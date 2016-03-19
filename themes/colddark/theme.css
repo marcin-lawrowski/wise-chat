@@ -1,0 +1,150 @@
+/* colddark */
+
+.wcContainer *, .wcError * {
+	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif; color: #cfcfcf;
+}
+
+.wcContainer, .wcError {
+	-webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
+	background-color: #333; border-color: #444; padding-top: 10px;
+}
+
+.wcContainer .wcWindowTitle {
+	margin: 0px 10px; font-size: 120%; color: #dbdbdb;
+}
+
+.wcContainer a, .wcContainer a:hover {
+	color: #38d5e0;
+	text-decoration: underline;
+}
+
+.wcContainer input[type="button"], .wcContainer input[type="button"]:active,
+.wcContainer input[type="submit"], .wcContainer input[type="submit"]:active {
+	border-radius: 5px; background-color: #55acee; background-image: none; background-repeat: none; border: none;
+	color: #fff; font-size: 13px; padding: 6px 13px; box-shadow: none;
+	text-transform: none;
+}
+
+.wcContainer input[type="button"]:focus, .wcContainer input[type="submit"]:focus {
+	background: #55acee; color: #fff; padding: 6px 13px;
+}
+
+.wcContainer input[type="button"]:hover, .wcContainer input[type="submit"]:hover {
+	background: #65bcfe; color: #fff;
+}
+
+.wcContainer input[type="text"], .wcContainer input[type="password"], .wcContainer textarea {
+	height: 30px; font-size: 1em; line-height: 20px;
+	background-color: #fff;  border: 1px solid #e1e8ed; border-radius: 3px; margin: 0; outline: 0 none; padding: 4px;
+	color: #222;
+}
+
+.wcContainer textarea {
+	height: 50px;
+}
+
+.wcContainer .wcMessages {
+	background-color: #333; color: #cfcfcf; border: 1px solid #333; border-top: 1px solid #444; border-bottom: 1px solid #444; padding: 0px;
+}
+
+.wcUsersListIncluded .wcMessages {
+	width: 67%; border: 1px solid #444444; margin-left: 8px;
+}
+
+.wcContainer .wcUsersCounter {
+	margin-bottom: 3px; margin-right: 10px; font-size: 80%;
+}
+
+.wcContainer .wcMessage .wcAdminAction:hover {
+	border: 1px solid #444;
+}
+
+.wcContainer .wcControls {
+	padding: 10px; padding-top: 5px;
+}
+
+.wcContainer .wcMessages .wcMessage {
+	border-top: 1px solid #444; padding: 5px;
+}
+
+.wcContainer .wcMessages .wcMessage a {
+	color: #38d5e0; text-decoration: none;
+}
+
+.wcContainer .wcMessages .wcMessage a:hover {
+	text-decoration: underline;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser a:hover {
+	text-decoration: underline;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageTime {
+	float: right;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser {
+	float: left; color: #dbdbdb; font-weight: bold;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser a {
+	color: #dbdbdb; text-decoration: none; font-weight: bold;
+}
+
+.wcContainer .wcMessages .wcCurrentUserMessage .wcMessageUser, .wcContainer .wcMessages .wcCurrentUserMessage .wcMessageUser a {
+	color: #fafafa;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageContent {
+	display: block; margin-top: 6px;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageContent .wcAdminAction {
+	float: right; 
+}
+
+.wcContainer .wcMessages .wcErrorMessage {
+	color: #ff0000;
+}
+
+.wcContainer .wcControls .wcCurrentUserName {
+	margin-bottom: 5px;
+}
+
+.wcWidth300 .wcMessageContent {
+	display: block; border-bottom: none; margin-bottom: inherit; padding-bottom: inherit;
+}
+
+.wcContainer .wcCustomizations a {
+	font-size: 100%; display: inline-block; margin: 4px 0px; color: #38d5e0;
+}
+
+.wcControlsButtonsIncluded a.wcToolButton:hover {
+	border: 1px solid #444;
+}
+
+.wcMessageAttachments a.wcAttachmentClear:hover {
+	border: 1px solid #444;
+}
+
+/* Users list: */
+.wcContainer .wcUsersList {
+	border-color: #444444; background-color: #333; color: #cfcfcf; margin-right: 8px;
+}
+
+.wcContainer .wcWindowContent {
+	text-align: center;
+}
+
+.wcContainer .wcError {
+	padding: 10px; color: #ffffff; background-color: rgb(247,66,67); border-radius: 5px; border: 1px solid rgb(207,46,47);
+	display: inline-block;
+}
+
+div.colorPicker-palette {
+	border: 1px solid #333 !important;
+}
+
+.wcEmoticonsLayer {
+	border: 1px solid #333;
+}
