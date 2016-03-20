@@ -29,6 +29,7 @@ class WiseChatSettings {
 		'wise-chat-bans' => 'Bans',
 		'wise-chat-localization' => 'Localization',
 		'wise-chat-advanced' => 'Advanced',
+		'wise-chat-pro' => 'PRO Options',
 	);
 	
 	/**
@@ -115,7 +116,9 @@ class WiseChatSettings {
 		update_option(WiseChatOptions::OPTIONS_NAME, $options);
 	}
 
-	public function renderAdminPage() {z
+	public function renderAdminPage() {
+		$options = WiseChatOptions::getInstance();
+
 		?>
 			<div class="wrap">
 				<style type="text/css">
@@ -134,6 +137,11 @@ class WiseChatSettings {
 					.wcAdminMenu ul li a.wcAdminMenuActive { font-weight: bold; background-color: #fafafa; }
 					.wcAdminDonation span { padding-top: 5px; display: inline-block; font-size: 1.1em; }
 					.wcAdminDonation a.wcAdminButton { border-color: #11f; color: #005; font-size: 1.1em; }
+					.wcAdminDonation a.wcAdminButtonPro, .wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
+						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px top;
+						border: 1px solid #4f3b5e; color: #fff; font-size: 1.2em; padding-left: 45px; padding-right: 20px;
+					}
+					.wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro:hover { background-color: #533f62; border: 1px solid #533f62; color: #fff; }
 				</style>
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>
@@ -144,6 +152,10 @@ class WiseChatSettings {
 					<a class="button-secondary" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo" title="See WiseChat demo">See Demo</a>
 					|
 					<a class="button-secondary" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-feedback" title="Send quick feedback">Send Feedback</a>
+					|
+					<a class="button-secondary wcAdminButtonPro" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
+						Wise Chat <strong>Pro</strong>
+					</a>
 				</div>
 				
 				<form method="post" action="options.php" class="metabox-holder">

@@ -4,7 +4,7 @@ Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, chatbox, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Tested up to: 4.4
-Stable tag: 2.1
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)**
+**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat Pro](http://kaine.pl/projects/wp-plugins/wise-chat-pro)**
 
 **Warning: Upgrade from version 1.* :** version 2.* of the plugin brings a lot of changes in the code and database structure. Remember to make a backup before upgrade in case of unexpected issues.
 
@@ -297,6 +297,9 @@ After you type a message use the key combination: Shift + ENTER
 06. Settings page - compilation of all tabs
 
 == Changelog ==
+
+= 2.2 =
+
 
 = 2.1 =
 * Read-only mode for anonymous users
