@@ -42,6 +42,10 @@
 	border-radius: none; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
 }
 
+.wcContainer .wcMessages .wcMessage .wcMessageContent {
+	overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all;-ms-hyphens: auto; -moz-hyphens: auto; -webkit-hyphens: auto; hyphens: auto;
+}
+
 .wcWidth300 .wcMessageContent {
 	display: block; border-bottom: 1px solid #f3f3f3; margin-bottom: 5px; padding-bottom: 5px;
 }

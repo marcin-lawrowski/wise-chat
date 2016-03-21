@@ -299,7 +299,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.2 =
-
+* Fixed: word wrapping of long messages
 
 = 2.1 =
 * Read-only mode for anonymous users
