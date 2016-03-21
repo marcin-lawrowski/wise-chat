@@ -391,6 +391,18 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		} else {
 			container.removeClass('wcWidth300');
 		}
+
+		if (options.autoHideUsersList) {
+			if (container.width() < options.autoHideUsersListWidth) {
+				container.removeClass('wcUsersListIncluded');
+				usersListContainer.hide();
+				usersListContainer.next('.wcClear').hide();
+			} else {
+				container.addClass('wcUsersListIncluded');
+				usersListContainer.show();
+				usersListContainer.next('.wcClear').show();
+			}
+		}
 	}
 
 	function onMessageDelete() {

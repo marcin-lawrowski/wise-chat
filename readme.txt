@@ -299,7 +299,8 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.2 =
-* Fixed: word wrapping of long messages
+* Option to auto-hide users list on the narrow screens
+* Fixed: word wrapping of the long messages
 
 = 2.1 =
 * Read-only mode for anonymous users
