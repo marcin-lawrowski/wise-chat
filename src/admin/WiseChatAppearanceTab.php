@@ -71,7 +71,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('background_color_users_list', 'Background Color', 'colorFieldCallback', 'string', 'Background color of the users list'),
 			array('text_color_users_list', 'Font Color', 'colorFieldCallback', 'string', 'Font color of the texts inside the users list'),
 			array('text_size_users_list', 'Font Size', 'selectCallback', 'string', 'Font size', WiseChatAppearanceTab::getFontSizes()),
-			
+			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below'),
+			array('autohide_users_list_width', 'Auto-hide Width Threshold', 'stringFieldCallback', 'integer', 'Minimum width of the chat window when users list is visible'),
+
 			array('_section', 'Advanced Customization'),
 			array('custom_styles', 'Custom CSS Styles', 'multilineFieldCallback', 'multilinestring', 'Custom CSS styles for the chat, valid CSS syntax is required.'),
 		);
@@ -113,7 +115,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'users_list_width' => '',
             'show_emoticon_insert_button' => 1,
             'show_users_flags' => 0,
-            'show_users_city_and_country' => 0
+            'show_users_city_and_country' => 0,
+            'autohide_users_list' => 0,
+            'autohide_users_list_width' => 300,
 		);
 	}
 
@@ -121,6 +125,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
         return array(
             'show_users_flags' => 'collect_user_stats',
             'show_users_city_and_country' => 'collect_user_stats',
+            'autohide_users_list_width' => 'autohide_users_list',
         );
     }
 

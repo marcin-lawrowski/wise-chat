@@ -245,7 +245,9 @@ class WiseChat {
 			'userSettings' => $this->userSettingsDAO->getAll(),
 			'attachmentsValidFileFormats' => $this->attachmentsService->getAllowedFormats(),
 			'attachmentsSizeLimit' => $this->attachmentsService->getSizeLimit(),
-			'imagesSizeLimit' => $this->options->getIntegerOption('images_size_limit', 3145728)
+			'imagesSizeLimit' => $this->options->getIntegerOption('images_size_limit', 3145728),
+			'autoHideUsersList' => $this->options->isOptionEnabled('autohide_users_list', false),
+			'autoHideUsersListWidth' => $this->options->getIntegerOption('autohide_users_list_width', 300),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
