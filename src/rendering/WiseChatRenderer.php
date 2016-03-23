@@ -167,6 +167,10 @@ class WiseChatRenderer {
 				continue;
 			}
 
+			if ($this->options->isOptionEnabled('users_list_hide_anonymous', false) && !($channelUser->getUser()->getWordPressId() > 0)) {
+				continue;
+			}
+
 			// text color feature:
 			$styles = '';
 			if ($this->options->isOptionEnabled('allow_change_text_color')) {
@@ -216,9 +220,11 @@ class WiseChatRenderer {
 		}
 		
 		if (!$isCurrentUserPresent && $userId !== null) {
-			array_unshift(
-				$usersList, sprintf('<span class="wcCurrentUser">%s</span>', $this->authentication->getUserNameOrEmptyString())
-			);
+			if (!$this->options->isOptionEnabled('users_list_hide_anonymous', false) || $this->authentication->getUser()->getWordPressId() > 0) {
+				array_unshift(
+					$usersList, sprintf('<span class="wcCurrentUser">%s</span>', $this->authentication->getUserNameOrEmptyString())
+				);
+			}
 		}
 		
 		return implode('<br />', $usersList);
