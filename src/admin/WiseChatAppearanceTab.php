@@ -71,8 +71,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('background_color_users_list', 'Background Color', 'colorFieldCallback', 'string', 'Background color of the users list'),
 			array('text_color_users_list', 'Font Color', 'colorFieldCallback', 'string', 'Font color of the texts inside the users list'),
 			array('text_size_users_list', 'Font Size', 'selectCallback', 'string', 'Font size', WiseChatAppearanceTab::getFontSizes()),
-			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below'),
+			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below)'),
 			array('autohide_users_list_width', 'Auto-hide Width Threshold', 'stringFieldCallback', 'integer', 'Minimum width of the chat window when users list is visible'),
+			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
 
 			array('_section', 'Advanced Customization'),
 			array('custom_styles', 'Custom CSS Styles', 'multilineFieldCallback', 'multilinestring', 'Custom CSS styles for the chat, valid CSS syntax is required.'),
@@ -118,6 +119,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
             'show_users_city_and_country' => 0,
             'autohide_users_list' => 0,
             'autohide_users_list_width' => 300,
+			'users_list_hide_anonymous' => 0,
 		);
 	}
 
