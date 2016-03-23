@@ -110,6 +110,26 @@ class WiseChatUserService {
 		$this->channelUsersDAO->deleteOlderByLastActivityTime(self::USERS_PRESENCE_TIME_FRAME);
 		$this->channelUsersDAO->updateActiveForOlderByLastActivityTime(false, self::USERS_ACTIVITY_TIME_FRAME);
 	}
+
+	/**
+	 * Checks if the current user has right to send a message.
+	 *
+	 * @return bool
+	 */
+	public function isSendingMessagesAllowed() {
+		if ($this->usersDAO->isWpUserLogged()) {
+			$targetRoles = (array) $this->options->getOption("read_only_for_roles", array());
+			if (count($targetRoles) > 0) {
+				$wpUser = $this->usersDAO->getCurrentWpUser();
+
+				return !is_array($wpUser->roles) || count(array_intersect($targetRoles, $wpUser->roles)) == 0;
+			} else {
+				return true;
+			}
+		} else {
+			return !$this->options->isOptionEnabled('read_only_for_anonymous', false);
+		}
+	}
 	
 	/**
 	* If the user has logged in then replace anonymous username with WordPress user name.
