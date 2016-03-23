@@ -299,6 +299,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.2 =
+* Option to give ban and/or delete permissions to each user role separately
 * Option to auto-hide users list on the narrow screens
 * Messages timestamp split to two spans - date and time
 * Fixed: word wrapping of the long messages

@@ -154,6 +154,8 @@ abstract class WiseChatAbstractTab {
 				case 'multivalues':
 					if (isset($inputValue[$id]) && is_array($inputValue[$id])) {
 						$newInputValue[$id] = $inputValue[$id];
+					} else {
+						$newInputValue[$id] = array();
 					}
 					
 					break;
@@ -321,7 +323,7 @@ abstract class WiseChatAbstractTab {
 			$html .= sprintf(
 				'<label><input type="checkbox" value="%s" name="%s[%s][]" %s %s data-parent-field="%s" />%s</label>&nbsp;&nbsp; ', 
 				$key, WiseChatOptions::OPTIONS_NAME, $id, 
-				in_array($value, $values) ? 'checked="1"' : '',
+				in_array($key, (array) $values) ? 'checked="1"' : '',
 				$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? 'disabled="1"' : '',
 				$parentId != null ? $parentId : '',
 				$value
