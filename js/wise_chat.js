@@ -502,14 +502,19 @@ function WiseChatNotifier(options) {
  * @author Marcin Ławrowski <marcin@kaine.pl>
  */
 function WiseChatDateAndTimeRenderer(options, dateFormatter) {
-	
+	var spanDate = '<span class="wcMessageTimeDate">';
+	var spanTime = '<span class="wcMessageTimeHour">';
+	var spanClose = '</span>';
 	var dateAndTimeMode = options.messagesTimeMode;
 	
 	function formatFullDateAndTime(date, nowDate, element) {
 		if (dateFormatter.isSameDate(nowDate, date)) {
-			element.html(dateFormatter.getLocalizedTime(date));
+			element.html(spanTime + dateFormatter.getLocalizedTime(date) + spanClose);
 		} else {
-			element.html(dateFormatter.getLocalizedDate(date) + ' ' + dateFormatter.getLocalizedTime(date));
+			element.html(
+				spanDate + dateFormatter.getLocalizedDate(date) + spanClose + ' ' +
+				spanTime + dateFormatter.getLocalizedTime(date) + spanClose
+			);
 		}
 		element.attr('data-fixed', '1');
 	}
@@ -521,21 +526,22 @@ function WiseChatDateAndTimeRenderer(options, dateFormatter) {
 		
 		var formattedDateAndTime = '';
 		var isFixed = false;
+
 		if (diffSeconds < 60) {
 			if (diffSeconds <= 0) {
 				diffSeconds = 1;
 			}
-			formattedDateAndTime = diffSeconds + ' ' + options.messages.messageSecAgo;
+			formattedDateAndTime = spanTime + diffSeconds + ' ' + options.messages.messageSecAgo + spanClose;
 		} else if (diffSeconds < 60 * 60) {
-			formattedDateAndTime = parseInt(diffSeconds / 60) + ' ' + options.messages.messageMinAgo;
+			formattedDateAndTime = spanTime + parseInt(diffSeconds / 60) + ' ' + options.messages.messageMinAgo + spanClose;
 		} else if (dateFormatter.isSameDate(nowDate, date)) {
-			formattedDateAndTime = dateFormatter.getLocalizedTime(date);
+			formattedDateAndTime = spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
 			isFixed = true;
 		} else if (dateFormatter.isSameDate(yesterdayDate, date)) {
-			formattedDateAndTime = options.messages.messageYesterday + ' ' + dateFormatter.getLocalizedTime(date);
+			formattedDateAndTime = spanDate + options.messages.messageYesterday + spanClose + ' ' + spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
 			isFixed = true;
 		} else {
-			formattedDateAndTime = dateFormatter.getLocalizedDate(date) + ' ' + dateFormatter.getLocalizedTime(date);
+			formattedDateAndTime = spanDate + dateFormatter.getLocalizedDate(date) + spanClose + ' ' + spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
 			isFixed = true;
 		}
 		

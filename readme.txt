@@ -300,6 +300,7 @@ After you type a message use the key combination: Shift + ENTER
 
 = 2.2 =
 * Option to auto-hide users list on the narrow screens
+* Messages timestamp split to two spans - date and time
 * Fixed: word wrapping of the long messages
 
 = 2.1 =
