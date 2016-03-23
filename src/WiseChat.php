@@ -281,7 +281,7 @@ class WiseChat {
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
 			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
 
-            'allowToSendMessages' => !$this->options->isOptionEnabled('read_only_for_anonymous', false) || $this->usersDAO->isWpUserLogged(),
+            'allowToSendMessages' => $this->userService->isSendingMessagesAllowed(),
 				
 			'messageCustomize' => $this->options->getEncodedOption('message_customize', 'Customize'),
 			'messageName' => $this->options->getEncodedOption('message_name', 'Name'),

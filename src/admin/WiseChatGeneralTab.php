@@ -13,6 +13,10 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			array('access_mode', 'Access Mode', 'selectCallback', 'string', 'Chat authorization mode', self::getAccessModes()),
 			array('force_user_name_selection', 'Force Username Selection', 'booleanFieldCallback', 'boolean', 'Blocks access to the chat until an user enters his/her name.'),
 			array('read_only_for_anonymous', 'Read-only For Anonymous', 'booleanFieldCallback', 'boolean', 'Makes the chat read-only for anonymous users. Only logged in WordPress users are allowed to send messages.'),
+			array(
+				'read_only_for_roles', 'Read-only For Roles', 'checkboxesCallback', 'multivalues',
+				'Selected roles have read-only access to the chat.', self::getRoles()
+			),
             array('collect_user_stats', 'Collect User Statistics', 'booleanFieldCallback', 'boolean', 'Collects various statistics of users, including country, city, etc.'),
 			array('user_actions', 'Actions', 'adminActionsCallback', 'void'),
 			array('_section', 'Chat Opening Hours and Days', 'Server UTC date and time is taken into account. It is currently: '.date('Y-m-d H:i:s')),
@@ -31,7 +35,8 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
             'collect_user_stats' => 1,
 			'enable_opening_control' => 0,
 			'opening_days' => array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
-			'opening_hours' => array('opening' => '8:00', 'openingMode' => 'AM', 'closing' => '4:00', 'closingMode' => 'PM')
+			'opening_hours' => array('opening' => '8:00', 'openingMode' => 'AM', 'closing' => '4:00', 'closingMode' => 'PM'),
+			'read_only_for_roles' => array()
 		);
 	}
 	
@@ -119,6 +124,18 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			'Saturday' => 'Saturday',
 			'Sunday' => 'Sunday'
 		);
+	}
+
+	public function getRoles() {
+		$editableRoles = array_reverse(get_editable_roles());
+		$rolesOptions = array();
+
+		foreach ($editableRoles as $role => $details) {
+			$name = translate_user_role($details['name']);
+			$rolesOptions[esc_attr($role)] = $name;
+		}
+
+		return $rolesOptions;
 	}
 	
 	public function adminActionsCallback() {

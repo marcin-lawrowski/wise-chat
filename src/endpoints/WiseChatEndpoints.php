@@ -512,7 +512,7 @@ class WiseChatEndpoints {
      * @throws WiseChatUnauthorizedAccessException
      */
     private function checkUserWriteAuthorization() {
-        if ($this->options->isOptionEnabled('read_only_for_anonymous', false) && !$this->usersDAO->isWpUserLogged()) {
+        if (!$this->userService->isSendingMessagesAllowed()) {
             throw new WiseChatUnauthorizedAccessException('No write permission');
         }
     }
