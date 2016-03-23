@@ -12,11 +12,11 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			array('_section', 'Moderation Settings'),
 			array('enable_message_actions', 'Enable Admin Actions', 'booleanFieldCallback', 'boolean', 'Displays ban and removal buttons next to each message. The buttons are visible only for roles defined below'),
 			array(
-				'permission_delete_message_role', 'Delete Message Permission', 'selectCallback', 'string', 
+				'permission_delete_message_role', 'Delete Message Permission', 'checkboxesCallback', 'multivalues',
 				'An user role that is allowed to delete posted messages.<br /> Alternatively you can assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
 			),
 			array(
-				'permission_ban_user_role', 'Ban User Permission', 'selectCallback', 'string',
+				'permission_ban_user_role', 'Ban User Permission', 'checkboxesCallback', 'multivalues',
 				'An user role that is allowed to ban users.<br /> Alternatively you can assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
 			),
 			array('moderation_ban_duration', 'Ban Duration', 'stringFieldCallback', 'integer', 'Duration of the ban (in minutes) created by clicking on Ban button next a message. Empty field sets the value to 1440 minutes (1 day)'),

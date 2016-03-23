@@ -177,8 +177,8 @@ class WiseChatUsersDAO {
 		$wpUser = $this->getCurrentWpUser();
 		
 		if ($wpUser !== null) {
-			$targetRole = $this->options->getOption("permission_{$rightName}_role", 'administrator');
-			if ((is_array($wpUser->roles) && in_array($targetRole, $wpUser->roles)) || current_user_can("wise_chat_{$rightName}")) {
+			$targetRoles = (array) $this->options->getOption("permission_{$rightName}_role", 'administrator');
+			if ((is_array($wpUser->roles) && count(array_intersect($targetRoles, $wpUser->roles)) > 0) || current_user_can("wise_chat_{$rightName}")) {
 				return true;
 			}
 		}
