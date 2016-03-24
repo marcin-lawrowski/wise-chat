@@ -305,6 +305,7 @@ After you type a message use the key combination: Shift + ENTER
 * Option to auto-hide users list on the narrow screens
 * Messages timestamp split to two spans - date and time
 * Disabled horizontal scrollbar on users list
+* Improved safety during deletion of images uploaded by the chat
 * Fixed: word wrapping of the long messages
 * Fixed: users list moves to the bottom on narrow screens
 
