@@ -161,8 +161,7 @@ class WiseChatCssRenderer {
 		if ($this->options->isOptionNotEmpty('users_list_width')) {
 			$width = $this->options->getIntegerOption('users_list_width');
 			if ($width > 1 && $width < 99) {
-				$this->addRawDefinition('.wcUsersList', 'width', $width.'%');
-				$this->addRawDefinition('.wcMessages', 'width', (100 - $width - 1).'%');
+				$this->addRawDefinition('.wcMessages', 'width', (100 - $width).'%');
 			}
 		}
 	}

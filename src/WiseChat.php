@@ -248,6 +248,7 @@ class WiseChat {
 			'imagesSizeLimit' => $this->options->getIntegerOption('images_size_limit', 3145728),
 			'autoHideUsersList' => $this->options->isOptionEnabled('autohide_users_list', false),
 			'autoHideUsersListWidth' => $this->options->getIntegerOption('autohide_users_list_width', 300),
+			'showUsersList' => $this->options->isOptionEnabled('show_users'),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
