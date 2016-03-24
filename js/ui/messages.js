@@ -392,7 +392,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 			container.removeClass('wcWidth300');
 		}
 
-		if (options.autoHideUsersList) {
+		if (options.showUsersList && options.autoHideUsersList) {
 			if (container.width() < options.autoHideUsersListWidth) {
 				container.removeClass('wcUsersListIncluded');
 				usersListContainer.hide();

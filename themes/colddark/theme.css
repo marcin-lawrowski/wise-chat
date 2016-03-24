@@ -10,7 +10,7 @@
 }
 
 .wcContainer .wcWindowTitle {
-	margin: 0px 10px; font-size: 120%; color: #dbdbdb;
+	margin: 0px 10px; font-size: 120%; color: #dbdbdb; margin-bottom: 10px
 }
 
 .wcContainer a, .wcContainer a:hover {
@@ -48,7 +48,7 @@
 }
 
 .wcUsersListIncluded .wcMessages {
-	width: 67%; border: 1px solid #444444; margin-left: 8px;
+	width: 67%; border: 1px solid #444444; margin-left: 8px; border-right: none;
 }
 
 .wcContainer .wcUsersCounter {

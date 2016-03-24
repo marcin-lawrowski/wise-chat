@@ -18,7 +18,7 @@
 		<div class='wcMessages'>{{ messages }}</div>
 		
 		{% if showUsersList %}
-			<div class='wcUsersList'>{{ usersList }}</div><br class='wcClear' />
+			<div class='wcUsersList'>{{ usersList }}</div>
 		{% endif showUsersList %}
 		
 		{% if showUsersCounter %}
@@ -101,7 +101,7 @@
 		<div class='wcMessages'>{{ messages }}</div>
 		
 		{% if showUsersList %}
-			<div class='wcUsersList'>{{ usersList }}</div><br class='wcClear' />
+			<div class='wcUsersList'>{{ usersList }}</div>
 		{% endif showUsersList %}
 		{% if showUsersCounter %}
 			<div class='wcUsersCounter'>

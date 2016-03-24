@@ -65,20 +65,19 @@
 
 /* Messages list: */
 .wcContainer .wcMessages {
-	width: 100%; height: 200px; overflow: auto; 
-	border: 1px solid #dfdfdf; background-color: #fff; margin: 5px 0px; padding: 0px 5px;
+	width: 100%; height: 200px; overflow: auto;
+	border: 1px solid #dfdfdf; background-color: #fff; margin: 0px; padding: 0px 5px;
 	-webkit-overflow-scrolling: touch;
 }
 
 /* Users list: */
 .wcUsersListIncluded .wcMessages {
-	float: left; width: 70%;
+	float: left; width: 70%; overflow: auto;
 }
 
 .wcUsersListIncluded .wcUsersList {
-	float: right; width: 29%; height: 200px; 
-	border: 1px solid #dfdfdf; overflow: auto; 	background-color: #fff; margin: 5px 0px; padding: 0px 5px;
-	-webkit-overflow-scrolling: touch;
+	height: 200px; border: 1px solid #dfdfdf; overflow: auto; background-color: #fff; margin: 0px; padding: 0px 5px;
+	-webkit-overflow-scrolling: touch; overflow: hidden;
 }
 
 .wcContainer .wcUsersCounter {
