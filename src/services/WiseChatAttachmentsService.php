@@ -135,7 +135,6 @@ class WiseChatAttachmentsService {
 			'post_status' => 'any',
 			'posts_per_page' => -1,
 			'meta_query' => array(
-				'relation' => 'OR',
 				array(
 					'key' => 'wise_chat_message_id',
 					'value' => $messagesIds,
@@ -216,7 +215,10 @@ class WiseChatAttachmentsService {
 	*/
 	private function deleteAttachemnts($attachments) {
 		foreach ($attachments as $attachment) {
-			wp_delete_attachment(intval($attachment->ID), true);
+			$meta = get_post_meta(intval($attachment->ID), 'wise_chat');
+			if (is_array($meta) && count($meta) > 0) {
+				wp_delete_attachment(intval($attachment->ID), true);
+			}
 		}
 	}
 	
