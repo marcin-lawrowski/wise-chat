@@ -10,7 +10,8 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public function getFields() {
 		return array(
 			array('_section', 'General Settings'),
-			array('access_mode', 'Access Mode', 'selectCallback', 'string', 'Chat authorization mode', self::getAccessModes()),
+			array('access_mode', 'Disable Anonymous Users', 'booleanFieldCallback', 'boolean', 'Only regular WP users are allowed to enter the chat. Choose user roles below. '),
+			array('access_roles', 'Access For Roles', 'checkboxesCallback', 'multivalues', 'Access only for these user roles', self::getRoles()),
 			array('force_user_name_selection', 'Force Username Selection', 'booleanFieldCallback', 'boolean', 'Blocks access to the chat until an user enters his/her name.'),
 			array('read_only_for_anonymous', 'Read-only For Anonymous', 'booleanFieldCallback', 'boolean', 'Makes the chat read-only for anonymous users. Only logged in WordPress users are allowed to send messages.'),
 			array(
@@ -29,6 +30,7 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public function getDefaultValues() {
 		return array(
 			'access_mode' => 0,
+			'access_roles' => array('administrator'),
 			'force_user_name_selection' => 0,
             'read_only_for_anonymous' => 0,
 			'user_actions' => null,
@@ -43,14 +45,8 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public function getParentFields() {
 		return array(
 			'opening_days' => 'enable_opening_control',
-			'opening_hours' => 'enable_opening_control'
-		);
-	}
-	
-	public function getAccessModes() {
-		return array(
-			0 => 'All',
-			1 => 'Only regular WP users'
+			'opening_hours' => 'enable_opening_control',
+			'access_roles' => 'access_mode',
 		);
 	}
 	

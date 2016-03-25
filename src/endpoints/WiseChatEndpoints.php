@@ -503,7 +503,10 @@ class WiseChatEndpoints {
 	 * @throws WiseChatUnauthorizedAccessException
 	 */
 	private function checkUserAuthorization() {
-		if ($this->options->getOption('access_mode') == 1 && !$this->usersDAO->isWpUserLogged()) {
+		if ($this->service->isChatRestrictedForAnonymousUsers()) {
+			throw new WiseChatUnauthorizedAccessException('Access denied');
+		}
+		if ($this->service->isChatRestrictedForCurrentUserRole()) {
 			throw new WiseChatUnauthorizedAccessException('Access denied');
 		}
 	}

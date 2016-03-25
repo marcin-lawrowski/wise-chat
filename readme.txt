@@ -300,6 +300,7 @@ After you type a message use the key combination: Shift + ENTER
 
 = 2.2 =
 * Hiding anonymous users on the users list
+* Option to give access to the chat for specific user roles only
 * Option to make the chat read-only for selected user roles
 * Option to give ban and/or delete permissions to each user role separately
 * Option to auto-hide users list on the narrow screens

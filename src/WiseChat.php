@@ -153,6 +153,12 @@ class WiseChat {
 				$this->options->getOption('message_error_4', 'Only logged in users are allowed to enter the chat'), 'wcAccessDenied'
 			);
 		}
+
+		if ($this->service->isChatRestrictedForCurrentUserRole()) {
+			return $this->renderer->getRenderedAccessDenied(
+				$this->options->getOption('message_error_11', 'You are not allowed to enter the chat.'), 'wcAccessDenied'
+			);
+		}
 		
 		if (!$this->service->isChatOpen()) {
 			return $this->renderer->getRenderedAccessDenied(

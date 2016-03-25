@@ -99,6 +99,32 @@ class WiseChatService {
 	public function isChatRestrictedForAnonymousUsers() {
 		return $this->options->getOption('access_mode') == 1 && !$this->usersDAO->isWpUserLogged();
 	}
+
+	/**
+	 * Determines whether the chat is restricted for user roles.
+	 *
+	 * @return boolean
+	 */
+	public function isChatRestrictedForCurrentUserRole() {
+		if ($this->options->getOption('access_mode') == 1 && $this->usersDAO->isWpUserLogged()) {
+			$targetRoles = (array) $this->options->getOption('access_roles', null);
+			if ($targetRoles === null) {
+				return false;
+			}
+			if (!is_array($targetRoles) || count($targetRoles) == 0) {
+				return true;
+			}
+
+			$wpUser = $this->usersDAO->getCurrentWpUser();
+			if (!is_array($wpUser->roles) || count($wpUser->roles) == 0) {
+				return true;
+			}
+
+			return count(array_intersect($targetRoles, $wpUser->roles)) == 0;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	* Determines whether the chat is open according to the settings.
