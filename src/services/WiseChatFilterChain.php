@@ -31,6 +31,16 @@ class WiseChatFilterChain {
 			
 			if ($type == 'text') {
 				$text = str_replace($replace, $replaceWith, $text);
+			} else if ($type == 'outgoing-link') {
+				$matches = array();
+				$replaceSource = '/'.WiseChatFiltersDAO::URL_REGEXP.'/i';
+				if (preg_match_all($replaceSource, $text, $matches)) {
+					foreach ($matches[0] as $value) {
+						if (!preg_match('/'.$replace.'/i', $value)) {
+							$text = self::strReplaceFirst($value, $replaceWith, $text);
+						}
+					}
+				}
 			} else {
 				$matches = array();
 				$replace = '/'.$replace.'/i';

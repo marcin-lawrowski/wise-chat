@@ -20,6 +20,7 @@ class WiseChatFiltersDAO {
 	private $types = array(
 		'text' => 'Text',
 		'link' => 'Hyperlinks',
+		'outgoing-link' => 'Outgoing Hyperlinks',
 		'email' => 'E-mails',
 		'regexp' => 'Regular Expression'
 	);
@@ -53,6 +54,8 @@ class WiseChatFiltersDAO {
 	
 		if ($type == 'link') {
 			$replace = self::URL_REGEXP;
+		} else if ($type == 'outgoing-link') {
+			$replace = $this->getOutgoingUrlRegExp();
 		} else if ($type == 'email') {
 			$replace = self::EMAIL_REGEXP;
 		}
@@ -121,5 +124,12 @@ class WiseChatFiltersDAO {
 		}
 		
 		return $filtersOut;
+	}
+
+	private function getOutgoingUrlRegExp() {
+		$currentDomain = parse_url(get_site_url(), PHP_URL_HOST);
+		$currentDomain = str_replace('.', '\.', $currentDomain);
+
+		return "((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)*{$currentDomain}(\/[^ \?]*)?(\?[^\"'<> ]+)?";
 	}
 }

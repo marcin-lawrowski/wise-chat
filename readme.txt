@@ -299,6 +299,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.2 =
+* Additional filter that allows to filter outgoing links
 * Hiding anonymous users on the users list
 * Option to give access to the chat for specific user roles only
 * Option to make the chat read-only for selected user roles
