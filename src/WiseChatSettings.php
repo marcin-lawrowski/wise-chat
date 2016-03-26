@@ -135,12 +135,20 @@ class WiseChatSettings {
 					.wcAdminMenu ul li a:hover { background-color: #fafafa; color: #000; outline: 0;}
 					.wcAdminMenu ul li a:visited { color: #000; }
 					.wcAdminMenu ul li a.wcAdminMenuActive { font-weight: bold; background-color: #fafafa; }
+					.wcAdminMenu ul li a#wise-chat-pro {
+						background: #4F3B5E url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 17px center;
+						color: #fff; padding-left: 48px;
+					}
 					.wcAdminDonation span { padding-top: 5px; display: inline-block; font-size: 1.1em; }
 					.wcAdminDonation a.wcAdminButton { border-color: #11f; color: #005; font-size: 1.1em; }
 					.wcAdminDonation a.wcAdminButtonPro, .wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
 						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px top;
 						border: 1px solid #4f3b5e; color: #fff; font-size: 1.2em; padding-left: 45px; padding-right: 20px;
 					}
+					#wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
+						padding-top: 10px; padding-bottom: 10px; height: 50px; background-position: 10px center;
+					}
+
 					.wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro:hover { background-color: #533f62; border: 1px solid #533f62; color: #fff; }
 				</style>
 			

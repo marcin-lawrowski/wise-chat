@@ -3,7 +3,7 @@ Contributors: marcin.lawrowski
 Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, chatbox, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
-Tested up to: 4.4
+Tested up to: 4.4.2
 Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat Pro](http://kaine.pl/projects/wp-plugins/wise-chat-pro)**
+**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat Pro](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
 
 **Warning: Upgrade from version 1.* :** version 2.* of the plugin brings a lot of changes in the code and database structure. Remember to make a backup before upgrade in case of unexpected issues.
 
@@ -62,7 +62,17 @@ Wise Chat is a chat plugin that helps to build a social network and to increase 
 * **List of current users**: Show the list of online users and their national flag / country / city of origin in the sidebar of the chat. Display amount of online users.
 * **Backups**: Backup all messages from given channel by downloading them as a single CSV file.
 
-All settings are available on `Settings -> Wise Chat Settings` page. 
+All settings are available on `Settings -> Wise Chat Settings` page.
+
+= List of PRO features: =
+* **Private one-to-one chats**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
+* **Avatars**: Display avatars either in the chat or the users list.
+* **External authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
+* **Multisite support**: Wise Chat Pro can operate in WordPress multisite environment.
+* **Pro themes**: Select and use one of 3 additional Pro themes.
+* **6-month upgrade**: Update your Wise Chat Pro to the new version for free during 6-month period after the purchase.
+
+**[Check Wise Chat Pro !](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)** Move customer engagement to the higher level!
 
 **See screenshots for detailed features.**
 
