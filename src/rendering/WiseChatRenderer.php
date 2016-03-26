@@ -214,6 +214,10 @@ class WiseChatRenderer {
             }
 
 			$encodedName = htmlspecialchars($channelUser->getUser()->getName(), ENT_QUOTES, 'UTF-8');
+			if ($this->options->isOptionEnabled('users_list_linking', false)) {
+				$encodedName = $this->getRenderedUserNameInternal($encodedName, $channelUser->getUser()->getWordPressId(), $channelUser->getUser());
+			}
+
 			$usersList[] = sprintf(
 				'<span class="wcUserInChannel %s" %s>%s</span>', $currentUserClassName, $styles, $encodedName
 			).$flag.$cityAndCountry;
@@ -229,45 +233,57 @@ class WiseChatRenderer {
 		
 		return implode('<br />', $usersList);
 	}
+
+	/**
+	 * Returns rendered user name for given message.
+	 *
+	 * @param WiseChatMessage $message
+	 *
+	 * @return string HTML source
+	 */
+	public function getRenderedUserName($message) {
+		return $this->getRenderedUserNameInternal($message->getUserName(), $message->getWordPressUserId(), $message->getUser());
+	}
 	
 	/**
-	* Returns rendered user name for given message.
+	* Returns rendered user name.
 	*
-	* @param WiseChatMessage $message
+	* @param string $userName
+	* @param integer $wordPressUserId
+	* @param WiseChatUser $user
 	*
 	* @return string HTML source
 	*/
-	public function getRenderedUserName($message) {
-		$formattedUserName = $message->getUserName();
+	private function getRenderedUserNameInternal($userName, $wordPressUserId, $user) {
+		$formattedUserName = $userName;
         $displayMode = $this->options->getIntegerOption('link_wp_user_name', 0);
 		$styles = '';
         if ($displayMode > 0) {
-            $messageUser = $message->getUser();
             if (
                 $this->options->isOptionEnabled('allow_change_text_color') &&
-                $messageUser !== null &&
-                strlen($messageUser->getDataProperty('textColor')) > 0
+				$user !== null &&
+                strlen($user->getDataProperty('textColor')) > 0
             ) {
-                $styles = sprintf('style="color: %s"', $messageUser->getDataProperty('textColor'));
+                $styles = sprintf('style="color: %s"', $user->getDataProperty('textColor'));
             }
         }
 
 
 		if ($displayMode === 1) {
 			$linkUserNameTemplate = $this->options->getOption('link_user_name_template', null);
-			$wpUser = $message->getWordPressUserId() != null ? $this->usersDAO->getWpUserByID($message->getWordPressUserId()) : null;
+			$wpUser = $wordPressUserId != null ? $this->usersDAO->getWpUserByID($wordPressUserId) : null;
 			
 			$userNameLink = null;
 			if ($linkUserNameTemplate != null) {
 				$variables = array(
 					'id' => $wpUser !== null ? $wpUser->ID : '',
-					'username' => $wpUser !== null ? $wpUser->user_login : $message->getUserName(),
-					'displayname' => $wpUser !== null ? $wpUser->display_name : $message->getUserName()
+					'username' => $wpUser !== null ? $wpUser->user_login : $userName,
+					'displayname' => $wpUser !== null ? $wpUser->display_name : $userName
 				);
 				
 				$userNameLink = $this->getTemplatedString($variables, $linkUserNameTemplate);
 			} else if ($wpUser !== null) {
-				$userNameLink = get_author_posts_url($wpUser->ID, $wpUser->display_name);
+				$userNameLink = get_author_posts_url($wpUser->ID);
 			}
 			
 			if ($userNameLink != null) {
