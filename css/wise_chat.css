@@ -96,7 +96,7 @@
 	font-weight: bold;
 }
 
-.wcUsersList .wcCurrentUser {
+.wcUsersList .wcCurrentUser, .wcUsersList .wcCurrentUser a {
 	font-weight: bold;
 }
 

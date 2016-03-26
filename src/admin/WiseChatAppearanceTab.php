@@ -74,6 +74,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below)'),
 			array('autohide_users_list_width', 'Auto-hide Width Threshold', 'stringFieldCallback', 'integer', 'Minimum width of the chat window when users list is visible'),
 			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
+			array('users_list_linking', 'Usernames Mode', 'booleanFieldCallback', 'boolean', 'Makes usernames like it is set in Username Display Mode option.'),
 
 			array('_section', 'Advanced Customization'),
 			array('custom_styles', 'Custom CSS Styles', 'multilineFieldCallback', 'multilinestring', 'Custom CSS styles for the chat, valid CSS syntax is required.'),
@@ -120,6 +121,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
             'autohide_users_list' => 0,
             'autohide_users_list_width' => 300,
 			'users_list_hide_anonymous' => 0,
+			'users_list_linking' => 0,
 		);
 	}
 
