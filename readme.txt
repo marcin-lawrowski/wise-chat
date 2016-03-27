@@ -14,7 +14,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat Pro](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
+**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
 
 **Warning: Upgrade from version 1.* :** version 2.* of the plugin brings a lot of changes in the code and database structure. Remember to make a backup before upgrade in case of unexpected issues.
 
