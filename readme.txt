@@ -4,7 +4,7 @@ Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, chatbox, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Tested up to: 4.4.2
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -307,6 +307,8 @@ After you type a message use the key combination: Shift + ENTER
 06. Settings page - compilation of all tabs
 
 == Changelog ==
+
+= 2.3 =
 
 = 2.2 =
 * Clickable usernames on the users list
