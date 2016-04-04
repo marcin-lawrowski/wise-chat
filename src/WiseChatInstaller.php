@@ -124,26 +124,9 @@ class WiseChatInstaller {
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		
-		self::dropLegacyColumns();
-		
 		// set default options after installation:
 		$settings = WiseChatContainer::get('WiseChatSettings');
 		$settings->setDefaultSettings();
-	}
-	
-	private function dropLegacyColumns() {
-		global $wpdb;
-		
-		$columnsToDrop = array(
-			self::getMessagesTable() => array('channel_user_id'),
-			self::getActionsTable() => array('user'),
-			self::getChannelUsersTable() => array('user', 'channel', 'session_id', 'ip')
-		);
-		foreach ($columnsToDrop as $table => $columns) {
-			foreach ($columns as $column) {
-				$wpdb->get_results("ALTER TABLE $table DROP COLUMN $column;");
-			}
-		}
 	}
 	
 	public static function deactivate() {
