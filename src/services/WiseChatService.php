@@ -101,6 +101,15 @@ class WiseChatService {
 	}
 
 	/**
+	 * Determines whether the chat is allowed only for logged in WP users.
+	 *
+	 * @return boolean
+	 */
+	public function isChatAllowedForWPUsersOnly() {
+		return $this->options->getOption('access_mode') == 1;
+	}
+
+	/**
 	 * Determines whether the chat is restricted for user roles.
 	 *
 	 * @return boolean

@@ -8,7 +8,12 @@
 class WiseChatUserService {
 	const USERS_ACTIVITY_TIME_FRAME = 80;
 	const USERS_PRESENCE_TIME_FRAME = 86400;
-	
+
+	/**
+	 * @var WiseChatService
+	 */
+	private $service;
+
 	/**
 	* @var WiseChatActions
 	*/
@@ -46,6 +51,7 @@ class WiseChatUserService {
 	
 	public function __construct() {
 		$this->options = WiseChatOptions::getInstance();
+		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->usersDAO = WiseChatContainer::getLazy('dao/user/WiseChatUsersDAO');
 		$this->actions = WiseChatContainer::getLazy('services/user/WiseChatActions');
 		$this->channelUsersDAO = WiseChatContainer::getLazy('dao/WiseChatChannelUsersDAO');
@@ -88,6 +94,18 @@ class WiseChatUserService {
 		// check and authenticate user:
 		if (!$this->authentication->isAuthenticated()) {
 			$user = $this->authentication->authenticateAnonymously();
+
+			// check if there is a WordPress user logged in:
+			$currentWPUser = $this->usersDAO->getCurrentWpUser();
+			if ($currentWPUser !== null && strlen($currentWPUser->display_name) > 0) {
+				$this->authentication->setOriginalUserName($user->getName());
+
+				// update username and WP user ID:
+				$user->setWordPressId(intval($currentWPUser->ID));
+				$user->setName($currentWPUser->display_name);
+				$this->usersDAO->save($user);
+			}
+
 			$this->actions->publishAction(
 				'refreshPlainUserName', array('name' => $user->getName()), $user
 			);
@@ -176,6 +194,11 @@ class WiseChatUserService {
 			} else {
 				$originalUserName = $this->authentication->getOriginalUserName();
 				if ($originalUserName !== null && $userName != $originalUserName) {
+					// the user becomes anonymous, so remove the user from all channels:
+					if ($this->service->isChatAllowedForWPUsersOnly()) {
+						$this->channelUsersDAO->deleteAllByUser($user);
+					}
+
 					// update username and WP user ID:
 					$user->setName($originalUserName);
 					$user->setWordPressId(null);

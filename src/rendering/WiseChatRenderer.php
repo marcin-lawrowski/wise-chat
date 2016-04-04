@@ -11,6 +11,11 @@ class WiseChatRenderer {
 	* @var WiseChatMessagesService
 	*/
 	private $messagesService;
+
+	/**
+	 * @var WiseChatService
+	 */
+	private $service;
 	
 	/**
 	* @var WiseChatUsersDAO
@@ -40,6 +45,7 @@ class WiseChatRenderer {
 	public function __construct() {
 		$this->options = WiseChatOptions::getInstance();
 		$this->messagesService = WiseChatContainer::get('services/WiseChatMessagesService');
+		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
 		$this->channelUsersDAO = WiseChatContainer::get('dao/WiseChatChannelUsersDAO');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
@@ -167,6 +173,11 @@ class WiseChatRenderer {
 				continue;
 			}
 
+			// do not render anonymous users:
+			if ($this->service->isChatAllowedForWPUsersOnly() && !($channelUser->getUser()->getWordPressId() > 0)) {
+				continue;
+			}
+
 			if ($this->options->isOptionEnabled('users_list_hide_anonymous', false) && !($channelUser->getUser()->getWordPressId() > 0)) {
 				continue;
 			}
@@ -226,7 +237,7 @@ class WiseChatRenderer {
 		if (!$isCurrentUserPresent && $userId !== null) {
 			if (!$this->options->isOptionEnabled('users_list_hide_anonymous', false) || $this->authentication->getUser()->getWordPressId() > 0) {
 				array_unshift(
-					$usersList, sprintf('<span class="wcCurrentUser">%s</span>', $this->authentication->getUserNameOrEmptyString())
+					$usersList, sprintf('<span class="wcUserInChannel wcCurrentUser">%s</span>', $this->authentication->getUserNameOrEmptyString())
 				);
 			}
 		}
