@@ -309,6 +309,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.3 =
+* Fixed: anonymous users on the list when "WP users only" option is selected
 * Fixed: logged in user becomes anonymous after some inactivity time
 
 = 2.2 =

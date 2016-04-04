@@ -196,6 +196,21 @@ class WiseChatChannelUsersDAO {
 	}
 
 	/**
+	 * Removes the user from all channels.
+	 *
+	 * @param WiseChatUser $user
+	 */
+	public function deleteAllByUser($user) {
+		global $wpdb;
+		if ($user === null) {
+			return;
+		}
+
+		$table = WiseChatInstaller::getChannelUsersTable();
+		$wpdb->get_results(sprintf("DELETE FROM %s WHERE user_id = %d;", $table, intval($user->getId())));
+	}
+
+	/**
 	 * Converts stdClass object into WiseChatChannelUser object.
 	 *
 	 * @param stdClass $channelUserRaw
