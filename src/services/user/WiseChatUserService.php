@@ -88,6 +88,18 @@ class WiseChatUserService {
 		// check and authenticate user:
 		if (!$this->authentication->isAuthenticated()) {
 			$user = $this->authentication->authenticateAnonymously();
+
+			// check if there is a WordPress user logged in:
+			$currentWPUser = $this->usersDAO->getCurrentWpUser();
+			if ($currentWPUser !== null && strlen($currentWPUser->display_name) > 0) {
+				$this->authentication->setOriginalUserName($user->getName());
+
+				// update username and WP user ID:
+				$user->setWordPressId(intval($currentWPUser->ID));
+				$user->setName($currentWPUser->display_name);
+				$this->usersDAO->save($user);
+			}
+
 			$this->actions->publishAction(
 				'refreshPlainUserName', array('name' => $user->getName()), $user
 			);
