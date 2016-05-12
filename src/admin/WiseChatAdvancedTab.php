@@ -19,14 +19,16 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				'messages_refresh_time', 'Refresh Time', 'selectCallback', 'string', 
 				"Determines how often the chat should check for new messages. Lower value means higher CPU usage and more HTTP requests.", 
 				WiseChatAdvancedTab::getRefreshTimes()
-			)
+			),
+			array('show_powered_by', 'Show "Powered By" Footer', 'booleanFieldCallback', 'boolean'),
 		);
 	}
 	
 	public function getDefaultValues() {
 		return array(
 			'ajax_engine' => 'lightweight',
-			'messages_refresh_time' => 3000
+			'messages_refresh_time' => 3000,
+			'show_powered_by' => 1,
 		);
 	}
 	

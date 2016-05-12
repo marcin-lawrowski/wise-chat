@@ -59,6 +59,18 @@
 	width: 100%;
 }
 
+.wcContainer .wcPoweredBy {
+	float: right; font-size: 0.8em; padding-right: 8px; padding-top: 3px; padding-bottom: 3px;
+}
+
+.wcContainer .wcPoweredBy a {
+	font-size: 1em;
+}
+
+.wcContainer .wcControls .wcPoweredBy {
+	padding: 0px;
+}
+
 .wcContainer .wcWindowContent {
 	padding: 10px;
 }
