@@ -246,7 +246,8 @@ class WiseChat {
 				'messageMinAgo' => $this->options->getEncodedOption('message_min_ago', 'min. ago'),
 				'messageYesterday' => $this->options->getEncodedOption('message_yesterday', 'yesterday'),
 				'messageUnsupportedTypeOfFile' => $this->options->getEncodedOption('message_error_7', 'Unsupported type of file.'),
-				'messageSizeLimitError' => $this->options->getEncodedOption('message_error_8', 'The size of the file exceeds allowed limit.')
+				'messageSizeLimitError' => $this->options->getEncodedOption('message_error_8', 'The size of the file exceeds allowed limit.'),
+				'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
 			),
 			'userSettings' => $this->userSettingsDAO->getAll(),
 			'attachmentsValidFileFormats' => $this->attachmentsService->getAllowedFormats(),
@@ -255,6 +256,8 @@ class WiseChat {
 			'autoHideUsersList' => $this->options->isOptionEnabled('autohide_users_list', false),
 			'autoHideUsersListWidth' => $this->options->getIntegerOption('autohide_users_list_width', 300),
 			'showUsersList' => $this->options->isOptionEnabled('show_users'),
+			'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),
+			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
@@ -300,6 +303,7 @@ class WiseChat {
 			'messagePictureUploadHint' => $this->options->getEncodedOption('message_picture_upload_hint', 'Upload a picture'),
 			'messageAttachFileHint' => $this->options->getEncodedOption('message_attach_file_hint', 'Attach a file'),
             'messageInsertEmoticon' => $this->options->getEncodedOption('message_insert_emoticon', 'Insert an emoticon'),
+			'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
             'windowTitle' => $this->options->getEncodedOption('window_title', ''),
 
             'enableAttachmentsPanel' => $this->options->isOptionEnabled('enable_images_uploader') || $this->options->isOptionEnabled('enable_attachments_uploader'),

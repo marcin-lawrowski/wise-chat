@@ -309,8 +309,9 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.3 =
-* Fixed: anonymous users on the list when "WP users only" option is selected
-* Fixed: logged in user becomes anonymous after some inactivity time
+* Shift+ENTER moves to the new line in message input field (when multiline mode is not enabled)
+* Fixed: anonymous users are sometimes on the users list when "WP users only" option is selected
+* Fixed: logged in user becomes anonymous after some inactivity time (especially on mobile devices)
 
 = 2.2 =
 * Clickable usernames on the users list

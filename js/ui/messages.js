@@ -23,7 +23,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	var usersCounter = container.find('.wcUsersCounter span');
 	var messagesInput = container.find('.wcInput');
 	var currentUserName = container.find('.wcCurrentUserName');
-	var isMessageMultiline = messagesInput.is("textarea");
+	var isMessageMultiline = options.multilineSupport;
 	var submitButton = container.find('.wcSubmitButton');
 	var currentRequest = null;
 	var lastErrorMessageText = null;
@@ -316,6 +316,10 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 
 			messagesInput.val('');
 
+			if (!isMessageMultiline) {
+				switchToSingle();
+			}
+
 			if (!isMessageMultiline && message.length > 0) {
 				messagesHistory.resetPointer();
 				if (messagesHistory.getPreviousMessage() != message) {
@@ -337,13 +341,81 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
         debugContainer.html(debugLog.join('<br />'));
     }
 
-	function onInputKeyPress(e) {
-		if (!isMessageMultiline && e.which == 13) {
-			sendMessage();
+	function switchToMultiline() {
+		// check if it was executed already:
+		if (messagesInput.is('textarea')) {
+			return;
 		}
 
-		if (isMessageMultiline && e.which == 13 && e.shiftKey) {
-			sendMessage();
+		// create new textarea and put a message into it:
+		var textarea = jQuery('<textarea />');
+		textarea.hide();
+		textarea.addClass('wcInput');
+		textarea.attr('placeholder', options.messages.hint_message);
+		textarea.attr('maxlength', options.messageMaxLength);
+		textarea.css('overflow-y', 'hidden');
+		textarea.keypress(onInputKeyPress);
+		textarea.val(messagesInput.val() + "\n");
+
+		// remove single-lined input:
+		messagesInput.after(textarea);
+		messagesInput.off('keypress');
+		messagesInput.off('keydown');
+		messagesInput.remove();
+
+		textarea.show();
+		textarea.focus();
+		messagesInput = textarea;
+	}
+
+	function switchToSingle() {
+		// check if it was executed already:
+		if (messagesInput.is('input')) {
+			return;
+		}
+
+		// create new textarea and put a message into it:
+		var input = jQuery('<input />');
+		input.hide();
+		input.addClass('wcInput');
+		input.attr('placeholder', options.messages.hint_message);
+		input.attr('maxlength', options.messageMaxLength);
+		input.attr('type', 'text');
+		input.attr('title', options.messages.messageInputTitle);
+		input.keypress(onInputKeyPress);
+		input.keydown(onInputKeyDown);
+
+		// remove single-lined input:
+		messagesInput.after(input);
+		messagesInput.off('keypress');
+		messagesInput.remove();
+
+		input.show();
+		input.focus();
+		messagesInput = input;
+	}
+
+	function fitMultilineTextInput() {
+		var lines = messagesInput.val().replace(/^\s+|\s+$/g, '').split("\n").length;
+		var lineHeight = parseInt(messagesInput.css('line-height'));
+		lines++;
+		if (lines > 0 && !isNaN(lineHeight) && lineHeight > 0) {
+			messagesInput.css('height', (lines * lineHeight + 10) + 'px');
+		}
+	}
+
+	function onInputKeyPress(e) {
+		if (e.which == 13) {
+			if (e.shiftKey) {
+				if (isMessageMultiline) {
+					sendMessage();
+				} else {
+					switchToMultiline();
+					fitMultilineTextInput();
+				}
+			} else if (!isMessageMultiline) {
+				sendMessage();
+			}
 		}
 	};
 

@@ -390,9 +390,7 @@ class WiseChatRenderer {
             $formattedMessage = $emoticonsFilter->filter($formattedMessage);
 		}
 		
-		if ($this->options->isOptionEnabled('multiline_support')) {
-			$formattedMessage = str_replace("\n", '<br />', $formattedMessage);
-		}
+		$formattedMessage = str_replace("\n", '<br />', $formattedMessage);
 		
 		return $formattedMessage;
 	}

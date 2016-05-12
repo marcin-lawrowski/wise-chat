@@ -56,7 +56,7 @@
                     <textarea class='wcInput' maxlength='{{ messageMaxLength }}' placeholder='{{ hintMessage }}'></textarea>
                 {% endif multilineSupport %}
                 {% if !multilineSupport %}
-                    <input class='wcInput' type='text' maxlength='{{ messageMaxLength }}' placeholder='{{ hintMessage }}' />
+                    <input class='wcInput' type='text' maxlength='{{ messageMaxLength }}' placeholder='{{ hintMessage }}' title="{{ messageInputTitle }} " />
                 {% endif multilineSupport %}
 
                 <progress class="wcMainProgressBar" max="100" value="0" style="display: none;"> </progress>
