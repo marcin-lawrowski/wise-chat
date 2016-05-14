@@ -160,7 +160,7 @@ class WiseChatAuthentication {
         $userName = trim($userName);
 
         // check for valid characters:
-        if (strlen($userName) == 0 || !preg_match('/^[a-zA-Z0-9\-_ ]+$/', $userName)) {
+        if (strlen($userName) == 0 || !preg_match('/^[\p{L}a-zA-Z0-9\-_ ’]+$/u', $userName)) {
             throw new Exception($this->options->getOption('message_error_1', 'Only letters, number, spaces, hyphens and underscores are allowed'));
         }
 
