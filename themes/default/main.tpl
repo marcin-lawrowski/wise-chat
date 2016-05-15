@@ -96,7 +96,7 @@
             {% endif showCustomizationsPanel %}
 
             {% if poweredBy %}
-                {{ poweredBy }}<br class='wcClear' />
+                {{ poweredBy }}
             {% endif poweredBy %}
         </div>
     {% endif allowToSendMessages %}
@@ -117,7 +117,7 @@
 
     {% if !allowToSendMessages %}
         {% if poweredBy %}
-            {{ poweredBy }}<br class='wcClear' />
+            {{ poweredBy }}
         {% endif poweredBy %}
     {% endif allowToSendMessages %}
 </div>

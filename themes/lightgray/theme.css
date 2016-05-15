@@ -11,6 +11,14 @@
 	color: #111;
 }
 
+.wcContainer .wcPoweredBy {
+	padding-right: 10px; padding-bottom: 3px;
+}
+
+.wcContainer .wcControls .wcPoweredBy {
+	padding: 0px;
+}
+
 .wcContainer .wcWindowTitle {
 	margin: 10px 5px; font-size: 110%; color: #111;
 }

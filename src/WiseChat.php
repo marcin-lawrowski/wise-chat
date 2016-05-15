@@ -390,7 +390,7 @@ class WiseChat {
 				$index = $position % count($urls);
 			}
 
-			return sprintf('<span class="wcPoweredBy">Powered by <a href="%s" title="%s">Wise Chat</a></span>', $urls[$index], $titles[$index]);
+			return sprintf('<div class="wcPoweredBy">Powered by <a href="%s" title="%s">Wise Chat</a></div>', $urls[$index], $titles[$index]);
 		}
 
 		return '';

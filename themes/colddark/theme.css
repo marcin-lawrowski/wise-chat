@@ -1,5 +1,9 @@
 /* colddark */
 
+.wcContainer .wcPoweredBy {
+	padding-right: 10px; padding-bottom: 5px;
+}
+
 .wcContainer *, .wcError * {
 	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif; color: #cfcfcf;
 }

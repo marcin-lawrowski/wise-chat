@@ -60,7 +60,7 @@
 }
 
 .wcContainer .wcPoweredBy {
-	float: right; font-size: 0.8em; padding-right: 8px; padding-top: 3px; padding-bottom: 3px;
+	text-align: right; font-size: 0.8em; margin-top: 2px; padding: 0px;
 }
 
 .wcContainer .wcPoweredBy a {
