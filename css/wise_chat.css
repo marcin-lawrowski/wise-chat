@@ -89,7 +89,7 @@
 
 .wcUsersListIncluded .wcUsersList {
 	height: 200px; border: 1px solid #dfdfdf; overflow: auto; background-color: #fff; margin: 0px; padding: 0px 5px;
-	-webkit-overflow-scrolling: touch; overflow: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 
 .wcContainer .wcUsersCounter {

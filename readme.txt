@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 * Shift+ENTER moves to the new line in message input field (when multiline mode is not enabled)
 * Fixed: anonymous users are sometimes on the users list when "WP users only" option is selected
 * Fixed: logged in user becomes anonymous after some inactivity time (especially on mobile devices)
+* Fixed: no scrollbar on users list
 
 = 2.2 =
 * Clickable usernames on the users list
