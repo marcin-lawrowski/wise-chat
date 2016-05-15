@@ -163,6 +163,7 @@ class WiseChatRenderer {
 	* @return string HTML source
 	*/
 	public function getRenderedUsersList($channel) {
+		$hideRoles = $this->options->getOption('users_list_hide_roles', array());
 		$channelUsers = $this->channelUsersDAO->getAllActiveByChannelId($channel->getId());
 		$isCurrentUserPresent = false;
 		$userId = $this->authentication->getUserIdOrNull();
@@ -178,6 +179,15 @@ class WiseChatRenderer {
 				continue;
 			}
 
+			// hide chosen roles:
+			if (is_array($hideRoles) && count($hideRoles) > 0 && $channelUser->getUser()->getWordPressId() > 0) {
+				$wpUser = $this->usersDAO->getWpUserByID($channelUser->getUser()->getWordPressId());
+				if (is_array($wpUser->roles) && count(array_intersect($hideRoles, $wpUser->roles)) > 0) {
+					continue;
+				}
+			}
+
+			// hide anonymous users:
 			if ($this->options->isOptionEnabled('users_list_hide_anonymous', false) && !($channelUser->getUser()->getWordPressId() > 0)) {
 				continue;
 			}
@@ -235,7 +245,15 @@ class WiseChatRenderer {
 		}
 		
 		if (!$isCurrentUserPresent && $userId !== null) {
-			if (!$this->options->isOptionEnabled('users_list_hide_anonymous', false) || $this->authentication->getUser()->getWordPressId() > 0) {
+			$hidden = false;
+			if (is_array($hideRoles) && count($hideRoles) > 0 && $this->authentication->getUser()->getWordPressId() > 0) {
+				$wpUser = $this->usersDAO->getWpUserByID($this->authentication->getUser()->getWordPressId());
+				if (is_array($wpUser->roles) && count(array_intersect($hideRoles, $wpUser->roles)) > 0) {
+					$hidden = true;
+				}
+			}
+
+			if (!$hidden && (!$this->options->isOptionEnabled('users_list_hide_anonymous', false) || $this->authentication->getUser()->getWordPressId() > 0)) {
 				array_unshift(
 					$usersList, sprintf('<span class="wcUserInChannel wcCurrentUser">%s</span>', $this->authentication->getUserNameOrEmptyString())
 				);

@@ -74,6 +74,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below)'),
 			array('autohide_users_list_width', 'Auto-hide Width Threshold', 'stringFieldCallback', 'integer', 'Minimum width of the chat window when users list is visible'),
 			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
+			array('users_list_hide_roles', 'Hide User Roles', 'checkboxesCallback', 'multivalues', 'Hides users belonging to these roles on the users list', self::getRoles()),
 			array('users_list_linking', 'Usernames Mode', 'booleanFieldCallback', 'boolean', 'Makes usernames like it is set in Username Display Mode option.'),
 
 			array('_section', 'Advanced Customization'),
@@ -121,6 +122,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
             'autohide_users_list' => 0,
             'autohide_users_list_width' => 300,
 			'users_list_hide_anonymous' => 0,
+			'users_list_hide_roles' => array(),
 			'users_list_linking' => 0,
 		);
 	}
@@ -147,6 +149,18 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'' => 'Full',
 			'elapsed' => 'Elapsed'
 		);
+	}
+
+	public function getRoles() {
+		$editableRoles = array_reverse(get_editable_roles());
+		$rolesOptions = array();
+
+		foreach ($editableRoles as $role => $details) {
+			$name = translate_user_role($details['name']);
+			$rolesOptions[esc_attr($role)] = $name;
+		}
+
+		return $rolesOptions;
 	}
 	
 	public static function getInputFieldLocation() {
