@@ -309,6 +309,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.3 =
+* Debug mode option (easier to report errors)
 * Option to select which user roles have to be hidden in the users list
 * Allow to use extended range of letters (Unicode characters) in username
 * Shift+ENTER moves to the new line in message input field (when multiline mode is not enabled)

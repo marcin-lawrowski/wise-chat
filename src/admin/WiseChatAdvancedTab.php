@@ -21,6 +21,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				WiseChatAdvancedTab::getRefreshTimes()
 			),
 			array('show_powered_by', 'Show "Powered By" Footer', 'booleanFieldCallback', 'boolean'),
+			array('enabled_debug', 'Enable Debug Mode', 'booleanFieldCallback', 'boolean'),
 		);
 	}
 	
@@ -29,6 +30,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			'ajax_engine' => 'lightweight',
 			'messages_refresh_time' => 3000,
 			'show_powered_by' => 1,
+			'enabled_debug' => 0,
 		);
 	}
 	

@@ -258,6 +258,7 @@ class WiseChat {
 			'showUsersList' => $this->options->isOptionEnabled('show_users'),
 			'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),
 			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
+			'debugMode' => $this->options->isOptionEnabled('enabled_debug', false),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());

@@ -174,6 +174,10 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		})
 		.success(onNewMessagesArrived)
 		.error(onMessageArrivalError);
+
+		if (options.debugMode) {
+			updateDebugLog();
+		}
 	};
 
 	function onNewMessagesArrived(result) {
@@ -334,12 +338,19 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
         var debugContainer = container.find('.wcDebug');
         if (debugContainer.length == 0) {
             debugContainer = jQuery('<div>').attr('class', 'wcDebug');
-            container.append(jQuery('<div>').html('This is errors log. Select and copy the text below:'));
+            container.append(jQuery('<div>').html('  [ DEBUG MODE error log. Select and copy the text below: ]  '));
             container.append(debugContainer);
         }
 
-        debugContainer.html(debugLog.join('<br />'));
+		updateDebugLog();
     }
+
+	function updateDebugLog() {
+		var debugContainer = container.find('.wcDebug');
+		if (debugContainer.length > 0 && debugLog.length < 20) {
+			debugContainer.html(debugLog.join('<br />'));
+		}
+	}
 
 	function switchToMultiline() {
 		// check if it was executed already:
@@ -557,6 +568,9 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		onWindowResize();
 		attachEventListeners();
 		scrollMessages();
+		if (options.debugMode) {
+			showDebug();
+		}
 	};
 	
 	this.scrollMessages = scrollMessages;

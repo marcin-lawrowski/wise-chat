@@ -12,6 +12,11 @@ require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
 WiseChatContainer::load('WiseChatOptions');
 
+if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
+	error_reporting(E_ALL);
+	ini_set("display_errors", 1);
+}
+
 if (is_admin()) {
 	// installer:
 	register_activation_hook(__FILE__, array('WiseChatInstaller', 'activate'));

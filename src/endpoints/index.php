@@ -73,6 +73,11 @@
 	
 	wp_plugin_directory_constants();
 	wp_cookie_constants();
+
+	if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
+		error_reporting(E_ALL);
+		ini_set("display_errors", 1);
+	}
 	
 	// removing images downloaded by the chat:
 	$wiseChatImagesService = WiseChatContainer::get('services/WiseChatImagesService');
