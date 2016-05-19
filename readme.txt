@@ -309,6 +309,8 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.3 =
+* Emoticons layer expands to the top
+* Three new emoticon sets
 * Debug mode option (easier to report errors)
 * Option to select which user roles have to be hidden in the users list
 * Allow to use extended range of letters (Unicode characters) in username

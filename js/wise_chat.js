@@ -636,7 +636,7 @@ function WiseChatProgressBar(options) {
  * @constructor
  */
 function WiseChatEmoticonsPanel(options, messages) {
-    var EMOTICONS = [
+    var EMOTICONS_1 = [
         'zip-it', 'blush', 'angry', 'not-one-care', 'laugh-big', 'please', 'cool', 'minishock',
         'devil', 'silly', 'smile', 'devil-laugh', 'heart', 'not-guilty', 'hay',
         'in-love', 'meow', 'tease', 'gift', 'kissy', 'sad', 'speechless', 'goatse',
@@ -644,15 +644,104 @@ function WiseChatEmoticonsPanel(options, messages) {
         'female', 'laugh', 'ill', 'total-shock', 'zzz', 'clock', 'oh', 'mail', 'crazy',
         'cry', 'boring', 'geek'
     ];
-    var EMOTICONS_SHORTCUTS = {
+    var EMOTICONS_SHORTCUTS_1 = {
         'smile': ':)', 'wink': ';)', 'laugh': ':D', 'laugh-big': 'xD',
         'sad': ':(', 'cry': ';(', 'kissy': ':*', 'silly': ':P',
         'crazy': ';P', 'angry': ':[', 'devil-laugh': ':>', 'devil': ':]', 'goatse': ':|'
     };
+	var FILES_EXTENSION_1 = 'png';
+	var SUBDIRECTORY_1 = '';
+	var LAYER_WIDTH_1 = null;
+
+	var EMOTICONS_2 = [
+		'angry', 'bulb', 'cafe', 'clap', 'clouds', 'cry', 'devil', 'gift', 'handshake',
+		'heart', 'kissy', 'laugh-big', 'no', 'ok', 'feel_peace', 'oh_please', 'rain', 'scared',
+		'silly', 'snail', 'sun', 'baloons', 'bye', 'cake', 'cleaver', 'cool', 'cry_big',
+		'drink', 'hat', 'heart_big', 'laugh', 'moon', 'offended', 'omg', 'a_phone',
+		'question', 'sad', 'shy', 'smile', 'stars', 'wine'
+	];
+	var EMOTICONS_SHORTCUTS_2 = {
+		'smile': ':)', 'wink': ';)', 'laugh': ':D', 'laugh-big': 'xD',
+		'sad': ':(', 'cry': ';(', 'kissy': ':*', 'silly': ':P',
+		'crazy': ';P', 'angry': ':[', 'devil-laugh': ':>', 'devil': ':]'
+	};
+	var FILES_EXTENSION_2 = 'gif';
+	var SUBDIRECTORY_2 = 'set_2/';
+	var LAYER_WIDTH_2 = 235;
+
+	var EMOTICONS_3 = [
+		'angel', 'confused', 'cthulhu', 'drugged', 'grinning', 'horrified', 'kawaii', 'madness',
+		'shy', 'spiteful', 'terrified', 'tongue_out', 'tongue_out_up_left', 'winking_grinning',
+		'angry', 'cool', 'cute', 'frowning', 'happy', 'hug', 'kissing', 'malicious', 'sick',
+		'stupid', 'thumbs_down', 'tongue_out_laughing', 'unsure', 'winking_tongue_out', 'aww',
+		'creepy', 'cute_winking', 'gasping', 'happy_smiling', 'irritated', 'laughing', 'naww',
+		'smiling', 'surprised', 'thumbs_up', 'tongue_out_left', 'unsure_2', 'blushing', 'crying',
+		'devil', 'greedy', 'heart', 'irritated_2', 'lips_sealed', 'i_am_pouting', 'speechless',
+		'surprised_2', 'tired', 'tongue_out_up', 'winking'
+	];
+	var EMOTICONS_SHORTCUTS_3 = {
+		'smiling': ':)', 'winking': ';)', 'laughing': ':D', 'madness': 'xD',
+		'frowning': ':(', 'crying': ';(', 'kissing': ':*', 'tongue_out': ':P',
+		'winking_tongue_out': ';P', 'angry': ':[', 'devil': ':>', 'devil': ':]', 'irritated': ':|'
+	};
+	var FILES_EXTENSION_3 = 'png';
+	var SUBDIRECTORY_3 = 'set_3/';
+	var LAYER_WIDTH_3 = 195;
+
+	var EMOTICONS_4 = [
+		'angel', 'beer', 'clock', 'crying', 'drink', 'eyeroll', 'glasses-cool', 'jump',
+		'mad-tongue', 'sad', 'sick', 'smile-big', 'thinking', 'wilt',
+		'angry', 'bomb', 'cloudy', 'cute', 'drool', 'fingers-crossed', 'go-away',
+		'kiss', 'mail', 'shock', 'silly', 'smirk', 'tongue', 'wink',
+		'arrogant', 'bye', 'coffee', 'devil', 'embarrassed', 'freaked-out', 'good',
+		'laugh', 'mean', 'shout', 'sleepy', 'star', 'vampire', 'worship',
+		'bad', 'cake', 'confused', 'disapointed', 'excruciating', 'giggle', 'in-love',
+		'love', 'neutral', 'rotfl', 'shut-mouth', 'smile', 'struggle', 'weep', 'yawn',
+		'beauty', 'hypnotized', 'island', 'quiet', 'rose', 'soccerball'
+	];
+	var EMOTICONS_SHORTCUTS_4 = {
+		'smile': ':)', 'wink': ';)', 'laugh': ':D', 'smile-big': 'xD',
+		'sad': ':(', 'crying': ';(', 'kiss': ':*', 'tongue': ':P',
+		'silly': ';P', 'angry': ':[', 'devil': ':>', 'devil': ':]', 'neutral': ':|'
+	};
+	var FILES_EXTENSION_4 = 'png';
+	var SUBDIRECTORY_4 = 'set_4/';
+	var LAYER_WIDTH_4 = 280;
+
     var LAYER_ID = 'wcEmoticonsLayer' + options.chatId;
     var container = jQuery('#' + options.chatId);
     var insertEmoticonButton = container.find('.wcInsertEmoticonButton');
     var layer = jQuery('#' + LAYER_ID);
+
+	var EMOTICONS = EMOTICONS_1;
+	var EMOTICONS_SHORTCUTS = EMOTICONS_SHORTCUTS_1;
+	var FILES_EXTENSION = FILES_EXTENSION_1;
+	var SUBDIRECTORY = SUBDIRECTORY_1;
+	var LAYER_WIDTH = null;
+	switch (options.emoticonsSet) {
+		case 2:
+			EMOTICONS = EMOTICONS_2;
+			EMOTICONS_SHORTCUTS = EMOTICONS_SHORTCUTS_2;
+			FILES_EXTENSION = FILES_EXTENSION_2;
+			SUBDIRECTORY = SUBDIRECTORY_2;
+			LAYER_WIDTH = LAYER_WIDTH_2;
+			break;
+		case 3:
+			EMOTICONS = EMOTICONS_3;
+			EMOTICONS_SHORTCUTS = EMOTICONS_SHORTCUTS_3;
+			FILES_EXTENSION = FILES_EXTENSION_3;
+			SUBDIRECTORY = SUBDIRECTORY_3;
+			LAYER_WIDTH = LAYER_WIDTH_3;
+			break;
+		case 4:
+			EMOTICONS = EMOTICONS_4;
+			EMOTICONS_SHORTCUTS = EMOTICONS_SHORTCUTS_4;
+			FILES_EXTENSION = FILES_EXTENSION_4;
+			SUBDIRECTORY = SUBDIRECTORY_4;
+			LAYER_WIDTH = LAYER_WIDTH_4;
+			break;
+	}
+
     if (insertEmoticonButton.length > 0 && layer.length === 0) {
         layer = jQuery('<div />')
             .attr('id', LAYER_ID)
@@ -663,7 +752,7 @@ function WiseChatEmoticonsPanel(options, messages) {
         // build buttons:
         for (var i = 0; i < EMOTICONS.length; i++) {
             var emoticon = EMOTICONS[i];
-            var imageSrc = options.emoticonsBaseURL + emoticon + '.png';
+            var imageSrc = options.emoticonsBaseURL + SUBDIRECTORY + emoticon + '.' + FILES_EXTENSION;
             var button = jQuery('<a />')
                 .attr('href', 'javascript://')
                 .attr('title', emoticon)
@@ -675,6 +764,10 @@ function WiseChatEmoticonsPanel(options, messages) {
                 }(emoticon));
             layer.append(button);
         }
+	}
+
+	if (LAYER_WIDTH !== null) {
+		layer.css('width', LAYER_WIDTH + 'px');
 	}
 
     function hideLayer() {
@@ -696,7 +789,7 @@ function WiseChatEmoticonsPanel(options, messages) {
 	function onInsertEmoticonButtonClick() {
         if (!layer.is(':visible')) {
             layer.css({
-                top: insertEmoticonButton.offset().top,
+                top: (insertEmoticonButton.offset().top + insertEmoticonButton.outerHeight()) - layer.outerHeight(),
                 left: insertEmoticonButton.offset().left - layer.outerWidth() - 5
             });
             showLayer();

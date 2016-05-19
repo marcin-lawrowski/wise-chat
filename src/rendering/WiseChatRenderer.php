@@ -401,11 +401,12 @@ class WiseChatRenderer {
             $hashTagsFilter = WiseChatContainer::get('rendering/filters/post/WiseChatHashtagsPostFilter');
 			$formattedMessage = $hashTagsFilter->filter($formattedMessage);
 		}
-		
-		if ($this->options->isOptionEnabled('emoticons_enabled', true)) {
+
+		$emoticonsSet = $this->options->getIntegerOption('emoticons_enabled', 1);
+		if ($emoticonsSet > 0) {
             /** @var WiseChatEmoticonsFilter $emoticonsFilter */
             $emoticonsFilter = WiseChatContainer::get('rendering/filters/post/WiseChatEmoticonsFilter');
-            $formattedMessage = $emoticonsFilter->filter($formattedMessage);
+            $formattedMessage = $emoticonsFilter->filter($formattedMessage, $emoticonsSet);
 		}
 		
 		$formattedMessage = str_replace("\n", '<br />', $formattedMessage);

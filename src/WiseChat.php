@@ -259,6 +259,7 @@ class WiseChat {
 			'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),
 			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 			'debugMode' => $this->options->isOptionEnabled('enabled_debug', false),
+			'emoticonsSet' => $this->options->getIntegerOption('emoticons_enabled', 1),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());

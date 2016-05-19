@@ -13,7 +13,11 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('message_max_length', 'Message Maximum Length', 'stringFieldCallback', 'integer', 'Maximum length of a message sent by an user'),
 			array('allow_post_links', 'Enable Links', 'booleanFieldCallback', 'boolean', 'Makes posted links clickable'),
 			array('enable_twitter_hashtags', 'Enable Twitter Hashtags', 'booleanFieldCallback', 'boolean', 'Detects Twitter hashtags and converts them to links'),
-			array('emoticons_enabled', 'Enable Emoticons', 'booleanFieldCallback', 'boolean', 'Displays posted emoticons (like :-) or ;-)) as images. You can display a button that allows to insert emoticons. The option is in appearance settings.'),
+			array(
+				'emoticons_enabled', 'Emoticons Set', 'selectCallback', 'integer',
+				'Displays posted emoticons (like :-) or ;-)) as images. You can display a button that allows to insert emoticons. The option is in appearance settings.',
+				self::getEmoticonSets()
+			),
 			array('enable_title_notifications', 'Enable Title Notifications', 'booleanFieldCallback', 'boolean', 'Shows notifications in browser\'s title when new messages arrives and the browser window is hidden / inactive'),
 			array('sound_notification', 'Sound Notification', 'selectCallback', 'string', 'Plays a sound when new messages arrives. You can add an option to mute sound for an user in appearance settings', WiseChatMessagesTab::getNotificationSounds()),
 			
@@ -80,6 +84,16 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'sound-02' => 'Sound 2',
 			'sound-03' => 'Sound 3',
 			'sound-04' => 'Sound 4'
+		);
+	}
+
+	public static function getEmoticonSets() {
+		return array(
+			0 => '-- No emoticons --',
+			1 => 'Basic Wise Chat',
+			2 => 'Animated',
+			3 => 'Steel',
+			4 => 'Pidgin',
 		);
 	}
 }
