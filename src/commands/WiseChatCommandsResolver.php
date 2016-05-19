@@ -86,7 +86,20 @@ class WiseChatCommandsResolver {
 	}
 	
 	private function getTokenizedCommand($command) {
-		return preg_split('/\s+/', trim(trim($command), '/'));
+		$command = trim(trim($command), '/');
+		$matches = array();
+		preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $command, $matches);
+
+		if (is_array($matches) && count($matches) > 0) {
+			$matchesResult = array();
+			foreach ($matches[0] as $match) {
+				$matchesResult[] = trim($match, '"');
+			}
+
+			return $matchesResult;
+		} else {
+			return array();
+		}
 	}
 	
 	private function getClassNameFromCommand($command) {

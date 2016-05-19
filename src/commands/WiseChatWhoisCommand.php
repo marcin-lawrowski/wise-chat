@@ -15,17 +15,23 @@ class WiseChatWhoisCommand extends WiseChatAbstractCommand {
 
         $user = $this->usersDAO->getLatestByName($userName);
         if ($user === null) {
-            $this->addMessage('User was not found');
+            $this->addMessage(sprintf('User "%s" was not found', $userName));
             return;
         }
 
         $channelUser = $this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $this->channel->getId());
         if ($channelUser !== null) {
-            $details = sprintf("User: %s, IP: %s", $userName, $user->getIp());
+            $details = sprintf(
+                "User: %s \n".
+                "ID: %d \n".
+                "IP address: %s \n".
+                "PHP session ID: %s \n",
+                $userName, $user->getId(), $user->getIp(), $user->getSessionId(), $user->get
+            );
 
             $this->addMessage($details);
         } else {
-            $this->addMessage('User was not found');
+            $this->addMessage(sprintf('User "%s" was not found', $userName));
         }
 	}
 }
