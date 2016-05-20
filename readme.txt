@@ -1,7 +1,7 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
 Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
-Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, bp, chatbox, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
+Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Tested up to: 4.5.2
 Stable tag: 2.3
@@ -14,15 +14,17 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)** | **[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
+**[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
+
+Wise Chat: **[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)**
 
 = List of features: =
 
 * **Easy installation**: The chat can be installed using a convenient shortcode, widget or PHP function. Multiple chat installations can be embedded on the same page.
 * **Mobile ready**: Fully responsive design and mobile ready interface.
 * **Themes**: Use one of 3 nice themes to quickly adjust the style of the chat. The simple theme adjusts to your styles.
-* **No server required**: There is no need to set up, maintain or pay for a server. Regular hosting is sufficient.
-* **Chat Channels**: Let people post messages in dedicated chat rooms (called channels). Run multiple channels either simultaneously on the same page or on separate pages.
+* **No external server required**: There is no need to set up, maintain or pay for a server. Regular hosting is sufficient.
+* **Unlimited Chat Channels**: Let people post messages in dedicated chat rooms (called channels). Run multiple channels either simultaneously on the same page or on separate pages.
 * **Private Chat Channels**: Make individual chat channels private by protecting them with a password. Only users that know the password could access the channel.
 * **Channels management**: Remove all messages from the single channel or delete the channel completely.
 * **Anonymous Users**: Unregistered or anonymous users can be allowed to participate in the chat. Auto-generated name (configurable) is assigned to such user.
