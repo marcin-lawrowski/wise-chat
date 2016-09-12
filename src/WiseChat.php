@@ -71,6 +71,11 @@ class WiseChat {
 	 * @var WiseChatAuthentication
 	 */
 	private $authentication;
+
+	/**
+	 * @var WiseChatAds
+	 */
+	private $ads;
 	
 	/**
 	* @var array
@@ -91,6 +96,7 @@ class WiseChat {
 		$this->service = WiseChatContainer::get('services/WiseChatService');
 		$this->attachmentsService = WiseChatContainer::get('services/WiseChatAttachmentsService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
+		$this->ads = WiseChatContainer::getLazy('services/WiseChatAds');
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
@@ -321,7 +327,7 @@ class WiseChat {
             'messagesOrder' => $this->options->getEncodedOption('messages_order', '') == 'descending' ? 'descending' : 'ascending',
 			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
 			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition(),
-			'poweredBy' => $this->getPoweredByFooter(),
+			'poweredBy' => $this->ads->getFooterAd(),
 		);
 		
 		$data = array_merge($data, $this->userSettingsDAO->getAll());
@@ -358,43 +364,5 @@ class WiseChat {
      */
 	private function getPostParam($name, $default = null) {
 		return array_key_exists($name, $_POST) ? $_POST[$name] : $default;
-	}
-
-	/**
-	 * Returns Powered By ad.
-	 *
-	 * @return string
-	 */
-	private function getPoweredByFooter() {
-		if ($this->options->isOptionEnabled('show_powered_by', true)) {
-			$domain = $_SERVER['SERVER_NAME'];
-			$index = 0;
-			$urls = array(
-				'http://kaine.pl/projects/wp-plugins/wise-chat/',
-				'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-				'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-				'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-				'http://kaine.pl/',
-				'http://kaine.pl/projects/wp-plugins/wise-chat/features/',
-				'http://kaine.pl/projects/wp-plugins/wise-chat-pro/pricing/'
-			);
-			$titles = array(
-				'Wise Chat plugin for WordPress',
-				'Chat plugin for WordPress and BuddyPress',
-				'WordPress chat plugin',
-				'WordPress chat',
-				'Wise Chat plugin',
-				'Wise Chat plugin for WordPress',
-				'WordPress and BuddyPress chat plugin',
-			);
-			if (strlen($domain) > 0) {
-				$position = ord(strtoupper($domain[0])) - ord('A') + 1;
-				$index = $position % count($urls);
-			}
-
-			return sprintf('<div class="wcPoweredBy">Powered by <a href="%s" title="%s">Wise Chat</a></div>', $urls[$index], $titles[$index]);
-		}
-
-		return '';
 	}
 }
