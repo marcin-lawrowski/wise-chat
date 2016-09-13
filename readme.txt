@@ -311,6 +311,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4 =
+* Shift+ENTER moves the cursor to the new line in multiline mode, ENTER sends the message
 * Fixed: jQuery up to version 3.1 is now supported
 * Fixed: bug in "Powered by" feature
 

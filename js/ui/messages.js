@@ -322,6 +322,8 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 
 			if (!isMessageMultiline) {
 				switchToSingle();
+			} else {
+				fitMultilineTextInput();
 			}
 
 			if (!isMessageMultiline && message.length > 0) {
@@ -404,6 +406,11 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		input.show();
 		input.focus();
 		messagesInput = input;
+
+		// Safari fix - unknown new line appears, should be cleared:
+		setTimeout(function () {
+			messagesInput.val('');
+		}, 200);
 	}
 
 	function fitMultilineTextInput() {
@@ -418,13 +425,20 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function onInputKeyPress(e) {
 		if (e.which == 13) {
 			if (e.shiftKey) {
-				if (isMessageMultiline) {
-					sendMessage();
-				} else {
+				if (!isMessageMultiline) {
 					switchToMultiline();
-					fitMultilineTextInput();
 				}
-			} else if (!isMessageMultiline) {
+				fitMultilineTextInput();
+
+				// move cusor to the end:
+				if (!isMessageMultiline) {
+					messagesInput.focus();
+					var text = messagesInput.val();
+					messagesInput.val('');
+					messagesInput.val(text);
+					messagesInput.focus();
+				}
+			} else {
 				sendMessage();
 			}
 		}
