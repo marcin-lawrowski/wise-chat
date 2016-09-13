@@ -34,10 +34,10 @@ function WiseChatSettings(options, messages) {
 				checksum: options.checksum
 			}
 		})
-		.success(function(result) {
+		.done(function(result) {
 			onPropertySaveRequestSuccess(result, successCallback);
 		})
-		.error(function(jqXHR, textStatus, errorThrown) {
+		.fail(function(jqXHR, textStatus, errorThrown) {
             messages.logDebug('[saveProperty] ' + jqXHR.responseText);
 			onPropertySaveRequestError(jqXHR, textStatus, errorThrown, errorCallback);
 		});

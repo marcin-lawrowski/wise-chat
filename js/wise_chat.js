@@ -209,11 +209,11 @@ function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 				}
 			}
 		})
-		.success(function(result) {
+		.done(function(result) {
 			progressBar.hide();
 			successCallback.apply(that, [result]);
 		})
-		.error(function(jqXHR, textStatus, errorThrown) {
+		.fail(function(jqXHR, textStatus, errorThrown) {
 			progressBar.hide();
 			try {
 				var response = jQuery.parseJSON(jqXHR.responseText);

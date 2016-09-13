@@ -58,8 +58,8 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages) {
 				checksum: options.checksum
 			}
 		})
-		.success(analyzeResponse)
-		.error(onMaintenanceRequestError);
+		.done(analyzeResponse)
+		.fail(onMaintenanceRequestError);
 	};
 	
 	function analyzeResponse(data) {

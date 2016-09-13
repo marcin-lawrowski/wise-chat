@@ -172,8 +172,8 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 				checksum: options.checksum
 			}
 		})
-		.success(onNewMessagesArrived)
-		.error(onMessageArrivalError);
+		.done(onNewMessagesArrived)
+		.fail(onMessageArrivalError);
 
 		if (options.debugMode) {
 			updateDebugLog();
@@ -300,8 +300,8 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 				}
 			}
 		})
-		.success(onMessageSent)
-		.error(onMessageSentError);
+		.done(onMessageSent)
+		.fail(onMessageSentError);
 	};
 
 	function sendMessage() {
@@ -504,10 +504,10 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 				checksum: options.checksum
 			}
 		})
-		.success(function() {
+		.done(function() {
 			hideMessage(messageId);
 		})
-		.error(function(jqXHR, textStatus, errorThrown) {
+		.fail(function(jqXHR, textStatus, errorThrown) {
             logDebug('[onMessageDelete] ' + jqXHR.responseText);
 			showErrorMessage('Server error: ' + errorThrown);
 		});
@@ -528,7 +528,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 				checksum: options.checksum
 			}
 		})
-		.success(function(result) {
+		.done(function(result) {
 			try {
 				var response = jQuery.parseJSON(result);
 				if (response.error) {
@@ -539,7 +539,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 				showErrorMessage('Server error: ' + e.toString());
 			}
 		})
-		.error(function(jqXHR, textStatus, errorThrown) {
+		.fail(function(jqXHR, textStatus, errorThrown) {
             logDebug('[onUserBan] ' + jqXHR.responseText);
 			showErrorMessage('Server error occurred: ' + errorThrown);
 		});

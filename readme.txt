@@ -311,6 +311,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4 =
+* Fixed: jQuery up to version 3.1 is now supported
 * Fixed: bug in "Powered by" feature
 
 = 2.3 =
