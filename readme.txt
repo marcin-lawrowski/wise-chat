@@ -86,6 +86,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * jQuery JS library (available in most themes)
 
 = Optional requirements: =
+* Exif PHP extension (in order to run auto-rotate feature for sent images)
 * mbstring PHP extension (in order to use all features of bad words filter)
 * Lightbox 2 library (for showing images on the nice looking popup)
 
@@ -312,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 
 = 2.4 =
 * Shift+ENTER moves the cursor to the new line in multiline mode, ENTER sends the message
+* Fixed: errors with sending images when there is no Exif PHP module installed
 * Fixed: jQuery up to version 3.1 is now supported
 * Fixed: bug in "Powered by" feature
 

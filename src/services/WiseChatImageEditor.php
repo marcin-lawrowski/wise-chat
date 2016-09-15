@@ -158,8 +158,11 @@ class WiseChatImageEditor {
 		if ($this->image === null) {
 			throw new Exception('WiseChatImageEditor: Image was not loaded');
 		}
-		
-		$exif = @exif_read_data($this->imagePath);
+
+		if (!function_exists('exif_read_data')) {
+			return;
+		}
+		$exif = exif_read_data($this->imagePath);
 
 		if (is_array($exif) && !empty($exif['Orientation'])) {
 			switch ($exif['Orientation']) {

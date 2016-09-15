@@ -46,7 +46,8 @@ class WiseChatImagesService {
 		try {
 			$this->createTempFile();
 			$this->saveTempFile($binaryImageData);
-			
+
+			/** @var WiseChatImageEditor $imageEditor */
 			$imageEditor = WiseChatContainer::get('services/WiseChatImageEditor');
 			$imageEditor->load($this->tempFileName);
 			$imageEditor->resize(

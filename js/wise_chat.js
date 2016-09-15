@@ -172,12 +172,16 @@ function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 			fileReader.onload = function(event) {
 				clearAttachments();
 				prepareImage(event.target.result, function(preparedImageData) {
-					addAttachment('image', preparedImageData);
-			
-					imageUploadPreviewImage.show();
-					imageUploadPreviewImage.attr('src', preparedImageData);
-					messageAttachmentsPanel.show();
-					imageUploadFile.val('');
+					if (typeof preparedImageData !== 'undefined' && preparedImageData.length > 0) {
+						addAttachment('image', preparedImageData);
+
+						imageUploadPreviewImage.show();
+						imageUploadPreviewImage.attr('src', preparedImageData);
+						messageAttachmentsPanel.show();
+						imageUploadFile.val('');
+					} else {
+						showErrorMessage('Cannot prepare image due to server error');
+					}
 				});
 			};
 			fileReader.readAsDataURL(fileDetails);
@@ -220,11 +224,11 @@ function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 				if (typeof response.error != 'undefined') {
 					showErrorMessage(response.error);
 				} else {
-					showErrorMessage('Image preparation error');
+					showErrorMessage('Image preparation error occurred');
 				}
 			}
 			catch (e) {
-				showErrorMessage('Unknown error occurred');
+				showErrorMessage('Unknown image preparation error occurred');
 			}
 		});
 	}
