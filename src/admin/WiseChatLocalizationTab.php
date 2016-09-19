@@ -42,6 +42,8 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			array('message_login', '"Log in" message', 'stringFieldCallback', 'string'),
 			array('message_enter_user_name', '"Enter your username" message', 'stringFieldCallback', 'string'),
 			array('message_input_title', 'Message input hint', 'stringFieldCallback', 'string'),
+			array('message_has_left_the_channel', 'has left the channel', 'stringFieldCallback', 'string'),
+			array('message_has_joined_the_channel', 'has joined the channel', 'stringFieldCallback', 'string'),
 
 			array('message_error_1', 'Message error #1', 'stringFieldCallback', 'string', 'Message: "Only letters, number, spaces, hyphens and underscores are allowed"'),
 			array('message_error_2', 'Message error #2', 'stringFieldCallback', 'string', 'Message: "This name is already occupied"'),
@@ -93,6 +95,8 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			'message_login' => 'Log in',
 			'message_enter_user_name' => 'Enter your username',
 			'message_input_title' => 'Use Shift+ENTER in order to move to the next line',
+			'message_has_left_the_channel' => 'has left the channel',
+			'message_has_joined_the_channel' => 'has joined the channel',
 		);
 	}
 }

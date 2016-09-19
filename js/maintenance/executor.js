@@ -139,6 +139,22 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages) {
 				case 'refreshUsersCounter':
 					wiseChatMessages.refreshUsersCounter(eventData);
 					break;
+				case 'reportAbsentUsers':
+					if (jQuery.isArray(eventData.users) && eventData.users.length > 0) {
+						for (var y = 0; y < eventData.users.length; y++) {
+							var user = eventData.users[y];
+							wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasLeftTheChannel);
+						}
+					}
+					break;
+				case 'reportNewUsers':
+					if (jQuery.isArray(eventData.users) && eventData.users.length > 0) {
+						for (var y = 0; y < eventData.users.length; y++) {
+							var user = eventData.users[y];
+							wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasJoinedTheChannel);
+						}
+					}
+					break;
 			}
 		}
 	};

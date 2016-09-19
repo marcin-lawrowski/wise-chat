@@ -18,9 +18,13 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 				'Displays posted emoticons (like :-) or ;-)) as images. You can display a button that allows to insert emoticons. The option is in appearance settings.',
 				self::getEmoticonSets()
 			),
+
+			array('_section', 'User Notifications'),
 			array('enable_title_notifications', 'Enable Title Notifications', 'booleanFieldCallback', 'boolean', 'Shows notifications in browser\'s title when new messages arrives and the browser window is hidden / inactive'),
 			array('sound_notification', 'Sound Notification', 'selectCallback', 'string', 'Plays a sound when new messages arrives. You can add an option to mute sound for an user in appearance settings', WiseChatMessagesTab::getNotificationSounds()),
-			
+			array('enable_join_notification', 'Enable Join Notification', 'booleanFieldCallback', 'boolean', 'Displays information message when user joins the channel'),
+			array('enable_leave_notification', 'Enable Leave Notification', 'booleanFieldCallback', 'boolean', 'Displays information message when user leaves the channel'),
+
 			array('_section', 'Images Settings'),
 			array('allow_post_images', 'Enable Images', 'booleanFieldCallback', 'boolean', 'Downloads posted images (links pointing to images) into Media Library and displays them'),
 			array('enable_images_uploader', 'Enable Uploader', 'booleanFieldCallback', 'boolean', 'Enables the uploader for sending pictures either from local storage or from a camera (on a mobile device). <br />In order to see sent pictures "Enable Images" option has to be enabled'),
@@ -45,6 +49,8 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 	public function getDefaultValues() {
 		return array(
 			'enable_title_notifications' => 0,
+			'enable_join_notification' => 1,
+			'enable_leave_notification' => 1,
 			'sound_notification' => '',
 			'message_max_length' => 400,
 			'allow_post_links' => 0,

@@ -131,6 +131,16 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		}
 	};
 
+	function showPlainMessage(message) {
+		message = '<div class="wcMessage wcPlainMessage">' + message + '</div>';
+		if (isAscendingOrder()) {
+			messagesContainer.append(message);
+		} else {
+			messagesContainer.prepend(message);
+		}
+		scrollMessages();
+	};
+
 	function setBusyState(showProgress) {
 		submitButton.attr('disabled', '1');
 		submitButton.attr('readonly', '1');
@@ -589,6 +599,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	
 	this.scrollMessages = scrollMessages;
 	this.showErrorMessage = showErrorMessage;
+	this.showPlainMessage = showPlainMessage;
 	this.hideMessage = hideMessage;
 	this.hideAllMessages = hideAllMessages;
 	this.refreshUsersList = refreshUsersList;

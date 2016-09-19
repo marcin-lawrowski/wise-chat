@@ -338,7 +338,29 @@ class WiseChatEndpoints {
 						)
 					);
 				}
+
+				// load absent users:
+				if ($this->options->isOptionEnabled('enable_leave_notification', true)) {
+					$response['events'][] = array(
+						'name' => 'reportAbsentUsers',
+						'data' => array(
+							'users' => $this->userService->getAbsentUsersForChannel($channel)
+						)
+					);
+					$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
+				}
+				// load new users:
+				if ($this->options->isOptionEnabled('enable_join_notification', true)) {
+					$response['events'][] = array(
+						'name' => 'reportNewUsers',
+						'data' => array(
+							'users' => $this->userService->getNewUsersForChannel($channel)
+						)
+					);
+					$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
+				}
 			}
+
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();
 			$this->sendUnauthorizedStatus();

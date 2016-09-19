@@ -85,6 +85,10 @@
 	border-top: 1px solid #eeeeee; padding: 5px;
 }
 
+.wcContainer .wcMessages .wcPlainMessage {
+	color: #5974a9;
+}
+
 .wcContainer .wcMessages .wcMessage a {
 	color: #5974a9; text-decoration: none;
 }

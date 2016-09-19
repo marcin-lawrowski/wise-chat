@@ -8,6 +8,9 @@
 class WiseChatUserService {
 	const USERS_ACTIVITY_TIME_FRAME = 80;
 	const USERS_PRESENCE_TIME_FRAME = 86400;
+	const USERS_LIST_SESSION_KEY = 'wise_chat_current_users_list_channel_';
+	const USERS_LIST_CATEGORY_NEW = '_new';
+	const USERS_LIST_CATEGORY_ABSENT = '_absent';
 
 	/**
 	 * @var WiseChatService
@@ -28,6 +31,11 @@ class WiseChatUserService {
 	* @var WiseChatUsersDAO
 	*/
 	private $usersDAO;
+
+	/**
+	 * @var WiseChatUserSessionDAO
+	 */
+	private $userSessionDAO;
 	
 	/**
 	* @var WiseChatChannelUsersDAO
@@ -53,6 +61,7 @@ class WiseChatUserService {
 		$this->options = WiseChatOptions::getInstance();
 		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->usersDAO = WiseChatContainer::getLazy('dao/user/WiseChatUsersDAO');
+		$this->userSessionDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSessionDAO');
 		$this->actions = WiseChatContainer::getLazy('services/user/WiseChatActions');
 		$this->channelUsersDAO = WiseChatContainer::getLazy('dao/WiseChatChannelUsersDAO');
 		$this->messagesDAO = WiseChatContainer::getLazy('dao/WiseChatMessagesDAO');
@@ -268,6 +277,184 @@ class WiseChatUserService {
 				'propertyValue' => $color
 			)
 		);
+	}
+
+	/**
+	 * Returns absent users since the last check.
+	 * Status is preserved in user session.
+	 *
+	 * @param WiseChatChannel $channel
+	 *
+	 * @return array Array of arrays containing id and name keys
+	 */
+	public function getAbsentUsersForChannel($channel) {
+		if ($channel === null) {
+			return array();
+		}
+
+		// get the last status:
+		$lastUsersRaw = $this->getPersistedUsersList($channel, self::USERS_LIST_CATEGORY_ABSENT);
+
+		// if the last users list is empty - return empty array:
+		if (count($lastUsersRaw) === 0) {
+			return array();
+		}
+
+		// check for absent users:
+		$currentUsersMap = array();
+		$users = $this->getUsersListForChannel($channel);
+		foreach ($users as $user) {
+			$currentUsersMap[$user->getId()] = true;
+		}
+		$absentUsers = array();
+		foreach ($lastUsersRaw as $user) {
+			if (!array_key_exists($user['id'], $currentUsersMap) && $this->authentication->getUserIdOrNull() != $user['id']) {
+				$absentUsers[] = $user;
+			}
+		}
+
+		return $absentUsers;
+	}
+
+	/**
+	 * Returns new users since the last check.
+	 * Status is preserved in user session.
+	 *
+	 * @param WiseChatChannel $channel
+	 *
+	 * @return array Array of arrays containing id and name keys
+	 */
+	public function getNewUsersForChannel($channel) {
+		if ($channel === null) {
+			return array();
+		}
+
+		// get the last status:
+		$lastUsersRaw = $this->getPersistedUsersList($channel, self::USERS_LIST_CATEGORY_NEW);
+		$users = $this->getUsersListForChannel($channel);
+		if (count($users) === 0) {
+			return array();
+		}
+
+		$lastUsersRawMap = array();
+		foreach ($lastUsersRaw as $rawUser) {
+			$lastUsersRawMap[$rawUser['id']] = $rawUser;
+		}
+
+		// check for new users:
+		$newUsers = array();
+		foreach ($users as $user) {
+			if (!array_key_exists($user->getId(), $lastUsersRawMap) && $this->authentication->getUserIdOrNull() != $user->getId()) {
+				$newUsers[] = array(
+					'id' => $user->getId(),
+					'name' => $user->getName()
+				);
+			}
+		}
+
+		return $newUsers;
+	}
+
+
+	/**
+	 * Loads users list for the given channel and saves it in user session.
+	 *
+	 * @param WiseChatChannel $channel
+	 * @param string $listCategory
+	 */
+	public function persistUsersListInSession($channel, $listCategory) {
+		if ($channel === null) {
+			return;
+		}
+
+		$usersRaw = array();
+		$users = $this->getUsersListForChannel($channel);
+		foreach ($users as $user) {
+			$usersRaw[] = array(
+				'id' => $user->getId(),
+				'name' => $user->getName()
+			);
+		}
+		$this->userSessionDAO->set(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory, json_encode($usersRaw));
+	}
+
+	/**
+	 * Clears users list for the given channel.
+	 *
+	 * @param WiseChatChannel $channel
+	 * @param string $listCategory
+	 */
+	public function clearUsersListInSession($channel, $listCategory) {
+		if ($channel === null) {
+			return;
+		}
+
+		$this->userSessionDAO->drop(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory);
+	}
+
+	/**
+	 * Returns users list for the given channel (persisted in session).
+	 *
+	 * @param WiseChatChannel $channel
+	 * @param string $listCategory
+	 * @return array
+	 */
+	private function getPersistedUsersList($channel, $listCategory) {
+		if ($channel === null) {
+			return array();
+		}
+
+		$lastUsersRawJSON = $this->userSessionDAO->get(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory);
+		$lastUsersRaw = array();
+		if ($lastUsersRawJSON !== null) {
+			$lastUsersRaw = json_decode($lastUsersRawJSON, true);
+			if (!is_array($lastUsersRaw)) {
+				$lastUsersRaw = array();
+			}
+		}
+
+		return $lastUsersRaw;
+	}
+
+	/**
+	 * Returns current users list in the given channel.
+	 *
+	 * @param WiseChatChannel $channel
+	 *
+	 * @return WiseChatUser[]
+	 */
+	public function getUsersListForChannel($channel) {
+		$hideRoles = $this->options->getOption('users_list_hide_roles', array());
+		$channelUsers = $this->channelUsersDAO->getAllActiveByChannelId($channel->getId());
+
+		$usersList = array();
+		foreach ($channelUsers as $channelUser) {
+			if ($channelUser->getUser() == null) {
+				continue;
+			}
+
+			// do not render anonymous users:
+			if ($this->service->isChatAllowedForWPUsersOnly() && !($channelUser->getUser()->getWordPressId() > 0)) {
+				continue;
+			}
+
+			// hide chosen roles:
+			if (is_array($hideRoles) && count($hideRoles) > 0 && $channelUser->getUser()->getWordPressId() > 0) {
+				$wpUser = $this->usersDAO->getWpUserByID($channelUser->getUser()->getWordPressId());
+				if (is_array($wpUser->roles) && count(array_intersect($hideRoles, $wpUser->roles)) > 0) {
+					continue;
+				}
+			}
+
+			// hide anonymous users:
+			if ($this->options->isOptionEnabled('users_list_hide_anonymous', false) && !($channelUser->getUser()->getWordPressId() > 0)) {
+				continue;
+			}
+
+			$usersList[] = $channelUser->getUser();
+		}
+
+		return $usersList;
 	}
 	
 	/**

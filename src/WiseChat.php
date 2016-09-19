@@ -154,6 +154,14 @@ class WiseChat {
 	public function getRenderedChat($channelName = null) {
 		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($channelName));
 
+		// saves users list in session for this channel (it will be updated in maintenance task):
+		if ($this->options->isOptionEnabled('enable_leave_notification', true)) {
+			$this->userService->clearUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
+		}
+		if ($this->options->isOptionEnabled('enable_join_notification', true)) {
+			$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
+		}
+
 		if ($this->service->isChatRestrictedForAnonymousUsers()) {
 			return $this->renderer->getRenderedAccessDenied(
 				$this->options->getOption('message_error_4', 'Only logged in users are allowed to enter the chat'), 'wcAccessDenied'
@@ -254,6 +262,8 @@ class WiseChat {
 				'messageUnsupportedTypeOfFile' => $this->options->getEncodedOption('message_error_7', 'Unsupported type of file.'),
 				'messageSizeLimitError' => $this->options->getEncodedOption('message_error_8', 'The size of the file exceeds allowed limit.'),
 				'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
+				'messageHasLeftTheChannel' => $this->options->getEncodedOption('message_has_left_the_channel', 'has left the channel'),
+				'messageHasJoinedTheChannel' => $this->options->getEncodedOption('message_has_joined_the_channel', 'has joined the channel'),
 			),
 			'userSettings' => $this->userSettingsDAO->getAll(),
 			'attachmentsValidFileFormats' => $this->attachmentsService->getAllowedFormats(),
