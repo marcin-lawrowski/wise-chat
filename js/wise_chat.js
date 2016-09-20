@@ -14,7 +14,7 @@ function WiseChatController(options) {
 	var dateAndTimeRenderer = new WiseChatDateAndTimeRenderer(options, dateFormatter);
 	var messages = new WiseChatMessages(options, messagesHistory, messageAttachments, dateAndTimeRenderer, notifier, progressBar);
 	var settings = new WiseChatSettings(options, messages);
-	var maintenanceExecutor = new WiseChatMaintenanceExecutor(options, messages);
+	var maintenanceExecutor = new WiseChatMaintenanceExecutor(options, messages, notifier);
     var emoticonsPanel = new WiseChatEmoticonsPanel(options, messages);
 	
 	messages.start();
@@ -414,15 +414,16 @@ function WiseChatNotifier(options) {
 	var isTitleNotificationVisible = false;
 	var rawTitle = document.title;
 	var notificationNumber = 0;
-	var soundNotification = null;
-	
-	function initializeSoundFeatures() {
-		var soundFile = options.soundNotification;
-		
+	var newMessageSoundNotification = null;
+	var userLeftSoundNotification = null;
+	var userJoinedSoundNotification = null;
+
+	function initializeSoundFeatures(soundFile, eventID) {
 		if (soundFile != null && soundFile.length > 0) {
-			soundNotification = jQuery('#wcMessagesNotificationAudio');
-			if (soundNotification.length > 0) {
-				return;
+			var elementId = 'wcMessagesNotificationAudio' + eventID;
+			var soundNotificationElement = jQuery('#' + elementId);
+			if (soundNotificationElement.length > 0) {
+				return soundNotificationElement;
 			}
 			
 			var soundFileURLWav = options.baseDir + 'sounds/' + soundFile + '.wav';
@@ -431,20 +432,17 @@ function WiseChatNotifier(options) {
 			var container = jQuery('body');
 			
 			container.append(
-				'<audio id="wcMessagesNotificationAudio" preload="auto">' +
+				'<audio id="' + elementId + '" preload="auto">' +
 					'<source src="' + soundFileURLWav + '" type="audio/x-wav" />' +
 					'<source src="' + soundFileURLOgg + '" type="audio/ogg" />' +
 					'<source src="' + soundFileURLMp3 + '" type="audio/mpeg" />' +
 				'</audio>'
 			);
-			soundNotification = jQuery('#wcMessagesNotificationAudio');
+
+			return jQuery('#' + elementId);
 		}
-	}
-	
-	function playSoundNotification() {
-		if (soundNotification !== null && soundNotification[0].play) {
-			soundNotification[0].play();
-		}
+
+		return null;
 	}
 	
 	function showTitleNotification() {
@@ -485,19 +483,38 @@ function WiseChatNotifier(options) {
 			showTitleNotification();
 		}
 		if (!options.userSettings.muteSounds) {
-			playSoundNotification();
+			if (newMessageSoundNotification !== null && newMessageSoundNotification[0].play) {
+				newMessageSoundNotification[0].play();
+			}
+		}
+	}
+
+	function sendNotificationForEvent(eventName) {
+		if (!options.userSettings.muteSounds) {
+			if (eventName == 'userLeft') {
+				if (userLeftSoundNotification !== null && userLeftSoundNotification[0].play) {
+					userLeftSoundNotification[0].play();
+				}
+			} else if (eventName == 'userJoined') {
+				if (userJoinedSoundNotification !== null && userJoinedSoundNotification[0].play) {
+					userJoinedSoundNotification[0].play();
+				}
+			}
 		}
 	}
 	
 	// start-up actions:
-	initializeSoundFeatures();
-	
+	newMessageSoundNotification = initializeSoundFeatures(options.soundNotification, 'NewMessage');
+	userLeftSoundNotification = initializeSoundFeatures(options.leaveSoundNotification, 'UserLeft');
+	userJoinedSoundNotification = initializeSoundFeatures(options.joinSoundNotification, 'UserJoined');
+
 	// DOM events:
 	jQuery(window).blur(onWindowBlur);
 	jQuery(window).focus(onWindowFocus);
 	
 	// public API:
 	this.sendNotifications = sendNotifications;
+	this.sendNotificationForEvent = sendNotificationForEvent;
 }
 
 /**

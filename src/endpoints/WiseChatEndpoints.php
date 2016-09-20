@@ -340,7 +340,7 @@ class WiseChatEndpoints {
 				}
 
 				// load absent users:
-				if ($this->options->isOptionEnabled('enable_leave_notification', true)) {
+				if ($this->options->isOptionEnabled('enable_leave_notification', true) || strlen($this->options->getOption('leave_sound_notification')) > 0) {
 					$response['events'][] = array(
 						'name' => 'reportAbsentUsers',
 						'data' => array(
@@ -350,7 +350,7 @@ class WiseChatEndpoints {
 					$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
 				}
 				// load new users:
-				if ($this->options->isOptionEnabled('enable_join_notification', true)) {
+				if ($this->options->isOptionEnabled('enable_join_notification', true) || strlen($this->options->getOption('join_sound_notification')) > 0) {
 					$response['events'][] = array(
 						'name' => 'reportNewUsers',
 						'data' => array(

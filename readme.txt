@@ -312,6 +312,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4 =
+* Option to enable a sound notification when user joins or leaves the channel
 * "User has joined/left the channel" notifications
 * Shift+ENTER moves the cursor to the new line in multiline mode, ENTER sends the message
 * Fixed: errors with sending images when there is no Exif PHP module installed

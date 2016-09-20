@@ -3,7 +3,7 @@
  *
  * @author Marcin Ławrowski <marcin@kaine.pl>
  */
-function WiseChatMaintenanceExecutor(options, wiseChatMessages) {
+function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
 	var REFRESH_TIMEOUT = 10000;
 	var ENDPOINT_URL = options.apiEndpointBase + '?action=wise_chat_maintenance_endpoint';
 	var lastActionId = options.lastActionId;
@@ -141,17 +141,27 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages) {
 					break;
 				case 'reportAbsentUsers':
 					if (jQuery.isArray(eventData.users) && eventData.users.length > 0) {
-						for (var y = 0; y < eventData.users.length; y++) {
-							var user = eventData.users[y];
-							wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasLeftTheChannel);
+						if (options.enableLeaveNotification) {
+							for (var y = 0; y < eventData.users.length; y++) {
+								var user = eventData.users[y];
+								wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasLeftTheChannel);
+							}
+						}
+						if (options.leaveSoundNotification && eventData.users.length > 0) {
+							notifier.sendNotificationForEvent('userLeft');
 						}
 					}
 					break;
 				case 'reportNewUsers':
 					if (jQuery.isArray(eventData.users) && eventData.users.length > 0) {
-						for (var y = 0; y < eventData.users.length; y++) {
-							var user = eventData.users[y];
-							wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasJoinedTheChannel);
+						if (options.enableJoinNotification) {
+							for (var y = 0; y < eventData.users.length; y++) {
+								var user = eventData.users[y];
+								wiseChatMessages.showPlainMessage(user.name + ' ' + options.messages.messageHasJoinedTheChannel);
+							}
+						}
+						if (options.joinSoundNotification && eventData.users.length > 0) {
+							notifier.sendNotificationForEvent('userJoined');
 						}
 					}
 					break;

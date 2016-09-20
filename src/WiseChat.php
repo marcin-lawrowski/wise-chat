@@ -155,10 +155,10 @@ class WiseChat {
 		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($channelName));
 
 		// saves users list in session for this channel (it will be updated in maintenance task):
-		if ($this->options->isOptionEnabled('enable_leave_notification', true)) {
+		if ($this->options->isOptionEnabled('enable_leave_notification', true) || strlen($this->options->getOption('leave_sound_notification')) > 0) {
 			$this->userService->clearUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
 		}
-		if ($this->options->isOptionEnabled('enable_join_notification', true)) {
+		if ($this->options->isOptionEnabled('enable_join_notification', true) || strlen($this->options->getOption('join_sound_notification')) > 0) {
 			$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
 		}
 
@@ -276,6 +276,10 @@ class WiseChat {
 			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 			'debugMode' => $this->options->isOptionEnabled('enabled_debug', false),
 			'emoticonsSet' => $this->options->getIntegerOption('emoticons_enabled', 1),
+			'enableLeaveNotification' => $this->options->isOptionEnabled('enable_leave_notification', true),
+			'enableJoinNotification' => $this->options->isOptionEnabled('enable_join_notification', true),
+			'leaveSoundNotification' => $this->options->getEncodedOption('leave_sound_notification'),
+			'joinSoundNotification' => $this->options->getEncodedOption('join_sound_notification'),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
