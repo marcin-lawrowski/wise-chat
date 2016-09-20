@@ -90,10 +90,30 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 	public static function getNotificationSounds() {
 		return array(
 			'' => 'Disabled',
-			'sound-01' => 'Sound 1',
-			'sound-02' => 'Sound 2',
-			'sound-03' => 'Sound 3',
-			'sound-04' => 'Sound 4'
+			'sound-01' => 'Legacy Sound 1',
+			'sound-02' => 'Legacy Sound 2',
+			'sound-03' => 'Legacy Sound 3',
+			'sound-04' => 'Legacy Sound 4',
+			'wise-chat-01' => 'Wise Chat 1',
+			'wise-chat-02' => 'Wise Chat 2',
+			'wise-chat-03' => 'Wise Chat 3',
+			'wise-chat-04' => 'Wise Chat 4',
+			'wise-chat-05' => 'Wise Chat 5',
+			'wise-chat-06' => 'Wise Chat 6',
+			'wise-chat-07' => 'Wise Chat 7',
+			'wise-chat-08' => 'Wise Chat 8',
+			'wise-chat-09' => 'Wise Chat 9',
+			'wise-chat-10' => 'Wise Chat 10',
+			'wise-chat-11' => 'Wise Chat 11',
+			'wise-chat-12' => 'Wise Chat 12',
+			'wise-chat-13' => 'Wise Chat 13',
+			'wise-chat-14' => 'Wise Chat 14',
+			'wise-chat-15' => 'Wise Chat 15',
+			'wise-chat-16' => 'Wise Chat 16',
+			'wise-chat-17' => 'Wise Chat 17',
+			'wise-chat-18' => 'Wise Chat 18',
+			'wise-chat-19' => 'Wise Chat 19',
+			'wise-chat-20' => 'Wise Chat 20',
 		);
 	}
 
