@@ -175,7 +175,12 @@ class WiseChatEmoticonsFilter {
 			$this->replacementArrays = $this->prepareReplacementArrays($emoticonsSet);
 		}
 
-		return str_replace($this->replacementArrays[0], $this->replacementArrays[1], $text);
+		// exclude entities:
+		$text = preg_replace('/(&[A-Za-z]+;)/', '$1 ', $text);
+		$text = str_replace($this->replacementArrays[0], $this->replacementArrays[1], $text);
+		$text = preg_replace('/(&[A-Za-z]+;) /', '$1', $text);
+
+		return $text;
 	}
 	
 	/**

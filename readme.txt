@@ -317,6 +317,7 @@ After you type a message use the key combination: Shift + ENTER
 * Option to enable a sound notification when user joins or leaves the channel
 * "User has joined/left the channel" notifications
 * Shift+ENTER moves the cursor to the new line in multiline mode, ENTER sends the message
+* Fixed: unwanted emoticons displayed after double quote
 * Fixed: errors with sending images when there is no Exif PHP module installed
 * Fixed: jQuery up to version 3.1 is now supported
 * Fixed: bug in "Powered by" feature
