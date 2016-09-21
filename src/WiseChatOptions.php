@@ -140,6 +140,15 @@ class WiseChatOptions {
 	* @return null
 	*/
 	public function replaceOptions($options) {
+		// detect arrays in the following format: {element1,element2,...,elementN}
+		foreach ($options as $key => $value) {
+			if (strlen($value) > 1 && $value[0] == '{' && $value[strlen($value) - 1] == '}') {
+				$value = trim($value, '{}');
+				$split = preg_split('/,/', $value);
+				$options[$key] = $split;
+			}
+		}
+
 		$this->options = array_merge(is_array($this->options) ? $this->options : array(), $options);
 	}
 	

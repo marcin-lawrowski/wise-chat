@@ -312,6 +312,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4 =
+* Option to pass simple arrays in shortcode, array format: {element1,element2,...,elementN}
 * Option to generate a sound when user is mentioned using @UserName notation
 * Added 20 new sounds to use in notifications
 * Option to enable a sound notification when user joins or leaves the channel
