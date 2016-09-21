@@ -42,7 +42,8 @@ Wise Chat: **[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-
 * **YouTube movies**: Display links to YouTube movies as a video player with adjustable width and height.
 * **File attachments**: Attach files directly to the messages using convenient uploader.
 * **Multiline messages**: Let your users post long messages in multiple lines. Keyboard shortcut Shift+Enter can be used to send such messages.
-* **Notifications**: Notifications signalizing new messages. It can be a sound or a counter in browser's title.
+* **Notifications**: Notifications signalizing new messages, new users, absent users or mentioned users. It can be a sound or a counter in browser's title.
+* **24 sounds**: Use any of 24 ready-to-use sounds dedicated for notifications.
 * **Messages auto cleanup**: Auto cleanup messages older than defined amount of time.
 * **Localization**: Provide a translation for your language. All texts are translatable.
 * **Appearance adjustments**: Adjust visual appearance to match your website by editing colors, font sizing, showing / hiding interface elements, changing sort order of messages and positioning chat elements. All this can be done using settings page.
