@@ -19,13 +19,17 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 				self::getEmoticonSets()
 			),
 
-			array('_section', 'User Notifications'),
-			array('enable_title_notifications', 'Enable Title Notifications', 'booleanFieldCallback', 'boolean', 'Shows notifications in browser\'s title when new messages arrives and the browser window is hidden / inactive'),
-			array('sound_notification', 'Sound Notification', 'selectCallback', 'string', 'Plays a sound when new messages arrives. You can add an option to mute sound for an user in appearance settings', WiseChatMessagesTab::getNotificationSounds()),
-			array('enable_join_notification', 'Enable Join Notification', 'booleanFieldCallback', 'boolean', 'Displays information message when user joins the channel: User has joined the channel.'),
-			array('join_sound_notification', 'Join Sound Notification', 'selectCallback', 'string', 'Plays a sound when user joins the chat. You can add an option to mute sound for an user in appearance settings', WiseChatMessagesTab::getNotificationSounds()),
-			array('enable_leave_notification', 'Enable Leave Notification', 'booleanFieldCallback', 'boolean', 'Displays information message when user leaves the channel: User has left the channel.'),
-			array('leave_sound_notification', 'Leave Sound Notification', 'selectCallback', 'string', 'Plays a sound when user leaves the chat. You can add an option to mute sound for an user in appearance settings', WiseChatMessagesTab::getNotificationSounds()),
+			array(
+				'_section', 'Users Notifications',
+				'Configure text notifications or sounds for various events such as new messages, new users in the channel, etc. You can give users an option to mute all sounds. Check appearance settings. '
+			),
+			array('enable_title_notifications', 'Enable Title Notifications', 'booleanFieldCallback', 'boolean', 'Shows notifications in browser\'s window title when new messages arrives and the browser window is hidden / inactive'),
+			array('sound_notification', 'Message  Sound Notification', 'selectCallback', 'string', 'Plays a sound when new messages arrives.', WiseChatMessagesTab::getNotificationSounds()),
+			array('enable_join_notification', 'Enable Join Notification', 'booleanFieldCallback', 'boolean', 'When user joins the channel it displays the following message: User has joined the channel.'),
+			array('join_sound_notification', 'Join Sound Notification', 'selectCallback', 'string', 'Plays a sound when user joins the chat.', WiseChatMessagesTab::getNotificationSounds()),
+			array('enable_leave_notification', 'Enable Leave Notification', 'booleanFieldCallback', 'boolean', 'When user leaves the channel it displays the following message: User has left the channel.'),
+			array('leave_sound_notification', 'Leave Sound Notification', 'selectCallback', 'string', 'Plays a sound when user leaves the chat.', WiseChatMessagesTab::getNotificationSounds()),
+			array('mentioning_sound_notification', 'Mentioning Sound Notification', 'selectCallback', 'string', 'Plays a sound when user has been mentioned using @UserName notation.', WiseChatMessagesTab::getNotificationSounds()),
 
 			array('_section', 'Images Settings'),
 			array('allow_post_images', 'Enable Images', 'booleanFieldCallback', 'boolean', 'Downloads posted images (links pointing to images) into Media Library and displays them'),
@@ -55,6 +59,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'join_sound_notification' => '',
 			'enable_leave_notification' => 1,
 			'leave_sound_notification' => '',
+			'mention_sound_notification' => '',
 			'sound_notification' => '',
 			'message_max_length' => 400,
 			'allow_post_links' => 0,

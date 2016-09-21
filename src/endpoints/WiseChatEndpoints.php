@@ -361,6 +361,13 @@ class WiseChatEndpoints {
 				}
 			}
 
+			$response['events'][] = array(
+				'name' => 'userData',
+				'data' => array(
+					'name' => $user->getName()
+				)
+			);
+
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();
 			$this->sendUnauthorizedStatus();

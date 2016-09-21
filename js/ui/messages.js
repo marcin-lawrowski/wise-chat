@@ -80,7 +80,21 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		} else {
 			messagesContainer.prepend(parsedMessage);
 		}
-		notifier.sendNotifications();
+
+		// user mentioning notification:
+		var userMentioned = false;
+		if (options.mentioningSoundNotification.length > 0 && message.length > 0 && typeof options.userData !== 'undefined') {
+			var regexp = new RegExp("@" + options.userData.name, "g");
+			if (message.match(regexp)) {
+				notifier.sendNotificationForEvent('userMentioning');
+				userMentioned = true;
+			}
+		}
+
+		// send regular notifications instead:
+		if (!userMentioned) {
+			notifier.sendNotifications();
+		}
 	};
 
 	function hideMessage(messageId) {

@@ -417,6 +417,7 @@ function WiseChatNotifier(options) {
 	var newMessageSoundNotification = null;
 	var userLeftSoundNotification = null;
 	var userJoinedSoundNotification = null;
+	var userMentioningSoundNotification = null;
 
 	function initializeSoundFeatures(soundFile, eventID) {
 		if (soundFile != null && soundFile.length > 0) {
@@ -432,7 +433,7 @@ function WiseChatNotifier(options) {
 			var container = jQuery('body');
 			
 			container.append(
-				'<audio id="' + elementId + '" preload="auto">' +
+				'<audio id="' + elementId + '" preload="auto" >' +
 					'<source src="' + soundFileURLWav + '" type="audio/x-wav" />' +
 					'<source src="' + soundFileURLOgg + '" type="audio/ogg" />' +
 					'<source src="' + soundFileURLMp3 + '" type="audio/mpeg" />' +
@@ -499,6 +500,10 @@ function WiseChatNotifier(options) {
 				if (userJoinedSoundNotification !== null && userJoinedSoundNotification[0].play) {
 					userJoinedSoundNotification[0].play();
 				}
+			} else if (eventName == 'userMentioning') {
+				if (userMentioningSoundNotification !== null && userMentioningSoundNotification[0].play) {
+					userMentioningSoundNotification[0].play();
+				}
 			}
 		}
 	}
@@ -507,6 +512,7 @@ function WiseChatNotifier(options) {
 	newMessageSoundNotification = initializeSoundFeatures(options.soundNotification, 'NewMessage');
 	userLeftSoundNotification = initializeSoundFeatures(options.leaveSoundNotification, 'UserLeft');
 	userJoinedSoundNotification = initializeSoundFeatures(options.joinSoundNotification, 'UserJoined');
+	userMentioningSoundNotification = initializeSoundFeatures(options.mentioningSoundNotification, 'UserMentioned');
 
 	// DOM events:
 	jQuery(window).blur(onWindowBlur);

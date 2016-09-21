@@ -280,6 +280,7 @@ class WiseChat {
 			'enableJoinNotification' => $this->options->isOptionEnabled('enable_join_notification', true),
 			'leaveSoundNotification' => $this->options->getEncodedOption('leave_sound_notification'),
 			'joinSoundNotification' => $this->options->getEncodedOption('join_sound_notification'),
+			'mentioningSoundNotification' => $this->options->getEncodedOption('mentioning_sound_notification'),
 		);
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());

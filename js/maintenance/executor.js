@@ -139,6 +139,9 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
 				case 'refreshUsersCounter':
 					wiseChatMessages.refreshUsersCounter(eventData);
 					break;
+				case 'userData':
+					options.userData = eventData;
+					break;
 				case 'reportAbsentUsers':
 					if (jQuery.isArray(eventData.users) && eventData.users.length > 0) {
 						if (options.enableLeaveNotification) {
