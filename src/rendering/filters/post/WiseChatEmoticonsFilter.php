@@ -220,7 +220,7 @@ class WiseChatEmoticonsFilter {
 			$filePath = $options->getEmoticonsBaseURL().$subDirectory.'/'.$emoticon.'.'.$filesExtension;
 			$imgTag = sprintf("<img src='%s' alt='%s' class='wcEmoticon' />", $filePath, htmlspecialchars($emoticon, ENT_QUOTES, 'UTF-8'));
 			
-			$searchArray[] = htmlentities('<'.$emoticon.'>');
+			$searchArray[] = htmlentities('< '.$emoticon.'>');
 			$replaceArray[] = $imgTag;
 			
 			if (array_key_exists($emoticon, $aliases)) {

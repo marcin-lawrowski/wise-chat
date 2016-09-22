@@ -4,7 +4,7 @@ Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Tested up to: 4.6.1
-Stable tag: 2.4
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -311,6 +311,9 @@ After you type a message use the key combination: Shift + ENTER
 06. Settings page - compilation of all tabs
 
 == Changelog ==
+
+= 2.4.1 =
+* Fixed: bug in emoticons posting
 
 = 2.4 =
 * Option to pass simple arrays in shortcode, array format: {element1,element2,...,elementN}
