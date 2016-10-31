@@ -10,6 +10,12 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public function getFields() {
 		return array(
 			array('_section', 'General Settings'),
+			array('mode', 'Mode', 'selectCallback', 'string',
+				'Overall chat mode.<br />
+				<strong>Classic chat:</strong> Displays a classic chat embedded in the content of the page<br />
+                <strong>Facebook-like chat:</strong> Displays users list and chat windows aligned to the right edge of the window',
+				self::getAllModes()
+			),
 			array('access_mode', 'Disable Anonymous Users', 'booleanFieldCallback', 'boolean', 'Only regular WP users are allowed to enter the chat. Choose user roles below. '),
 			array('access_roles', 'Access For Roles', 'checkboxesCallback', 'multivalues', 'Access only for these user roles', self::getRoles()),
 			array('force_user_name_selection', 'Force Username Selection', 'booleanFieldCallback', 'boolean', 'Blocks access to the chat until an user enters his/her name.'),
@@ -43,6 +49,13 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			'opening_days' => array('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'),
 			'opening_hours' => array('opening' => '8:00', 'openingMode' => 'AM', 'closing' => '4:00', 'closingMode' => 'PM'),
 			'read_only_for_roles' => array()
+		);
+	}
+
+	public static function getAllModes() {
+		return array(
+			'' => 'Classic chat',
+			'_DISABLED_pro_fb' => 'Facebook-like chat (available in Wise Chat Pro 1.4)',
 		);
 	}
 	

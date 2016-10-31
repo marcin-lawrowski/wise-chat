@@ -21,6 +21,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; All the features of Wise Chat free edition</li>'.
 				'<li>&#8226; Private one-to-one messages</li>'.
 				'<li>&#8226; Avatars</li>'.
+				'<li>&#8226; Facebook-like chat mode (in Wise Chat Pro 1.4)</li>'.
 				'<li>&#8226; BuddyPress integration</li>'.
 				'<li>&#8226; Pending messages (fully moderated messages)</li>'.
 				'<li>&#8226; External authentication (via Facebook, Twitter or Google+)</li>'.
