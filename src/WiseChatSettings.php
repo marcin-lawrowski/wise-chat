@@ -150,7 +150,7 @@ class WiseChatSettings {
 						color: #f00;
 					}
 					.wp-admin p.description a.wcAdminButtonPro {
-						vertical-align: middle; padding-right: 6px; padding-left: 40px;
+						vertical-align: middle; padding-right: 6px; padding-left: 40px; font-style: normal;
 					}
 					#wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
 						padding-top: 10px; padding-bottom: 10px; height: 50px; background-position: 10px center;
