@@ -282,6 +282,10 @@ class WiseChat {
 			'joinSoundNotification' => $this->options->getEncodedOption('join_sound_notification'),
 			'mentioningSoundNotification' => $this->options->getEncodedOption('mentioning_sound_notification'),
 		);
+
+		foreach ($jsOptions['messages'] as $key => $jsOption) {
+			$jsOptions['messages'][$key] = html_entity_decode( (string) $jsOption, ENT_QUOTES, 'UTF-8');
+		}
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
 		$templater->setTemplateFile(WiseChatThemes::getInstance()->getMainTemplate());
