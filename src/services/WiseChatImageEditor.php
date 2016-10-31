@@ -159,7 +159,12 @@ class WiseChatImageEditor {
 			throw new Exception('WiseChatImageEditor: Image was not loaded');
 		}
 
-		if (!function_exists('exif_read_data')) {
+		if (!function_exists('exif_read_data') || !function_exists('exif_imagetype')) {
+			return;
+		}
+
+		$type = exif_imagetype($this->imagePath);
+		if (!in_array($type, array(IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM))) {
 			return;
 		}
 		$exif = exif_read_data($this->imagePath);

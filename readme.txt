@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4.2 =
+* Fixed: error with uploading PNG files when EXIF extension is available
 * Fixed: invalid encoding of UTF-8 characters in localized texts
 * Fixed: the plugin cannot be deleted in WordPress 4.6 and above
 
