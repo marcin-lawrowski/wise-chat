@@ -108,6 +108,15 @@ abstract class WiseChatAbstractTab {
 	public function getParentFields() {
 		return array();
 	}
+
+	/**
+	 * Returns an array of PRO fields.
+	 *
+	 * @return array
+	 */
+	public function getProFields() {
+		return array();
+	}
 	
 	/**
 	* Filters values of fields.
@@ -164,7 +173,14 @@ abstract class WiseChatAbstractTab {
 		
 		return $newInputValue;
 	}
-	
+
+	private function printProFeatureNotice() {
+		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">
+						Check Wise Chat <strong>Pro</strong>
+					</a>';
+		printf('<p class="description wcProDescription">%s</p>', 'Notice: This feature is available after upgrading to Wise Chat Pro. '.$button);
+	}
+
 	/**
 	* Callback method for displaying plain text field with a hint. If the property is not defined the default value is used.
 	*
@@ -178,16 +194,20 @@ abstract class WiseChatAbstractTab {
 		$defaults = $this->getDefaultValues();
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
+		$isProFeature = in_array($id, $this->getProFields());
 	
 		printf(
 			'<input type="text" id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" value="%s" %s data-parent-field="%s" />',
 			$id, $id,
 			$this->options->getEncodedOption($id, $defaultValue),
-			$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
+			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
 		}
 	}
 	
@@ -256,16 +276,20 @@ abstract class WiseChatAbstractTab {
 		$defaults = $this->getDefaultValues();
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
-	
+		$isProFeature = in_array($id, $this->getProFields());
+
 		printf(
 			'<input type="checkbox" id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" value="1" %s  %s data-parent-field="%s" />',
 			$id, $id, 
 			$this->options->isOptionEnabled($id, $defaultValue == 1) ? ' checked="1" ' : '',
-			$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
+			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
 		}
 	}
 	
@@ -284,21 +308,26 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$value = $this->options->getEncodedOption($id, $defaultValue);
 		$parentId = $this->getFieldParent($id);
-		
+		$isProFeature = in_array($id, $this->getProFields());
+
 		$optionsHtml = '';
 		foreach ($options as $name => $label) {
-			$optionsHtml .= sprintf("<option value='%s'%s>%s</option>", $name, $name == $value ? ' selected="1"' : '', $label);
+			$disabled = strpos($name, '_DISABLED_') !== false;
+			$optionsHtml .= sprintf("<option value='%s'%s %s>%s</option>", $name, $name == $value ? ' selected="1"' : '', $disabled ? 'disabled' : '', $label);
 		}
 		
 		printf(
 			'<select id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" %s data-parent-field="%s">%s</select>',
 			$id, $id,
-			$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
+			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : '',
 			$optionsHtml
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
 		}
 	}
 	
@@ -317,14 +346,15 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$values = $this->options->getOption($id, $defaultValue);
 		$parentId = $this->getFieldParent($id);
+		$isProFeature = in_array($id, $this->getProFields());
 		
 		$html = '';
 		foreach ($options as $key => $value) {
 			$html .= sprintf(
-				'<label><input type="checkbox" value="%s" name="%s[%s][]" %s %s data-parent-field="%s" />%s</label>&nbsp;&nbsp; ', 
+				'<label><input type="checkbox" value="%s" name="%s[%s][]" %s %s data-parent-field="%s" />%s</label>&nbsp;&nbsp; ',
 				$key, WiseChatOptions::OPTIONS_NAME, $id, 
 				in_array($key, (array) $values) ? 'checked="1"' : '',
-				$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? 'disabled="1"' : '',
+				$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? 'disabled="1"' : '',
 				$parentId != null ? $parentId : '',
 				$value
 			);
@@ -334,6 +364,9 @@ abstract class WiseChatAbstractTab {
 		
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
 		}
 	}
 	

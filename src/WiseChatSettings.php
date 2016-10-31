@@ -21,6 +21,7 @@ class WiseChatSettings {
 	*/
 	private $tabs = array(
 		'wise-chat-general' => 'General', 
+		'wise-chat-externalLogin' => 'External Login',
 		'wise-chat-messages' => 'Messages Posting',
 		'wise-chat-moderation' => 'Moderation',
 		'wise-chat-appearance' => 'Appearance',
@@ -141,16 +142,22 @@ class WiseChatSettings {
 					}
 					.wcAdminDonation span { padding-top: 5px; display: inline-block; font-size: 1.1em; }
 					.wcAdminDonation a.wcAdminButton { border-color: #11f; color: #005; font-size: 1.1em; }
-					.wcAdminDonation a.wcAdminButtonPro, .wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
+					.wp-admin a.wcAdminButtonPro, .wp-admin a.wcAdminButtonPro:hover, .wp-admin a.wcAdminButtonPro:focus, #wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
 						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px top;
 						border: 1px solid #4f3b5e; color: #fff; font-size: 1.2em; padding-left: 61px; padding-right: 35px;
+					}
+					.wp-admin p.wcProDescription {
+						color: #f00;
+					}
+					.wp-admin p.description a.wcAdminButtonPro {
+						vertical-align: middle; padding-right: 6px; padding-left: 40px;
 					}
 					#wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
 						padding-top: 10px; padding-bottom: 10px; height: 50px; background-position: 10px center;
 						padding-left: 60px; padding-right: 40px;
 					}
 
-					.wcAdminDonation a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro:hover { background-color: #533f62; border: 1px solid #533f62; color: #fff; }
+					.wp-admin a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro:hover { background-color: #533f62; border: 1px solid #533f62; color: #fff; }
 				</style>
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>

@@ -22,6 +22,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; Private one-to-one messages</li>'.
 				'<li>&#8226; Avatars</li>'.
 				'<li>&#8226; BuddyPress integration</li>'.
+				'<li>&#8226; Pending messages (fully moderated messages)</li>'.
 				'<li>&#8226; External authentication (via Facebook, Twitter or Google+)</li>'.
 				'<li>&#8226; WordPress multisite support</li>'.
 				'<li>&#8226; Three Pro themes</li>'.

@@ -12,7 +12,14 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 	public function getFields() {
 		return array(
 			array('_section', 'Chat Window Appearance'),
-			array('theme', 'Theme', 'selectCallback', 'string', '', WiseChatThemes::getAllThemes()),
+			array(
+				'theme', 'Theme', 'selectCallback', 'string', '',
+				array_merge(WiseChatThemes::getAllThemes(), array(
+					'_DISABLED_pro_1' => 'Crystal (available in Wise Chat Pro)',
+					'_DISABLED_pro_2' => 'Clear (available in Wise Chat Pro)',
+					'_DISABLED_pro_3' => 'Balloon (available in Wise Chat Pro)',
+				))
+			),
 			array('background_color_chat', 'Background Color', 'colorFieldCallback', 'string', ''),
 			array('text_color_chat', 'Font Color', 'colorFieldCallback', 'string', ''),
 			array('text_size_chat', 'Font Size', 'selectCallback', 'string', '', WiseChatAppearanceTab::getFontSizes()),
@@ -43,6 +50,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
                 <strong>Example 2:</strong> http://my.website.com/{id}/about<br />
                 <strong>Example 3:</strong> http://my.website.com/search?user={displayname}
                 '),
+			array('show_avatars', 'Show Avatar', 'booleanFieldCallback', 'boolean', 'Shows user avatar next to each message'),
 
 			array('_section', 'Input Section Appearance', 'Input section is the rectangular area around message input field'),
 			array('background_color_input', 'Background Color', 'colorFieldCallback', 'string', ''),
@@ -59,7 +67,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			
 			array('_section', 'Users List Appearance'),
 			array('show_users', 'Show Users List', 'booleanFieldCallback', 'boolean', 'Shows users currently visiting the channel'),
-            array('show_users_flags', 'Show National Flags', 'booleanFieldCallback', 'boolean', '
+			array('enable_private_messages', 'Enable Private Messages', 'booleanFieldCallback', 'boolean', 'Allows users to exchange private messages. I have to show users list (option above) in order to enable private messages.'),
+			array('show_users_list_avatars', 'Show Avatars', 'booleanFieldCallback', 'boolean', 'Shows user avatar next to each username on the list'),
+			array('show_users_flags', 'Show National Flags', 'booleanFieldCallback', 'boolean', '
                 Shows national flag next to each user on the list. Country is obtained from IP address and this may not be successful sometimes.<br />
                 <strong>Notice:</strong> In order to show flags enable "Collect User Statistics" option in General tab
                 '),
@@ -134,6 +144,10 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
             'autohide_users_list_width' => 'autohide_users_list',
         );
     }
+
+	public function getProFields() {
+		return array('enable_private_messages', 'show_users_list_avatars', 'show_avatars');
+	}
 
     public static function getUserNameLinkModes() {
         return array(

@@ -19,6 +19,10 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 				'Selected roles have read-only access to the chat.', self::getRoles()
 			),
             array('collect_user_stats', 'Collect User Statistics', 'booleanFieldCallback', 'boolean', 'Collects various statistics of users, including country, city, etc.'),
+			array(
+				'enable_buddypress', 'Enable BuddyPress', 'booleanFieldCallback', 'boolean',
+				'Enables BuddyPress integration features.<br />'
+			),
 			array('user_actions', 'Actions', 'adminActionsCallback', 'void'),
 			array('_section', 'Chat Opening Hours and Days', 'Server UTC date and time is taken into account. It is currently: '.date('Y-m-d H:i:s')),
 			array('enable_opening_control', 'Enable Opening Control', 'booleanFieldCallback', 'boolean', 'Allows to specify when the chat is available for users.'),
@@ -48,6 +52,10 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			'opening_hours' => 'enable_opening_control',
 			'access_roles' => 'access_mode',
 		);
+	}
+
+	public function getProFields() {
+		return array('enable_buddypress');
 	}
 	
 	public function resetAnonymousCounterAction() {
