@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4.3 =
+* Fixed: error with uploading images on WordPress 4.7
 
 = 2.4.2 =
 * Fixed: error with uploading PNG files when EXIF extension is available

@@ -37,6 +37,7 @@
 	requireIfExists('session.php');
 	
 	// features enabled:
+	requireIfExists('class-wp-query.php');
 	require_once(ABSPATH.WPINC.'/formatting.php');
 	require_once(ABSPATH.WPINC.'/query.php');
 	require_once(ABSPATH.WPINC.'/comment.php');
