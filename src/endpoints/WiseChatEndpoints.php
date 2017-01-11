@@ -331,10 +331,17 @@ class WiseChatEndpoints {
 				}
 
 				if ($this->options->isOptionEnabled('show_users_counter')) {
+					$totalUsers = 0;
+					if ($this->options->isOptionEnabled('counter_without_anonymous', true)) {
+						$totalUsers = $this->channelUsersDAO->getAmountOfLoggedInUsersInChannel($channel->getId());
+					} else {
+						$totalUsers = $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId());
+					}
+
 					$response['events'][] = array(
 						'name' => 'refreshUsersCounter',
 						'data' => array(
-							'total' => $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId())
+							'total' => $totalUsers
 						)
 					);
 				}

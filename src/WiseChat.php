@@ -289,6 +289,14 @@ class WiseChat {
 		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
 		$templater->setTemplateFile(WiseChatThemes::getInstance()->getMainTemplate());
+
+		$totalUsers = 0;
+		if ($this->options->isOptionEnabled('counter_without_anonymous', true)) {
+			$totalUsers = $this->channelUsersDAO->getAmountOfLoggedInUsersInChannel($channel->getId());
+		} else {
+			$totalUsers = $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId());
+		}
+
 		$data = array(
 			'chatId' => $chatId,
 			'baseDir' => $this->options->getBaseDir(),
@@ -301,7 +309,7 @@ class WiseChat {
 			'usersList' => $this->options->isOptionEnabled('show_users') ? $this->renderer->getRenderedUsersList($channel) : '',
 			'showUsersCounter' => $this->options->isOptionEnabled('show_users_counter'),
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
-			'totalUsers' => $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId()),
+			'totalUsers' => $totalUsers,
 			'showUserName' => $this->options->isOptionEnabled('show_user_name'),
 			'currentUserName' => htmlentities($this->authentication->getUserNameOrEmptyString(), ENT_QUOTES, 'UTF-8'),
 			'isCurrentUserNameNotEmpty' => $this->authentication->isAuthenticated(),

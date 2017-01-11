@@ -56,6 +56,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('background_color_input', 'Background Color', 'colorFieldCallback', 'string', ''),
 			array('text_color_input_field', 'Font Color', 'colorFieldCallback', 'string', ''),
 			array('show_users_counter', 'Show Users Counter', 'booleanFieldCallback', 'boolean', 'Shows number of users visiting current channel'),
+			array('counter_without_anonymous', "Counter Without Anonymous", 'booleanFieldCallback', 'boolean', 'Does not include anonymous users in counter calculation'),
             array('show_emoticon_insert_button', 'Show Emoticon Button', 'booleanFieldCallback', 'boolean', 'Shows a button, near the message input field, that enables to insert an emoticon'),
 			array('show_message_submit_button', 'Show Submit Button', 'booleanFieldCallback', 'boolean', 'Displays the submit button next to the message input field, might be useful on mobile devices'),
 			array('show_user_name', 'Show User Name', 'booleanFieldCallback', 'boolean', 'Shows the name of the current user near the message input field'),
@@ -115,6 +116,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'multiline_support' => 0,
 			'show_users' => 0,
 			'show_users_counter' => 0,
+			'counter_without_anonymous' => 0,
 			'input_controls_location' => '',
 			'messages_order' => '',
 			'custom_styles' => '',
@@ -142,6 +144,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
             'show_users_flags' => 'collect_user_stats',
             'show_users_city_and_country' => 'collect_user_stats',
             'autohide_users_list_width' => 'autohide_users_list',
+            'counter_without_anonymous' => 'show_users_counter',
         );
     }
 

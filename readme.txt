@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4.3 =
+* Option to exclude anonymous users from the counter calculation
 * Fixed: unclickable image upload button on some themes
 * Fixed: error with uploading images on WordPress 4.7
 
