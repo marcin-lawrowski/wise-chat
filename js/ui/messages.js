@@ -500,8 +500,12 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function setMessagesProperty(data) {
 		container.find('div[data-chat-user-id="' + data.chatUserId + '"]').each(function(index, element) {
 			if (data.propertyName == 'textColor') {
-				var cssSelector = '.wcMessageUser, .wcMessageUser a, .wcMessageContent, .wcMessageTime';
-				jQuery(element).find(cssSelector).css({color: data.propertyValue});
+				if (jQuery.inArray('message', options.textColorAffectedParts) !== -1) {
+					jQuery(element).find('.wcMessageContent').css({color: data.propertyValue});
+				}
+				if (jQuery.inArray('messageUserName', options.textColorAffectedParts) !== -1) {
+					jQuery(element).find('.wcMessageUser, .wcMessageUser a').css({color: data.propertyValue});
+				}
 			}
 		});
 	}

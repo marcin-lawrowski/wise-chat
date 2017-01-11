@@ -10,12 +10,12 @@
 		<a href="javascript://" class="wcAdminAction wcUserBanButton" data-id="{{ messageId }}" title="Ban this user"><img src='{{ baseDir }}/gfx/icons/block.png' class='wcIcon' /></a>
 	{% endif showBanButton %}
 	
-	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}></span>
+	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
 	
-	<span class="wcMessageUser" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}>
+	<span class="wcMessageUser" {% if isTextColorSetForUserName %}style="color:{{ textColor }}"{% endif isTextColorSetForUserName %}>
 		{{ renderedUserName }}: 
 	</span>
-	<span class="wcMessageContent" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}>
+	<span class="wcMessageContent" {% if isTextColorSetForMessage %}style="color:{{ textColor }}"{% endif isTextColorSetForMessage %}>
 		{{ messageContent }}
 	</span>
 </div>
