@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.4.3 =
+* Option to pass more complex configuration in shortcode, for example: [wise-chat opening_hours="{opening: 8:30, openingMode: AM, closing: 8:32, closingMode: AM }" enable_opening_control="1" opening_days="{ Monday,Tuesday}"]
 * Option to select which parts of a message are effected when user changes text color
 * Option to exclude anonymous users from the counter calculation
 * Fixed: unclickable image upload button on some themes
