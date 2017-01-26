@@ -64,7 +64,7 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
 	
 	function analyzeResponse(data) {
 		try {
-			var maintenance = jQuery.parseJSON(data);
+			var maintenance = data;
 			
 			if (typeof(maintenance.actions) !== 'undefined') {
 				executeActions(maintenance.actions);

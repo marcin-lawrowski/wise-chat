@@ -206,7 +206,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 
 	function onNewMessagesArrived(result) {
 		try {
-			var response = jQuery.parseJSON(result);
+			var response = result;
 			if (response.result && response.result.length > 0) {
 				var wasFullyScrolled = isFullyScrolled();
 				var messagesScrollPosition = messagesContainer.scrollTop();
@@ -267,7 +267,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function onMessageSent(result) {
 		setIdleState();
 		try {
-			var response = jQuery.parseJSON(result);
+			var response = result;
 			if (response.error) {
 				showErrorMessage(response.error);
 			} else {
@@ -572,7 +572,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		})
 		.done(function(result) {
 			try {
-				var response = jQuery.parseJSON(result);
+				var response = result;
 				if (response.error) {
 					showErrorMessage(response.error);
 				}

@@ -77,6 +77,10 @@ class WiseChatUsersDAO {
             }
         }
 
+		if (count($idsFiltered) === 0) {
+			return array();
+		}
+
 		$users = array();
 		$table = WiseChatInstaller::getUsersTable();
 		$sql = sprintf('SELECT * FROM %s WHERE id IN (%s);', $table, implode(',', $idsFiltered));

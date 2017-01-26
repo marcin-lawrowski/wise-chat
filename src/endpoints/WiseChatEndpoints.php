@@ -109,6 +109,7 @@ class WiseChatEndpoints {
 	* Returns messages to render in the chat window.
 	*/
 	public function messagesEndpoint() {
+		$this->jsonContentType();
 		$this->confirmUserAuthenticationOrEndRequest();
 		$this->verifyCheckSum();
 
@@ -157,6 +158,7 @@ class WiseChatEndpoints {
 	* New message endpoint.
 	*/
 	public function messageEndpoint() {
+		$this->jsonContentType();
 		$this->verifyCheckSum();
 
 
@@ -218,6 +220,7 @@ class WiseChatEndpoints {
 	* Endpoint for messages deletion.
 	*/
 	public function messageDeleteEndpoint() {
+		$this->jsonContentType();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -254,6 +257,7 @@ class WiseChatEndpoints {
 	* Endpoint for banning users by message ID.
 	*/
 	public function userBanEndpoint() {
+		$this->jsonContentType();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -295,6 +299,7 @@ class WiseChatEndpoints {
 	* - maintenance actions in messages, bans, users, etc.
 	*/
 	public function maintenanceEndpoint() {
+		$this->jsonContentType();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -391,6 +396,7 @@ class WiseChatEndpoints {
 	* Endpoint for user's settings.
 	*/
 	public function settingsEndpoint() {
+		$this->jsonContentType();
 		$this->verifyCheckSum();
     
 		$response = array();
@@ -612,6 +618,10 @@ class WiseChatEndpoints {
 
 	private function sendUnauthorizedStatus() {
 		header('HTTP/1.0 401 Unauthorized', true, 401);
+	}
+
+	private function jsonContentType() {
+		header('Content-Type: application/json; charset='.get_option('blog_charset'));
 	}
 }
 

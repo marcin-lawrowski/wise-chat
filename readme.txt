@@ -318,6 +318,7 @@ After you type a message use the key combination: Shift + ENTER
 * Option to exclude anonymous users from the counter calculation
 * Fixed: unclickable image upload button on some themes
 * Fixed: error with uploading images on WordPress 4.7
+* Fixed: switched to JSON content type for AJAX requests (this may prevent from indexing raw data by Google)
 
 = 2.4.2 =
 * Fixed: error with uploading PNG files when EXIF extension is available
