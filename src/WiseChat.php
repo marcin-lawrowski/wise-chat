@@ -370,6 +370,7 @@ class WiseChat {
      * @return string
      */
     private function getCheckSum() {
+		$this->shortCodeOptions['ts'] = time();
         return base64_encode(WiseChatCrypt::encrypt(serialize($this->shortCodeOptions)));
     }
 

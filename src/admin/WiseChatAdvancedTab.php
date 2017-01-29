@@ -22,6 +22,11 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			),
 			array('show_powered_by', 'Show "Powered By" Footer', 'booleanFieldCallback', 'boolean'),
 			array('enabled_debug', 'Enable Debug Mode', 'booleanFieldCallback', 'boolean'),
+			array(
+				'ajax_validity_time', 'AJAX Validity Time', 'stringFieldCallback', 'integer',
+				'Determines how many minutes AJAX requests are considered as valid. It is useful to prevent indexing internal API calls by search engines and Web crawlers.<br />
+				<strong>Warning:</strong> Too low value may cause errors on mobile devices. The default value is: 1 day (1440 minutes). '
+			),
 		);
 	}
 	
@@ -31,6 +36,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			'messages_refresh_time' => 3000,
 			'show_powered_by' => 1,
 			'enabled_debug' => 0,
+			'ajax_validity_time' => 1440,
 		);
 	}
 	

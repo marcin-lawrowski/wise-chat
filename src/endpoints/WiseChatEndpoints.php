@@ -379,6 +379,10 @@ class WiseChatEndpoints {
 					'name' => $user->getName()
 				)
 			);
+			$response['events'][] = array(
+				'name' => 'checkSum',
+				'data' => $this->generateCheckSum()
+			);
 
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();
@@ -595,12 +599,34 @@ class WiseChatEndpoints {
 		}
 	}
 
+	private function generateCheckSum() {
+		$checksum = $this->getParam('checksum');
+
+		if ($checksum !== null) {
+			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
+			if (is_array($decoded)) {
+				$decoded['ts'] = time();
+
+				return base64_encode(WiseChatCrypt::encrypt(serialize($decoded)));
+			}
+		}
+
+		return null;
+	}
+
 	private function verifyCheckSum() {
 		$checksum = $this->getParam('checksum');
 
 		if ($checksum !== null) {
 			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
 			if (is_array($decoded)) {
+				$timestamp = array_key_exists('ts', $decoded) ? $decoded['ts'] : time();
+				$validityTime = $this->options->getIntegerOption('ajax_validity_time', 1440) * 60;
+				if ($timestamp + $validityTime < time()) {
+					$this->sendNotFoundStatus();
+					die();
+				}
+
 				$this->options->replaceOptions($decoded);
 			}
 		}
@@ -618,6 +644,10 @@ class WiseChatEndpoints {
 
 	private function sendUnauthorizedStatus() {
 		header('HTTP/1.0 401 Unauthorized', true, 401);
+	}
+
+	private function sendNotFoundStatus() {
+		header('HTTP/1.0 404 Not Found', true, 404);
 	}
 
 	private function jsonContentType() {
