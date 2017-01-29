@@ -83,6 +83,14 @@ function wise_chat_action_delete_attachment($attachmentId) {
 add_action('delete_attachment', 'wise_chat_action_delete_attachment');
 
 
+function wise_chat_panels_plugin_action_links($links) {
+	unset( $links['edit'] );
+	$links[] = '<a href="http://kaine.pl/projects/wp-plugins/wise-chat-pro/" style="font-weight: bold; color: #ff0000;">Update to Wise Chat PRO</a>';
+
+	return $links;
+}
+add_action('plugin_action_links_' . plugin_basename(__FILE__), 'wise_chat_panels_plugin_action_links');
+
 // Endpoints fo AJAX requests:
 function wise_chat_endpoint_messages() {
 	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatEndpoints');
