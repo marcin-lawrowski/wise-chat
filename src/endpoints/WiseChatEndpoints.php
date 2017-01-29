@@ -111,6 +111,7 @@ class WiseChatEndpoints {
 	public function messagesEndpoint() {
 		$this->jsonContentType();
 		$this->confirmUserAuthenticationOrEndRequest();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -159,6 +160,7 @@ class WiseChatEndpoints {
 	*/
 	public function messageEndpoint() {
 		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 
@@ -221,6 +223,7 @@ class WiseChatEndpoints {
 	*/
 	public function messageDeleteEndpoint() {
 		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -258,6 +261,7 @@ class WiseChatEndpoints {
 	*/
 	public function userBanEndpoint() {
 		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -300,6 +304,7 @@ class WiseChatEndpoints {
 	*/
 	public function maintenanceEndpoint() {
 		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -401,6 +406,7 @@ class WiseChatEndpoints {
 	*/
 	public function settingsEndpoint() {
 		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
     
 		$response = array();
@@ -629,6 +635,19 @@ class WiseChatEndpoints {
 
 				$this->options->replaceOptions($decoded);
 			}
+		}
+	}
+
+	private function verifyXhrRequest() {
+		if (!$this->options->isOptionEnabled('enabled_xhr_check', true)) {
+			return true;
+		}
+
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			return true;
+		} else {
+			$this->sendNotFoundStatus();
+			die();
 		}
 	}
 

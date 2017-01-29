@@ -27,6 +27,10 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				'Determines how many minutes AJAX requests are considered as valid. It is useful to prevent indexing internal API calls by search engines and Web crawlers.<br />
 				<strong>Warning:</strong> Too low value may cause errors on mobile devices. The default value is: 1 day (1440 minutes). '
 			),
+			array(
+				'enabled_xhr_check', 'Enable XHR Request Check', 'booleanFieldCallback', 'boolean',
+				'Enabled check for "X-Requested-With" header in AJAX requests'
+			),
 		);
 	}
 	
@@ -37,6 +41,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			'show_powered_by' => 1,
 			'enabled_debug' => 0,
 			'ajax_validity_time' => 1440,
+			'enabled_xhr_check' => 1,
 		);
 	}
 	

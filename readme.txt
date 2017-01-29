@@ -317,6 +317,8 @@ After you type a message use the key combination: Shift + ENTER
 * Option to select which parts of a message are effected when user changes text color
 * Option to exclude anonymous users from the counter calculation
 * Set validity time on AJAX internal requests (preventing indexation by Web crawlers)
+* Option to verify "X-Requested-With" header in AJAX requests
+* Fixed: valid content type (application/json) for content returned for AJAX requests
 * Fixed: unclickable image upload button on some themes
 * Fixed: error with uploading images on WordPress 4.7
 * Fixed: switched to JSON content type for AJAX requests (this may prevent from indexing raw data by Google)
