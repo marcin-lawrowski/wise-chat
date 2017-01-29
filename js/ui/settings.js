@@ -51,7 +51,7 @@ function WiseChatSettings(options, messages) {
 	 */
 	function onPropertySaveRequestSuccess(result, callback) {
 		try {
-			var response = jQuery.parseJSON(result);
+			var response = result;
 			if (response.error) {
 				messages.showErrorMessage(response.error);
 			} else {

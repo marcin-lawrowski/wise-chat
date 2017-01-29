@@ -140,12 +140,48 @@ class WiseChatOptions {
 	* @return null
 	*/
 	public function replaceOptions($options) {
-		// detect arrays in the following format: {element1,element2,...,elementN}
+		// detect arrays in the following format: {element1, element2, ..., elementN} or {key1: element1, key2: element2, ..., keyN: elementN}
 		foreach ($options as $key => $value) {
 			if (strlen($value) > 1 && $value[0] == '{' && $value[strlen($value) - 1] == '}') {
 				$value = trim($value, '{}');
-				$split = preg_split('/,/', $value);
-				$options[$key] = $split;
+
+				$elements = array();
+				$currentValue = null;
+				for($i = 0; $i < strlen($value); $i++) {
+					if ($value[$i] == ',') {
+						if ($i > 0 && $value[$i - 1] != "\\") {
+							if ($currentValue !== null) {
+								$elements[] = trim($currentValue);
+							}
+							$currentValue = null;
+						} else if ($i > 0 && $value[$i - 1] == "\\") {
+							$currentValue = rtrim($currentValue, "\\");
+							$currentValue .= ',';
+						}
+					} else {
+						$currentValue .= $value[$i];
+					}
+				}
+				if ($currentValue !== null) {
+					$elements[] = trim($currentValue);
+				}
+
+				$transformedValues = array();
+				foreach ($elements as $element) {
+					$split = preg_split('/:/', $element);
+
+					// detect "key: value" format:
+					if (is_array($split)) {
+						if (count($split) > 1) {
+							$transformedValues[trim($split[0])] = trim(str_replace($split[0].':', '', $element));
+						} else {
+							$transformedValues[] = $element;
+						}
+					} else {
+						$transformedValues[] = $element;
+					}
+				}
+				$options[$key] = $transformedValues;
 			}
 		}
 

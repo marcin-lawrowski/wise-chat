@@ -148,38 +148,40 @@ class WiseChatService {
 			}
 			
 			$chatOpeningHours = $this->options->getOption('opening_hours');
-			$openingHour = $chatOpeningHours['opening'];
-			$openingMode = $chatOpeningHours['openingMode'];
-			$startHourDate = null;
-			if ($openingMode != '24h') {
-				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode);
-			} else {
-				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour);
-			}
-			
-			$closingHour = $chatOpeningHours['closing'];
-			$closingMode = $chatOpeningHours['closingMode'];
-			$endHourDate = null;
-			if ($closingMode != '24h') {
-				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode);
-			} else {
-				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour);
-			}
-			
-			if ($startHourDate != null && $endHourDate != null) {
-				$nowDate = new DateTime();
-				
-				$nowU = $nowDate->format('U');
-				$startHourDateU = $startHourDate->format('U');
-				$endHourDateU = $endHourDate->format('U');
-				
-				if ($startHourDateU <= $endHourDateU) {
-					if ($nowU < $startHourDateU || $nowU > $endHourDateU) {
-						return false;
-					}
+			if (is_array($chatOpeningHours)) {
+				$openingHour = isset($chatOpeningHours['opening']) ? $chatOpeningHours['opening'] : '00:00';
+				$openingMode = isset($chatOpeningHours['openingMode']) ? $chatOpeningHours['openingMode'] : '24h';
+				$startHourDate = null;
+				if ($openingMode != '24h') {
+					$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d') . ' ' . $openingHour . ' ' . $openingMode);
 				} else {
-					if ($nowU > $endHourDateU && $nowU < $startHourDateU) {
-						return false;
+					$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $openingHour);
+				}
+
+				$closingHour = isset($chatOpeningHours['closing']) ? $chatOpeningHours['closing'] : '23:59';
+				$closingMode = isset($chatOpeningHours['closingMode']) ? $chatOpeningHours['closingMode'] : '24h';
+				$endHourDate = null;
+				if ($closingMode != '24h') {
+					$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d') . ' ' . $closingHour . ' ' . $closingMode);
+				} else {
+					$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $closingHour);
+				}
+
+				if ($startHourDate != null && $endHourDate != null) {
+					$nowDate = new DateTime();
+
+					$nowU = $nowDate->format('U');
+					$startHourDateU = $startHourDate->format('U');
+					$endHourDateU = $endHourDate->format('U');
+
+					if ($startHourDateU <= $endHourDateU) {
+						if ($nowU < $startHourDateU || $nowU > $endHourDateU) {
+							return false;
+						}
+					} else {
+						if ($nowU > $endHourDateU && $nowU < $startHourDateU) {
+							return false;
+						}
 					}
 				}
 			}

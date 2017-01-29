@@ -3,8 +3,8 @@ Contributors: marcin.lawrowski
 Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
-Tested up to: 4.6.1
-Stable tag: 2.4.2
+Tested up to: 4.7.2
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
+**[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
 
 Wise Chat: **[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)**
 
@@ -311,6 +311,17 @@ After you type a message use the key combination: Shift + ENTER
 06. Settings page - compilation of all tabs
 
 == Changelog ==
+
+= 2.4.3 =
+* Option to pass more complex configuration in shortcode, for example: [wise-chat opening_hours="{opening: 8:30, openingMode: AM, closing: 8:32, closingMode: AM }" enable_opening_control="1" opening_days="{ Monday,Tuesday}"]
+* Option to select which parts of a message are effected when user changes text color
+* Option to exclude anonymous users from the counter calculation
+* Set validity time on AJAX internal requests (preventing indexation by Web crawlers)
+* Option to verify "X-Requested-With" header in AJAX requests
+* Fixed: valid content type (application/json) for content returned for AJAX requests
+* Fixed: unclickable image upload button on some themes
+* Fixed: error with uploading images on WordPress 4.7
+* Fixed: switched to JSON content type for AJAX requests (this may prevent from indexing raw data by Google)
 
 = 2.4.2 =
 * Fixed: error with uploading PNG files when EXIF extension is available

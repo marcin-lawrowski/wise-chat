@@ -261,6 +261,34 @@ class WiseChatChannelUsersDAO {
 	}
 
 	/**
+	 * Returns the amount of logged-in users of the given channel.
+	 *
+	 * @param integer $channelId ID of the Channel
+	 *
+	 * @return integer
+	 */
+	public function getAmountOfLoggedInUsersInChannel($channelId) {
+		global $wpdb;
+
+		$table = WiseChatInstaller::getChannelUsersTable();
+		$usersTable = WiseChatInstaller::getUsersTable();
+		$sql = sprintf(
+			'SELECT count(DISTINCT ch_us.user_id) AS quantity
+				FROM %s AS ch_us
+				LEFT JOIN %s AS us ON (us.id = ch_us.user_id)
+				WHERE ch_us.active = 1 AND ch_us.channel_id = "%d" AND us.wp_id > 0;',
+			$table, $usersTable, intval($channelId)
+		);
+		$results = $wpdb->get_results($sql);
+		if (is_array($results) && count($results) > 0) {
+			$result = $results[0];
+			return $result->quantity;
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Returns statistics of channels containing active users.
 	 *
 	 * @return WiseChatChannelStats[]

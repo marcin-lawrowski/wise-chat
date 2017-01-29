@@ -134,6 +134,11 @@ class WiseChatRenderer {
 	public function getRenderedMessage($message) {
 		$this->templater->setTemplateFile(WiseChatThemes::getInstance()->getMessageTemplate());
 
+		$textColorAffectedParts = (array) $this->options->getOption("text_color_parts", array('message', 'messageUserName'));
+		$isTextColorSet = $this->options->isOptionEnabled('allow_change_text_color') &&
+			$message->getUser() !== null &&
+			strlen($message->getUser()->getDataProperty('textColor')) > 0;
+
 		$data = array(
 			'baseDir' => $this->options->getBaseDir(),
 			'messageId' => $message->getId(),
@@ -146,9 +151,8 @@ class WiseChatRenderer {
 			'messageTimeUTC' => gmdate('c', $message->getTime()),
 			'renderedUserName' => $this->getRenderedUserName($message),
 			'messageContent' => $this->getRenderedMessageContent($message),
-			'isTextColorSet' => $this->options->isOptionEnabled('allow_change_text_color') &&
-								$message->getUser() !== null &&
-								strlen($message->getUser()->getDataProperty('textColor')) > 0,
+			'isTextColorSetForMessage' => $isTextColorSet && in_array('message', $textColorAffectedParts),
+			'isTextColorSetForUserName' => $isTextColorSet && in_array('messageUserName', $textColorAffectedParts),
 			'textColor' => $message->getUser() !== null ? $message->getUser()->getDataProperty('textColor') : ''
 		);
 		

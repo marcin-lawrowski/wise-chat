@@ -109,7 +109,9 @@ class WiseChatEndpoints {
 	* Returns messages to render in the chat window.
 	*/
 	public function messagesEndpoint() {
+		$this->jsonContentType();
 		$this->confirmUserAuthenticationOrEndRequest();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -157,6 +159,8 @@ class WiseChatEndpoints {
 	* New message endpoint.
 	*/
 	public function messageEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 
@@ -218,6 +222,8 @@ class WiseChatEndpoints {
 	* Endpoint for messages deletion.
 	*/
 	public function messageDeleteEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -254,6 +260,8 @@ class WiseChatEndpoints {
 	* Endpoint for banning users by message ID.
 	*/
 	public function userBanEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -295,6 +303,8 @@ class WiseChatEndpoints {
 	* - maintenance actions in messages, bans, users, etc.
 	*/
 	public function maintenanceEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
 
 		$response = array();
@@ -331,10 +341,17 @@ class WiseChatEndpoints {
 				}
 
 				if ($this->options->isOptionEnabled('show_users_counter')) {
+					$totalUsers = 0;
+					if ($this->options->isOptionEnabled('counter_without_anonymous', true)) {
+						$totalUsers = $this->channelUsersDAO->getAmountOfLoggedInUsersInChannel($channel->getId());
+					} else {
+						$totalUsers = $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId());
+					}
+
 					$response['events'][] = array(
 						'name' => 'refreshUsersCounter',
 						'data' => array(
-							'total' => $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId())
+							'total' => $totalUsers
 						)
 					);
 				}
@@ -367,6 +384,10 @@ class WiseChatEndpoints {
 					'name' => $user->getName()
 				)
 			);
+			$response['events'][] = array(
+				'name' => 'checkSum',
+				'data' => $this->generateCheckSum()
+			);
 
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();
@@ -384,6 +405,8 @@ class WiseChatEndpoints {
 	* Endpoint for user's settings.
 	*/
 	public function settingsEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
 		$this->verifyCheckSum();
     
 		$response = array();
@@ -582,14 +605,49 @@ class WiseChatEndpoints {
 		}
 	}
 
+	private function generateCheckSum() {
+		$checksum = $this->getParam('checksum');
+
+		if ($checksum !== null) {
+			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
+			if (is_array($decoded)) {
+				$decoded['ts'] = time();
+
+				return base64_encode(WiseChatCrypt::encrypt(serialize($decoded)));
+			}
+		}
+
+		return null;
+	}
+
 	private function verifyCheckSum() {
 		$checksum = $this->getParam('checksum');
 
 		if ($checksum !== null) {
 			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
 			if (is_array($decoded)) {
+				$timestamp = array_key_exists('ts', $decoded) ? $decoded['ts'] : time();
+				$validityTime = $this->options->getIntegerOption('ajax_validity_time', 1440) * 60;
+				if ($timestamp + $validityTime < time()) {
+					$this->sendNotFoundStatus();
+					die();
+				}
+
 				$this->options->replaceOptions($decoded);
 			}
+		}
+	}
+
+	private function verifyXhrRequest() {
+		if (!$this->options->isOptionEnabled('enabled_xhr_check', true)) {
+			return true;
+		}
+
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+			return true;
+		} else {
+			$this->sendNotFoundStatus();
+			die();
 		}
 	}
 
@@ -605,6 +663,14 @@ class WiseChatEndpoints {
 
 	private function sendUnauthorizedStatus() {
 		header('HTTP/1.0 401 Unauthorized', true, 401);
+	}
+
+	private function sendNotFoundStatus() {
+		header('HTTP/1.0 404 Not Found', true, 404);
+	}
+
+	private function jsonContentType() {
+		header('Content-Type: application/json; charset='.get_option('blog_charset'));
 	}
 }
 

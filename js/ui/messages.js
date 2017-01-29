@@ -206,7 +206,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 
 	function onNewMessagesArrived(result) {
 		try {
-			var response = jQuery.parseJSON(result);
+			var response = result;
 			if (response.result && response.result.length > 0) {
 				var wasFullyScrolled = isFullyScrolled();
 				var messagesScrollPosition = messagesContainer.scrollTop();
@@ -267,7 +267,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function onMessageSent(result) {
 		setIdleState();
 		try {
-			var response = jQuery.parseJSON(result);
+			var response = result;
 			if (response.error) {
 				showErrorMessage(response.error);
 			} else {
@@ -500,8 +500,12 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function setMessagesProperty(data) {
 		container.find('div[data-chat-user-id="' + data.chatUserId + '"]').each(function(index, element) {
 			if (data.propertyName == 'textColor') {
-				var cssSelector = '.wcMessageUser, .wcMessageUser a, .wcMessageContent, .wcMessageTime';
-				jQuery(element).find(cssSelector).css({color: data.propertyValue});
+				if (jQuery.inArray('message', options.textColorAffectedParts) !== -1) {
+					jQuery(element).find('.wcMessageContent').css({color: data.propertyValue});
+				}
+				if (jQuery.inArray('messageUserName', options.textColorAffectedParts) !== -1) {
+					jQuery(element).find('.wcMessageUser, .wcMessageUser a').css({color: data.propertyValue});
+				}
 			}
 		});
 	}
@@ -568,7 +572,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		})
 		.done(function(result) {
 			try {
-				var response = jQuery.parseJSON(result);
+				var response = result;
 				if (response.error) {
 					showErrorMessage(response.error);
 				}
