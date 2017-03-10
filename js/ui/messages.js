@@ -133,7 +133,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
     }
 
 	function showErrorMessage(message) {
-		if (lastErrorMessageText != message) {
+		if (options.errorMode && lastErrorMessageText != message) {
 			lastErrorMessageText = message;
 			message = '<div class="wcMessage wcErrorMessage">' + message + '</div>';
 			if (isAscendingOrder()) {

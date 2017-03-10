@@ -21,7 +21,8 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				WiseChatAdvancedTab::getRefreshTimes()
 			),
 			array('show_powered_by', 'Show "Powered By" Footer', 'booleanFieldCallback', 'boolean'),
-			array('enabled_debug', 'Enable Debug Mode', 'booleanFieldCallback', 'boolean'),
+			array('enabled_debug', 'Enable Debug Mode', 'booleanFieldCallback', 'boolean', "Displays extended error log. It is useful when reporting issues."),
+			array('enabled_errors', 'Enable Errors Reporting', 'booleanFieldCallback', 'boolean', "Determines if all run-time errors should be displayed to chat users. It is useful when detecting issues."),
 			array(
 				'ajax_validity_time', 'AJAX Validity Time', 'stringFieldCallback', 'integer',
 				'Determines how many minutes AJAX requests are considered as valid. It is useful to prevent indexing internal API calls by search engines and Web crawlers.<br />
@@ -40,6 +41,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			'messages_refresh_time' => 3000,
 			'show_powered_by' => 1,
 			'enabled_debug' => 0,
+			'enabled_errors' => 0,
 			'ajax_validity_time' => 1440,
 			'enabled_xhr_check' => 1,
 		);

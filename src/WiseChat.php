@@ -276,6 +276,7 @@ class WiseChat {
 			'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),
 			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 			'debugMode' => $this->options->isOptionEnabled('enabled_debug', false),
+			'errorMode' => $this->options->isOptionEnabled('enabled_errors', false),
 			'emoticonsSet' => $this->options->getIntegerOption('emoticons_enabled', 1),
 			'enableLeaveNotification' => $this->options->isOptionEnabled('enable_leave_notification', true),
 			'enableJoinNotification' => $this->options->isOptionEnabled('enable_join_notification', true),
