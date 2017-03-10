@@ -12,7 +12,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	var channelId = options.channelId;
 	var refresherInitialized = false;
 
-	var messagesEndpoint = options.apiEndpointBase + '?action=wise_chat_messages_endpoint';
+	var messagesEndpoint = options.apiMessagesEndpointBase + '?action=wise_chat_messages_endpoint';
 	var messageEndpoint = options.apiEndpointBase + '?action=wise_chat_message_endpoint';
 	var messageDeleteEndpoint = options.apiEndpointBase + '?action=wise_chat_delete_message_endpoint';
 	var userBanEndpoint = options.apiEndpointBase + '?action=wise_chat_user_ban_endpoint';

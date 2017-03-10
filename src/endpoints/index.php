@@ -15,7 +15,7 @@
 	WiseChatContainer::load('WiseChatInstaller');
 	WiseChatContainer::load('WiseChatOptions');
 	
-	require_once('../../../../../wp-load.php');
+	require_once(dirname(__FILE__).'/../../../../../wp-load.php');
 	
 
 	header('Content-Type: text/html');
