@@ -322,7 +322,9 @@ class WiseChatMessagesDAO {
 		$usersSummary = $this->channelUsersDAO->getAllChannelsStats();
 		$usersSummaryMap = array();
 		foreach ($usersSummary as $userDetails) {
-			$usersSummaryMap[$userDetails->getChannel()->getName()] = intval($userDetails->getNumberOfUsers());
+			if ($userDetails->getChannel() !== null) {
+				$usersSummaryMap[$userDetails->getChannel()->getName()] = intval($userDetails->getNumberOfUsers());
+			}
 		}
 		
 		$mainSummaryMap = array();
