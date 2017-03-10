@@ -316,6 +316,7 @@ After you type a message use the key combination: Shift + ENTER
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU
 * Less frequent maintenance actions which means less CPU usage
 * Fixed: issue with broken menu on Wise Chat Pro settings page, this blocked navigation between settings sections
+* Fixed: issues with setting background colors
 
 = 2.4.3 =
 * Option to pass more complex configuration in shortcode, for example: [wise-chat opening_hours="{opening: 8:30, openingMode: AM, closing: 8:32, closingMode: AM }" enable_opening_control="1" opening_days="{ Monday,Tuesday}"]
