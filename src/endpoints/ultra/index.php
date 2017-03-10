@@ -1,5 +1,10 @@
 <?php
 
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+	header('HTTP/1.0 404 Not Found');
+	die('');
+}
+
 // make sure it is used only for "wise_chat_messages_endpoint" action:
 if (!isset($_REQUEST['action']) || $_REQUEST['action'] !== 'wise_chat_messages_endpoint') {
 	header('HTTP/1.0 404 Not Found');
