@@ -314,6 +314,7 @@ After you type a message use the key combination: Shift + ENTER
 
 = 2.5 =
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU
+* Less frequent maintenance actions which means less CPU usage
 
 = 2.4.3 =
 * Option to pass more complex configuration in shortcode, for example: [wise-chat opening_hours="{opening: 8:30, openingMode: AM, closing: 8:32, closingMode: AM }" enable_opening_control="1" opening_days="{ Monday,Tuesday}"]
