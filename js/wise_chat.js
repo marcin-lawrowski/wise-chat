@@ -815,9 +815,24 @@ function WiseChatEmoticonsPanel(options, messages) {
 
 	function onInsertEmoticonButtonClick() {
         if (!layer.is(':visible')) {
+			var leftValue = insertEmoticonButton.offset().left - layer.outerWidth() - 5;
+			if (leftValue < 0) {
+				leftValue = container.offset().left;
+
+				if (container.outerWidth() < LAYER_WIDTH) {
+					layer.css({
+						width: container.outerWidth() + 'px'
+					});
+
+				} else {
+					layer.css('width', LAYER_WIDTH + 'px');
+				}
+			}
+			var topValue = insertEmoticonButton.offset().top - layer.outerHeight();
+
             layer.css({
-                top: (insertEmoticonButton.offset().top + insertEmoticonButton.outerHeight()) - layer.outerHeight(),
-                left: insertEmoticonButton.offset().left - layer.outerWidth() - 5
+                top: topValue,
+                left: leftValue
             });
             showLayer();
         } else {

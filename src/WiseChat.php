@@ -247,6 +247,7 @@ class WiseChat {
 			'baseDir' => $this->options->getBaseDir(),
             'emoticonsBaseURL' => $this->options->getEmoticonsBaseURL(),
 			'apiEndpointBase' => $this->getEndpointBase(),
+			'apiMessagesEndpointBase' => $this->getMessagesEndpointBase(),
 			'messagesRefreshTime' => intval($this->options->getEncodedOption('messages_refresh_time', 3000)),
 			'messagesOrder' => $this->options->getEncodedOption('messages_order', '') == 'descending' ? 'descending' : 'ascending',
 			'enableTitleNotifications' => $this->options->isOptionEnabled('enable_title_notifications'),
@@ -275,6 +276,7 @@ class WiseChat {
 			'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),
 			'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 			'debugMode' => $this->options->isOptionEnabled('enabled_debug', false),
+			'errorMode' => $this->options->isOptionEnabled('enabled_errors', false),
 			'emoticonsSet' => $this->options->getIntegerOption('emoticons_enabled', 1),
 			'enableLeaveNotification' => $this->options->isOptionEnabled('enable_leave_notification', true),
 			'enableJoinNotification' => $this->options->isOptionEnabled('enable_join_notification', true),
@@ -305,6 +307,7 @@ class WiseChat {
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button'),
             'showEmoticonInsertButton' => $this->options->isOptionEnabled('show_emoticon_insert_button', true),
+			'messagesInline' => $this->options->isOptionEnabled('messages_inline', false),
 			'messageSubmitButtonCaption' => $this->options->getEncodedOption('message_submit_button_caption', 'Send'),
 			'showUsersList' => $this->options->isOptionEnabled('show_users'),
 			'usersList' => $this->options->isOptionEnabled('show_users') ? $this->renderer->getRenderedUsersList($channel) : '',
@@ -379,10 +382,23 @@ class WiseChat {
      */
 	private function getEndpointBase() {
 		$endpointBase = get_site_url().'/wp-admin/admin-ajax.php';
-		if ($this->options->getEncodedOption('ajax_engine', null) === 'lightweight') {
+		if (in_array($this->options->getEncodedOption('ajax_engine', null), array('lightweight', 'ultralightweight'))) {
 			$endpointBase = get_site_url().'/wp-content/plugins/wise-chat/src/endpoints/';
 		}
 		
+		return $endpointBase;
+	}
+
+	/**
+     * @return string
+     */
+	private function getMessagesEndpointBase() {
+		if ($this->options->getEncodedOption('ajax_engine', null) === 'ultralightweight') {
+			$endpointBase = get_site_url().'/wp-content/plugins/wise-chat/src/endpoints/ultra/index.php';
+		} else {
+			$endpointBase = $this->getEndpointBase();
+		}
+
 		return $endpointBase;
 	}
 

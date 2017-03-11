@@ -15,7 +15,7 @@
 	{% endif windowTitle %}
 	
 	{% if inputControlsBottomLocation %}
-		<div class='wcMessages'>{{ messages }}</div>
+		<div class='wcMessages {% if messagesInline %}wcMessagesInline{% endif messagesInline %}'>{{ messages }}</div>
 		
 		{% if showUsersList %}
 			<div class='wcUsersList'>{{ usersList }}</div>
@@ -102,7 +102,7 @@
     {% endif allowToSendMessages %}
 
 	{% if inputControlsTopLocation %}
-		<div class='wcMessages'>{{ messages }}</div>
+		<div class='wcMessages {% if messagesInline %}wcMessagesInline{% endif messagesInline %}'>{{ messages }}</div>
 		
 		{% if showUsersList %}
 			<div class='wcUsersList'>{{ usersList }}</div>

@@ -50,8 +50,12 @@ class WiseChatCssRenderer {
 			$this->addRawDefinition('.wcControls', 'background', 'none');
 			$this->addDefinition('.wcControls', 'background_color_chat', 'background-color');
 		}
+		$this->addDefinition('.wcWindowTitle', 'background_color_chat', 'background-color');
 		
 		$this->addDefinition('.wcMessages', 'background_color', 'background-color');
+		$this->addDefinition('.wcMessages .wcMessage', 'background_color', 'background-color');
+		$this->addDefinition('.wcMessages .wcMessage > .wcMessageUser', 'background_color', 'background-color');
+		$this->addDefinition('.wcMessages .wcMessage > .wcMessageContent', 'background_color', 'background-color');
 		
 		$this->addDefinition('.wcMessages .wcMessage *', 'text_color', 'color');
 		
@@ -70,7 +74,9 @@ class WiseChatCssRenderer {
 		$this->addDefinition('.wcControls span', 'background_color_input', 'background-color');
 		$this->addDefinition('.wcControls a', 'background_color_input', 'background-color');
 		$this->addDefinition('.wcControls label', 'background_color_input', 'background-color');
-		
+
+		$this->addDefinition('.wcUsersCounter', 'text_color_input_field', 'color');
+		$this->addDefinition('.wcUsersCounter *', 'text_color_input_field', 'color');
 		$this->addDefinition('.wcControls', 'text_color_input_field', 'color');
 		$this->addDefinition('.wcControls span', 'text_color_input_field', 'color');
 		$this->addDefinition('.wcControls a', 'text_color_input_field', 'color');

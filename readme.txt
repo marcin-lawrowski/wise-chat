@@ -3,8 +3,8 @@ Contributors: marcin.lawrowski
 Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
-Tested up to: 4.7.2
-Stable tag: 2.4.3
+Tested up to: 4.7.3
+Stable tag: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -311,6 +311,15 @@ After you type a message use the key combination: Shift + ENTER
 06. Settings page - compilation of all tabs
 
 == Changelog ==
+
+= 2.5 =
+* New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU
+* Less frequent maintenance actions which means less CPU usage
+* Option to display message and username in the same line
+* Better displaying emoticons panel on mobile devices
+* Option to enable / disable displaying errors to chat users
+* Fixed: issue with broken menu on Wise Chat Pro settings page, this blocked navigation between settings sections
+* Fixed: issues with setting background colors
 
 = 2.4.3 =
 * Option to pass more complex configuration in shortcode, for example: [wise-chat opening_hours="{opening: 8:30, openingMode: AM, closing: 8:32, closingMode: AM }" enable_opening_control="1" opening_days="{ Monday,Tuesday}"]

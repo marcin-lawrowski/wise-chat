@@ -4,7 +4,7 @@
  * @author Marcin Ławrowski <marcin@kaine.pl>
  */
 function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
-	var REFRESH_TIMEOUT = 10000;
+	var REFRESH_TIMEOUT = 20000;
 	var ENDPOINT_URL = options.apiEndpointBase + '?action=wise_chat_maintenance_endpoint';
 	var lastActionId = options.lastActionId;
 	var isInitialized = false;
