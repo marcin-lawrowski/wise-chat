@@ -307,6 +307,7 @@ class WiseChat {
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button'),
             'showEmoticonInsertButton' => $this->options->isOptionEnabled('show_emoticon_insert_button', true),
+			'messagesInline' => $this->options->isOptionEnabled('messages_inline', false),
 			'messageSubmitButtonCaption' => $this->options->getEncodedOption('message_submit_button_caption', 'Send'),
 			'showUsersList' => $this->options->isOptionEnabled('show_users'),
 			'usersList' => $this->options->isOptionEnabled('show_users') ? $this->renderer->getRenderedUsersList($channel) : '',

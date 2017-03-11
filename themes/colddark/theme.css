@@ -111,6 +111,22 @@
 	float: right; 
 }
 
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcMessageContent {
+	display: inline;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcClear {
+	display: none;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcMessageUser {
+	margin-right: 4px;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcAdminAction {
+	padding: 0px; padding-right: 1px; padding-left: 1px;
+}
+
 .wcContainer .wcMessages .wcErrorMessage {
 	color: #ff0000;
 }

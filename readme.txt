@@ -315,6 +315,7 @@ After you type a message use the key combination: Shift + ENTER
 = 2.5 =
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU
 * Less frequent maintenance actions which means less CPU usage
+* Option to display message and username in the same line
 * Better displaying emoticons panel on mobile devices
 * Option to enable / disable displaying errors to chat users
 * Fixed: issue with broken menu on Wise Chat Pro settings page, this blocked navigation between settings sections
