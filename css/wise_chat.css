@@ -260,6 +260,11 @@
 	color: #ff0000;
 }
 
+.wcContainer .wcUserNameError {
+	margin: 10px 0px;
+	color: #ff0000;
+}
+
 .colorPicker-palette {
 	width: 216px !important; border: 1px solid #dfdfdf !important; border-radius: 0px !important;
 }
@@ -279,4 +284,13 @@
 
 .wcEmoticonsLayer a img {
     border: none; border-radius: 0px; margin: 0px; padding: 0px;
+}
+
+/* window content */
+.wcContainer .wcWindowContent input[name='wcUserName'] {
+	width: auto;
+}
+
+.wcContainer .wcWindowContent input[name='wcChannelPassword'] {
+	width: auto;
 }
