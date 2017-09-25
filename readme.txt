@@ -313,7 +313,8 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.6 =
-Fixed: text input width on Force Username and Channel Password screens
+* Reloading page after sending valid POST forms on Force Username and Channel Password screens
+* Fixed: text input width on Force Username and Channel Password screens
 
 = 2.5 =
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU

@@ -76,6 +76,11 @@ class WiseChat {
 	 * @var WiseChatAds
 	 */
 	private $ads;
+
+	/**
+	 * @var WiseChatHttpRequestService
+	 */
+	private $httpRequestService;
 	
 	/**
 	* @var array
@@ -97,6 +102,7 @@ class WiseChat {
 		$this->attachmentsService = WiseChatContainer::get('services/WiseChatAttachmentsService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
 		$this->ads = WiseChatContainer::getLazy('services/WiseChatAds');
+		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
@@ -152,6 +158,7 @@ class WiseChat {
 	 * @throws Exception
 	 */
 	public function getRenderedChat($channelName = null) {
+		$redirectURL = null;
 		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($channelName));
 
 		// saves users list in session for this channel (it will be updated in maintenance task):
@@ -196,6 +203,7 @@ class WiseChat {
 			if ($this->getPostParam('wcUserNameSelection') !== null) {
 				try {
 					$this->authentication->authenticate($this->getPostParam('wcUserName'));
+					$redirectURL = $this->httpRequestService->getCurrentURL();
 				} catch (Exception $e) {
 					return $this->renderer->getRenderedUserNameForm($e->getMessage());
 				}
@@ -208,6 +216,8 @@ class WiseChat {
 			if ($this->getPostParam('wcChannelAuthorization') !== null) {
 				if (!$this->service->authorize($channel, $this->getPostParam('wcChannelPassword'))) {
 					return $this->renderer->getRenderedPasswordAuthorization($this->options->getOption('message_error_9', 'Invalid password.'));
+				} else {
+					$redirectURL = $this->httpRequestService->getCurrentURL();
 				}
 			} else {
 				return $this->renderer->getRenderedPasswordAuthorization();
@@ -303,6 +313,7 @@ class WiseChat {
 		$data = array(
 			'chatId' => $chatId,
 			'baseDir' => $this->options->getBaseDir(),
+			'redirectURL' => $redirectURL,
 			'messages' => $renderedMessages,
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button'),

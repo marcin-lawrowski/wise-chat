@@ -126,6 +126,10 @@
 {{ customCssDefinitions }}
 
 <script type='text/javascript'>
+    {% if redirectURL %}
+        window.location.href = '{{ redirectURL }}';
+    {% endif redirectURL %}
+
     (function() {
         var messages = jQuery('#{{ chatId }} .wcMessages');
         if (messages.length > 0 && '{{ messagesOrder }}' == 'ascending') {
