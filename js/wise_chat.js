@@ -2,7 +2,7 @@
  * Wise Chat core controller.
  *
  * @author Marcin Ławrowski <marcin@kaine.pl>
- * @link http://kaine.pl/projects/wp-plugins/wise-chat
+ * @link https://kaine.pl/projects/wp-plugins/wise-chat
  */
 function WiseChatController(options) {
 	var progressBar = new WiseChatProgressBar(options);

@@ -2,7 +2,7 @@
  * Wise Chat admin support JS
  *
  * @author Marcin Ławrowski <marcin@kaine.pl>
- * @link http://kaine.pl/projects/wp-plugins/wise-chat
+ * @link https://kaine.pl/projects/wp-plugins/wise-chat
  */
 jQuery(document).ready(function($){
 	jQuery('.wc-color-picker').wpColorPicker();

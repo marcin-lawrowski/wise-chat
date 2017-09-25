@@ -162,11 +162,11 @@ class WiseChatSettings {
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>
 				<div class="wcAdminDonation">
-					<a class="button-secondary wcAdminButtonPro" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
+					<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
 						Wise Chat <strong>Pro</strong>
 					</a>
-					<a class="button-secondary" target="_blank" href="http://kaine.pl/" title="Kainex software">Visit Us</a>
-					<a class="button-secondary" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-feedback" title="Send quick feedback">Send Feedback</a>
+					<a class="button-secondary" target="_blank" href="https://kaine.pl/" title="Kainex software">Visit Us</a>
+					<a class="button-secondary" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-feedback" title="Send quick feedback">Send Feedback</a>
 				</div>
 				
 				<form method="post" action="options.php" class="metabox-holder">

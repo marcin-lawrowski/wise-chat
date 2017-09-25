@@ -11,7 +11,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 		return array(
 			array(
 				'_section', 'Wise Chat Pro Features',
-				'<a href="http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page"><img src="'.$this->options->getBaseDir().'/gfx/pro/wordpress-wise-chat-pro.png" /></a>'.
+				'<a href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page"><img src="'.$this->options->getBaseDir().'/gfx/pro/wordpress-wise-chat-pro.png" /></a>'.
 				'<style type="text/css">#wise-chat-proContainer .button { display: none; } #wise-chat-proContainer ul li { font-size: 1.3em; }</style>'.
 				'<br />'.
 				'<h2>Boost user engagement, build a community, increase conversion!</h2>'.
@@ -31,7 +31,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; Eternal license</li>'.
 				'<li>&#8226; Pay once, use forever</li>'.
 				'</ul>'.
-				'<a class="button-secondary wcAdminButtonPro" target="_blank" href="http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
+				'<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
 					Check Wise Chat <strong>Pro</strong>
 				</a>'
 			),

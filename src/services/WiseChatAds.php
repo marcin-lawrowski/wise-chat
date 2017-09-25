@@ -32,13 +32,13 @@ class WiseChatAds {
             $groupIndex = abs($position % 2);
             if ($groupIndex === 0) {
                 $urls = array(
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
-                    'http://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
+                    'https://kaine.pl/projects/wp-plugins/wise-chat-pro/',
                 );
                 $titles = array(
                     'Chat plugin for WordPress',
@@ -54,12 +54,12 @@ class WiseChatAds {
                 return sprintf('<div class="wcPoweredBy">Powered by <a href="%s" title="%s">Wise Chat</a></div>', $urls[$index], $titles[$index]);
             } else {
                 $urls = array(
-                    'http://kaine.pl/',
-                    'http://kaine.pl/',
-                    'http://kaine.pl/',
-                    'http://kaine.pl/about-us/',
-                    'http://kaine.pl/about-us/',
-                    'http://kaine.pl/about-us/',
+                    'https://kaine.pl/',
+                    'https://kaine.pl/',
+                    'https://kaine.pl/',
+                    'https://kaine.pl/about-us/',
+                    'https://kaine.pl/about-us/',
+                    'https://kaine.pl/about-us/',
                 );
                 $titles = array(
                     'WordPress plugins',

@@ -3,7 +3,7 @@
  * It uses Local Storage to store and retrieve historical chat messages typed by the current user.
  *
  * @author Marcin Ławrowski <marcin@kaine.pl>
- * @link http://kaine.pl/projects/wp-plugins/wise-chat
+ * @link https://kaine.pl/projects/wp-plugins/wise-chat
  */
 function WiseChatMessagesHistory() {
 	var LOCAL_STORAGE_KEY_MESSAGES_KEY = "WiseChatMessagesStack";
