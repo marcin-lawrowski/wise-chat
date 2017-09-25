@@ -2,10 +2,10 @@
 /*
 	Plugin Name: Wise Chat
 	Version: 2.6
-	Plugin URI: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
+	Plugin URI: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Marcin Ławrowski
-	Author URI: http://kaine.pl
+	Author URI: https://kaine.pl
 */
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
@@ -85,7 +85,7 @@ add_action('delete_attachment', 'wise_chat_action_delete_attachment');
 
 function wise_chat_panels_plugin_action_links($links) {
 	unset( $links['edit'] );
-	$links[] = '<a href="http://kaine.pl/projects/wp-plugins/wise-chat-pro/" style="font-weight: bold; color: #ff0000;">Update to Wise Chat PRO</a>';
+	$links[] = '<a href="https://kaine.pl/projects/wp-plugins/wise-chat-pro/" style="font-weight: bold; color: #ff0000;">Update to Wise Chat PRO</a>';
 
 	return $links;
 }

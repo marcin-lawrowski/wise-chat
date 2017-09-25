@@ -1,6 +1,6 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
-Donate link: http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
+Donate link: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Tested up to: 4.8.2
@@ -14,9 +14,9 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Check Wise Chat PRO](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
+**[Check Wise Chat PRO](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
 
-Wise Chat: **[Try DEMO here](http://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](http://kaine.pl/projects/wp-plugins/wise-chat/features)**
+Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](https://kaine.pl/projects/wp-plugins/wise-chat/features)**
 
 = List of features: =
 
@@ -75,7 +75,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * **One-time payment**: Pay once and use forever.
 * **6-month upgrade**: Update your Wise Chat Pro to the new version for free during 6-month period after the purchase.
 
-**[Check Wise Chat Pro !](http://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)** Move customer engagement to the higher level!
+**[Check Wise Chat Pro !](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)** Move customer engagement to the higher level!
 
 **See screenshots for detailed features.**
 
@@ -111,7 +111,7 @@ You can install Wise Chat using dedicated widget. Go to `Appearance -> Widgets` 
 
 For full documentation of the shortcode attributes visit the website:
 
-**[Shortcode documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
+**[Shortcode documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
 
 = Shortcode installation: =
 
@@ -124,7 +124,7 @@ The shortcode can be configured with the list of attributes, for example – in 
 
 Almost all settings available on plugin's settings page are also available in shortcode. For full documentation of the shortcode visit the website:
 
-**[Shortcode documentation](http://kaine.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
+**[Shortcode documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
 
 == Frequently Asked Questions ==
 
