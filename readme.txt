@@ -315,6 +315,7 @@ After you type a message use the key combination: Shift + ENTER
 = 2.6 =
 * Reloading page after sending valid POST forms on Force Username and Channel Password screens
 * Fixed: text input width on Force Username and Channel Password screens
+* Fixed: image uploader preview issue on Chrome
 
 = 2.5 =
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU

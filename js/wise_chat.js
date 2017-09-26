@@ -355,9 +355,9 @@ function WiseChatImageViewer() {
 			} else if (image.height() > windowHeight) {
 				image.height(windowHeight - additionalMargin);
 			}
-			
-			var topPosition = Math.max(0, ((windowHeight - jQuery(this).outerHeight()) / 2) + jQuery(window).scrollTop());
-			var leftMargin = -1 * (image.width() / 2);
+
+			var topPosition = Math.max(0, ((windowHeight - image.outerHeight()) / 2) + jQuery(window).scrollTop());
+			var leftMargin = Math.max(0, (windowWidth - image.width()) / 2);
 			imagePreview.css({
 				top: topPosition + "px",
 				marginLeft: leftMargin + "px"

@@ -229,11 +229,11 @@
 }
 
 .wcImagePreview {
-    display: none; position: absolute; left: 50%; top: 50%; padding: 0px; border: none; background: transparent; z-index:1002; overflow:visible;
+	display: none; position: absolute; padding: 0; border: none; background: transparent; z-index:1002; overflow:visible;
 }
 
 .wcImagePreview img {
-	border-radius: none; box-shadow: none; border: none;
+	border-radius: 0; box-shadow: none; border: none;
 }
 
 .wcCustomizations label {
