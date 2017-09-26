@@ -3,13 +3,13 @@
 {% endvariable messageClasses %}
 
 <div class="{{ messageClasses }}" data-id="{{ messageId }}" data-chat-user-id="{{ messageChatUserId }}">
-	<span class="wcMessageUser" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}>
+	<span class="wcMessageUser" {% if isTextColorSetForUserName %}style="color:{{ textColor }}"{% endif isTextColorSetForUserName %}>
 		{{ renderedUserName }}
 	</span>
-	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}></span>
+	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
 	
 	<br class='wcClear' />
-	<span class="wcMessageContent" {% if isTextColorSet %}style="color:{{ textColor }}"{% endif isTextColorSet %}>
+	<span class="wcMessageContent" {% if isTextColorSetForMessage %}style="color:{{ textColor }}"{% endif isTextColorSetForMessage %}>
 		{{ messageContent }}
 		
 		{% if showDeleteButton %}
