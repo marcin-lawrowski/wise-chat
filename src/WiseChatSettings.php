@@ -25,6 +25,7 @@ class WiseChatSettings {
 		'wise-chat-messages' => 'Messages Posting',
 		'wise-chat-moderation' => 'Moderation',
 		'wise-chat-appearance' => 'Appearance',
+		'wise-chat-emoticons' => 'Emoticons',
 		'wise-chat-channels' => 'Channels',
 		'wise-chat-filters' => 'Filters',
 		'wise-chat-bans' => 'Bans',
