@@ -191,7 +191,7 @@ class WiseChatSettings {
 								}
 								do_settings_fields($pageId, $section['id']);
 								echo '<tr><td colspan="2">';
-								submit_button('', 'primary large', 'submit', false);
+								submit_button('', 'primary large', 'submit', false, array('onclick' => 'wise_chat_append_tab(\''.str_replace('wise-chat-', '', $pageId).'\')'));
 								echo '</td></tr>';
 								echo '</table>';
 								echo "</div></div>";
@@ -206,6 +206,11 @@ class WiseChatSettings {
 				</form>
 				
 				<script type="text/javascript">
+					function wise_chat_append_tab(tab) {
+						var referrer = jQuery('input[name = "_wp_http_referer"]');
+						referrer.val(referrer.val() + '#tab=' + tab);
+					}
+
 					jQuery(window).load(function() {
 						jQuery('.wcAdminMenu a').click(function() {
 							jQuery('.wcAdminTabContainer').hide();
@@ -213,6 +218,17 @@ class WiseChatSettings {
 							jQuery('.wcAdminMenu a').removeClass('wcAdminMenuActive');
 							jQuery(this).addClass('wcAdminMenuActive');
 						});
+
+						if (location && location.hash && location.hash.length > 0) {
+							var matches = location.hash.match(new RegExp('tab=([^&]*)'));
+							if (matches) {
+								var tab = matches[1];
+								jQuery('.wcAdminTabContainer').hide();
+								jQuery('#wise-chat-' + tab + 'Container').show();
+								jQuery('.wcAdminMenu a').removeClass('wcAdminMenuActive');
+								jQuery('#wise-chat-' + tab).addClass('wcAdminMenuActive');
+							}
+						}
 					});
 				</script>
 			</div>
@@ -252,8 +268,8 @@ class WiseChatSettings {
 					$tabObject->$actionMethod();
 				}
 			}
-			
-			$redirURL = admin_url("options-general.php?page=".self::MENU_SLUG);
+
+			$redirURL = admin_url("options-general.php?page=".self::MENU_SLUG).(isset($_GET['tab']) ? '#wc_tab='.urlencode($_GET['tab']) : '');
 			echo '<script type="text/javascript">location.replace("' . $redirURL . '");</script>';
 		} else {
 			$this->showUpdatedMessage();
