@@ -338,6 +338,7 @@ class WiseChat {
 				$this->options->isOptionEnabled('allow_change_text_color'),
 				
 			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name') && !$this->usersDAO->isWpUserLogged(),
+			'userNameLengthLimit' => $this->options->getIntegerOption('user_name_length_limit', 25),
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
 			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
 

@@ -426,6 +426,10 @@ class WiseChatEndpoints {
 					$channel = $this->channelsDAO->get($this->getPostParam('channelId'));
 					$this->checkChannel($channel);
 					$this->checkChannelAuthorization($channel);
+					$userNameLengthLimit = $this->options->getIntegerOption('user_name_length_limit', 25);
+					if ($userNameLengthLimit > 0) {
+						$value = substr($value, 0, $userNameLengthLimit);
+					}
 					$response['value'] = $this->userService->changeUserName($value);
 					break;
 				case 'textColor':

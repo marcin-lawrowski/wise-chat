@@ -313,6 +313,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.6 =
+* Option to set limit to the length of user names
 * Reloading page after sending valid POST forms on Force Username and Channel Password screens
 * Settings page improvement - preserving current tab after saving settings
 * Fixed: choosing text color issues
