@@ -33,8 +33,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('_section', 'Message Appearance'),
 			array('background_color', 'Background Color', 'colorFieldCallback', 'string', ''),
 			array('text_color', 'Font Color', 'colorFieldCallback', 'string', ''),
-			array('text_color_user', 'Username Font Color', 'colorFieldCallback', 'string', 'Font color of username text in messages sent by a non-logged in user'),
-			array('text_color_logged_user', 'Username Font Color<br />(logged in user)', 'colorFieldCallback', 'string', 'Font color of username text in messages sent by a logged in user'),
+			array('text_color_user', 'Username Font Color<br />(any user)', 'colorFieldCallback', 'string', 'Font color of username text in messages sent by any user'),
+			array('text_color_logged_user', 'Username Font Color<br />(logged in users)', 'colorFieldCallback', 'string', 'Font color of username text in messages sent by logged in users'),
+			array('text_color_user_roles', 'Username Font Color<br />(logged in users in roles)', 'textColorUserRolesCallback', 'multivalues'),
 			array('text_size', 'Font Size', 'selectCallback', 'string', '', WiseChatAppearanceTab::getFontSizes()),
 			
 			array('messages_time_mode', 'Message Time Mode', 'selectCallback', 'string', 'Format of the date and time displayed next to each message', WiseChatAppearanceTab::getTimeModes()),
@@ -238,4 +239,28 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 		
 		return $sizes;
 	}
+
+	public function textColorUserRolesCallback() {
+		$roles = $this->getRoles();
+		$values = $this->options->getOption('text_color_user_roles', array());
+
+		print('
+			<style type="text/css">
+				table.packed tr td { padding: 0; }
+			</style>
+		');
+		print('<table class="packed">');
+		foreach ($roles as $roleSlug => $roleName) {
+			$value = array_key_exists($roleSlug, $values) ? $values[$roleSlug] : '';
+
+			printf(
+				'<tr>'.
+				'<td>%s:&nbsp;</td><td><input type="text" id="text_color_user_roles_%s" name="'.WiseChatOptions::OPTIONS_NAME.'[text_color_user_roles][%s]" value="%s" class="wc-color-picker" /> </td>'.
+				'</tr>',
+				$roleName, $roleSlug, $roleSlug, $value
+			);
+		}
+		print('</table>');
+	}
+
 }
