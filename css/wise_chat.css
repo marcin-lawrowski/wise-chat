@@ -294,3 +294,12 @@
 .wcContainer .wcWindowContent input[name='wcChannelPassword'] {
 	width: auto;
 }
+
+/* Channel users widget */
+.wcContainer.wcChannelUsersWidget .wcUsersList {
+	padding: 3px 0;
+}
+
+.wcContainer.wcChannelUsersWidget .wcUsersList .wcCurrentUser {
+	font-weight: normal;
+}

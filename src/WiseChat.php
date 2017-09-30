@@ -150,6 +150,50 @@ class WiseChat {
 	}
 
 	/**
+	 * Shortcode backend function: [wise-chat]
+	 *
+	 * @param array $attributes
+	 * @return string
+	 */
+	public function getRenderedChannelUsersShortcode($attributes) {
+		if (!is_array($attributes)) {
+			$attributes = array();
+		}
+		$attributes['channel'] = $this->service->getValidChatChannelName(
+			array_key_exists('channel', $attributes) ? $attributes['channel'] : ''
+		);
+
+		$attributes['chat_height'] = '';
+
+		$this->options->replaceOptions($attributes);
+		$this->shortCodeOptions = $attributes;
+
+		$chatId = $this->service->getChatID();
+		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($attributes['channel']));
+		$this->userService->refreshChannelUsersData();
+
+		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
+		$templater->setTemplateFile(WiseChatThemes::getInstance()->getChannelUsersWidgetTemplate());
+
+		$data = array(
+			'chatId' => $chatId,
+			'baseDir' => $this->options->getBaseDir(),
+			'title' => $attributes['title'],
+			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
+			'usersList' => $this->renderer->getRenderedUsersList($channel, false),
+			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
+			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition(),
+			'messageUsersListEmpty' => $this->options->getEncodedOption('message_users_list_empty', 'No users in the channel'),
+		);
+		$data = array_merge($data, $this->userSettingsDAO->getAll());
+		if ($this->authentication->isAuthenticated()) {
+			$data = array_merge($data, $this->authentication->getUser()->getData());
+		}
+
+		return $templater->render($data);
+	}
+
+	/**
 	 * Returns chat HTML for given channel.
 	 *
 	 * @param string|null $channelName

@@ -199,10 +199,11 @@ class WiseChatRenderer {
 	* Returns rendered users list in the given channel.
 	*
 	* @param WiseChatChannel $channel
+	* @param boolean $displayCurrentUserWhenEmpty
 	*
 	* @return string HTML source
 	*/
-	public function getRenderedUsersList($channel) {
+	public function getRenderedUsersList($channel, $displayCurrentUserWhenEmpty = true) {
 		$hideRoles = $this->options->getOption('users_list_hide_roles', array());
 		$channelUsers = $this->channelUsersDAO->getAllActiveByChannelId($channel->getId());
 		$isCurrentUserPresent = false;
@@ -291,7 +292,7 @@ class WiseChatRenderer {
 			).$flag.$cityAndCountry;
 		}
 		
-		if (!$isCurrentUserPresent && $userId !== null) {
+		if ($displayCurrentUserWhenEmpty && !$isCurrentUserPresent && $userId !== null) {
 			$hidden = false;
 			if (is_array($hideRoles) && count($hideRoles) > 0 && $this->authentication->getUser()->getWordPressId() > 0) {
 				$wpUser = $this->usersDAO->getWpUserByID($this->authentication->getUser()->getWordPressId());

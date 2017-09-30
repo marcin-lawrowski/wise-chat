@@ -301,6 +301,14 @@ Make sure that openssl extension for your PHP installation is loaded and works c
 
 After you type a message use the key combination: Shift + ENTER
 
+= How to display a list of online users in the sidebar?
+
+Just use `Wise Chat Channel Users` widget. It displays a block containing list of online users for given channel. Go to `Appearance -> Widgets` and add `Wise Chat Channel Users` widget to the sidebar. You can additionally set:
+
+* title - a title for the block (it may be empty)
+* channel - a name of the channel (empty value means the deafult channel is used)
+* options - use here the syntax and list of attributes of `[wise-chat]` shortcode
+
 == Screenshots ==
 
 01. Simple configuration without a theme
@@ -313,6 +321,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 2.6 =
+* "Wise Chat Channel Users" widget for displaying current users
 * Option to set username color for each user role separately
 * Option to set limit to the length of user names
 * Reloading page after sending valid POST forms on Force Username and Channel Password screens
