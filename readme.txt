@@ -323,6 +323,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.6 =
+* A new theme: "Air Flow"
 * "Wise Chat Channel Users" widget for displaying current users
 * Option to set username color for each user role separately
 * Option to set limit to the length of user names
