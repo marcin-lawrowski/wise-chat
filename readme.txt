@@ -313,12 +313,12 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 == Screenshots ==
 
-01. Simple configuration without a theme
-02. Pictures and attachments posting, links, customizations panel enabled, users list
-03. Themes comparison: Default, Light Gray, Cold Dark
-04. Preview on mobile - Light Gray theme
-05. Preview on mobile - Cold Dark theme
-06. Settings page - compilation of all tabs
+01. Air Flow theme: pictures, links, customizations, users list
+02. Cold Dark theme: pictures, links, customizations, users list
+03. Light Gray theme: pictures, links, customizations, users list
+04. Simple default mode.
+05. Preview on mobile - Light Gray theme
+06. Preview on mobile - Cold Dark theme
 
 == Changelog ==
 
