@@ -12,7 +12,8 @@ class WiseChatThemes {
 	private static $themes = array(
 		'' => 'Default',
 		'lightgray' => 'Light Gray',
-		'colddark' => 'Cold Dark'
+		'colddark' => 'Cold Dark',
+		'airflow' => 'Air Flow'
 	);
 
     /**
@@ -25,6 +26,7 @@ class WiseChatThemes {
 			'passwordAuthorization' => '/themes/default/password-authorization.tpl',
 			'userName' => '/themes/default/user-name.tpl',
 			'accessDenied' => '/themes/default/access-denied.tpl',
+			'channelUsersWidgetTemplate' => '/themes/default/channel-users-widget.tpl',
 			'css' => '/themes/default/theme.css',
 		),
 		'colddark' => array(
@@ -33,6 +35,7 @@ class WiseChatThemes {
 			'passwordAuthorization' => '/themes/default/password-authorization.tpl',
 			'userName' => '/themes/default/user-name.tpl',
 			'accessDenied' => '/themes/default/access-denied.tpl',
+			'channelUsersWidgetTemplate' => '/themes/default/channel-users-widget.tpl',
 			'css' => '/themes/colddark/theme.css',
 		),
 		'lightgray' => array(
@@ -41,7 +44,17 @@ class WiseChatThemes {
 			'passwordAuthorization' => '/themes/default/password-authorization.tpl',
 			'userName' => '/themes/default/user-name.tpl',
 			'accessDenied' => '/themes/default/access-denied.tpl',
+			'channelUsersWidgetTemplate' => '/themes/default/channel-users-widget.tpl',
 			'css' => '/themes/lightgray/theme.css',
+		),
+		'airflow' => array(
+			'mainTemplate' => '/themes/default/main.tpl',
+			'messageTemplate' => '/themes/airflow/message.tpl',
+			'passwordAuthorization' => '/themes/default/password-authorization.tpl',
+			'userName' => '/themes/default/user-name.tpl',
+			'accessDenied' => '/themes/default/access-denied.tpl',
+			'channelUsersWidgetTemplate' => '/themes/default/channel-users-widget.tpl',
+			'css' => '/themes/airflow/theme.css',
 		)
 	);
 	
@@ -85,6 +98,10 @@ class WiseChatThemes {
 	
 	public function getAccessDeniedTemplate() {
 		return $this->getThemeProperty('accessDenied');
+	}
+
+	public function getChannelUsersWidgetTemplate() {
+		return $this->getThemeProperty('channelUsersWidgetTemplate');
 	}
 
 	public function getUserNameFormTemplate() {

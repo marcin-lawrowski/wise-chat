@@ -180,3 +180,8 @@ div.colorPicker-palette {
 .wcEmoticonsLayer {
 	border: 1px solid #333;
 }
+
+/* Channel users widget */
+.wcContainer.wcChannelUsersWidget .wcUsersList {
+	padding: 0 10px; padding-bottom: 10px;
+}

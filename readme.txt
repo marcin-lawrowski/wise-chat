@@ -3,6 +3,7 @@ Contributors: marcin.lawrowski
 Donate link: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
+Requires PHP: 5.2.0
 Tested up to: 4.8.2
 Stable tag: 2.6
 License: GPLv2 or later
@@ -14,7 +15,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
 
-**[Check Wise Chat PRO](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
+**[Check Wise Chat PRO](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, custom emoticons, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
 
 Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](https://kaine.pl/projects/wp-plugins/wise-chat/features)**
 
@@ -69,11 +70,12 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Avatars**: Display avatars either in the chat or the users list.
 * **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress groups. Give moderator rights to delete messages or ban users.
-* **External authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
-* **Multisite support**: Wise Chat Pro can operate in WordPress multisite environment.
-* **Pro themes**: Select and use one of 3 additional Pro themes.
-* **One-time payment**: Pay once and use forever.
-* **6-month upgrade**: Update your Wise Chat Pro to the new version for free during 6-month period after the purchase.
+* **Custom emoticons**: Compose your own set of emoticons.
+* **Facebook / Twitter / Google+ authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
+* **Multisite support**: Wise Chat Pro supports WordPress multisite environment.
+* **Pro themes**: Use one of 3 extra modern looking Pro themes.
+* **One-time payment**: Pay once and use it forever.
+* **6 / 12 / 18 - month upgrade**: Update your Wise Chat Pro to the new version for free during 6 / 12 / 18 - month period after the purchase.
 
 **[Check Wise Chat Pro !](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)** Move customer engagement to the higher level!
 
@@ -87,9 +89,9 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * jQuery JS library (available in most themes)
 
 = Optional requirements: =
-* Exif PHP extension (in order to run auto-rotate feature for sent images)
-* mbstring PHP extension (in order to use all features of bad words filter)
-* Lightbox 2 library (for showing images on the nice looking popup)
+* Exif PHP extension (in order to run auto-rotate feature for posted images)
+* mbstring PHP extension (in order to use all features of the bad words filter)
+* Lightbox 2 library (for showing images in the nice looking popup)
 
 = Installation: =
 1. Upload the entire `wise-chat` folder to the `/wp-content/plugins/` directory.
@@ -104,12 +106,12 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 
 = Widget installation: =
 
-You can install Wise Chat using dedicated widget. Go to `Appearance -> Widgets` and add `Wise Chat Window` widget to a sidebar. In the widget's settings you can specify:
+You can install Wise Chat using dedicated widget. Go to `Appearance -> Widgets` and add `Wise Chat Window` widget to the sidebar. In the widget's settings you can specify:
 
-* **Channel**: It is a name of the channel to open in the chat window. Channel will be created on first use.
-* **Shortcode options**: It is a space-separated list of options that configure Wise Chat. All shortcode attributes could be used here, type for example `theme="colddark" show_users="0"` in order to choose Cold Dark theme and disable list of users.
+* **Channel**: It is the name of the channel to open in the chat window. Channel is created on first use.
+* **Shortcode options**: It is a space-separated list of options that configures Wise Chat. All shortcode attributes could be used here, type for example `theme="colddark" show_users="0"` in order to choose Cold Dark theme and disable list of users.
 
-For full documentation of the shortcode attributes visit the website:
+For the full documentation of the shortcode attributes visit the website:
 
 **[Shortcode documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
 
@@ -146,7 +148,7 @@ First, create a regular channel (see the previous question) and then go to Setti
 
 Go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Click "Delete Password" button.
 
-= Is there a way to show simple statistics regarding chat channel separately in a post or a page? =
+= Is there a way to show simple statistics of the chat channel in a post or a page? =
 
 Yes. Place "wise-chat-channel-stats" shortcode in the page or post. You can choose what to display using "template" attribute. Here is a fully-featured example:
 `[wise-chat-channel-stats channel="my-channel" template="Channel: {channel} Messages: {messages} Users: {users}"]`
@@ -301,18 +303,35 @@ Make sure that openssl extension for your PHP installation is loaded and works c
 
 After you type a message use the key combination: Shift + ENTER
 
+= How to display a list of online users in the sidebar?
+
+Just use `Wise Chat Channel Users` widget. It displays a block containing list of online users for given channel. Go to `Appearance -> Widgets` and add `Wise Chat Channel Users` widget to the sidebar. You can additionally set:
+
+* title - a title for the block (it may be empty)
+* channel - a name of the channel (empty value means the deafult channel is used)
+* options - use here the syntax and list of attributes of `[wise-chat]` shortcode
+
 == Screenshots ==
 
-01. Simple configuration without a theme
-02. Pictures and attachments posting, links, customizations panel enabled, users list
-03. Themes comparison: Default, Light Gray, Cold Dark
-04. Preview on mobile - Light Gray theme
-05. Preview on mobile - Cold Dark theme
-06. Settings page - compilation of all tabs
+01. Air Flow theme: pictures, links, customizations, users list
+02. Cold Dark theme: pictures, links, customizations, users list
+03. Light Gray theme: pictures, links, customizations, users list
+04. Simple default mode.
+05. Preview on mobile - Light Gray theme
+06. Preview on mobile - Cold Dark theme
 
 == Changelog ==
 
 = 2.6 =
+* A new theme: "Air Flow"
+* "Wise Chat Channel Users" widget for displaying current users
+* Option to set username color for each user role separately
+* Option to set limit to the length of user names
+* Reloading page after sending valid POST forms on Force Username and Channel Password screens
+* Settings page improvement - preserving current tab after saving settings
+* Fixed: choosing text color issues
+* Fixed: text input width on Force Username and Channel Password screens
+* Fixed: image uploader preview issue on Chrome
 
 = 2.5 =
 * New engine "Ultra Lightweight AJAX" which consumes 5 times less CPU

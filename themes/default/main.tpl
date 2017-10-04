@@ -76,7 +76,7 @@
                     <div class='wcCustomizationsPanel' style='display:none;'>
                         {% if allowChangeUserName %}
                             <div class="wcCustomizationsProperty">
-                                <label>{{ messageName }}: <input class='wcUserName' type='text' value='{{ currentUserName }}' required /></label>
+                                <label>{{ messageName }}: <input class='wcUserName' type='text' {% if userNameLengthLimit %}maxlength='{{ userNameLengthLimit }}'{% endif userNameLengthLimit %} value='{{ currentUserName }}' required /></label>
                                 <input class='wcUserNameApprove' type='button' value='{{ messageSave }}' />
                             </div>
                         {% endif allowChangeUserName %}
@@ -126,6 +126,10 @@
 {{ customCssDefinitions }}
 
 <script type='text/javascript'>
+    {% if redirectURL %}
+        window.location.href = '{{ redirectURL }}';
+    {% endif redirectURL %}
+
     (function() {
         var messages = jQuery('#{{ chatId }} .wcMessages');
         if (messages.length > 0 && '{{ messagesOrder }}' == 'ascending') {

@@ -241,3 +241,8 @@ div.colorPicker-palette {
 .wcUserNameHint {
 	margin-bottom: 4px;
 }
+
+/* Channel users widget */
+.wcContainer.wcChannelUsersWidget .wcUsersList {
+	padding: 3px 5px;
+}

@@ -134,10 +134,22 @@ class WiseChatRenderer {
 	public function getRenderedMessage($message) {
 		$this->templater->setTemplateFile(WiseChatThemes::getInstance()->getMessageTemplate());
 
-		$textColorAffectedParts = (array) $this->options->getOption("text_color_parts", array('message', 'messageUserName'));
-		$isTextColorSet = $this->options->isOptionEnabled('allow_change_text_color') &&
-			$message->getUser() !== null &&
-			strlen($message->getUser()->getDataProperty('textColor')) > 0;
+		$textColorAffectedParts = array();
+		$isTextColorSet = false;
+
+		// text color defined by role:
+		$textColor = $this->getTextColorDefinedByUserRole($message->getUser());
+		if (strlen($textColor) > 0) {
+			$isTextColorSet = true;
+			$textColorAffectedParts = array('messageUserName');
+		}
+
+		// custom color (higher priority):
+		if ($this->options->isOptionEnabled('allow_change_text_color') && $message->getUser() !== null && strlen($message->getUser()->getDataProperty('textColor')) > 0) {
+			$isTextColorSet = true;
+			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
+			$textColor = $message->getUser()->getDataProperty('textColor');
+		}
 
 		$data = array(
 			'baseDir' => $this->options->getBaseDir(),
@@ -153,20 +165,45 @@ class WiseChatRenderer {
 			'messageContent' => $this->getRenderedMessageContent($message),
 			'isTextColorSetForMessage' => $isTextColorSet && in_array('message', $textColorAffectedParts),
 			'isTextColorSetForUserName' => $isTextColorSet && in_array('messageUserName', $textColorAffectedParts),
-			'textColor' => $message->getUser() !== null ? $message->getUser()->getDataProperty('textColor') : ''
+			'textColor' => $textColor
 		);
 		
 		return $this->templater->render($data);
+	}
+
+	/**
+	 * Returns text color if the color is defined for user's role.
+	 *
+	 * @param WiseChatUser $user
+	 * @return string|null
+	 */
+	private function getTextColorDefinedByUserRole($user) {
+		$textColor = null;
+		$userRoleToColorMap = $this->options->getOption('text_color_user_roles', array());
+
+		if ($user !== null && $user->getWordPressId() > 0) {
+			$wpUser = $this->usersDAO->getWpUserByID($user->getWordPressId());
+			$commonRoles = array_intersect($wpUser->roles, array_keys($userRoleToColorMap));
+			if (is_array($wpUser->roles) && count($commonRoles) > 0) {
+				$userRoleColor = trim($userRoleToColorMap[$commonRoles[0]]);
+				if (strlen($userRoleColor) > 0) {
+					$textColor = $userRoleColor;
+				}
+			}
+		}
+
+		return $textColor;
 	}
 	
 	/**
 	* Returns rendered users list in the given channel.
 	*
 	* @param WiseChatChannel $channel
+	* @param boolean $displayCurrentUserWhenEmpty
 	*
 	* @return string HTML source
 	*/
-	public function getRenderedUsersList($channel) {
+	public function getRenderedUsersList($channel, $displayCurrentUserWhenEmpty = true) {
 		$hideRoles = $this->options->getOption('users_list_hide_roles', array());
 		$channelUsers = $this->channelUsersDAO->getAllActiveByChannelId($channel->getId());
 		$isCurrentUserPresent = false;
@@ -196,13 +233,20 @@ class WiseChatRenderer {
 				continue;
 			}
 
-			// text color feature:
 			$styles = '';
+
+			// text color defined by role:
+			$textColor = $this->getTextColorDefinedByUserRole($channelUser->getUser());
+
+			// custom text color:
 			if ($this->options->isOptionEnabled('allow_change_text_color')) {
-				$textColor = $channelUser->getUser()->getDataProperty('textColor');
-				if (strlen($textColor) > 0) {
-					$styles = sprintf('style="color: %s"', $textColor);
+				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
+				if (strlen($textColorProposal) > 0) {
+					$textColor = $textColorProposal;
 				}
+			}
+			if (strlen($textColor) > 0) {
+				$styles = sprintf('style="color: %s"', $textColor);
 			}
 
 			$currentUserClassName = '';
@@ -248,7 +292,7 @@ class WiseChatRenderer {
 			).$flag.$cityAndCountry;
 		}
 		
-		if (!$isCurrentUserPresent && $userId !== null) {
+		if ($displayCurrentUserWhenEmpty && !$isCurrentUserPresent && $userId !== null) {
 			$hidden = false;
 			if (is_array($hideRoles) && count($hideRoles) > 0 && $this->authentication->getUser()->getWordPressId() > 0) {
 				$wpUser = $this->usersDAO->getWpUserByID($this->authentication->getUser()->getWordPressId());

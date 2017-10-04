@@ -55,7 +55,7 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public static function getAllModes() {
 		return array(
 			'' => 'Classic chat',
-			'_DISABLED_pro_fb' => 'Facebook-like chat (available in Wise Chat Pro 1.4)',
+			'_DISABLED_pro_fb' => 'Facebook-like chat (available in Wise Chat Pro)',
 		);
 	}
 	

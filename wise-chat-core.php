@@ -75,6 +75,13 @@ function wise_chat_widget() {
 }
 add_action('widgets_init', 'wise_chat_widget');
 
+// register channel users widget:
+function wise_chat_widget_channel_users() {
+	WiseChatContainer::get('WiseChatWidgetChannelUsers');
+	return register_widget("WiseChatWidgetChannelUsers");
+}
+add_action('widgets_init', 'wise_chat_widget_channel_users');
+
 // register action that auto-removes images generate by the chat (the additional thumbnail):
 function wise_chat_action_delete_attachment($attachmentId) {
 	$wiseChatImagesService = WiseChatContainer::get('services/WiseChatImagesService');

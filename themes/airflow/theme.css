@@ -1,0 +1,278 @@
+/* airflow */
+
+.wcContainer * {
+	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif; color: #525252;
+}
+
+.wcContainer {
+	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif;
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+	background-color: #f8f9fd; border: 1px solid #f0f1f6; padding-top: 0;
+	color: #525252;
+}
+
+.wcContainer .wcPoweredBy {
+	padding-right: 10px; padding-bottom: 3px;
+}
+
+.wcContainer .wcControls .wcPoweredBy {
+	padding: 0;
+}
+
+.wcContainer .wcWindowTitle {
+	padding: 10px 13px; font-size: 150%; color: #525252; background-color: #f3f4f8;
+}
+
+.wcContainer a {
+	color: #5974a9;
+}
+
+.wcContainer input[type="button"], .wcContainer input[type="button"]:focus, .wcContainer input[type="button"]:active,
+.wcContainer input[type="submit"], .wcContainer input[type="submit"]:focus, .wcContainer input[type="submit"]:active{
+	border-radius: 15px; background-image: none; background-repeat: no-repeat; border: 1px solid #f2ce60;
+	color: #784d17; padding: 5px 13px; box-shadow: none; font-weight: normal;
+	height: 31px; outline: none;
+	background-color: #fbd75f;
+	text-transform: none;
+
+	-webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	-o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+}
+
+.wcContainer input[type="button"]:hover, .wcContainer input[type="submit"]:hover {
+	background-color: #fbd92b;
+}
+
+.wcContainer input[type="text"], .wcContainer input[type="password"], .wcContainer textarea {
+	height: 31px; font-size: 1em; line-height: 20px;
+	background-color: #ffffff; border-radius: 15px; margin: 0; outline: 0 none; padding: 4px;
+	padding-left: 15px; border: 1px solid transparent;
+}
+
+.wcContainer input[type="text"]:focus, .wcContainer input[type="password"]:focus, .wcContainer textarea:focus {
+	background-color: #ffffff; padding-left: 15px; border: 1px solid #efefef;
+}
+
+.wcContainer ::-webkit-input-placeholder {
+	color: #afb1b8;
+}
+.wcContainer ::-moz-placeholder {
+	color: #d2d5dc;
+}
+.wcContainer :-ms-input-placeholder {
+	color: #d2d5dc;
+}
+.wcContainer :-moz-placeholder {
+	color: #d2d5dc;
+}
+
+.wcContainer textarea {
+	height: 50px;
+}
+
+.wcContainer .wcMessages {
+	background-color: #f3f4f8; color: #111; border-left: none; border-right: none; border-top: 1px solid #f0f1f6; border-bottom: 1px solid #f0f1f6;
+	padding: 0;
+}
+
+.wcContainer .wcUsersCounter {
+	margin-bottom: 3px; margin-right: 10px; font-size: 80%;
+}
+
+.wcContainer .wcMessage .wcAdminAction:hover {
+	border: 1px solid #e1e8ed;
+}
+
+.wcContainer .wcControls {
+	padding: 10px; padding-top: 5px;
+	background: #f8f9fd;
+}
+
+.wcContainer .wcMessages .wcMessage {
+	border-top: 1px solid #efefef; padding: 5px; background-color: #ffffff;
+}
+
+.wcContainer .wcMessages .wcMessage.wcCurrentUserMessage {
+	background-color: #f7fbff;
+}
+
+.wcContainer .wcMessages .wcPlainMessage {
+	color: #5974a9;
+}
+
+.wcContainer .wcMessages .wcMessage a {
+	color: #5974a9; text-decoration: none;
+}
+
+.wcContainer .wcMessages .wcMessage a:hover {
+	text-decoration: underline;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser a:hover {
+	text-decoration: underline;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageTime {
+	float: right; color: #bac1c7; line-height: 22px;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageTime * {
+	color: #bac1c7; line-height: 22px;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser {
+	float: left; color: #525252; font-weight: bold;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageUser a {
+	color: #525252; text-decoration: none; font-weight: bold;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageContent {
+	display: block; margin-top: 6px;
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageContent .wcAdminAction {
+	float: right;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+	filter: alpha(opacity=60);
+	-moz-opacity: 0.6;
+	-khtml-opacity: 0.6;
+	opacity: 0.6;
+	outline: none;
+	-webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	-o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+}
+
+.wcContainer .wcMessages .wcMessage .wcMessageContent .wcAdminAction:hover {
+	border: 1px solid transparent;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcMessageContent {
+	display: inline;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcClear {
+	display: none;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcMessageUser {
+	margin-right: 4px;
+}
+
+.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcAdminAction {
+	padding: 0px; padding-right: 1px; padding-left: 1px;
+}
+
+.wcContainer .wcInputContainer {
+	margin-bottom: 5px;
+}
+
+.wcContainer .wcCustomizationsPanel {
+	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; 
+	background-image: none; background-repeat: no-repeat; border: none;
+	padding: 4px;
+}
+
+.wcContainer .wcCustomizationsPanel .wcCustomizationsProperty:not(:last-child) {
+	padding-bottom: 4px;
+}
+
+.wcContainer .wcControls .wcCurrentUserName {
+	margin-bottom: 5px; float: left; padding-right: 5px; line-height: 31px;
+}
+
+.wcWidth300 .wcMessageContent {
+	display: block; border-bottom: none; margin-bottom: inherit; padding-bottom: inherit;
+}
+
+.wcContainer .wcCustomizations a, .wcContainer .wcCustomizations a:hover {
+	font-size: 90%; display: inline-block; margin: 4px 0; color: #5974a9; outline: none;
+}
+
+.wcContainer .wcCustomizations a.wcCustomizeButton {
+	color: #bac1c7;
+}
+
+.wcContainer a.wcToolButton {
+	border-radius: 5px; border: none; box-shadow: none; height: 31px;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+	filter: alpha(opacity=60);
+	-moz-opacity: 0.6;
+	-khtml-opacity: 0.6;
+	opacity: 0.6;
+	outline: none;
+
+	-webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	-o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+}
+
+.wcContainer a.wcToolButton:hover, .wcContainer a.wcToolButton:active, .wcContainer a.wcToolButton:focus {
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	-moz-opacity: 1;
+	-khtml-opacity: 1;
+	opacity: 1;
+	border: none;
+}
+
+.wcContainer a.wcAddImageAttachment {
+	background: url('gfx/camera.png') center center no-repeat;
+}
+
+.wcContainer a.wcAddFileAttachment {
+	background: url('gfx/attach.png') center center no-repeat;
+}
+
+.wcContainer a.wcInsertEmoticonButton {
+	background: url('gfx/emoticon.png') center center no-repeat;
+}
+
+/* Users list: */
+.wcContainer .wcUsersList {
+	border-right: none; background-color: #fff; color: #525252; border-color: #f0f1f6;
+	border-top: 1px solid #f0f1f6; border-bottom: 1px solid #f0f1f6;
+}
+
+.wcContainer .wcUsersList .wcUserInChannel {
+	padding: 5px 3px; display: inline-block;
+}
+
+.wcContainer .wcWindowContent {
+	text-align: center;
+	padding-top: 0;
+}
+
+.wcContainer .wcError {
+	padding: 10px; color: #ffffff; background-color: rgb(247,66,67); border-radius: 5px; border: 1px solid rgb(207,46,47);
+	display: inline-block; margin-top: 5px;
+}
+
+div.colorPicker-palette {
+	border: 1px solid #e1e8ed !important; border-radius: 5px !important;
+}
+
+.wcEmoticonsLayer {
+	border: 1px solid #e1e8ed; border-radius: 5px; background-color: #f8f9fd;
+}
+
+.wcEmoticonsLayer a, .wcEmoticonsLayer a:hover {
+	border: none;
+}
+
+.wcUserNameHint {
+	margin-bottom: 4px;
+}
+
+/* Channel users widget */
+.wcContainer.wcChannelUsersWidget .wcUsersList {
+	padding: 3px 5px;
+}

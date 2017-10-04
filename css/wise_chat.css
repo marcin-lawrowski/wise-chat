@@ -229,11 +229,11 @@
 }
 
 .wcImagePreview {
-    display: none; position: absolute; left: 50%; top: 50%; padding: 0px; border: none; background: transparent; z-index:1002; overflow:visible;
+	display: none; position: absolute; padding: 0; border: none; background: transparent; z-index:1002; overflow:visible;
 }
 
 .wcImagePreview img {
-	border-radius: none; box-shadow: none; border: none;
+	border-radius: 0; box-shadow: none; border: none;
 }
 
 .wcCustomizations label {
@@ -260,6 +260,11 @@
 	color: #ff0000;
 }
 
+.wcContainer .wcUserNameError {
+	margin: 10px 0px;
+	color: #ff0000;
+}
+
 .colorPicker-palette {
 	width: 216px !important; border: 1px solid #dfdfdf !important; border-radius: 0px !important;
 }
@@ -279,4 +284,22 @@
 
 .wcEmoticonsLayer a img {
     border: none; border-radius: 0px; margin: 0px; padding: 0px;
+}
+
+/* window content */
+.wcContainer .wcWindowContent input[name='wcUserName'] {
+	width: auto;
+}
+
+.wcContainer .wcWindowContent input[name='wcChannelPassword'] {
+	width: auto;
+}
+
+/* Channel users widget */
+.wcContainer.wcChannelUsersWidget .wcUsersList {
+	padding: 3px 0;
+}
+
+.wcContainer.wcChannelUsersWidget .wcUsersList .wcCurrentUser {
+	font-weight: normal;
 }

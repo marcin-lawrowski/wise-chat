@@ -6,12 +6,10 @@
 	<span class="wcMessageUser" {% if isTextColorSetForUserName %}style="color:{{ textColor }}"{% endif isTextColorSetForUserName %}>
 		{{ renderedUserName }}
 	</span>
-	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
-	
 	<br class='wcClear' />
 	<span class="wcMessageContent" {% if isTextColorSetForMessage %}style="color:{{ textColor }}"{% endif isTextColorSetForMessage %}>
 		{{ messageContent }}
-		
+		<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
 		{% if showDeleteButton %}
 			<a href="javascript://" class="wcAdminAction wcMessageDeleteButton" data-id="{{ messageId }}" title="Delete the message"><img src='{{ baseDir }}/gfx/icons/x.png' class='wcIcon' /></a>
 		{% endif showDeleteButton %}

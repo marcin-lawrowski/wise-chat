@@ -76,6 +76,11 @@ class WiseChat {
 	 * @var WiseChatAds
 	 */
 	private $ads;
+
+	/**
+	 * @var WiseChatHttpRequestService
+	 */
+	private $httpRequestService;
 	
 	/**
 	* @var array
@@ -97,6 +102,7 @@ class WiseChat {
 		$this->attachmentsService = WiseChatContainer::get('services/WiseChatAttachmentsService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
 		$this->ads = WiseChatContainer::getLazy('services/WiseChatAds');
+		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
@@ -144,6 +150,50 @@ class WiseChat {
 	}
 
 	/**
+	 * Shortcode backend function: [wise-chat]
+	 *
+	 * @param array $attributes
+	 * @return string
+	 */
+	public function getRenderedChannelUsersShortcode($attributes) {
+		if (!is_array($attributes)) {
+			$attributes = array();
+		}
+		$attributes['channel'] = $this->service->getValidChatChannelName(
+			array_key_exists('channel', $attributes) ? $attributes['channel'] : ''
+		);
+
+		$attributes['chat_height'] = '';
+
+		$this->options->replaceOptions($attributes);
+		$this->shortCodeOptions = $attributes;
+
+		$chatId = $this->service->getChatID();
+		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($attributes['channel']));
+		$this->userService->refreshChannelUsersData();
+
+		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
+		$templater->setTemplateFile(WiseChatThemes::getInstance()->getChannelUsersWidgetTemplate());
+
+		$data = array(
+			'chatId' => $chatId,
+			'baseDir' => $this->options->getBaseDir(),
+			'title' => $attributes['title'],
+			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
+			'usersList' => $this->renderer->getRenderedUsersList($channel, false),
+			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
+			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition(),
+			'messageUsersListEmpty' => $this->options->getEncodedOption('message_users_list_empty', 'No users in the channel'),
+		);
+		$data = array_merge($data, $this->userSettingsDAO->getAll());
+		if ($this->authentication->isAuthenticated()) {
+			$data = array_merge($data, $this->authentication->getUser()->getData());
+		}
+
+		return $templater->render($data);
+	}
+
+	/**
 	 * Returns chat HTML for given channel.
 	 *
 	 * @param string|null $channelName
@@ -152,6 +202,7 @@ class WiseChat {
 	 * @throws Exception
 	 */
 	public function getRenderedChat($channelName = null) {
+		$redirectURL = null;
 		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($channelName));
 
 		// saves users list in session for this channel (it will be updated in maintenance task):
@@ -196,6 +247,7 @@ class WiseChat {
 			if ($this->getPostParam('wcUserNameSelection') !== null) {
 				try {
 					$this->authentication->authenticate($this->getPostParam('wcUserName'));
+					$redirectURL = $this->httpRequestService->getCurrentURL();
 				} catch (Exception $e) {
 					return $this->renderer->getRenderedUserNameForm($e->getMessage());
 				}
@@ -208,6 +260,8 @@ class WiseChat {
 			if ($this->getPostParam('wcChannelAuthorization') !== null) {
 				if (!$this->service->authorize($channel, $this->getPostParam('wcChannelPassword'))) {
 					return $this->renderer->getRenderedPasswordAuthorization($this->options->getOption('message_error_9', 'Invalid password.'));
+				} else {
+					$redirectURL = $this->httpRequestService->getCurrentURL();
 				}
 			} else {
 				return $this->renderer->getRenderedPasswordAuthorization();
@@ -303,6 +357,7 @@ class WiseChat {
 		$data = array(
 			'chatId' => $chatId,
 			'baseDir' => $this->options->getBaseDir(),
+			'redirectURL' => $redirectURL,
 			'messages' => $renderedMessages,
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button'),
@@ -327,6 +382,7 @@ class WiseChat {
 				$this->options->isOptionEnabled('allow_change_text_color'),
 				
 			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name') && !$this->usersDAO->isWpUserLogged(),
+			'userNameLengthLimit' => $this->options->getIntegerOption('user_name_length_limit', 25),
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
 			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
 
