@@ -323,6 +323,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.6.1 =
+* Changed default settings to reflect richer interface
 * Option to reset all settings to default
 
 = 2.6 =

@@ -81,7 +81,7 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			'message_error_9' => 'Invalid password.',
 			'message_error_10' => 'You cannot enter the chat due to the limit of channels you can participate simultaneously.',
 			'message_error_11' => 'You are not allowed to enter the chat.',
-			'window_title' => '',
+			'window_title' => 'Wise Chat',
 			'message_mute_sounds' => 'Mute sounds',
 			'message_text_color' => 'Text color',
 			'message_total_users' => 'Total users',

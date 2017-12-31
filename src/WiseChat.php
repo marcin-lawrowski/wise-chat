@@ -123,7 +123,7 @@ class WiseChat {
 		wp_enqueue_script('wise_chat_maintenance_executor', $pluginBaseURL.'js/maintenance/executor.js', array());
 		wp_enqueue_script('wise_chat_core', $pluginBaseURL.'js/wise_chat.js', array());
 		
-		if ($this->options->isOptionEnabled('allow_change_text_color')) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 			wp_enqueue_script('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'js/3rdparty/jquery.colorPicker.min.js', array());
 			wp_enqueue_style('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'css/3rdparty/colorPicker.css');
 		}
@@ -306,7 +306,7 @@ class WiseChat {
 			'messagesOrder' => $this->options->getEncodedOption('messages_order', '') == 'descending' ? 'descending' : 'ascending',
 			'enableTitleNotifications' => $this->options->isOptionEnabled('enable_title_notifications'),
 			'soundNotification' => $this->options->getEncodedOption('sound_notification'),
-			'messagesTimeMode' => $this->options->getEncodedOption('messages_time_mode'),
+			'messagesTimeMode' => $this->options->getEncodedOption('messages_time_mode', 'elapsed'),
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
 			'messages' => array(
 				'message_sending' => $this->options->getEncodedOption('message_sending', 'Sending ...'),
@@ -360,7 +360,7 @@ class WiseChat {
 			'redirectURL' => $redirectURL,
 			'messages' => $renderedMessages,
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
-			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button'),
+			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button', true),
             'showEmoticonInsertButton' => $this->options->isOptionEnabled('show_emoticon_insert_button', true),
 			'messagesInline' => $this->options->isOptionEnabled('messages_inline', false),
 			'messageSubmitButtonCaption' => $this->options->getEncodedOption('message_submit_button_caption', 'Send'),
@@ -369,7 +369,7 @@ class WiseChat {
 			'showUsersCounter' => $this->options->isOptionEnabled('show_users_counter'),
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
 			'totalUsers' => $totalUsers,
-			'showUserName' => $this->options->isOptionEnabled('show_user_name'),
+			'showUserName' => $this->options->isOptionEnabled('show_user_name', true),
 			'currentUserName' => htmlentities($this->authentication->getUserNameOrEmptyString(), ENT_QUOTES, 'UTF-8'),
 			'isCurrentUserNameNotEmpty' => $this->authentication->isAuthenticated(),
 			
@@ -377,14 +377,14 @@ class WiseChat {
 			'inputControlsBottomLocation' => $this->options->getEncodedOption('input_controls_location') == '',
 			
 			'showCustomizationsPanel' => 
-				$this->options->isOptionEnabled('allow_change_user_name') && !$this->usersDAO->isWpUserLogged() ||
+				$this->options->isOptionEnabled('allow_change_user_name', true) && !$this->usersDAO->isWpUserLogged() ||
 				$this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0 || 
-				$this->options->isOptionEnabled('allow_change_text_color'),
+				$this->options->isOptionEnabled('allow_change_text_color', true),
 				
-			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name') && !$this->usersDAO->isWpUserLogged(),
+			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name', true) && !$this->usersDAO->isWpUserLogged(),
 			'userNameLengthLimit' => $this->options->getIntegerOption('user_name_length_limit', 25),
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
-			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
+			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color', true),
 
             'allowToSendMessages' => $this->userService->isSendingMessagesAllowed(),
 				
@@ -399,11 +399,11 @@ class WiseChat {
 			'messageAttachFileHint' => $this->options->getEncodedOption('message_attach_file_hint', 'Attach a file'),
             'messageInsertEmoticon' => $this->options->getEncodedOption('message_insert_emoticon', 'Insert an emoticon'),
 			'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
-            'windowTitle' => $this->options->getEncodedOption('window_title', ''),
+            'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 
-            'enableAttachmentsPanel' => $this->options->isOptionEnabled('enable_images_uploader') || $this->options->isOptionEnabled('enable_attachments_uploader'),
-            'enableImagesUploader' => $this->options->isOptionEnabled('enable_images_uploader'),
-            'enableAttachmentsUploader' => $this->options->isOptionEnabled('enable_attachments_uploader'),
+            'enableAttachmentsPanel' => $this->options->isOptionEnabled('enable_images_uploader', true) || $this->options->isOptionEnabled('enable_attachments_uploader', true),
+            'enableImagesUploader' => $this->options->isOptionEnabled('enable_images_uploader', true),
+            'enableAttachmentsUploader' => $this->options->isOptionEnabled('enable_attachments_uploader', true),
             'attachmentsExtensionsList' => $this->attachmentsService->getAllowedExtensionsList(),
 
             'multilineSupport' => $this->options->isOptionEnabled('multiline_support'),

@@ -229,7 +229,7 @@ class WiseChatUserService {
 	*/
 	public function changeUserName($userName) {
 		if (
-			!$this->options->isOptionEnabled('allow_change_user_name') ||
+			!$this->options->isOptionEnabled('allow_change_user_name', true) ||
 			$this->usersDAO->getCurrentWpUser() !== null ||
 			!$this->authentication->isAuthenticated()
 		) {
