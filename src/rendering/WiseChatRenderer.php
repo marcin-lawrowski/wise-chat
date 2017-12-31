@@ -335,16 +335,23 @@ class WiseChatRenderer {
 		$formattedUserName = $userName;
         $displayMode = $this->options->getIntegerOption('link_wp_user_name', 0);
 		$styles = '';
-        if ($displayMode > 0) {
-            if (
-                $this->options->isOptionEnabled('allow_change_text_color', true) &&
-				$user !== null &&
-                strlen($user->getDataProperty('textColor')) > 0
-            ) {
-                $styles = sprintf('style="color: %s"', $user->getDataProperty('textColor'));
-            }
-        }
+		$textColorAffectedParts = array();
 
+		// text color defined by role:
+		$textColor = $this->getTextColorDefinedByUserRole($user);
+		if (strlen($textColor) > 0) {
+			$textColorAffectedParts = array('messageUserName');
+		}
+
+		// custom color (higher priority):
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
+			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
+			$textColor = $user->getDataProperty('textColor');
+		}
+
+		if (strlen($textColor) > 0 && in_array('messageUserName', $textColorAffectedParts)) {
+			$styles = sprintf('style="color: %s"', $textColor);
+		}
 
 		if ($displayMode === 1) {
 			$linkUserNameTemplate = $this->options->getOption('link_user_name_template', null);
