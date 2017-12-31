@@ -29,7 +29,7 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 				'enable_buddypress', 'Enable BuddyPress', 'booleanFieldCallback', 'boolean',
 				'Enables BuddyPress integration features.<br />'
 			),
-			array('user_actions', 'Actions', 'adminActionsCallback', 'void'),
+			array('user_actions', 'Admin Actions', 'adminActionsCallback', 'void'),
 			array('_section', 'Chat Opening Hours and Days', 'Server UTC date and time is taken into account. It is currently: '.date('Y-m-d H:i:s')),
 			array('enable_opening_control', 'Enable Opening Control', 'booleanFieldCallback', 'boolean', 'Allows to specify when the chat is available for users.'),
 			array('opening_days', 'Opening Days', 'checkboxesCallback', 'multivalues', 'Select chat opening days.', self::getOpeningDaysValues()),
@@ -74,6 +74,12 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	public function resetAnonymousCounterAction() {
 		$this->options->resetUserNameSuffix();
 		$this->addMessage('The prefix has been reset.');
+	}
+
+	public function resetSettingsAction() {
+		$this->options->dropAllOptions();
+		WiseChatContainer::get('WiseChatSettings')->setDefaultSettings();
+		$this->addMessage('All settings has been reset to defaults.');
 	}
 	
 	public function openingHoursCallback($args) {
@@ -157,10 +163,14 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	
 	public function adminActionsCallback() {
 		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter");
-		
+		$urlResetSettings = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings");
+
 		printf(
-			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>',
-			wp_nonce_url($url)
+			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>'.
+			'<br />'.
+			'<a class="button-secondary" href="%s" title="Resets all settings to default" onclick="return confirm(\'Are you sure you want to reset all settings to default? \\n\\nWarning: this cannot be reversed!\')">Reset All Settings</a><p class="description">Resets all settings to default.</p>',
+			wp_nonce_url($url),
+			wp_nonce_url($urlResetSettings)
 		);
 	}
 }

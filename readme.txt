@@ -323,6 +323,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.6.1 =
+* Option to reset all settings to default
 
 = 2.6 =
 * A new theme: "Air Flow"
