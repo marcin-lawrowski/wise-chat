@@ -57,7 +57,7 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	
 	public function getDefaultValues() {
 		return array(
-			'enable_message_actions' => 0,
+			'enable_message_actions' => 1,
 			'permission_delete_message_role' => 'administrator',
 			'permission_ban_user_role' => 'administrator',
 			'permission_kick_user_role' => 'administrator',
