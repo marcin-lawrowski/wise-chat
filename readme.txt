@@ -4,8 +4,8 @@ Donate link: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 4.8.2
-Stable tag: 2.6
+Tested up to: 4.9.1
+Stable tag: 2.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,7 +53,8 @@ Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise
 * **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages. It is good for cutting links for example.
 * **Messages history**: All recently published messages are available in input field for resending.
 * **Chat Opening Hours / Days**: Define days and range of hours when the chat is open for users.
-* **Bans**: Administrator can ban (IP based ban) users who do not follow rules of the chat.
+* **Bans**: Administrator can ban (IP based) users who do not follow rules of the chat.
+* **Kicks**: Administrator can kick (IP based) users who do not follow rules of the chat.
 * **Automatic bans**: An option that automatically blocks an user if he / she exceeds the defined number of bad words.
 * **Moderation**: Administrators (or other specified user roles) can delete single messages or ban users that violate chat rules.
 * **Emoticons**: See nice smiles in messages by enabling emoticons support. Emoticons can be inserted either using shortcuts or the list.
@@ -69,7 +70,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Avatars**: Display avatars either in the chat or the users list.
-* **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress groups. Give moderator rights to delete messages or ban users.
+* **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
 * **Custom emoticons**: Compose your own set of emoticons.
 * **Facebook / Twitter / Google+ authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
 * **Multisite support**: Wise Chat Pro supports WordPress multisite environment.
@@ -199,6 +200,20 @@ Log in as an administrator and type the command:
 `/unban [IP address]`
 or go to Settings -> Wise Chat Settings page, select Bans tab and then delete the desired ban from the list.
 
+= How to kick users? =
+
+Log in as an administrator and go to Settings -> Wise Chat Settings page, select Moderation tab. Enable "Enable Admin Actions" option and go to chat page. Next to each message there should be a button for kicking the user who sent the message.
+
+Alternatively, you can go to Settings -> Wise Chat Settings page and select Kicks tab. In "Add Kick" section specify IP address and click "Add Kick" button.
+
+= How to get the list of kicked users? =
+
+Log in as an administrator, go to Settings -> Wise Chat Settings page and select Kicks tab.
+
+= How to remove kicked IP address? =
+
+Log in as an administrator, go to Settings -> Wise Chat Settings page, select Kicks tab and then delete the desired IP address from the list.
+
 = How to get some information (e.g. IP address) about an user? =
 
 Log in as an administrator and type the command:
@@ -321,6 +336,12 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 06. Preview on mobile - Cold Dark theme
 
 == Changelog ==
+
+= 2.6.1 =
+* Kicking users
+* Changed default settings to reflect richer interface
+* Option to reset all settings to default
+* Fixed: text color by roles when username is linked
 
 = 2.6 =
 * A new theme: "Air Flow"

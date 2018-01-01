@@ -62,12 +62,12 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'mention_sound_notification' => '',
 			'sound_notification' => '',
 			'message_max_length' => 400,
-			'allow_post_links' => 0,
+			'allow_post_links' => 1,
 			'emoticons_enabled' => 1,
-			'allow_post_images' => 0,
-			'enable_images_uploader' => 0,
-			'enable_twitter_hashtags' => 0,
-			'enable_attachments_uploader' => 0,
+			'allow_post_images' => 1,
+			'enable_images_uploader' => 1,
+			'enable_twitter_hashtags' => 1,
+			'enable_attachments_uploader' => 1,
 			'attachments_file_formats' => 'pdf,doc,docx',
 			'attachments_size_limit' => 3145728,
 			
@@ -77,7 +77,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'images_thumbnail_width_limit' => 60,
 			'images_thumbnail_height_limit' => 60,
 			
-			'enable_youtube' => 0,
+			'enable_youtube' => 1,
 			'youtube_width' => 186,
 			'youtube_height' => 105
 		);

@@ -89,6 +89,7 @@
 		'wise_chat_message_endpoint' => 'messageEndpoint',
 		'wise_chat_delete_message_endpoint' => 'messageDeleteEndpoint',
 		'wise_chat_user_ban_endpoint' => 'userBanEndpoint',
+		'wise_chat_user_kick_endpoint' => 'userKickEndpoint',
 		'wise_chat_maintenance_endpoint' => 'maintenanceEndpoint',
 		'wise_chat_settings_endpoint' => 'settingsEndpoint',
 		'wise_chat_prepare_image_endpoint' => 'prepareImageEndpoint'

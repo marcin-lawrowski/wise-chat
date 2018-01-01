@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 2.6
+	Version: 2.6.1
 	Plugin URI: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Marcin Ławrowski
@@ -126,6 +126,13 @@ function wise_chat_endpoint_user_ban() {
 }
 add_action("wp_ajax_nopriv_wise_chat_user_ban_endpoint", 'wise_chat_endpoint_user_ban');
 add_action("wp_ajax_wise_chat_user_ban_endpoint", 'wise_chat_endpoint_user_ban');
+
+function wise_chat_endpoint_user_kick() {
+	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatEndpoints');
+	$wiseChatEndpoints->userKickEndpoint();
+}
+add_action("wp_ajax_nopriv_wise_chat_user_kick_endpoint", 'wise_chat_endpoint_user_kick');
+add_action("wp_ajax_wise_chat_user_kick_endpoint", 'wise_chat_endpoint_user_kick');
 
 function wise_chat_endpoint_maintenance() {
 	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatEndpoints');

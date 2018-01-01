@@ -16,6 +16,11 @@ abstract class WiseChatAbstractTab {
 	* @var WiseChatBansDAO
 	*/
 	protected $bansDAO;
+
+	/**
+	 * @var WiseChatKicksDAO
+	 */
+	protected $kicksDAO;
 	
 	/**
 	* @var WiseChatUsersDAO
@@ -43,6 +48,11 @@ abstract class WiseChatAbstractTab {
 	protected $bansService;
 
 	/**
+	 * @var WiseChatKicksService
+	 */
+	protected $kicksService;
+
+	/**
 	 * @var WiseChatMessagesService
 	 */
 	protected $messagesService;
@@ -56,11 +66,13 @@ abstract class WiseChatAbstractTab {
 		$this->options = WiseChatOptions::getInstance();
 		$this->channelsDAO = WiseChatContainer::get('dao/WiseChatChannelsDAO');
 		$this->bansDAO = WiseChatContainer::get('dao/WiseChatBansDAO');
+		$this->kicksDAO = WiseChatContainer::get('dao/WiseChatKicksDAO');
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
 		$this->messagesDAO = WiseChatContainer::get('dao/WiseChatMessagesDAO');
 		$this->filtersDAO = WiseChatContainer::get('dao/WiseChatFiltersDAO');
 		$this->actions = WiseChatContainer::getLazy('services/user/WiseChatActions');
 		$this->bansService = WiseChatContainer::get('services/WiseChatBansService');
+		$this->kicksService = WiseChatContainer::get('services/WiseChatKicksService');
 		$this->messagesService = WiseChatContainer::get('services/WiseChatMessagesService');
 	}
 	

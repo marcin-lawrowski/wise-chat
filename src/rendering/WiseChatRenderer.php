@@ -71,7 +71,7 @@ class WiseChatRenderer {
 		
 		$data = array(
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
-			'windowTitle' => $this->options->getEncodedOption('window_title', ''),
+			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 			'messageChannelPasswordAuthorizationHint' => $this->options->getEncodedOption(
 				'message_channel_password_authorization_hint', 'This channel is protected. Enter your password:'
 			),
@@ -95,7 +95,7 @@ class WiseChatRenderer {
 		
 		$data = array(
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
-			'windowTitle' => $this->options->getEncodedOption('window_title', ''),
+			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 			'errorMessage' => $errorMessage,
 			'cssClass' => $cssClass,
 		);
@@ -115,7 +115,7 @@ class WiseChatRenderer {
 		$this->templater->setTemplateFile(WiseChatThemes::getInstance()->getUserNameFormTemplate());
 		$data = array(
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
-			'windowTitle' => $this->options->getEncodedOption('window_title', ''),
+			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 			'errorMessage' => $errorMessage,
 			'messageLogin' => $this->options->getEncodedOption('message_login', 'Log in'),
 			'messageEnterUserName' => $this->options->getEncodedOption('message_enter_user_name', 'Enter your username'),
@@ -145,7 +145,7 @@ class WiseChatRenderer {
 		}
 
 		// custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color') && $message->getUser() !== null && strlen($message->getUser()->getDataProperty('textColor')) > 0) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $message->getUser() !== null && strlen($message->getUser()->getDataProperty('textColor')) > 0) {
 			$isTextColorSet = true;
 			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
 			$textColor = $message->getUser()->getDataProperty('textColor');
@@ -158,8 +158,9 @@ class WiseChatRenderer {
 			'messageChatUserId' => $message->getUserId(),
 			'isAuthorWpUser' => $this->usersDAO->getWpUserByID($message->getWordPressUserId()) !== null,
 			'isAuthorCurrentUser' => $this->authentication->getUserIdOrNull() == $message->getUserId(),
-			'showDeleteButton' => $this->options->isOptionEnabled('enable_message_actions') && $this->usersDAO->hasCurrentWpUserRight('delete_message'),
-			'showBanButton' => $this->options->isOptionEnabled('enable_message_actions') && $this->usersDAO->hasCurrentWpUserRight('ban_user'),
+			'showDeleteButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('delete_message'),
+			'showBanButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('ban_user'),
+			'showKickButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('kick_user'),
 			'messageTimeUTC' => gmdate('c', $message->getTime()),
 			'renderedUserName' => $this->getRenderedUserName($message),
 			'messageContent' => $this->getRenderedMessageContent($message),
@@ -239,7 +240,7 @@ class WiseChatRenderer {
 			$textColor = $this->getTextColorDefinedByUserRole($channelUser->getUser());
 
 			// custom text color:
-			if ($this->options->isOptionEnabled('allow_change_text_color')) {
+			if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
 				if (strlen($textColorProposal) > 0) {
 					$textColor = $textColorProposal;
@@ -335,16 +336,23 @@ class WiseChatRenderer {
 		$formattedUserName = $userName;
         $displayMode = $this->options->getIntegerOption('link_wp_user_name', 0);
 		$styles = '';
-        if ($displayMode > 0) {
-            if (
-                $this->options->isOptionEnabled('allow_change_text_color') &&
-				$user !== null &&
-                strlen($user->getDataProperty('textColor')) > 0
-            ) {
-                $styles = sprintf('style="color: %s"', $user->getDataProperty('textColor'));
-            }
-        }
+		$textColorAffectedParts = array();
 
+		// text color defined by role:
+		$textColor = $this->getTextColorDefinedByUserRole($user);
+		if (strlen($textColor) > 0) {
+			$textColorAffectedParts = array('messageUserName');
+		}
+
+		// custom color (higher priority):
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
+			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
+			$textColor = $user->getDataProperty('textColor');
+		}
+
+		if (strlen($textColor) > 0 && in_array('messageUserName', $textColorAffectedParts)) {
+			$styles = sprintf('style="color: %s"', $textColor);
+		}
 
 		if ($displayMode === 1) {
 			$linkUserNameTemplate = $this->options->getOption('link_user_name_template', null);
@@ -415,36 +423,36 @@ class WiseChatRenderer {
         $linksFilter = WiseChatContainer::get('rendering/filters/post/WiseChatLinksPostFilter');
 		$formattedMessage = $linksFilter->filter(
             $formattedMessage,
-            $this->options->isOptionEnabled('allow_post_links')
+            $this->options->isOptionEnabled('allow_post_links', true)
         );
 
         /** @var WiseChatAttachmentsPostFilter $attachmentsFilter */
         $attachmentsFilter = WiseChatContainer::get('rendering/filters/post/WiseChatAttachmentsPostFilter');
 		$formattedMessage = $attachmentsFilter->filter(
 			$formattedMessage,
-            $this->options->isOptionEnabled('enable_attachments_uploader'),
-            $this->options->isOptionEnabled('allow_post_links')
+            $this->options->isOptionEnabled('enable_attachments_uploader', true),
+            $this->options->isOptionEnabled('allow_post_links', true)
 		);
 
         /** @var WiseChatImagesPostFilter $imagesFilter */
         $imagesFilter = WiseChatContainer::get('rendering/filters/post/WiseChatImagesPostFilter');
         $formattedMessage = $imagesFilter->filter(
 			$formattedMessage,
-            $this->options->isOptionEnabled('allow_post_images'),
-            $this->options->isOptionEnabled('allow_post_links')
+            $this->options->isOptionEnabled('allow_post_images', true),
+            $this->options->isOptionEnabled('allow_post_links', true)
 		);
 
         /** @var WiseChatYouTubePostFilter $youTubeFilter */
         $youTubeFilter = WiseChatContainer::get('rendering/filters/post/WiseChatYouTubePostFilter');
 		$formattedMessage = $youTubeFilter->filter(
 			$formattedMessage,
-            $this->options->isOptionEnabled('enable_youtube'),
-            $this->options->isOptionEnabled('allow_post_links'),
+            $this->options->isOptionEnabled('enable_youtube', true),
+            $this->options->isOptionEnabled('allow_post_links', true),
 			$this->options->getIntegerOption('youtube_width', 186),
             $this->options->getIntegerOption('youtube_height', 105)
 		);
 		
-		if ($this->options->isOptionEnabled('enable_twitter_hashtags')) {
+		if ($this->options->isOptionEnabled('enable_twitter_hashtags', true)) {
             /** @var WiseChatHashtagsPostFilter $hashTagsFilter */
             $hashTagsFilter = WiseChatContainer::get('rendering/filters/post/WiseChatHashtagsPostFilter');
 			$formattedMessage = $hashTagsFilter->filter($formattedMessage);

@@ -20,6 +20,10 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 				'An user role that is allowed to ban users.<br /> Alternatively you can assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
 			),
 			array(
+				'permission_kick_user_role', 'Kick User Permission', 'checkboxesCallback', 'multivalues',
+				'An user role that is allowed to kick users.<br /> Alternatively you can assign "wise_chat_kick_user" capability to any custom role.', self::getRoles()
+			),
+			array(
 				'permission_approve_message_role', 'Approve Message Permission', 'checkboxesCallback', 'multivalues',
 				'An user role that is allowed to approve posted messages.<br />Alternatively you can assign "wise_chat_approve_message" capability to any custom role.<br />',
 				self::getRoles()
@@ -53,9 +57,10 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	
 	public function getDefaultValues() {
 		return array(
-			'enable_message_actions' => 0,
+			'enable_message_actions' => 1,
 			'permission_delete_message_role' => 'administrator',
 			'permission_ban_user_role' => 'administrator',
+			'permission_kick_user_role' => 'administrator',
 			'moderation_ban_duration' => 1440,
 		);
 	}
@@ -64,6 +69,7 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 		return array(
 			'permission_delete_message_role' => 'enable_message_actions',
 			'permission_ban_user_role' => 'enable_message_actions',
+			'permission_kick_user_role' => 'enable_message_actions',
 			'moderation_ban_duration' => 'enable_message_actions'
 		);
 	}
