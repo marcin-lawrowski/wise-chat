@@ -29,6 +29,7 @@ class WiseChatSettings {
 		'wise-chat-channels' => 'Channels',
 		'wise-chat-filters' => 'Filters',
 		'wise-chat-bans' => 'Bans',
+		'wise-chat-kicks' => 'Kicks',
 		'wise-chat-localization' => 'Localization',
 		'wise-chat-advanced' => 'Advanced',
 		'wise-chat-pro' => 'PRO Options',

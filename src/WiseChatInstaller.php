@@ -21,8 +21,14 @@ class WiseChatInstaller {
 	
 	public static function getBansTable() {
 		global $wpdb;
-		
+
 		return $wpdb->prefix.'wise_chat_bans';
+	}
+
+	public static function getKicksTable() {
+		global $wpdb;
+
+		return $wpdb->prefix.'wise_chat_kicks';
 	}
 	
 	public static function getActionsTable() {
@@ -86,6 +92,16 @@ class WiseChatInstaller {
 		$sql = "CREATE TABLE " . $tableName . " (
 				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
 				time bigint(11) DEFAULT '0' NOT NULL,
+				created bigint(11) DEFAULT '0' NOT NULL,
+				ip text NOT NULL
+		) DEFAULT CHARSET=utf8;";
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+
+		$tableName = self::getKicksTable();
+		$sql = "CREATE TABLE " . $tableName . " (
+				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				last_user_name text NOT NULL,
 				created bigint(11) DEFAULT '0' NOT NULL,
 				ip text NOT NULL
 		) DEFAULT CHARSET=utf8;";
@@ -156,7 +172,11 @@ class WiseChatInstaller {
 		$tableName = self::getBansTable();
 		$sql = "DROP TABLE IF EXISTS {$tableName};";
 		$wpdb->query($sql);
-		
+
+		$tableName = self::getKicksTable();
+		$sql = "DROP TABLE IF EXISTS {$tableName};";
+		$wpdb->query($sql);
+
 		$tableName = self::getActionsTable();
 		$sql = "DROP TABLE IF EXISTS {$tableName};";
 		$wpdb->query($sql);

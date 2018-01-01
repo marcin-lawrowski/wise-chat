@@ -46,6 +46,11 @@ class WiseChatEndpoints {
 	* @var WiseChatBansService
 	*/
 	private $bansService;
+
+	/**
+	 * @var WiseChatKicksService
+	 */
+	private $kicksService;
 	
 	/**
 	* @var WiseChatMessagesService
@@ -98,6 +103,7 @@ class WiseChatEndpoints {
 		$this->bansDAO = WiseChatContainer::getLazy('dao/WiseChatBansDAO');
 		$this->renderer = WiseChatContainer::getLazy('rendering/WiseChatRenderer');
 		$this->bansService = WiseChatContainer::getLazy('services/WiseChatBansService');
+		$this->kicksService = WiseChatContainer::getLazy('services/WiseChatKicksService');
 		$this->messagesService = WiseChatContainer::getLazy('services/WiseChatMessagesService');
 		$this->userService = WiseChatContainer::getLazy('services/user/WiseChatUserService');
 		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
@@ -120,6 +126,7 @@ class WiseChatEndpoints {
 			$lastId = intval($this->getGetParam('lastId', 0));
 			$channelId = $this->getGetParam('channelId');
 
+			$this->checkIpNotKicked();
 			$this->checkUserAuthorization();
 			$this->checkChatOpen();
 			$channel = $this->channelsDAO->get($channelId);
@@ -173,6 +180,7 @@ class WiseChatEndpoints {
 
 		$response = array();
 		try {
+			$this->checkIpNotKicked();
 			$this->checkUserAuthentication();
 			$this->checkUserAuthorization();
             $this->checkUserWriteAuthorization();
@@ -228,6 +236,7 @@ class WiseChatEndpoints {
 
 		$response = array();
 		try {
+			$this->checkIpNotKicked();
 			$this->checkChatOpen();
 			$this->checkUserAuthentication();
 			$this->checkUserRight('delete_message');
@@ -266,6 +275,7 @@ class WiseChatEndpoints {
 
 		$response = array();
 		try {
+			$this->checkIpNotKicked();
 			$this->checkChatOpen();
 			$this->checkUserAuthentication();
 			$this->checkUserRight('ban_user');
@@ -291,6 +301,45 @@ class WiseChatEndpoints {
 			$this->sendBadRequestStatus();
 		}
 		
+		echo json_encode($response);
+		die();
+	}
+
+	/**
+	 * Endpoint for kicking users by message ID.
+	 */
+	public function userKickEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
+		$this->verifyCheckSum();
+
+		$response = array();
+		try {
+			$this->checkIpNotKicked();
+			$this->checkChatOpen();
+			$this->checkUserAuthentication();
+			$this->checkUserRight('kick_user');
+			$this->checkPostParams(array('channelId', 'messageId'));
+
+			$channelId = trim($this->getPostParam('channelId'));
+			$messageId = trim($this->getPostParam('messageId'));
+			$channel = $this->channelsDAO->get($channelId);
+
+			$this->checkChannel($channel);
+			$this->checkChannelAuthorization($channel);
+
+			$this->kicksService->kickByMessageId($messageId);
+			$this->messagesService->addMessage($this->authentication->getSystemUser(), $channel, "User has been kicked", true);
+
+			$response['result'] = 'OK';
+		} catch (WiseChatUnauthorizedAccessException $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendUnauthorizedStatus();
+		} catch (Exception $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendBadRequestStatus();
+		}
+
 		echo json_encode($response);
 		die();
 	}
@@ -411,6 +460,7 @@ class WiseChatEndpoints {
     
 		$response = array();
 		try {
+			$this->checkIpNotKicked();
 			$this->checkChatOpen();
 			$this->checkUserAuthentication();
 			$this->checkUserAuthorization();
@@ -464,6 +514,7 @@ class WiseChatEndpoints {
 		$this->verifyCheckSum();
 		
 		try {
+			$this->checkIpNotKicked();
 			$this->checkChatOpen();
 			$this->checkUserAuthentication();
 			$this->checkUserAuthorization();
@@ -563,6 +614,15 @@ class WiseChatEndpoints {
 			throw new WiseChatUnauthorizedAccessException('Access denied');
 		}
 		if ($this->service->isChatRestrictedForCurrentUserRole()) {
+			throw new WiseChatUnauthorizedAccessException('Access denied');
+		}
+	}
+
+	/**
+	 * @throws WiseChatUnauthorizedAccessException
+	 */
+	private function checkIpNotKicked() {
+		if (isset($_SERVER['REMOTE_ADDR']) && $this->kicksService->isIpAddressKicked($_SERVER['REMOTE_ADDR'])) {
 			throw new WiseChatUnauthorizedAccessException('Access denied');
 		}
 	}

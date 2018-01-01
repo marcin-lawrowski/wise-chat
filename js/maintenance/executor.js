@@ -122,6 +122,11 @@ function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
 					case 'setMessagesProperty':
 						wiseChatMessages.setMessagesProperty(commandData);
 						break;
+					case 'reload':
+						if (typeof location.reload !== 'undefined') {
+							location.reload();
+						}
+						break;
 				}
 			}
 		}

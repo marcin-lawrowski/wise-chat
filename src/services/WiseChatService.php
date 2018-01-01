@@ -28,6 +28,11 @@ class WiseChatService {
 	private $userService;
 
 	/**
+	 * @var WiseChatKicksService
+	 */
+	private $kicksService;
+
+	/**
 	 * @var WiseChatAuthentication
 	 */
 	private $authentication;
@@ -49,6 +54,7 @@ class WiseChatService {
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
 		$this->channelUsersDAO = WiseChatContainer::get('dao/WiseChatChannelUsersDAO');
 		$this->userService = WiseChatContainer::get('services/user/WiseChatUserService');
+		$this->kicksService = WiseChatContainer::getLazy('services/WiseChatKicksService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
 		$this->authorization = WiseChatContainer::getLazy('services/user/WiseChatAuthorization');
 	}
@@ -98,6 +104,15 @@ class WiseChatService {
 	*/
 	public function isChatRestrictedForAnonymousUsers() {
 		return $this->options->getOption('access_mode') == 1 && !$this->usersDAO->isWpUserLogged();
+	}
+
+	/**
+	 * Determines whether IP is kicked.
+	 *
+	 * @return boolean
+	 */
+	public function isIpKicked() {
+		return isset($_SERVER['REMOTE_ADDR']) && $this->kicksService->isIpAddressKicked($_SERVER['REMOTE_ADDR']);
 	}
 
 	/**

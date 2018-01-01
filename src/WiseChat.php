@@ -213,6 +213,12 @@ class WiseChat {
 			$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
 		}
 
+		if ($this->service->isIpKicked()) {
+			return $this->renderer->getRenderedAccessDenied(
+				$this->options->getOption('message_error_12', 'You are blocked from using the chat'), 'wcAccessDenied'
+			);
+		}
+
 		if ($this->service->isChatRestrictedForAnonymousUsers()) {
 			return $this->renderer->getRenderedAccessDenied(
 				$this->options->getOption('message_error_4', 'Only logged in users are allowed to enter the chat'), 'wcAccessDenied'
