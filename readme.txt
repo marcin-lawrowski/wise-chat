@@ -70,7 +70,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Avatars**: Display avatars either in the chat or the users list.
-* **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress groups. Give moderator rights to delete messages or ban users.
+* **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
 * **Custom emoticons**: Compose your own set of emoticons.
 * **Facebook / Twitter / Google+ authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
 * **Multisite support**: Wise Chat Pro supports WordPress multisite environment.
