@@ -3,7 +3,7 @@
 /**
  * Wise Chat simple template engine.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatTemplater {
 	const REGEXP_VARIABLE = '/\{\{\s*([\w\d]+)\s*\}\}/is';

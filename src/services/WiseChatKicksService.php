@@ -3,7 +3,7 @@
 /**
  * WiseChat kicks services.
  *
- * @author Marcin <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatKicksService {
 

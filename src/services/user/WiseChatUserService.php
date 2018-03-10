@@ -3,7 +3,7 @@
 /**
  * WiseChat user services.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatUserService {
 	const USERS_ACTIVITY_TIME_FRAME = 80;

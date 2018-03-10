@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin moderation settings tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatModerationTab extends WiseChatAbstractTab {
 

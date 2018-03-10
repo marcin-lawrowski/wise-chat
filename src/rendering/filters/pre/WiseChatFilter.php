@@ -3,7 +3,7 @@
 /**
  * Wise Chat bad words filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatFilter {
 	const BAD_WORDS_FILE = '/../../../../data/bad_words.txt';

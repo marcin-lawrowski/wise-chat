@@ -3,7 +3,7 @@
 /**
  * Shortcode that renders Wise Chat basic statistics for given channel.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatStatsShortcode {
     /**

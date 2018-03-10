@@ -3,7 +3,7 @@
 /**
  * Wise Chat message shortcodes builders.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatShortcodeConstructor {
 	const IMAGE_SHORT_TAG = '[img id="%d" src="%s" src-th="%s" src-org="%s"]';

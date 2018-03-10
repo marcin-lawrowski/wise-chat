@@ -3,7 +3,7 @@
 /**
  * Wise Chat widget.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatWidget extends WP_Widget {
 	

@@ -3,7 +3,7 @@
 /**
  * Wise Chat widget for displaying users of a channel.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatWidgetChannelUsers extends WP_Widget {
 

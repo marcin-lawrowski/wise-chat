@@ -3,7 +3,7 @@
 /**
  * WiseChat class for accessing plugin options.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatOptions {
 	const OPTIONS_NAME = 'wise_chat_options_name';

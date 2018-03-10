@@ -3,7 +3,7 @@
 /**
  * Wise Chat links post-filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatLinksPostFilter {
 	const SHORTCODE_REGEXP = '/\[link src=&quot;(.+?)&quot;\]/i';

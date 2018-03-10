@@ -5,7 +5,7 @@ WiseChatContainer::load('WiseChatThemes');
 /**
  * Wise Chat admin appearance settings tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatAppearanceTab extends WiseChatAbstractTab {
 

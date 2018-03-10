@@ -3,7 +3,7 @@
 /**
  * WiseChat and WordPress users DAO.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatUsersDAO {
 	/**

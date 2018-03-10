@@ -3,7 +3,7 @@
 /**
  * WiseChat abstract command.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 abstract class WiseChatAbstractCommand {
 

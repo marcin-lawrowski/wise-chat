@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin emoticons settings tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatEmoticonsTab extends WiseChatAbstractTab {
 

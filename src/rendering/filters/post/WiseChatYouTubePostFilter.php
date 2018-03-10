@@ -3,7 +3,7 @@
 /**
  * Wise Chat YouTube videos post-filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatYouTubePostFilter {
 	const SHORTCODE_REGEXP = '/\[youtube movie-id=&quot;(.+?)&quot; src-org=&quot;(.+?)&quot;\]/i';

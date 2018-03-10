@@ -3,7 +3,7 @@
 /**
  * Wise Chat channel-user associations DAO
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatChannelUsersDAO {
 

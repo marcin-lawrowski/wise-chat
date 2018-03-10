@@ -3,7 +3,7 @@
 /**
  * Wise Chat main services class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatService {
 

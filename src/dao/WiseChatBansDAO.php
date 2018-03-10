@@ -3,7 +3,7 @@
 /**
  * Wise Chat bans DAO
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatBansDAO {
 	/**
