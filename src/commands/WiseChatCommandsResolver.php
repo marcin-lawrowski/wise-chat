@@ -5,7 +5,7 @@ WiseChatContainer::load('commands/WiseChatAbstractCommand');
 /**
  * WiseChat commands resolver.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatCommandsResolver {
 	

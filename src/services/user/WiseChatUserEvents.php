@@ -3,7 +3,7 @@
 /**
  * Wise Chat user events service.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatUserEvents {
     const SESSION_KEY_EVENT_TIME = 'wise_chat_activity_time';

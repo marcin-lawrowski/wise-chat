@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin abstract tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 abstract class WiseChatAbstractTab {
 

@@ -3,7 +3,7 @@
 /**
  * Wise Chat emoticons filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatEmoticonsFilter {
     /**

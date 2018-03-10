@@ -1,7 +1,7 @@
 /**
  * Wise Chat user's settings support.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatSettings(options, messages) {
 	var settingsEndpoint = options.apiEndpointBase + '?action=wise_chat_settings_endpoint';

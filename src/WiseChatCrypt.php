@@ -3,7 +3,7 @@
 /**
  * WiseChat encryption support.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatCrypt {
 	const KEY_BITS = 512;

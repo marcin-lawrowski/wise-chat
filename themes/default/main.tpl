@@ -95,9 +95,6 @@
                 </div>
             {% endif showCustomizationsPanel %}
 
-            {% if poweredBy %}
-                {{ poweredBy }}
-            {% endif poweredBy %}
         </div>
     {% endif allowToSendMessages %}
 
@@ -114,12 +111,6 @@
 			<br class='wcClear' />
 		{% endif showUsersCounter %}
 	{% endif inputControlsTopLocation %}
-
-    {% if !allowToSendMessages %}
-        {% if poweredBy %}
-            {{ poweredBy }}
-        {% endif poweredBy %}
-    {% endif allowToSendMessages %}
 </div>
 
 {{ cssDefinitions }}

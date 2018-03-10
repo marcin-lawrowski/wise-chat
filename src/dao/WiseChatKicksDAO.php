@@ -3,7 +3,7 @@
 /**
  * Wise Chat kicks DAO
  *
- * @author Marcin <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatKicksDAO {
 	/**

@@ -3,7 +3,7 @@
 /**
  * WiseChat custom filters DAO. Filter is a regular expression and replacement text.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatFiltersDAO {
 	const URL_REGEXP = "((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?]*)?(\?[^\"'<> ]+)?";

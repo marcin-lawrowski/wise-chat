@@ -3,7 +3,7 @@
 /**
  * WiseChat installer.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatInstaller {
 

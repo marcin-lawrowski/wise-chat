@@ -1,7 +1,7 @@
 /**
  * Wise Chat messages sending and displaying. 
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndTimeRenderer, notifier, progressBar) {
 	var MESSAGES_REFRESH_TIMEOUT = options.messagesRefreshTime;

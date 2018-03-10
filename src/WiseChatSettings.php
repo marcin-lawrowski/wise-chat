@@ -3,7 +3,7 @@
 /**
  * WiseChat admin settings page.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatSettings {
 	const OPTIONS_GROUP = 'wise_chat_options_group';

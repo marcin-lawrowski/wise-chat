@@ -3,7 +3,7 @@
 /**
  * WiseChat DI container.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatContainer {
 	/**

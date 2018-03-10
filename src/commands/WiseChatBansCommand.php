@@ -3,7 +3,7 @@
 /**
  * WiseChat command: /bans
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatBansCommand extends WiseChatAbstractCommand {
 	public function execute() {

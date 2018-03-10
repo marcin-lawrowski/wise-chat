@@ -3,7 +3,7 @@
 /**
  * Wise Chat channel-user associations DAO
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatChannelUsersDAO {
 
@@ -360,22 +360,24 @@ class WiseChatChannelUsersDAO {
 	*
 	* @param string $userName Username to check
 	* @param string $sessionId Session ID to check
+	* @param boolean $includeActiveOnly
 	*
 	* @return boolean
 	*/
-	public function isUserNameOccupied($userName, $sessionId) {
+	public function isUserNameOccupied($userName, $sessionId, $includeActiveOnly = false) {
 		global $wpdb;
 
 		$userName = addslashes($userName);
 		$sessionId = addslashes($sessionId);
 		$table = WiseChatInstaller::getChannelUsersTable();
 		$usersTable = WiseChatInstaller::getUsersTable();
+		$activeOnlyCondition = $includeActiveOnly ? ' AND usc.active = 1 ' : '';
 		$sql = sprintf(
 			'SELECT * '.
 			'FROM %s AS usc '.
 			'LEFT JOIN %s AS us ON (usc.user_id = us.id) '.
-			'WHERE us.name = "%s" AND us.session_id != "%s" LIMIT 1;',
-			$table, $usersTable, $userName, $sessionId
+			'WHERE us.name = "%s" AND us.session_id != "%s" %s LIMIT 1;',
+			$table, $usersTable, $userName, $sessionId, $activeOnlyCondition
 		);
 		$results = $wpdb->get_results($sql);
 		

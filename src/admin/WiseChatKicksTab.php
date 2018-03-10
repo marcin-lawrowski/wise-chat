@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin kicks settings tab class.
  *
- * @author Marcin <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatKicksTab extends WiseChatAbstractTab {
 

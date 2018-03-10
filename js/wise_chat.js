@@ -1,8 +1,7 @@
 /**
  * Wise Chat core controller.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
- * @link https://kaine.pl/projects/wp-plugins/wise-chat
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatController(options) {
 	var progressBar = new WiseChatProgressBar(options);
@@ -24,7 +23,7 @@ function WiseChatController(options) {
 /**
  * WiseChatDateFormatter class. Formats dates given in UTC timezone.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatDateFormatter() {
 	
@@ -126,7 +125,7 @@ function WiseChatDateFormatter() {
 /**
  * WiseChatMessageAttachments class. Attachments management.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 	var IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'gif'];
@@ -314,7 +313,7 @@ function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 /**
  * WiseChatImageViewer
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatImageViewer() {
 	var HOURGLASS_ICON = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wQEDB4ktAYXpwAAAb5JREFUSMe1lr9qFFEUh78rg8gWW1ikSLEWgkVq2SoYsbBIk1dYEAsxaJt3sLAIFkEEX0FSRlgMhKAPkEIQwZDChATSBLMQP5uz4bKZmZ3ZxR+cYs75nT9z7rlnJpFBfQC8B24xG/4Cz1NK38eKYoKwADxiPiwA1wnSpFUdAO+A+y0D/wBeppQ+5sqihHgAdIBRSumsSWT1bvgcNCF31Et1tWnp6mr4dCZtNw4zpXQB7AJrLdqzBuyGb6OKBuq52m3A7QZ3UGZPVW0CfgJvgc/As4r4H4CnwGvgXkrpDy36uh6VPVRPvYnTsJ2r662HWS3U/ZDH6kkW/CR0Y3sx041Re+qh+kXtq59C+qE7VHt1MWpXQkrpF7ACdIFhZhqGbiU4syX474gWHUU7FjP9YuiOprVo2iF/jUO8U3Hj94NTzJLgVYxgL0v4JqTI3rD9mEZ1v9WN7Hk7G9Pt8d5RN4LbaZPgelWE7JVctL3MXrkqqhLsqFvqbXVoNYbB2VJ32rTnMlbwptOxWbeuyxL0w/GJetUgwVVwVfuT8crGawm4AEbAi4ZdHYXPEvCtrvpl58dy3Rscx9dsnt+W41zxD60+eUN8VNiNAAAAAElFTkSuQmCC";
@@ -407,7 +406,7 @@ function WiseChatImageViewer() {
 /**
  * WiseChatNotifier - window title and sound notifiers.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatNotifier(options) {
 	var isWindowFocused = true;
@@ -526,7 +525,7 @@ function WiseChatNotifier(options) {
 /**
  * WiseChatDateAndTimeRenderer - renders date and time next to each message according to the settings.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatDateAndTimeRenderer(options, dateFormatter) {
 	var spanDate = '<span class="wcMessageTimeDate">';

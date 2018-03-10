@@ -1,7 +1,7 @@
 /**
  * Wise Chat maintenance services.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 function WiseChatMaintenanceExecutor(options, wiseChatMessages, notifier) {
 	var REFRESH_TIMEOUT = 20000;

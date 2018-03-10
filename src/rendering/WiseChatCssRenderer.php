@@ -3,7 +3,7 @@
 /**
  * Wise Chat CSS styles rendering.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatCssRenderer {
 	

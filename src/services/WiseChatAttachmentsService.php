@@ -3,7 +3,7 @@
 /**
  * Wise Chat attachments services class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatAttachmentsService {
 	const UPLOAD_FILE_NAME = '_wise_chat_upload_attachment';

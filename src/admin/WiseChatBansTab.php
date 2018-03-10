@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin bans settings tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatBansTab extends WiseChatAbstractTab {
 

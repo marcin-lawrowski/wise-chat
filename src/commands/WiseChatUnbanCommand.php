@@ -3,7 +3,7 @@
 /**
  * WiseChat command: /unban
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatUnbanCommand extends WiseChatAbstractCommand {
 	public function execute() {

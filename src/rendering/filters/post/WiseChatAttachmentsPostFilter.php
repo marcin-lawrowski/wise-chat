@@ -3,7 +3,7 @@
 /**
  * Wise Chat attachments post-filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatAttachmentsPostFilter {
 	const SHORTCODE_REGEXP = '/\[attachment id=&quot;(.+?)&quot; src=&quot;(.+?)&quot; name-org=&quot;(.+?)&quot;\]/i';

@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin localization settings tab class.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatLocalizationTab extends WiseChatAbstractTab {
 

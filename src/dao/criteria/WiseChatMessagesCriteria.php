@@ -3,7 +3,7 @@
 /**
  * WiseChat messages DAO criteria
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatMessagesCriteria {
     const ORDER_DESCENDING = 'descending';

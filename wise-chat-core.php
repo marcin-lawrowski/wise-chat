@@ -1,10 +1,10 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 2.6.1
+	Version: 2.6.2
 	Plugin URI: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
-	Author: Marcin Ławrowski
+	Author: Kainex
 	Author URI: https://kaine.pl
 */
 

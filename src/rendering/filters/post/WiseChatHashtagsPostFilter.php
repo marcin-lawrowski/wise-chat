@@ -3,7 +3,7 @@
 /**
  * Wise Chat hashtags post-filter.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatHashtagsPostFilter {
 	const REGEXP = "/(.)?#([^\s#\&]+)/i";

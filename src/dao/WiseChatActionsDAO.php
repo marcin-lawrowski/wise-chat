@@ -3,7 +3,7 @@
 /**
  * Wise Chat actions DAO. Actions are commands sent from the chat server to each client.
  *
- * @author Marcin Ławrowski <marcin@kaine.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatActionsDAO {
 	const ACTIONS_LIMIT = 100;
