@@ -73,11 +73,6 @@ class WiseChat {
 	private $authentication;
 
 	/**
-	 * @var WiseChatAds
-	 */
-	private $ads;
-
-	/**
 	 * @var WiseChatHttpRequestService
 	 */
 	private $httpRequestService;
@@ -101,7 +96,6 @@ class WiseChat {
 		$this->service = WiseChatContainer::get('services/WiseChatService');
 		$this->attachmentsService = WiseChatContainer::get('services/WiseChatAttachmentsService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
-		$this->ads = WiseChatContainer::getLazy('services/WiseChatAds');
 		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
@@ -419,8 +413,7 @@ class WiseChat {
 			'jsOptions' => json_encode($jsOptions),
             'messagesOrder' => $this->options->getEncodedOption('messages_order', '') == 'descending' ? 'descending' : 'ascending',
 			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
-			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition(),
-			'poweredBy' => $this->ads->getFooterAd(),
+			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition()
 		);
 		
 		$data = array_merge($data, $this->userSettingsDAO->getAll());

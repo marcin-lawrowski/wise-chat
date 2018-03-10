@@ -338,6 +338,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.6.2 =
+* Removed ad footer
 * Source files tags update
 
 = 2.6.1 =
