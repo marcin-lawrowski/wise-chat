@@ -121,6 +121,8 @@ class WiseChat {
 			wp_enqueue_script('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'js/3rdparty/jquery.colorPicker.min.js', array());
 			wp_enqueue_style('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'css/3rdparty/colorPicker.css');
 		}
+
+		wp_enqueue_script('wise_chat_3rdparty_momentjs', $pluginBaseURL.'js/3rdparty/moment.patched.min.js', array());
 	}
 
 	/**
