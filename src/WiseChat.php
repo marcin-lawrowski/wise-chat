@@ -309,6 +309,8 @@ class WiseChat {
 			'enableTitleNotifications' => $this->options->isOptionEnabled('enable_title_notifications'),
 			'soundNotification' => $this->options->getEncodedOption('sound_notification'),
 			'messagesTimeMode' => $this->options->getEncodedOption('messages_time_mode', 'elapsed'),
+			'messagesDateFormat' => trim($this->options->getEncodedOption('messages_date_format')),
+			'messagesTimeFormat' => trim($this->options->getEncodedOption('messages_time_format')),
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
 			'messages' => array(
 				'message_sending' => $this->options->getEncodedOption('message_sending', 'Sending ...'),

@@ -39,6 +39,16 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('text_size', 'Font Size', 'selectCallback', 'string', '', WiseChatAppearanceTab::getFontSizes()),
 			
 			array('messages_time_mode', 'Message Time Mode', 'selectCallback', 'string', 'Format of the date and time displayed next to each message', WiseChatAppearanceTab::getTimeModes()),
+			array(
+				'messages_date_format', 'Message Date Format', 'stringFieldCallback', 'string',
+				'Format of date displayed next to each message. Empty value means web browser\'s local date format is used.<br />'.
+				'For detailed format options check <a href="https://momentjs.com/docs/#/displaying/" target="_blank">the docs</a>.'
+			),
+			array(
+				'messages_time_format', 'Message Time Format', 'stringFieldCallback', 'string',
+				'Format of time displayed next to each message. Empty value means web browser\'s local time format is used.<br />'.
+				'For detailed format options check <a href="https://momentjs.com/docs/#/displaying/" target="_blank">the docs</a>.'
+			),
 			array('messages_inline', 'Inline Message', 'booleanFieldCallback', 'boolean', 'Displays message and username in the same line'),
 			array('link_wp_user_name', 'Username Display Mode', 'selectCallback', 'string', '
 			    Controls how username is displayed in each message:<br />
@@ -136,6 +146,8 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'custom_styles' => '',
 			'allow_mute_sound' => '',
 			'messages_time_mode' => 'elapsed',
+			'messages_date_format' => '',
+			'messages_time_format' => '',
 			'messages_inline' => 0,
 			'background_color_users_list' => '',
 			'text_color_users_list' => '',
