@@ -339,6 +339,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 2.6.3 =
 * Option to adjust date and time format in messages
+* Option to adjust lock time of user names
 * Fixed: error in WiseChatRenderer
 
 = 2.6.2 =

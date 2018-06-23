@@ -134,7 +134,12 @@ class WiseChatUserService {
 	* @return null
 	*/
 	public function refreshChannelUsersData() {
-		$this->channelUsersDAO->deleteOlderByLastActivityTime(self::USERS_PRESENCE_TIME_FRAME);
+		$timeFrame = $this->options->getIntegerOption('user_name_lock_window_seconds', self::USERS_PRESENCE_TIME_FRAME);
+		if ($timeFrame < 600) {
+			$timeFrame = self::USERS_PRESENCE_TIME_FRAME;
+		}
+
+		$this->channelUsersDAO->deleteOlderByLastActivityTime($timeFrame);
 		$this->channelUsersDAO->updateActiveForOlderByLastActivityTime(false, self::USERS_ACTIVITY_TIME_FRAME);
 	}
 
