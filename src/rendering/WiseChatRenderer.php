@@ -184,11 +184,13 @@ class WiseChatRenderer {
 
 		if ($user !== null && $user->getWordPressId() > 0) {
 			$wpUser = $this->usersDAO->getWpUserByID($user->getWordPressId());
-			$commonRoles = array_intersect($wpUser->roles, array_keys($userRoleToColorMap));
-			if (is_array($wpUser->roles) && count($commonRoles) > 0) {
-				$userRoleColor = trim($userRoleToColorMap[$commonRoles[0]]);
-				if (strlen($userRoleColor) > 0) {
-					$textColor = $userRoleColor;
+			if (is_array($wpUser->roles)) {
+				$commonRoles = array_intersect($wpUser->roles, array_keys($userRoleToColorMap));
+				if (count($commonRoles) > 0 && array_key_exists(0, $commonRoles) && array_key_exists($commonRoles[0], $userRoleToColorMap)) {
+					$userRoleColor = trim($userRoleToColorMap[$commonRoles[0]]);
+					if (strlen($userRoleColor) > 0) {
+						$textColor = $userRoleColor;
+					}
 				}
 			}
 		}
