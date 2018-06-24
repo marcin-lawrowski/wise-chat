@@ -4,8 +4,8 @@ Donate link: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 4.9.4
-Stable tag: 2.6.2
+Tested up to: 4.9.6
+Stable tag: 2.6.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -336,6 +336,11 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 06. Preview on mobile - Cold Dark theme
 
 == Changelog ==
+
+= 2.6.3 =
+* Option to adjust date and time format in messages
+* Option to adjust lock time of user names
+* Fixed: error in WiseChatRenderer
 
 = 2.6.2 =
 * Option to disable user names duplication check

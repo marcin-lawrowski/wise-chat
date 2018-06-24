@@ -534,12 +534,19 @@ function WiseChatDateAndTimeRenderer(options, dateFormatter) {
 	var dateAndTimeMode = options.messagesTimeMode;
 	
 	function formatFullDateAndTime(date, nowDate, element) {
+		var timeFormatted = typeof options.messagesTimeFormat !== 'undefined' && options.messagesTimeFormat.length > 0
+			? wiseChatUtilsMomentJS.moment(date).format(options.messagesTimeFormat)
+			: dateFormatter.getLocalizedTime(date);
+
 		if (dateFormatter.isSameDate(nowDate, date)) {
-			element.html(spanTime + dateFormatter.getLocalizedTime(date) + spanClose);
+			element.html(spanTime + timeFormatted + spanClose);
 		} else {
+			var dateFormatted = typeof options.messagesDateFormat !== 'undefined' && options.messagesDateFormat.length > 0
+				? wiseChatUtilsMomentJS.moment(date).format(options.messagesDateFormat)
+				: dateFormatter.getLocalizedDate(date);
 			element.html(
-				spanDate + dateFormatter.getLocalizedDate(date) + spanClose + ' ' +
-				spanTime + dateFormatter.getLocalizedTime(date) + spanClose
+				spanDate + dateFormatted + spanClose + ' ' +
+				spanTime + timeFormatted + spanClose
 			);
 		}
 		element.attr('data-fixed', '1');
@@ -552,6 +559,9 @@ function WiseChatDateAndTimeRenderer(options, dateFormatter) {
 		
 		var formattedDateAndTime = '';
 		var isFixed = false;
+		var timeFormatted = typeof options.messagesTimeFormat !== 'undefined' && options.messagesTimeFormat.length > 0
+			? wiseChatUtilsMomentJS.moment(date).format(options.messagesTimeFormat)
+			: dateFormatter.getLocalizedTime(date);
 
 		if (diffSeconds < 60) {
 			if (diffSeconds <= 0) {
@@ -561,13 +571,17 @@ function WiseChatDateAndTimeRenderer(options, dateFormatter) {
 		} else if (diffSeconds < 60 * 60) {
 			formattedDateAndTime = spanTime + parseInt(diffSeconds / 60) + ' ' + options.messages.messageMinAgo + spanClose;
 		} else if (dateFormatter.isSameDate(nowDate, date)) {
-			formattedDateAndTime = spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
+			formattedDateAndTime = spanTime + timeFormatted + spanClose;
 			isFixed = true;
 		} else if (dateFormatter.isSameDate(yesterdayDate, date)) {
-			formattedDateAndTime = spanDate + options.messages.messageYesterday + spanClose + ' ' + spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
+			formattedDateAndTime = spanDate + options.messages.messageYesterday + spanClose + ' ' + spanTime + timeFormatted + spanClose;
 			isFixed = true;
 		} else {
-			formattedDateAndTime = spanDate + dateFormatter.getLocalizedDate(date) + spanClose + ' ' + spanTime + dateFormatter.getLocalizedTime(date) + spanClose;
+			var dateFormatted = typeof options.messagesDateFormat !== 'undefined' && options.messagesDateFormat.length > 0
+				? wiseChatUtilsMomentJS.moment(date).format(options.messagesDateFormat)
+				: dateFormatter.getLocalizedDate(date);
+
+			formattedDateAndTime = spanDate + dateFormatted + spanClose + ' ' + spanTime + timeFormatted + spanClose;
 			isFixed = true;
 		}
 		
