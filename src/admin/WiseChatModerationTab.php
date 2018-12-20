@@ -12,20 +12,24 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			array('_section', 'Moderation Settings'),
 			array('enable_message_actions', 'Enable Admin Actions', 'booleanFieldCallback', 'boolean', 'Displays ban and removal buttons next to each message. The buttons are visible only for roles defined below'),
 			array(
+				'permission_edit_message_role', 'Edit Message Permission', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to edit posted messages.<br /> Alternatively you can assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
+			),
+			array(
 				'permission_delete_message_role', 'Delete Message Permission', 'checkboxesCallback', 'multivalues',
-				'An user role that is allowed to delete posted messages.<br /> Alternatively you can assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
+				'User roles allowed to delete posted messages.<br /> Alternatively you can assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
 			),
 			array(
 				'permission_ban_user_role', 'Ban User Permission', 'checkboxesCallback', 'multivalues',
-				'An user role that is allowed to ban users.<br /> Alternatively you can assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
+				'User roles allowed to ban users.<br /> Alternatively you can assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
 			),
 			array(
 				'permission_kick_user_role', 'Kick User Permission', 'checkboxesCallback', 'multivalues',
-				'An user role that is allowed to kick users.<br /> Alternatively you can assign "wise_chat_kick_user" capability to any custom role.', self::getRoles()
+				'User roles allowed to kick users.<br /> Alternatively you can assign "wise_chat_kick_user" capability to any custom role.', self::getRoles()
 			),
 			array(
 				'permission_approve_message_role', 'Approve Message Permission', 'checkboxesCallback', 'multivalues',
-				'An user role that is allowed to approve posted messages.<br />Alternatively you can assign "wise_chat_approve_message" capability to any custom role.<br />',
+				'User roles allowed to approve posted messages.<br />Alternatively you can assign "wise_chat_approve_message" capability to any custom role.<br />',
 				self::getRoles()
 			),
 			array('enable_approval_confirmation', 'Approval Confirmation', 'booleanFieldCallback', 'boolean',
@@ -75,7 +79,7 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	}
 
 	public function getProFields() {
-		return array('new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode', 'permission_approve_message_role', 'enable_approval_confirmation');
+		return array('new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode', 'permission_edit_message_role', 'permission_approve_message_role', 'enable_approval_confirmation');
 	}
 
 	public function getPendingMessagesApprovalModes() {

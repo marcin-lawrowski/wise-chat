@@ -20,19 +20,26 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
 					Check Wise Chat <strong>Pro</strong>
 				</a>'.
+				' <a class="button-secondary wcAdminButtonPro wcAdminButtonProDemo" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro/demo/?source=settings-page" title="Check Wise Chat Pro">
+					<strong>See Demo</strong>
+				</a>'.
 				'<br /><h3 style="font-size: 17px;">Wise Chat Pro features:</h3>'.
 				'<ul>'.
 				'<li>&#8226; All the features of Wise Chat free edition</li>'.
 				'<li>&#8226; Private one-to-one messages</li>'.
-				'<li>&#8226; Offline private messages</li>'.
+				'<li>&#8226; Sending private messages to offline users</li>'.
 				'<li>&#8226; Avatars</li>'.
 				'<li>&#8226; Facebook-like chat mode</li>'.
-				'<li>&#8226; BuddyPress integration: friends and group chats</li>'.
+				'<li>&#8226; BuddyPress integration: friends and groups</li>'.
 				'<li>&#8226; Custom emoticons</li>'.
+				'<li>&#8226; E-mail notifications to admin</li>'.
 				'<li>&#8226; Pending messages (fully moderated messages)</li>'.
 				'<li>&#8226; External authentication (via Facebook, Twitter or Google+)</li>'.
 				'<li>&#8226; WordPress multisite support</li>'.
 				'<li>&#8226; Three Pro themes</li>'.
+				'<li>&#8226; Users list search option</li>'.
+				'<li>&#8226; Chat button on profile page</li>'.
+				'<li>&#8226; Edit posted messages</li>'.
 				'<li>&#8226; Free update for 6, 12 or 18 months</li>'.
 				'<li>&#8226; Eternal license</li>'.
 				'<li>&#8226; Pay once, use forever</li>'.
