@@ -375,7 +375,7 @@ class WiseChatRenderer {
 			
 			if ($userNameLink != null) {
 				$formattedUserName = sprintf(
-					"<a href='%s' target='_blank' rel='nofollow' %s>%s</a>", $userNameLink, $styles, $formattedUserName
+					"<a href='%s' target='_blank' rel='noopener noreferrer nofollow' %s>%s</a>", $userNameLink, $styles, $formattedUserName
 				);
 			}
 		} else if ($displayMode === 2) {

@@ -338,6 +338,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.7 =
+* Fixed: security issue with the external links
 
 = 2.6.3 =
 * Option to adjust date and time format in messages

@@ -8,7 +8,7 @@
 class WiseChatImagesPostFilter {
 	const SHORTCODE_REGEXP = '/\[img id=&quot;(\d+)&quot; src=&quot;(.+?)&quot; src-th=&quot;(.+?)&quot; src-org=&quot;(.+?)&quot;\]/i';
 	const URL_PROTOCOLS_REGEXP = "/^(https|http|ftp)\:\/\//i";
-    const IMAGE_TAG_TEMPLATE = '<a href="%s" target="_blank" data-lightbox="wise_chat" rel="lightbox[wise_chat]"><img src="%s" class="wcImage" /></a>';
+    const IMAGE_TAG_TEMPLATE = '<a href="%s" target="_blank" rel="noopener noreferrer" data-lightbox="wise_chat" rel="lightbox[wise_chat]"><img src="%s" class="wcImage" /></a>';
 	
 	/**
 	* Detects all images in shortcode format and converts them into images, clickable links or raw URLs
@@ -40,7 +40,7 @@ class WiseChatImagesPostFilter {
 				
 					$url = (!preg_match(self::URL_PROTOCOLS_REGEXP, $imageOrgSrc) ? 'http://' : '').$imageOrgSrc;
 					$linkBody = htmlentities(urldecode($imageOrgSrc), ENT_QUOTES, 'UTF-8', false);
-					$replace = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $url, $linkBody);
+					$replace = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $url, $linkBody);
 				} else {
 					$replace = $imageOrgSrc != '_' ? $imageOrgSrc : $imageSrc;
 				}

@@ -32,7 +32,7 @@ class WiseChatLinksPostFilter {
 						$url = "http://".$shortCodeSrc;
 					}
 					$linkBody = htmlentities(urldecode($shortCodeSrc), ENT_QUOTES, 'UTF-8', false);
-					$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $url, $linkBody);
+					$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $url, $linkBody);
 				
 					$text = $this->strReplaceFirst($shortCode, $linkTag, $text);
 				} else {
