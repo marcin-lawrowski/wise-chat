@@ -161,6 +161,7 @@ class WiseChatRenderer {
 			'showDeleteButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('delete_message'),
 			'showBanButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('ban_user'),
 			'showKickButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('kick_user'),
+			'showSpamButton' => $this->options->isOptionEnabled('spam_report_enable_all', true) || $this->usersDAO->hasCurrentWpUserRight('spam_report'),
 			'messageTimeUTC' => gmdate('c', $message->getTime()),
 			'renderedUserName' => $this->getRenderedUserName($message),
 			'messageContent' => $this->getRenderedMessageContent($message),

@@ -53,6 +53,7 @@ Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise
 * **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages. It is good for cutting links for example.
 * **Messages history**: All recently published messages are available in input field for resending.
 * **Chat Opening Hours / Days**: Define days and range of hours when the chat is open for users.
+* **Spam Reporting**: Chat participants can report spam messages.
 * **Bans**: Administrator can ban (IP based) users who do not follow rules of the chat.
 * **Kicks**: Administrator can kick (IP based) users who do not follow rules of the chat.
 * **Automatic bans**: An option that automatically blocks an user if he / she exceeds the defined number of bad words.
@@ -338,6 +339,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.7 =
+* Spam report button
 * Fixed: security issue with the external links
 
 = 2.6.3 =

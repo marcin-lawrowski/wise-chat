@@ -134,6 +134,13 @@ function wise_chat_endpoint_user_kick() {
 add_action("wp_ajax_nopriv_wise_chat_user_kick_endpoint", 'wise_chat_endpoint_user_kick');
 add_action("wp_ajax_wise_chat_user_kick_endpoint", 'wise_chat_endpoint_user_kick');
 
+function wise_chat_endpoint_spam_report() {
+	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatEndpoints');
+	$wiseChatEndpoints->spamReportEndpoint();
+}
+add_action("wp_ajax_nopriv_wise_chat_spam_report_endpoint", 'wise_chat_endpoint_spam_report');
+add_action("wp_ajax_wise_chat_spam_report_endpoint", 'wise_chat_endpoint_spam_report');
+
 function wise_chat_endpoint_maintenance() {
 	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatEndpoints');
 	$wiseChatEndpoints->maintenanceEndpoint();

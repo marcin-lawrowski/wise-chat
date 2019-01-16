@@ -343,6 +343,48 @@ class WiseChatEndpoints {
 		echo json_encode($response);
 		die();
 	}
+
+	/**
+	 * Endpoint to report spam messages by message ID.
+	 */
+	public function spamReportEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
+		$this->verifyCheckSum();
+
+		$response = array();
+		try {
+			$this->checkIpNotKicked();
+			$this->checkChatOpen();
+			$this->checkUserAuthentication();
+
+			if (!$this->options->isOptionEnabled('spam_report_enable_all', true)) {
+				$this->checkUserRight('spam_report');
+			}
+			$this->checkPostParams(array('channelId', 'messageId'));
+
+			$channelId = trim($this->getPostParam('channelId'));
+			$messageId = trim($this->getPostParam('messageId'));
+			$url = trim($this->getPostParam('url'));
+			$channel = $this->channelsDAO->get($channelId);
+
+			$this->checkChannel($channel);
+			$this->checkChannelAuthorization($channel);
+
+			$this->messagesService->reportSpam($channelId, $messageId, $url);
+
+			$response['result'] = 'OK';
+		} catch (WiseChatUnauthorizedAccessException $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendUnauthorizedStatus();
+		} catch (Exception $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendBadRequestStatus();
+		}
+
+		echo json_encode($response);
+		die();
+	}
 	
 	/**
 	* Endpoint for periodic (every 10-20 seconds) maintenance services like:

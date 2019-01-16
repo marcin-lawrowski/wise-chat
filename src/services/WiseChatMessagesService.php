@@ -353,6 +353,52 @@ class WiseChatMessagesService {
 	}
 
 	/**
+	 * Sends a notification e-mail reporting spam message.
+	 *
+	 * @param integer $channelId
+	 * @param integer $messageId
+	 * @param string $url
+	 */
+	public function reportSpam($channelId, $messageId, $url) {
+		$recipient = $this->options->getOption('spam_report_recipient', get_option('admin_email'));
+		$subject = $this->options->getOption('spam_report_subject', '[Wise Chat] Spam Report');
+		$contentDefaultTemplate = "Wise Chat Spam Report\n\n".
+			'Channel: ${channel}'."\n".
+			'Message: ${message}'."\n".
+			'Posted by: ${message-user}'."\n".
+			'Posted from IP: ${message-user-ip}'."\n\n".
+			"--\n".
+			'This e-mail was sent by ${report-user} from ${url}'."\n".
+			'${report-user-ip}';
+		$content = $this->options->getOption('spam_report_content', $contentDefaultTemplate);
+
+		if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+			return;
+		}
+
+		$currentUser = $this->authentication->getUser();
+		$message = $this->messagesDAO->get($messageId);
+		if ($message === null || $currentUser === null) {
+			return;
+		}
+
+		$variables = array(
+			'url' => $url,
+			'channel' => $message->getChannelName(),
+			'message' => $message->getText(),
+			'message-user' => $message->getUserName(),
+			'message-user-ip' => $message->getIp(),
+			'report-user' => $currentUser->getName(),
+			'report-user-ip' => $currentUser->getIp()
+		);
+		foreach ($variables as $key => $variable) {
+			$content = str_replace('${'.$key.'}', $variable, $content);
+		}
+
+		wp_mail($recipient, $subject, $content);
+	}
+
+	/**
 	 * Deletes old messages according to the plugin's settings.
 	 * Images connected to the messages (WordPress Media Library attachments) are also deleted.
 	 *

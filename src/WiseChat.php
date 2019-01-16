@@ -302,6 +302,7 @@ class WiseChat {
 			'lastActionId' => $lastAction !== null ? $lastAction->getId() : 0,
 			'baseDir' => $this->options->getBaseDir(),
             'emoticonsBaseURL' => $this->options->getEmoticonsBaseURL(),
+			'apiWPEndpointBase' => $this->getWPEndpointBase(),
 			'apiEndpointBase' => $this->getEndpointBase(),
 			'apiMessagesEndpointBase' => $this->getMessagesEndpointBase(),
 			'messagesRefreshTime' => intval($this->options->getEncodedOption('messages_refresh_time', 3000)),
@@ -323,6 +324,7 @@ class WiseChat {
 				'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
 				'messageHasLeftTheChannel' => $this->options->getEncodedOption('message_has_left_the_channel', 'has left the channel'),
 				'messageHasJoinedTheChannel' => $this->options->getEncodedOption('message_has_joined_the_channel', 'has joined the channel'),
+				'messageSpamReportQuestion' => $this->options->getEncodedOption('message_text_1', 'Are you sure you want to report the message as spam?'),
 			),
 			'userSettings' => $this->userSettingsDAO->getAll(),
 			'attachmentsValidFileFormats' => $this->attachmentsService->getAllowedFormats(),
@@ -435,6 +437,13 @@ class WiseChat {
 		$this->shortCodeOptions['ts'] = time();
         return base64_encode(WiseChatCrypt::encrypt(serialize($this->shortCodeOptions)));
     }
+
+	/**
+	 * @return string
+	 */
+	private function getWPEndpointBase() {
+		return get_site_url().'/wp-admin/admin-ajax.php';
+	}
 
     /**
      * @return string

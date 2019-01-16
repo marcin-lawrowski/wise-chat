@@ -17,6 +17,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	var messageDeleteEndpoint = options.apiEndpointBase + '?action=wise_chat_delete_message_endpoint';
 	var userBanEndpoint = options.apiEndpointBase + '?action=wise_chat_user_ban_endpoint';
 	var userKickEndpoint = options.apiEndpointBase + '?action=wise_chat_user_kick_endpoint';
+	var spamReportEndpoint = options.apiWPEndpointBase + '?action=wise_chat_spam_report_endpoint';
 
 	var container = jQuery('#' + options.chatId);
 	var messagesContainer = container.find('.wcMessages');
@@ -620,6 +621,39 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 			});
 	}
 
+	function onSpamReportClick() {
+		if (!confirm(options.messages.messageSpamReportQuestion)) {
+			return;
+		}
+
+		var messageId = jQuery(this).data('id');
+		jQuery.ajax({
+				type: "POST",
+				url: spamReportEndpoint,
+				data: {
+					channelId: channelId,
+					messageId: messageId,
+					url: window.location.href,
+					checksum: options.checksum
+				}
+			})
+			.done(function(result) {
+				try {
+					var response = result;
+					if (response.error) {
+						showErrorMessage(response.error);
+					}
+				}
+				catch (e) {
+					showErrorMessage('Server error: ' + e.toString());
+				}
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				logDebug('[onSpamReport] ' + jqXHR.responseText);
+				showErrorMessage('Server error occurred: ' + errorThrown);
+			});
+	}
+
     function onUserNameClick() {
         appendTextToInputField('@' + jQuery(this).text() + ': ');
     }
@@ -629,6 +663,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		container.on('click', 'a.wcUserBanButton', onUserBan);
 		container.on('click', 'a.wcUserKickButton', onUserKick);
         container.on('click', 'a.wcMessageUserReplyTo', onUserNameClick);
+        container.on('click', 'a.wcSpamReportButton', onSpamReportClick);
     }
 
     // DOM events:

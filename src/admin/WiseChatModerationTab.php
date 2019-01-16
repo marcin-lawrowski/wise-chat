@@ -37,6 +37,25 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			),
 			array('moderation_ban_duration', 'Ban Duration', 'stringFieldCallback', 'integer', 'Duration of the ban (in minutes) created by clicking on Ban button next a message. Empty field sets the value to 1440 minutes (1 day)'),
 
+			array('_section', 'Spam Reporting',
+				'Configuration of the spam reporting feature. It displays spam reporting button next to the posted message.'
+			),
+			array(
+				'spam_report_enable_all', 'Enable All', 'booleanFieldCallback', 'boolean',
+				'Enables spam reporting for all - including anonymous users.'
+			),
+			array(
+				'permission_spam_report_role', 'Enable Roles Only', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to report spam messages.<br /> Alternatively you can assign "wise_chat_spam_report" capability to any custom role.', self::getRoles()
+			),
+
+			array('_section', 'Spam Reporting Notification',
+				'Notification e-mail sent to admin when Report Spam button is clicked.'
+			),
+			array('spam_report_recipient', 'Recipient', 'stringFieldCallback', 'string'),
+			array('spam_report_subject', 'Subject', 'stringFieldCallback', 'string'),
+			array('spam_report_content', 'Content', 'multilineFieldCallback', 'multilinestring', 'Available variables: ${url}, ${channel}, ${message}, ${message-user}, ${message-user-ip}, ${report-user}, ${report-user-ip}'),
+
 			array('_section', 'Pending Messages',
 				'After enabling this feature all posted messages are hidden until they are manually approved using Approve button (enable corresponding moderation permissions in the section above).'
 			),
@@ -66,6 +85,18 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			'permission_ban_user_role' => 'administrator',
 			'permission_kick_user_role' => 'administrator',
 			'moderation_ban_duration' => 1440,
+			'spam_report_enable_all' => 1,
+			'permission_spam_report_role' => 'administrator',
+			'spam_report_recipient' => get_option('admin_email'),
+			'spam_report_subject' => '[Wise Chat] Spam Report',
+			'spam_report_content' => "Wise Chat Spam Report\n\n".
+				'Channel: ${channel}'."\n".
+				'Message: ${message}'."\n".
+				'Posted by: ${message-user}'."\n".
+				'Posted from IP: ${message-user-ip}'."\n\n".
+				"--\n".
+				'This e-mail was sent by ${report-user} from ${url}'."\n".
+				'${report-user-ip}'
 		);
 	}
 	

@@ -12,7 +12,9 @@
 	{% if showKickButton %}
 		<a href="javascript://" class="wcAdminAction wcUserKickButton" data-id="{{ messageId }}" title="Kick this user"><img src='{{ baseDir }}/gfx/icons/kick.png' class='wcIcon' /></a>
 	{% endif showKickButton %}
-	
+	{% if showSpamButton %}
+		<a href="javascript://" class="wcAdminAction wcSpamReportButton" data-id="{{ messageId }}" title="Report spam"><img src='{{ baseDir }}/gfx/icons/spam.png' class='wcIcon' /></a>
+	{% endif showSpamButton %}
 	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
 	
 	<span class="wcMessageUser" {% if isTextColorSetForUserName %}style="color:{{ textColor }}"{% endif isTextColorSetForUserName %}>
