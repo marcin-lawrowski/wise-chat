@@ -147,7 +147,7 @@
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageContent .wcAdminAction:hover {
-	border: 1px solid transparent;
+	border: none;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 	filter: alpha(opacity=100);
 	-moz-opacity: 1;

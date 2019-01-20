@@ -340,6 +340,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 2.7 =
 * Spam report button
+* Improved: admin action buttons without direct img elements
 * Fixed: security issue with the external links
 
 = 2.6.3 =
