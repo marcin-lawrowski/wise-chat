@@ -45,6 +45,10 @@
 	border: 1px solid #dfdfdf;
 }
 
+.wcMessage .wcAdminAction:focus {
+	outline: none;
+}
+
 .wcMessage .wcEmoticon {
 	border-radius: 0; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
 }

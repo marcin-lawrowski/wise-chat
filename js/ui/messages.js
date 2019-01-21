@@ -532,7 +532,9 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		}
 	}
 
-	function onMessageDelete() {
+	function onMessageDelete(e) {
+		e.preventDefault();
+
 		if (!confirm('Are you sure you want to delete this message?')) {
 			return;
 		}
@@ -557,7 +559,9 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		});
 	}
 
-	function onUserBan() {
+	function onUserBan(e) {
+		e.preventDefault();
+
 		if (!confirm('Are you sure you want to ban this user?')) {
 			return;
 		}
@@ -589,7 +593,9 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 		});
 	}
 
-	function onUserKick() {
+	function onUserKick(e) {
+		e.preventDefault();
+
 		if (!confirm('Are you sure you want to kick this user?')) {
 			return;
 		}
@@ -621,7 +627,9 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 			});
 	}
 
-	function onSpamReportClick() {
+	function onSpamReportClick(e) {
+		e.preventDefault();
+
 		if (!confirm(options.messages.messageSpamReportQuestion)) {
 			return;
 		}

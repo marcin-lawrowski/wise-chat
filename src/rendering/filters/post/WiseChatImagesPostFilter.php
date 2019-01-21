@@ -8,7 +8,7 @@
 class WiseChatImagesPostFilter {
 	const SHORTCODE_REGEXP = '/\[img id=&quot;(\d+)&quot; src=&quot;(.+?)&quot; src-th=&quot;(.+?)&quot; src-org=&quot;(.+?)&quot;\]/i';
 	const URL_PROTOCOLS_REGEXP = "/^(https|http|ftp)\:\/\//i";
-    const IMAGE_TAG_TEMPLATE = '<a href="%s" target="_blank" rel="noopener noreferrer" data-lightbox="wise_chat" rel="lightbox[wise_chat]"><img src="%s" class="wcImage" /></a>';
+    const IMAGE_TAG_TEMPLATE = '<a href="%s" target="_blank" data-lightbox="wise_chat" rel="lightbox[wise_chat]"><img src="%s" class="wcImage" alt="Chat image" /></a>';
 	
 	/**
 	* Detects all images in shortcode format and converts them into images, clickable links or raw URLs
