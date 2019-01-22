@@ -58,6 +58,8 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			array('message_error_10', 'Message error #10', 'stringFieldCallback', 'string', 'Message: "You cannot enter the chat due to the limit of channels you can participate simultaneously."'),
 			array('message_error_11', 'Message error #11', 'stringFieldCallback', 'string', 'Message: "You are not allowed to enter the chat."'),
 			array('message_error_12', 'Message error #12', 'stringFieldCallback', 'string', 'Message: "You are blocked from using the chat."'),
+			
+			array('message_text_1', 'Message text #1', 'stringFieldCallback', 'string', 'Message: "Are you sure you want to report the message as spam?"'),
 		);
 	}
 	
@@ -83,6 +85,7 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			'message_error_10' => 'You cannot enter the chat due to the limit of channels you can participate simultaneously.',
 			'message_error_11' => 'You are not allowed to enter the chat.',
 			'message_error_12' => 'You are blocked from using the chat.',
+			'message_text_1' => 'Are you sure you want to report the message as spam?',
 			'window_title' => 'Wise Chat',
 			'message_mute_sounds' => 'Mute sounds',
 			'message_text_color' => 'Text color',

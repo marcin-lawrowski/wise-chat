@@ -11,14 +11,17 @@
 		{{ messageContent }}
 		<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
 		{% if showDeleteButton %}
-			<a href="javascript://" class="wcAdminAction wcMessageDeleteButton" data-id="{{ messageId }}" title="Delete the message"><img src='{{ baseDir }}/gfx/icons/x.png' class='wcIcon' /></a>
+			<a href="#" class="wcAdminAction wcMessageDeleteButton" data-id="{{ messageId }}" title="Delete the message"></a>
 		{% endif showDeleteButton %}
 		{% if showBanButton %}
-			<a href="javascript://" class="wcAdminAction wcUserBanButton" data-id="{{ messageId }}" title="Ban this user"><img src='{{ baseDir }}/gfx/icons/block.png' class='wcIcon' /></a>
+			<a href="#" class="wcAdminAction wcUserBanButton" data-id="{{ messageId }}" title="Ban this user"></a>
 		{% endif showBanButton %}
 		{% if showKickButton %}
-			<a href="javascript://" class="wcAdminAction wcUserKickButton" data-id="{{ messageId }}" title="Kick this user"><img src='{{ baseDir }}/gfx/icons/kick.png' class='wcIcon' /></a>
+			<a href="#" class="wcAdminAction wcUserKickButton" data-id="{{ messageId }}" title="Kick this user"></a>
 		{% endif showKickButton %}
+		{% if showSpamButton %}
+			<a href="#" class="wcAdminAction wcSpamReportButton" data-id="{{ messageId }}" title="Report spam"></a>
+		{% endif showSpamButton %}
 		<br class='wcClear' />
 	</span>
 </div>

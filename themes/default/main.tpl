@@ -40,15 +40,15 @@
             {% endif showMessageSubmitButton %}
 
             {% if enableAttachmentsUploader %}
-                <a href="javascript://" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
+                <a href="#" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
             {% endif enableAttachmentsUploader %}
 
             {% if enableImagesUploader %}
-                <a href="javascript://" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
+                <a href="#" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
             {% endif enableImagesUploader %}
 
             {% if showEmoticonInsertButton %}
-                <a href="javascript://" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
+                <a href="#" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
             {% endif showEmoticonInsertButton %}
 
             <div class='wcInputContainer'>
@@ -64,15 +64,15 @@
 
             {% if enableAttachmentsPanel %}
                 <div class="wcMessageAttachments" style="display: none;">
-                    <img class="wcImageUploadPreview" style="display: none;" />
+                    <img src="data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=" class="wcImageUploadPreview" alt="Images preview" style="display: none;" />
                     <span class="wcFileUploadNamePreview" style="display: none;"></span>
-                    <a href="javascript://" class="wcAttachmentClear"><img src='{{ baseDir }}/gfx/icons/x.png' class='wcIcon' /></a>
+                    <a href="#" class="wcAttachmentClear"><img src='{{ baseDir }}/gfx/icons/x.png' alt="Delete attachment" class='wcIcon' /></a>
                 </div>
             {% endif enableAttachmentsPanel %}
 
             {% if showCustomizationsPanel %}
                 <div class='wcCustomizations'>
-                    <a href='javascript://' class='wcCustomizeButton'>{{ messageCustomize }}</a>
+                    <a href='#' class='wcCustomizeButton'>{{ messageCustomize }}</a>
                     <div class='wcCustomizationsPanel' style='display:none;'>
                         {% if allowChangeUserName %}
                             <div class="wcCustomizationsProperty">
@@ -116,7 +116,7 @@
 {{ cssDefinitions }}
 {{ customCssDefinitions }}
 
-<script type='text/javascript'>
+<script>
     {% if redirectURL %}
         window.location.href = '{{ redirectURL }}';
     {% endif redirectURL %}

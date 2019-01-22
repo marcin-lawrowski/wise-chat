@@ -37,7 +37,7 @@ class WiseChatYouTubePostFilter {
 				} else if ($linksEnabled && strlen($srcOrg) > 0) {
 					$url = (!preg_match(self::URL_PROTOCOLS_REGEXP, $srcOrg) ? 'http://' : '').$srcOrg;
 					$linkBody = htmlentities(urldecode($srcOrg), ENT_QUOTES, 'UTF-8', false);
-					$replace = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $url, $linkBody);
+					$replace = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $url, $linkBody);
 				} else if (strlen($srcOrg) > 0) {
                     $replace = $srcOrg;
                 }

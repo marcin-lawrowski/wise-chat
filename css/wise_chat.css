@@ -18,27 +18,47 @@
 }
 
 .wcContainer .wcIcon {
-	border-radius: none; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 2px;
+	border-radius: 0; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 2px;
 }
 
 .wcMessage .wcAdminAction {
-	border: 1px solid transparent; padding: 2px;
+	padding: 1px; width: 18px; height: 18px; display: inline-block; position: relative;	top: 0.2rem; text-decoration: none; border: none;
+}
+
+.wcMessage .wcAdminAction.wcMessageDeleteButton {
+	background: transparent url("../gfx/icons/x.png") no-repeat center center;
+}
+
+.wcMessage .wcAdminAction.wcUserBanButton {
+	background: transparent url("../gfx/icons/block.png") no-repeat center center;
+}
+
+.wcMessage .wcAdminAction.wcUserKickButton {
+	background: transparent url("../gfx/icons/kick.png") no-repeat center center;
+}
+
+.wcMessage .wcAdminAction.wcSpamReportButton {
+	background: transparent url("../gfx/icons/spam.png") no-repeat center center;
 }
 
 .wcMessage .wcAdminAction:hover {
 	border: 1px solid #dfdfdf;
 }
 
+.wcMessage .wcAdminAction:focus {
+	outline: none;
+}
+
 .wcMessage .wcEmoticon {
-	border-radius: none; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
+	border-radius: 0; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
 }
 
 .wcMessage .wcImage {
-	border-radius: none; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
+	border-radius: 0; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
 }
 
 .wcMessage .wcVideoPlayer {
-	border-radius: none; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
+	border-radius: 0; box-shadow: none; border: none; display: inline-block; vertical-align: middle; margin-bottom: 4px;
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageContent {

@@ -37,7 +37,7 @@ class WiseChatHashtagsPostFilter {
 				}
 			
 				$url = sprintf(self::TWITTER_URL_TEMPLATE, urlencode($detectedHashtag));
-				$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $url, '#'.$detectedHashtag);
+				$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $url, '#'.$detectedHashtag);
 				
 				$text = $this->strReplaceFirst('#'.$detectedHashtag, $linkTag, $text);
 			}

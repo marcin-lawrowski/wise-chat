@@ -63,6 +63,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
                 <strong>Example 3:</strong> http://my.website.com/search?user={displayname}
                 '),
 			array('show_avatars', 'Show Avatar', 'booleanFieldCallback', 'boolean', 'Shows user avatar next to each message'),
+			array('enable_edit_own_messages', 'Enable Message Editing', 'booleanFieldCallback', 'boolean', 'Enables editing of own messages'),
 
 			array('_section', 'Input Section Appearance', 'Input section is the rectangular area around message input field'),
 			array('background_color_input', 'Background Color', 'colorFieldCallback', 'string', ''),
@@ -110,6 +111,44 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
 			array('users_list_hide_roles', 'Hide User Roles', 'checkboxesCallback', 'multivalues', 'Hides users belonging to these roles on the users list', self::getRoles()),
 			array('users_list_linking', 'Usernames Mode', 'booleanFieldCallback', 'boolean', 'Makes usernames like it is set in Username Display Mode option.'),
+
+			array('_section', 'Users List Info Window Appearance', 'Information windows are displayed when mouse pointer enters username on the users list'),
+			array('show_users_list_info_windows', 'Show Info Windows', 'booleanFieldCallback', 'boolean'),
+			array(
+				'users_list_info_windows_template', 'Info Window Template', 'multilineFieldCallback', 'multilinestring',
+				'HTML template of info windows. Dynamic variables: {profileLink}, {role}, {roles}, {profileURL}, {avatar}, {privateMessageButton}, {id}, {username}, {displayname}'),
+
+			array('_section', 'Facebook-like Mode Appearance', 'These are additional settings that take effect only when Facebook-like mode is enabled'),
+			array('fb_users_list_top_offset', 'Users List Top Offset', 'stringFieldCallback', 'integer',
+				'Moves users list down by defined offset (in <strong>px</strong> unit). It is useful when the theme displays some kind of top toolbar which can be covered by users list in the top right corner.'
+			),
+			array('fb_bottom_offset', 'Bottom Offset', 'stringFieldCallback', 'integer',
+				'Moves users list and chat windows up by defined offset (in <strong>px</strong> unit). It is useful when the theme displays some kind of bottom toolbar which can be covered by users list and chat windows.'
+			),
+			array('fb_bottom_offset_threshold', 'Bottom Offset Threshold', 'stringFieldCallback', 'integer',
+				'Determines maximal screen width (in <strong>px</strong> unit) for which Bottom Offset (see above) option takes effect. It is useful when you want to enable bottom offset only for narrow screens like mobile phones or tablets. Empty value means no limit is enabled.'
+			),
+			array(
+				'fb_show_users_list_title', 'Show Users List Title', 'booleanFieldCallback', 'boolean',
+				'Displays a title bar above the users list.'.
+				'<strong>Notice:</strong> Enable this option if you would like to display pending chats indicator (usable with Enable Offline Users option).'
+			),
+			array('fb_minimize_users_list_option', 'Allow To Minimize Users List', 'booleanFieldCallback', 'boolean', 'Displays a button in title bar to minimize users list. In order to enable this option please make users list title visible (see option above).'),
+			array('fb_minimize_on_start', 'Minimized By Default', 'booleanFieldCallback', 'boolean',
+				'Minimizes both the chat window and users list by default. If user maximizes chat window and/or users list then this setting no longer applies.
+				This option will become effective again after the user clears LocalStorage in Web browser.'
+			),
+			array('fb_disable_channel', 'Hide Channel Window', 'booleanFieldCallback', 'boolean',
+				'Hides the public channel window.<br />
+				<strong>Notice:</strong> This option will take effect only if users lists and private messages are enabled (see section Users List Appearance).'
+			),
+
+			array('_section', 'BuddyPress Customization', 'BuddyPress integration adjustments'),
+			array(
+				'bp_member_profile_chat_button', 'Show Chat Button On Member Profile', 'booleanFieldCallback', 'boolean',
+				"Displays chat button on member profiles. Clicking the button opens a private chat window if and only if the chat is currently visible on the member profile page. <br />".
+				'<a href="https://kaine.pl/projects/wp-plugins/wise-chat-pro/documentation/features/private-chat-button/">Read more</a>'
+			),
 
 			array('_section', 'Advanced Customization'),
 			array('custom_styles', 'Custom CSS Styles', 'multilineFieldCallback', 'multilinestring', 'Custom CSS styles for the chat, valid CSS syntax is required.'),
@@ -165,6 +204,12 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'users_list_hide_anonymous' => 0,
 			'users_list_hide_roles' => array(),
 			'users_list_linking' => 0,
+			'show_users_list_info_windows' => 1,
+			'users_list_info_windows_template' =>
+				"{avatar}\n".
+				"{profileLink}<br />\n".
+				"{role}<br />\n".
+				"{privateMessageButton}"
 		);
 	}
 
@@ -180,7 +225,11 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
     }
 
 	public function getProFields() {
-		return array('enable_private_messages', 'show_users_list_avatars', 'show_avatars');
+		return array(
+			'enable_private_messages', 'show_users_list_avatars', 'show_avatars', 'enable_edit_own_messages', 'show_users_list_info_windows',
+			'users_list_info_windows_template', 'fb_users_list_top_offset', 'fb_bottom_offset', 'fb_bottom_offset_threshold', 'fb_show_users_list_title',
+			'fb_minimize_users_list_option', 'fb_minimize_on_start', 'fb_disable_channel', 'bp_member_profile_chat_button'
+		);
 	}
 
     public static function getUserNameLinkModes() {

@@ -136,6 +136,8 @@ function WiseChatSettings(options, messages) {
 
 	// DOM events:
 	customizeButton.click(function(e) {
+		e.preventDefault();
+
 		customizationsPanel.toggle();
 	});
 	userNameApproveButton.click(onUserNameApproveButtonClick);

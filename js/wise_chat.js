@@ -289,7 +289,11 @@ function WiseChatMessageAttachments(options, imageViewer, progressBar) {
 	/**
 	* Clears all added attachments, resets and hides UI related to added attachments.
 	*/
-	function clearAttachments() {
+	function clearAttachments(e) {
+		if (typeof e !== 'undefined') {
+			e.preventDefault();
+		}
+
 		attachments = [];
 		messageAttachmentsPanel.hide();
 		fileUploadNamePreview.hide();
@@ -826,7 +830,9 @@ function WiseChatEmoticonsPanel(options, messages) {
         }
     }
 
-	function onInsertEmoticonButtonClick() {
+	function onInsertEmoticonButtonClick(e) {
+		e.preventDefault();
+
         if (!layer.is(':visible')) {
 			var leftValue = insertEmoticonButton.offset().left - layer.outerWidth() - 5;
 			if (leftValue < 0) {

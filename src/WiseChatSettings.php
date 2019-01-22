@@ -160,6 +160,11 @@ class WiseChatSettings {
 					}
 
 					.wp-admin a.wcAdminButtonPro:hover, #wise-chat-proContainer a.wcAdminButtonPro:hover { background-color: #533f62; border: 1px solid #533f62; color: #fff; }
+
+					.wp-admin a.wcAdminButtonProDemo, .wp-admin a.wcAdminButtonProDemo:hover, .wp-admin a.wcAdminButtonProDemo:focus, #wise-chat-proContainer a.wcAdminButtonProDemo, #wise-chat-proContainer a.wcAdminButtonProDemo:hover {
+						padding-left: 31px; background: #0085ba;
+						border: 1px solid #0085ba;
+					}
 				</style>
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>

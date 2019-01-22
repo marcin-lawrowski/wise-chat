@@ -30,12 +30,12 @@ class WiseChatAttachmentsPostFilter {
 				$linkBody = htmlentities(urldecode($attachmentOrgName), ENT_QUOTES, 'UTF-8', false);
 				$replace = '';
 				if ($attachmentsEnabled) {
-					$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $attachmentSrc, $linkBody);
+					$linkTag = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $attachmentSrc, $linkBody);
                     $replace = $linkTag;
 				} else if ($linksEnabled) {
                     $url = (!preg_match(self::URL_PROTOCOLS_REGEXP, $attachmentSrc) ? 'http://' : '').$attachmentSrc;
                     $linkBody = htmlentities(urldecode($attachmentOrgName), ENT_QUOTES, 'UTF-8', false);
-                    $replace = sprintf('<a href="%s" target="_blank" rel="nofollow">%s</a>', $url, $linkBody);
+                    $replace = sprintf('<a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a>', $url, $linkBody);
                 } else {
                     $replace = $linkBody;
 				}

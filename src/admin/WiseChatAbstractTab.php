@@ -236,16 +236,20 @@ abstract class WiseChatAbstractTab {
 		$defaults = $this->getDefaultValues();
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
+		$isProFeature = in_array($id, $this->getProFields());
 		
 		printf(
 			'<textarea id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" cols="70" rows="6" %s data-parent-field="%s">%s</textarea>',
 			$id, $id,
-			$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
+			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : '',
 			$this->options->getEncodedOption($id, $defaultValue)
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
 		}
 	}
 	

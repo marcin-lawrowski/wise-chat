@@ -4,8 +4,8 @@ Donate link: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 4.9.6
-Stable tag: 2.6.3
+Tested up to: 5.0.3
+Stable tag: 2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,9 +13,9 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 == Description ==
 
-Wise Chat is a chat plugin that helps to build a social network and to increase user engagement of your website by providing possibility to exchange real time messages in chat rooms. The plugin is easy installable and extremely configurable. It also has a growing list of features and the constant support.
+Wise Chat is a leading chat plugin that helps to build a social network and to increase user engagement on your website by providing the possibility to exchange real time messages in chat rooms. The plugin is easily installable and extremely configurable. Its features list is growing all the time. The plugin is supported by its authors.
 
-**[Check Wise Chat PRO](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: private messages, avatars, Facebook-like sidebar mode, Pro themes, custom emoticons, Multisite support, BuddyPress integration, Facebook/Twitter/G+ login and more! **Buy once, use forever!**
+**[Check Wise Chat PRO](https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: Private one-to-one chats, Private messages to offline users, Avatars, Facebook-like sidebar mode, 3 Pro themes, Custom emoticons, E-mail notifications to admin, Pending messages, Multisite support, BuddyPress integration (friends and groups), Facebook/Twitter/G+ login, Users list search option, Edit posted messages and more! **Buy once, use forever!**
 
 Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](https://kaine.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](https://kaine.pl/projects/wp-plugins/wise-chat/features)**
 
@@ -53,6 +53,7 @@ Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise
 * **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages. It is good for cutting links for example.
 * **Messages history**: All recently published messages are available in input field for resending.
 * **Chat Opening Hours / Days**: Define days and range of hours when the chat is open for users.
+* **Spam Reporting**: Chat participants can report spam messages.
 * **Bans**: Administrator can ban (IP based) users who do not follow rules of the chat.
 * **Kicks**: Administrator can kick (IP based) users who do not follow rules of the chat.
 * **Automatic bans**: An option that automatically blocks an user if he / she exceeds the defined number of bad words.
@@ -69,12 +70,17 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
+* **Private messages to offline users**: Send private messages to offline users.
 * **Avatars**: Display avatars either in the chat or the users list.
 * **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
 * **Custom emoticons**: Compose your own set of emoticons.
 * **Facebook / Twitter / Google+ authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
 * **Multisite support**: Wise Chat Pro supports WordPress multisite environment.
+* **E-mail notifications**: Configure notifications sent to admin.
 * **Pro themes**: Use one of 3 extra modern looking Pro themes.
+* **Pending messages**: Set up full moderation which allows to publish approved messages only.
+* **Users list search option**: Search users list.
+* **Edit posted messages**: Modify posted messages in the chat window.
 * **One-time payment**: Pay once and use it forever.
 * **6 / 12 / 18 - month upgrade**: Update your Wise Chat Pro to the new version for free during 6 / 12 / 18 - month period after the purchase.
 
@@ -336,6 +342,12 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 06. Preview on mobile - Cold Dark theme
 
 == Changelog ==
+
+= 2.7 =
+* Spam report button
+* Improved: W3C issues
+* Improved: admin action buttons without direct img elements
+* Fixed: security issue with the external links
 
 = 2.6.3 =
 * Option to adjust date and time format in messages

@@ -161,6 +161,7 @@ class WiseChatRenderer {
 			'showDeleteButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('delete_message'),
 			'showBanButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('ban_user'),
 			'showKickButton' => $this->options->isOptionEnabled('enable_message_actions', true) && $this->usersDAO->hasCurrentWpUserRight('kick_user'),
+			'showSpamButton' => $this->options->isOptionEnabled('spam_report_enable_all', true) || $this->usersDAO->hasCurrentWpUserRight('spam_report'),
 			'messageTimeUTC' => gmdate('c', $message->getTime()),
 			'renderedUserName' => $this->getRenderedUserName($message),
 			'messageContent' => $this->getRenderedMessageContent($message),
@@ -375,7 +376,7 @@ class WiseChatRenderer {
 			
 			if ($userNameLink != null) {
 				$formattedUserName = sprintf(
-					"<a href='%s' target='_blank' rel='nofollow' %s>%s</a>", $userNameLink, $styles, $formattedUserName
+					"<a href='%s' target='_blank' rel='noopener noreferrer nofollow' %s>%s</a>", $userNameLink, $styles, $formattedUserName
 				);
 			}
 		} else if ($displayMode === 2) {
