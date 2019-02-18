@@ -867,3 +867,27 @@ function WiseChatEmoticonsPanel(options, messages) {
 
 	insertEmoticonButton.click(onInsertEmoticonButtonClick);
 }
+
+// chat init script:
+jQuery(window).load(function() {
+	jQuery(".wcContainer[data-wc-config]").each(function(index) {
+		var config = jQuery(this).data('wc-config');
+		if (typeof config !== 'object') {
+			jQuery(this).prepend('<strong style="color:#f00;">Error: invalid Wise Chat configuration</strong>');
+			return;
+		}
+		
+		var messages = jQuery(this).find('.wcMessages');
+		if (messages.length > 0 && config.messagesOrder == 'ascending') {
+			messages.scrollTop(messages[0].scrollHeight);
+		}
+		
+		if (typeof(window['wiseChatInstances']) == 'undefined') {
+			window['wiseChatInstances'] = {};
+		}
+		
+		if (typeof(window.wiseChatInstances[config.chatId]) == 'undefined') {
+			window.wiseChatInstances[config.chatId] = new WiseChatController(config);
+		}
+	});
+});

@@ -111,18 +111,18 @@ class WiseChat {
 	public function registerResources() {
 		$pluginBaseURL = $this->options->getBaseDir();
 		
-		wp_enqueue_script('wise_chat_messages_history', $pluginBaseURL.'js/utils/messages_history.js', array());
-		wp_enqueue_script('wise_chat_messages', $pluginBaseURL.'js/ui/messages.js', array());
-		wp_enqueue_script('wise_chat_settings', $pluginBaseURL.'js/ui/settings.js', array());
-		wp_enqueue_script('wise_chat_maintenance_executor', $pluginBaseURL.'js/maintenance/executor.js', array());
-		wp_enqueue_script('wise_chat_core', $pluginBaseURL.'js/wise_chat.js', array());
+		wp_enqueue_script('wise_chat_messages_history', $pluginBaseURL.'js/utils/messages_history.js', array('jquery'));
+		wp_enqueue_script('wise_chat_messages', $pluginBaseURL.'js/ui/messages.js', array('jquery'));
+		wp_enqueue_script('wise_chat_settings', $pluginBaseURL.'js/ui/settings.js', array('jquery'));
+		wp_enqueue_script('wise_chat_maintenance_executor', $pluginBaseURL.'js/maintenance/executor.js', array('jquery'));
+		wp_enqueue_script('wise_chat_core', $pluginBaseURL.'js/wise_chat.js', array('jquery'));
 		
 		if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
-			wp_enqueue_script('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'js/3rdparty/jquery.colorPicker.min.js', array());
+			wp_enqueue_script('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'js/3rdparty/jquery.colorPicker.min.js', array('jquery'));
 			wp_enqueue_style('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'css/3rdparty/colorPicker.css');
 		}
 
-		wp_enqueue_script('wise_chat_3rdparty_momentjs', $pluginBaseURL.'js/3rdparty/moment.patched.min.js', array());
+		wp_enqueue_script('wise_chat_3rdparty_momentjs', $pluginBaseURL.'js/3rdparty/moment.patched.min.js', array('jquery'));
 	}
 
 	/**
@@ -417,6 +417,7 @@ class WiseChat {
             'messageMaxLength' => $this->options->getIntegerOption('message_max_length', 100),
 
 			'jsOptions' => json_encode($jsOptions),
+			'jsOptionsEncoded' => htmlspecialchars(json_encode($jsOptions), ENT_QUOTES, 'UTF-8'),
             'messagesOrder' => $this->options->getEncodedOption('messages_order', '') == 'descending' ? 'descending' : 'ascending',
 			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
 			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition()

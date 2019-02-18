@@ -9,7 +9,7 @@
 
 <link rel='stylesheet' id='wise_chat_theme_{{ chatId }}-css' href='{{ themeStyles }}' type='text/css' media='all' />
 
-<div id='{{ chatId }}' class='{{ containerClasses }}'>
+<div id='{{ chatId }}' class='{{ containerClasses }}' data-wc-config="{{ jsOptionsEncoded }}">
 	{% if windowTitle %}
 		<div class='wcWindowTitle'>{{ windowTitle }}</div>
 	{% endif windowTitle %}
@@ -120,23 +120,4 @@
     {% if redirectURL %}
         window.location.href = '{{ redirectURL }}';
     {% endif redirectURL %}
-
-    (function() {
-        var messages = jQuery('#{{ chatId }} .wcMessages');
-        if (messages.length > 0 && '{{ messagesOrder }}' == 'ascending') {
-            messages.scrollTop(messages[0].scrollHeight);
-        }
-    })();
-
-	jQuery(window).load(function() {
-		var jsOptions = {{ jsOptions }};
-		
-		if (typeof(window['wiseChatInstances']) == 'undefined') {
-			window['wiseChatInstances'] = {};
-		}
-		
-		if (typeof(window.wiseChatInstances[jsOptions.chatId]) == 'undefined') {
-			window.wiseChatInstances[jsOptions.chatId] = new WiseChatController(jsOptions);
-		}
-	}); 
 </script>
