@@ -334,12 +334,14 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 == Screenshots ==
 
-01. Air Flow theme: pictures, links, customizations, users list
+01. Light Gray theme: pictures, links, customizations, users list
 02. Cold Dark theme: pictures, links, customizations, users list
-03. Light Gray theme: pictures, links, customizations, users list
-04. Simple default mode.
-05. Preview on mobile - Light Gray theme
-06. Preview on mobile - Cold Dark theme
+03. Air Flow theme: pictures, links, customizations, users list
+04. Default theme: pictures, links, customizations, users list
+05. Air Flow theme: simple mode
+06. Light Gray theme: admin mode
+07. Light Gray theme: responsive design
+08. Cold Dark theme: responsive design
 
 == Changelog ==
 
