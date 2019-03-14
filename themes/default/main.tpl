@@ -39,17 +39,19 @@
                 <input type='button' class='wcSubmitButton' value='{{ messageSubmitButtonCaption }}' />
             {% endif showMessageSubmitButton %}
 
-            {% if enableAttachmentsUploader %}
-                <a href="#" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
-            {% endif enableAttachmentsUploader %}
+            <div class="wcToolButtonWrapper">
+                {% if enableAttachmentsUploader %}
+                    <a href="#" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
+                {% endif enableAttachmentsUploader %}
 
-            {% if enableImagesUploader %}
-                <a href="#" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
-            {% endif enableImagesUploader %}
+                {% if enableImagesUploader %}
+                    <a href="#" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
+                {% endif enableImagesUploader %}
 
-            {% if showEmoticonInsertButton %}
-                <a href="#" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
-            {% endif showEmoticonInsertButton %}
+                {% if showEmoticonInsertButton %}
+                    <a href="#" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
+                {% endif showEmoticonInsertButton %}
+            </div>
 
             <div class='wcInputContainer'>
                 {% if multilineSupport %}

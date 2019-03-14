@@ -344,6 +344,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.8 =
+* Major update of all 4 themes
 * Improved: Moved Javascript code to the footer
 
 = 2.7 =

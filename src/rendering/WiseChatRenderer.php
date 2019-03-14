@@ -312,7 +312,7 @@ class WiseChatRenderer {
 			}
 		}
 		
-		return implode('<br />', $usersList);
+		return implode("\n", $usersList);
 	}
 
 	/**

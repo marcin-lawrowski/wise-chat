@@ -7,11 +7,7 @@
 		{{ renderedUserName }}
 	</span>
 	<span class="wcMessageTime" data-utc="{{ messageTimeUTC }}"></span>
-	
-	<br class='wcClear' />
-	<span class="wcMessageContent" {% if isTextColorSetForMessage %}style="color:{{ textColor }}"{% endif isTextColorSetForMessage %}>
-		{{ messageContent }}
-		
+	<div class="wcActionWrapper">	
 		{% if showDeleteButton %}
 			<a href="#" class="wcAdminAction wcMessageDeleteButton" data-id="{{ messageId }}" title="Delete the message"></a>
 		{% endif showDeleteButton %}
@@ -24,6 +20,8 @@
 		{% if showSpamButton %}
 			<a href="#" class="wcAdminAction wcSpamReportButton" data-id="{{ messageId }}" title="Report spam"></a>
 		{% endif showSpamButton %}
-		<br class='wcClear' />
+	</div>
+	<span class="wcMessageContent" {% if isTextColorSetForMessage %}style="color:{{ textColor }}"{% endif isTextColorSetForMessage %}>
+		{{ messageContent }}
 	</span>
 </div>
