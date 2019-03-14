@@ -137,8 +137,11 @@ class WiseChatCssRenderer {
 	*
 	* @return null
 	*/
-	private function addRawDefinition($cssSelector, $property, $value) {
-		$fullCssSelector = sprintf("#%s %s", $this->containerId, $cssSelector);
+	private function addRawDefinition($cssSelector, $property, $value, $rootSelector = null) {
+		if ($rootSelector === null) {
+			$rootSelector = '#'.$this->containerId;
+		}
+		$fullCssSelector = sprintf("%s %s", $rootSelector, $cssSelector);
 		$this->definitions[$fullCssSelector][] = sprintf("%s: %s;", $property, $value);
 	}
 	
@@ -167,7 +170,7 @@ class WiseChatCssRenderer {
 		if ($this->options->isOptionNotEmpty('users_list_width')) {
 			$width = $this->options->getIntegerOption('users_list_width');
 			if ($width > 1 && $width < 99) {
-				$this->addRawDefinition('.wcMessages', 'width', (100 - $width).'%');
+				$this->addRawDefinition('.wcMessages', 'width', (100 - $width).'%', '#'.$this->containerId.'.wcUsersListIncluded');
 			}
 		}
 	}

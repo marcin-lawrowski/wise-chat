@@ -1,14 +1,14 @@
 /* airflow */
-
+@import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext');
 .wcContainer * {
-	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif; color: #525252;
+	font: 13px/22px 'Maven Pro', sans-serif; color: #0e2849;
 }
 
 .wcContainer {
-	font: 12px/16px "Helvetica Neue",Roboto,"Segoe UI",Calibri,sans-serif;
-	-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
-	background-color: #f8f9fd; border: 1px solid #f0f1f6; padding-top: 0;
-	color: #525252;
+	font: 13px/22px 'Maven Pro', sans-serif; 
+	border: 0; padding-top: 0; color: #0e2849;
+	-webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px; 
+	overflow: hidden;
 }
 
 .wcContainer .wcPoweredBy {
@@ -20,20 +20,26 @@
 }
 
 .wcContainer .wcWindowTitle {
-	padding: 10px 13px; font-size: 150%; color: #525252; background-color: #f3f4f8;
+	padding: 10px 13px; font-size: 150%; color: #0e2849; background-color: #e9eef0; border-radius: 10px 10px 0 0;
 }
 
 .wcContainer a {
-	color: #5974a9;
+	color: #119bd4;
 }
 
 .wcContainer input[type="button"], .wcContainer input[type="button"]:focus, .wcContainer input[type="button"]:active,
 .wcContainer input[type="submit"], .wcContainer input[type="submit"]:focus, .wcContainer input[type="submit"]:active{
-	border-radius: 15px; background-image: none; background-repeat: no-repeat; border: 1px solid #f2ce60;
-	color: #784d17; padding: 5px 13px; box-shadow: none; font-weight: normal;
-	height: 31px; outline: none;
-	background-color: #fbd75f;
-	text-transform: none;
+	border-radius: 15px !important; background-image: none; background-repeat: no-repeat; border: 0!important;
+	color: #FFF !important; padding: 5px 20px !important; box-shadow: none; font-weight: normal !important; line-height: 20px !important;
+	height: 40px; outline: none; min-height: 40px !important;
+
+	background: #0194d2 !important; /* Old browsers */
+	background: -moz-linear-gradient(top,  #0194d2 0%, #0081b7 100%) !important; /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #0194d2 0%,#0081b7 100%) !important; /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #0194d2 0%,#0081b7 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0194d2', endColorstr='#0081b7',GradientType=0 ) !important; /* IE6-9 */
+
+	text-transform: none !important;
 
 	-webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
 	-o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
@@ -41,17 +47,24 @@
 }
 
 .wcContainer input[type="button"]:hover, .wcContainer input[type="submit"]:hover {
-	background-color: #fbd92b;
+	background: #01567a !important; /* Old browsers */
+	background: -moz-linear-gradient(top,  #01567a 0%, #024460 100%) !important; /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #01567a 0%,#024460 100%) !important; /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #01567a 0%,#024460 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01567a', endColorstr='#024460',GradientType=0 ) !important; /* IE6-9 */
+	box-shadow: none !important; font-weight: normal !important; 
 }
 
+	
+
 .wcContainer input[type="text"], .wcContainer input[type="password"], .wcContainer textarea {
-	height: 31px; font-size: 1em; line-height: 20px;
+	height: 40px; font-size: 1em; line-height: 40px; box-shadow: none;
 	background-color: #ffffff; border-radius: 15px; margin: 0; outline: 0 none; padding: 4px;
 	padding-left: 15px; border: 1px solid transparent;
 }
 
 .wcContainer input[type="text"]:focus, .wcContainer input[type="password"]:focus, .wcContainer textarea:focus {
-	background-color: #ffffff; padding-left: 15px; border: 1px solid #efefef;
+	background-color: #ffffff; padding-left: 15px; border: 1px solid transparent;
 }
 
 .wcContainer ::-webkit-input-placeholder {
@@ -72,37 +85,56 @@
 }
 
 .wcContainer .wcMessages {
-	background-color: #f3f4f8; color: #111; border-left: none; border-right: none; border-top: 1px solid #f0f1f6; border-bottom: 1px solid #f0f1f6;
-	padding: 0;
+	color: #111; border: none; padding: 20px 2%; background: #f3f6f7;
 }
 
 .wcContainer .wcUsersCounter {
-	margin-bottom: 3px; margin-right: 10px; font-size: 80%;
+	font-size: 80%; border: 0; border-top: 1px solid #e9eef0; background: #f3f6f7;
 }
 
+.wcContainer .wcMessage .wcAdminAction {
+	border-color: #7593AA;
+}
 .wcContainer .wcMessage .wcAdminAction:hover {
-	border: 1px solid #e1e8ed;
+	background-color: #d1e6ef;
+}
+
+.wcMessageAttachments a.wcAttachmentClear {
+	border-color: #7593AA;
+}
+
+.wcMessageAttachments a.wcAttachmentClear:hover {
+	background-color: #d1e6ef;
+}
+
+.wcMessage .wcAdminAction.wcMessageDeleteButton {
+	background-image: url("gfx/x.svg");
+}
+
+.wcMessage .wcAdminAction.wcUserBanButton {
+	background-image: url("gfx/block.svg"); 
+}
+
+.wcMessage .wcAdminAction.wcUserKickButton {
+	background-image: url("gfx/kick.svg"); 
+}
+
+.wcMessage .wcAdminAction.wcSpamReportButton {
+	background-image: url("gfx/spam.svg");
 }
 
 .wcContainer .wcControls {
-	padding: 10px; padding-top: 5px;
-	background: #f8f9fd;
+    background: #e9eef0;
+    border: 0 !important;
 }
 
-.wcContainer .wcMessages .wcMessage {
-	border-top: 1px solid #efefef; padding: 5px; background-color: #ffffff;
-}
-
-.wcContainer .wcMessages .wcMessage.wcCurrentUserMessage {
-	background-color: #f7fbff;
-}
 
 .wcContainer .wcMessages .wcPlainMessage {
-	color: #5974a9;
+	color: #119bd4;
 }
 
 .wcContainer .wcMessages .wcMessage a {
-	color: #5974a9; text-decoration: none;
+	color: #119bd4; text-decoration: none;
 }
 
 .wcContainer .wcMessages .wcMessage a:hover {
@@ -112,9 +144,12 @@
 .wcContainer .wcMessages .wcMessage .wcMessageUser a:hover {
 	text-decoration: underline;
 }
-
+.wcMessage .wcMessageUser {
+	line-height: 22px;
+	margin-bottom: 3px;
+}
 .wcContainer .wcMessages .wcMessage .wcMessageTime {
-	float: right; color: #bac1c7; line-height: 22px;
+	color: #bac1c7; line-height: 22px;
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageTime * {
@@ -122,15 +157,18 @@
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageUser {
-	float: left; color: #525252; font-weight: bold;
+	float: left; color: #0e2849; 
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageUser a {
-	color: #525252; text-decoration: none; font-weight: bold;
+	color: #0e2849; text-decoration: none; 
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageContent {
-	display: block; margin-top: 6px;
+	background-color: #FFF; border-radius: 0 10px 10px 10px; box-shadow: 0 0 15px rgba(14,40,73,0.03); 
+}
+.wcContainer .wcMessages .wcMessage.wcCurrentUserMessage .wcMessageContent {
+	background-color: #d1e6ef;
 }
 
 .wcContainer .wcMessages .wcMessage .wcMessageContent .wcAdminAction {
@@ -163,10 +201,6 @@
 	display: none;
 }
 
-.wcContainer .wcMessages.wcMessagesInline .wcMessage .wcMessageUser {
-	margin-right: 4px;
-}
-
 .wcContainer .wcMessages.wcMessagesInline .wcMessage .wcAdminAction {
 	padding: 0px; padding-right: 1px; padding-left: 1px;
 }
@@ -186,23 +220,22 @@
 }
 
 .wcContainer .wcControls .wcCurrentUserName {
-	margin-bottom: 5px; float: left; padding-right: 5px; line-height: 31px;
+	margin-bottom: 5px; float: left; padding-right: 5px; line-height: 40px;
 }
-
+.wcWidth300 .wcControls .wcCurrentUserName {
+	float: none; line-height: 20px;
+}
 .wcWidth300 .wcMessageContent {
 	display: block; border-bottom: none; margin-bottom: inherit; padding-bottom: inherit;
 }
 
 .wcContainer .wcCustomizations a, .wcContainer .wcCustomizations a:hover {
-	font-size: 90%; display: inline-block; margin: 4px 0; color: #5974a9; outline: none;
+	display: inline-block; margin: 4px 0; color: #119bd4; outline: none;
 }
 
-.wcContainer .wcCustomizations a.wcCustomizeButton {
-	color: #bac1c7;
-}
 
 .wcContainer a.wcToolButton {
-	border-radius: 5px; border: none; box-shadow: none; height: 31px;
+	border-radius: 15px; border: none; box-shadow: none; height: 40px; 
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
 	filter: alpha(opacity=60);
 	-moz-opacity: 0.6;
@@ -222,37 +255,36 @@
 	-khtml-opacity: 1;
 	opacity: 1;
 	border: none;
+	background-color: transparent;
 }
 
+
+
 .wcContainer a.wcAddImageAttachment {
-	background: url('gfx/camera.png') center center no-repeat;
+	background: url('gfx/camera.svg') center center no-repeat;
 }
 
 .wcContainer a.wcAddFileAttachment {
-	background: url('gfx/attach.png') center center no-repeat;
+	background: url('gfx/attach.svg') center center no-repeat;
 }
 
 .wcContainer a.wcInsertEmoticonButton {
-	background: url('gfx/emoticon.png') center center no-repeat;
+	background: url('gfx/emoticon.svg') center center no-repeat;
 }
 
 /* Users list: */
 .wcContainer .wcUsersList {
-	border-right: none; background-color: #fff; color: #525252; border-color: #f0f1f6;
-	border-top: 1px solid #f0f1f6; border-bottom: 1px solid #f0f1f6;
+	border: 0; background-color: #f3f6f7; color: #0e2849; 
 }
-
-.wcContainer .wcUsersList .wcUserInChannel {
-	padding: 5px 3px; display: inline-block;
+.wcUsersList .wcUserInChannel {
+	border-color: #e9eef0;
 }
-
 .wcContainer .wcWindowContent {
-	text-align: center;
-	padding-top: 0;
+	text-align: center; background: #f3f6f7; border-radius: 0 0 10px 10px;
 }
 
 .wcContainer .wcError {
-	padding: 10px; color: #ffffff; background-color: rgb(247,66,67); border-radius: 5px; border: 1px solid rgb(207,46,47);
+	padding: 10px; color: #26323e; background-color: #ffe9e9; border-radius: 5px; 
 	display: inline-block; margin-top: 5px;
 }
 
@@ -271,8 +303,52 @@ div.colorPicker-palette {
 .wcUserNameHint {
 	margin-bottom: 4px;
 }
+.wcContainer input[name='wcUserName'] {
+	margin-bottom: 5px !important;
+}
 
 /* Channel users widget */
 .wcContainer.wcChannelUsersWidget .wcUsersList {
 	padding: 3px 5px;
+}
+.wcContainer .wcWindowContent {
+    border: 0;
+}
+
+/* Progress bar - background */
+.wcContainer progress, .wcContainer progress[role][aria-valuenow] {
+	background: #d7dfe3 !important;
+ }
+ 
+ .wcContainer progress::-webkit-progress-bar {
+	 background: #d7dfe3; 
+ }
+ /* Progress bar - foreground */
+.wcContainer progress {
+    color: #0194d2; 
+}
+
+.wcContainer progress::-moz-progress-bar { 
+    background: #0194d2; 
+}
+
+.wcContainer progress::-webkit-progress-value {
+    background: #0194d2;
+}
+
+.wcContainer progress[aria-valuenow]:before  {
+    background: #0194d2; 
+}
+
+div.colorPicker-picker,
+div.colorPicker-swatch {
+	border-color: #7593AA !important;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.wcContainer select,
+	.wcContainer textarea,
+	.wcContainer input {
+		font-size: 16px;
+	}
 }

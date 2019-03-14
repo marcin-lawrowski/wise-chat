@@ -113,7 +113,7 @@ class WiseChatThemes {
 	}
 	
 	private function getThemeProperty($property) {
-		$theme = $this->options->getEncodedOption('theme', 'airflow');
+		$theme = $this->options->getEncodedOption('theme', 'lightgray');
 		
 		return self::$themesSettings[$theme][$property];
 	}

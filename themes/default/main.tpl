@@ -9,7 +9,7 @@
 
 <link rel='stylesheet' id='wise_chat_theme_{{ chatId }}-css' href='{{ themeStyles }}' type='text/css' media='all' />
 
-<div id='{{ chatId }}' class='{{ containerClasses }}'>
+<div id='{{ chatId }}' class='{{ containerClasses }}' data-wc-config="{{ jsOptionsEncoded }}">
 	{% if windowTitle %}
 		<div class='wcWindowTitle'>{{ windowTitle }}</div>
 	{% endif windowTitle %}
@@ -39,17 +39,19 @@
                 <input type='button' class='wcSubmitButton' value='{{ messageSubmitButtonCaption }}' />
             {% endif showMessageSubmitButton %}
 
-            {% if enableAttachmentsUploader %}
-                <a href="#" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
-            {% endif enableAttachmentsUploader %}
+            <div class="wcToolButtonWrapper">
+                {% if enableAttachmentsUploader %}
+                    <a href="#" class="wcToolButton wcAddFileAttachment" title="{{ messageAttachFileHint }}"><input type="file" accept="{{ attachmentsExtensionsList }}" class="wcFileUploadFile" title="{{ messageAttachFileHint }}" /></a>
+                {% endif enableAttachmentsUploader %}
 
-            {% if enableImagesUploader %}
-                <a href="#" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
-            {% endif enableImagesUploader %}
+                {% if enableImagesUploader %}
+                    <a href="#" class="wcToolButton wcAddImageAttachment" title="{{ messagePictureUploadHint }}"><input type="file" accept="image/*;capture=camera" class="wcImageUploadFile" title="{{ messagePictureUploadHint }}" /></a>
+                {% endif enableImagesUploader %}
 
-            {% if showEmoticonInsertButton %}
-                <a href="#" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
-            {% endif showEmoticonInsertButton %}
+                {% if showEmoticonInsertButton %}
+                    <a href="#" class="wcToolButton wcInsertEmoticonButton" title="{{ messageInsertEmoticon }}"></a>
+                {% endif showEmoticonInsertButton %}
+            </div>
 
             <div class='wcInputContainer'>
                 {% if multilineSupport %}
@@ -120,23 +122,4 @@
     {% if redirectURL %}
         window.location.href = '{{ redirectURL }}';
     {% endif redirectURL %}
-
-    (function() {
-        var messages = jQuery('#{{ chatId }} .wcMessages');
-        if (messages.length > 0 && '{{ messagesOrder }}' == 'ascending') {
-            messages.scrollTop(messages[0].scrollHeight);
-        }
-    })();
-
-	jQuery(window).load(function() {
-		var jsOptions = {{ jsOptions }};
-		
-		if (typeof(window['wiseChatInstances']) == 'undefined') {
-			window['wiseChatInstances'] = {};
-		}
-		
-		if (typeof(window.wiseChatInstances[jsOptions.chatId]) == 'undefined') {
-			window.wiseChatInstances[jsOptions.chatId] = new WiseChatController(jsOptions);
-		}
-	}); 
 </script>

@@ -5,7 +5,7 @@ Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, cha
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 5.0.3
-Stable tag: 2.7
+Stable tag: 2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -334,14 +334,20 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 == Screenshots ==
 
-01. Air Flow theme: pictures, links, customizations, users list
+01. Light Gray theme: pictures, links, customizations, users list
 02. Cold Dark theme: pictures, links, customizations, users list
-03. Light Gray theme: pictures, links, customizations, users list
-04. Simple default mode.
-05. Preview on mobile - Light Gray theme
-06. Preview on mobile - Cold Dark theme
+03. Air Flow theme: pictures, links, customizations, users list
+04. Default theme: pictures, links, customizations, users list
+05. Air Flow theme: simple mode
+06. Light Gray theme: admin mode
+07. Light Gray theme: responsive design
+08. Cold Dark theme: responsive design
 
 == Changelog ==
+
+= 2.8 =
+* Major update of all 4 themes
+* Improved: Moved Javascript code to the footer
 
 = 2.7 =
 * Spam report button

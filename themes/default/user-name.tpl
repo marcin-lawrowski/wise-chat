@@ -1,6 +1,6 @@
 <link rel='stylesheet' href='{{ themeStyles }}' type='text/css' media='all' />
 
-<div class='wcContainer'>
+<div class='wcContainer {% if windowTitle %} wcWindowTitleIncluded {% endif windowTitle %}'>
 	{% if windowTitle %}
 		<div class='wcWindowTitle'>{{ windowTitle }}</div>
 	{% endif windowTitle %}
