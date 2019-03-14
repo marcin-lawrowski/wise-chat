@@ -157,7 +157,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 	
 	public function getDefaultValues() {
 		return array(
-			'theme' => 'airflow',
+			'theme' => 'lightgray',
 			'background_color_chat' => '',
 			'text_color_chat' => '',
 			'text_size_chat' => '',
