@@ -345,13 +345,21 @@ class WiseChatSettings {
 	 */
 	private function showDocs() {
 		$excludedFields = array(
+			'mode', 'anonymous_login_enabled', 'facebook_login_enabled', 'facebook_login_app_id', 'facebook_login_app_secret',
+			'twitter_login_enabled', 'twitter_login_api_key', 'twitter_login_api_secret', 'google_login_enabled', 'google_login_client_id', 'google_login_client_secret', 'permission_approve_message_role',
 			'user_actions', 'enable_opening_control', 'opening_days', 'opening_hours',
-			'bans', 'ban_add', 'channels', 'admin_actions', 'filters', 'filter_add'
+			'enable_approval_confirmation', 'new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode', 'show_avatars', 'enable_edit_own_messages',
+			'bans', 'ban_add', 'channels', 'admin_actions', 'filters', 'filter_add',
+			'enable_private_messages', 'show_users_list_avatars', 'show_users_list_info_windows', 'users_list_info_windows_template', 'fb_users_list_top_offset', 'fb_bottom_offset',
+			'fb_bottom_offset_threshold', 'fb_show_users_list_title', 'fb_minimize_users_list_option', 'fb_minimize_on_start', 'fb_disable_channel', 'bp_member_profile_chat_button', 'custom_emoticons_enabled',
+			'custom_emoticons_popup_width', 'custom_emoticons_popup_height', 'custom_emoticons_emoticon_max_width_in_popup', 'custom_emoticons_emoticon_width', 'custom_emoticon_add', 
+			'custom_emoticons', 'kicks', 'kick_add',
 		);
 		foreach ($this->tabs as $key => $caption) {
 			$tabObject = $this->getTabObject($key);
 			$fields = $tabObject->getFields();
 			$defaults = $tabObject->getDefaultValues();
+			$printSection = null;
 			foreach ($fields as $field) {
 				$id = $field[0];
 				$name = str_replace('<br />', ' ', $field[1]);
@@ -365,9 +373,13 @@ class WiseChatSettings {
 				}
 
 				if ($id == '_section') {
-					echo "<h4>{$caption}: $name</h4>";
+					$printSection = "<h4>{$caption}: $name</h4>";
 					continue;
 				} else {
+					if ($printSection !== null) {
+						echo $printSection;
+						$printSection = null;
+					}
 					$default = $defaults[$id];
 					$defaultLabel = ($default !== '' && $default !== null ? $default : '[not set]');
 
