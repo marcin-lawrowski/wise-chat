@@ -21,7 +21,7 @@
   - [See the full list of features](https://wordpress.org/plugins/wise-chat/#description)
 
 ### Tech
-
+   
 * [PHP](http://www.php.net/)
 * [WordPress](https://wordpress.org/)
 * [jQuery](https://jquery.com/)
@@ -49,7 +49,7 @@ $ git clone https://github.com/marcin-lawrowski/wise-chat.git
 
 #### Post Installation Notices:
 
- - Go to "Settings → Wise Chat Settings" page and adjust all the settings according to your needs.
+ - Go to "Settings → Wise Chat Settings" page and adjust all the settings according to your needs. 
  - Go to "Settings → Wise Chat Settings" page, select Localization tab and translate all the messages into your own language.
  - Posting pictures from camera / local storage is limited to the specific range of Web browsers: IE 10+,
    Firefox 31+, Chrome 31+, Safari 7+, Opera 27+, iOS Safari 7.1+, Android Browser 4.1+, Chrome For Android 41+.

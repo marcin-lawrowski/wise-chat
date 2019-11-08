@@ -6,62 +6,62 @@
  * @author Kainex <contact@kaine.pl>
  */
 class WiseChat {
-
+	
 	/**
 	* @var WiseChatOptions
 	*/
 	private $options;
-
+	
 	/**
 	* @var WiseChatUsersDAO
 	*/
 	private $usersDAO;
-
+	
 	/**
 	* @var WiseChatUserSettingsDAO
 	*/
 	private $userSettingsDAO;
-
+	
 	/**
 	* @var WiseChatChannelUsersDAO
 	*/
 	private $channelUsersDAO;
-
+	
 	/**
 	* @var WiseChatActionsDAO
 	*/
 	private $actionsDAO;
-
+	
 	/**
 	* @var WiseChatRenderer
 	*/
 	private $renderer;
-
+	
 	/**
 	* @var WiseChatCssRenderer
 	*/
 	private $cssRenderer;
-
+	
 	/**
 	* @var WiseChatBansService
 	*/
 	private $bansService;
-
+	
 	/**
 	* @var WiseChatUserService
 	*/
 	private $userService;
-
+	
 	/**
 	* @var WiseChatMessagesService
 	*/
 	private $messagesService;
-
+	
 	/**
 	* @var WiseChatService
 	*/
 	private $service;
-
+	
 	/**
 	* @var WiseChatAttachmentsService
 	*/
@@ -76,12 +76,12 @@ class WiseChat {
 	 * @var WiseChatHttpRequestService
 	 */
 	private $httpRequestService;
-
+	
 	/**
 	* @var array
 	*/
 	private $shortCodeOptions;
-
+	
 	public function __construct() {
 		$this->options = WiseChatOptions::getInstance();
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
@@ -100,23 +100,23 @@ class WiseChat {
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
-
+		
 		$this->userService->initMaintenance();
 		$this->shortCodeOptions = array();
 	}
-
+	
 	/*
 	* Enqueues all necessary resources (scripts or styles).
 	*/
 	public function registerResources() {
 		$pluginBaseURL = $this->options->getBaseDir();
-
+		
 		wp_enqueue_script('wise_chat_messages_history', $pluginBaseURL.'js/utils/messages_history.js', array('jquery'));
 		wp_enqueue_script('wise_chat_messages', $pluginBaseURL.'js/ui/messages.js', array('jquery'));
 		wp_enqueue_script('wise_chat_settings', $pluginBaseURL.'js/ui/settings.js', array('jquery'));
 		wp_enqueue_script('wise_chat_maintenance_executor', $pluginBaseURL.'js/maintenance/executor.js', array('jquery'));
 		wp_enqueue_script('wise_chat_core', $pluginBaseURL.'js/wise_chat.js', array('jquery'));
-
+		
 		if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 			wp_enqueue_script('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'js/3rdparty/jquery.colorPicker.min.js', array('jquery'));
 			wp_enqueue_style('wise_chat_3rdparty_jscolorPicker', $pluginBaseURL.'css/3rdparty/colorPicker.css');
@@ -138,10 +138,10 @@ class WiseChat {
 		$attributes['channel'] = $this->service->getValidChatChannelName(
 			array_key_exists('channel', $attributes) ? $attributes['channel'] : ''
 		);
-
+		
 		$this->options->replaceOptions($attributes);
 		$this->shortCodeOptions = $attributes;
-
+   
 		return $this->getRenderedChat($attributes['channel']);
 	}
 
@@ -226,19 +226,19 @@ class WiseChat {
 				$this->options->getOption('message_error_11', 'You are not allowed to enter the chat.'), 'wcAccessDenied'
 			);
 		}
-
+		
 		if (!$this->service->isChatOpen()) {
 			return $this->renderer->getRenderedAccessDenied(
 				$this->options->getOption('message_error_5', 'The chat is closed now'), 'wcChatClosed'
 			);
 		}
-
+		
 		if ($this->service->isChatChannelFull($channel)) {
 			return $this->renderer->getRenderedAccessDenied(
 				$this->options->getOption('message_error_6', 'The chat is full now. Try again later.'), 'wcChatFull'
 			);
 		}
-
+		
 		if ($this->service->isChatChannelsLimitReached($channel)) {
 			return $this->renderer->getRenderedAccessDenied(
 				$this->options->getOption('message_error_10', 'You cannot enter the chat due to the limit of channels you can participate simultaneously.'), 'wcChatChannelLimitFull'
@@ -257,7 +257,7 @@ class WiseChat {
 				return $this->renderer->getRenderedUserNameForm();
 			}
 		}
-
+		
 		if ($this->service->hasUserToBeAuthorizedInChannel($channel)) {
 			if ($this->getPostParam('wcChannelAuthorization') !== null) {
 				if (!$this->service->authorize($channel, $this->getPostParam('wcChannelPassword'))) {
@@ -271,7 +271,7 @@ class WiseChat {
 		}
 
 		$chatId = $this->service->getChatID();
-
+		
 		$this->userService->startUpMaintenance($channel);
 		$this->bansService->startUpMaintenance();
 		$this->messagesService->startUpMaintenance($channel);
@@ -284,14 +284,14 @@ class WiseChat {
 			if ($message->isAdmin() && !$this->usersDAO->isWpUserAdminLogged()) {
 				continue;
 			}
-
+				
 			$renderedMessages .= $this->renderer->getRenderedMessage($message);
-
+			
 			if ($lastId < $message->getId()) {
 				$lastId = $message->getId();
 			}
 		}
-
+		
 		$lastAction = $this->actionsDAO->getLast();
 		$jsOptions = array(
 			'chatId' => $chatId,
@@ -349,7 +349,7 @@ class WiseChat {
 		foreach ($jsOptions['messages'] as $key => $jsOption) {
 			$jsOptions['messages'][$key] = html_entity_decode( (string) $jsOption, ENT_QUOTES, 'UTF-8');
 		}
-
+		
 		$templater = new WiseChatTemplater($this->options->getPluginBaseDir());
 		$templater->setTemplateFile(WiseChatThemes::getInstance()->getMainTemplate());
 
@@ -378,22 +378,22 @@ class WiseChat {
 			'showUserName' => $this->options->isOptionEnabled('show_user_name', true),
 			'currentUserName' => htmlentities($this->authentication->getUserNameOrEmptyString(), ENT_QUOTES, 'UTF-8'),
 			'isCurrentUserNameNotEmpty' => $this->authentication->isAuthenticated(),
-
+			
 			'inputControlsTopLocation' => $this->options->getEncodedOption('input_controls_location') == 'top',
 			'inputControlsBottomLocation' => $this->options->getEncodedOption('input_controls_location') == '',
-
-			'showCustomizationsPanel' =>
+			
+			'showCustomizationsPanel' => 
 				$this->options->isOptionEnabled('allow_change_user_name', true) && !$this->usersDAO->isWpUserLogged() ||
-				$this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0 ||
+				$this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0 || 
 				$this->options->isOptionEnabled('allow_change_text_color', true),
-
+				
 			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name', true) && !$this->usersDAO->isWpUserLogged(),
 			'userNameLengthLimit' => $this->options->getIntegerOption('user_name_length_limit', 25),
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
 			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color', true),
 
             'allowToSendMessages' => $this->userService->isSendingMessagesAllowed(),
-
+				
 			'messageCustomize' => $this->options->getEncodedOption('message_customize', 'Customize'),
 			'messageName' => $this->options->getEncodedOption('message_name', 'Name'),
 			'messageSave' => $this->options->getEncodedOption('message_save', 'Save'),
@@ -422,7 +422,7 @@ class WiseChat {
 			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
 			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition()
 		);
-
+		
 		$data = array_merge($data, $this->userSettingsDAO->getAll());
 		if ($this->authentication->isAuthenticated()) {
 			$data = array_merge($data, $this->authentication->getUser()->getData());
@@ -452,9 +452,9 @@ class WiseChat {
 	private function getEndpointBase() {
 		$endpointBase = get_site_url().'/wp-admin/admin-ajax.php';
 		if (in_array($this->options->getEncodedOption('ajax_engine', null), array('lightweight', 'ultralightweight'))) {
-            $endpointBase = plugin_dir_url(__FILE__).'endpoints/';
+			$endpointBase = plugin_dir_url(__FILE__).'endpoints/';
 		}
-
+		
 		return $endpointBase;
 	}
 

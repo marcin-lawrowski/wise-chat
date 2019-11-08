@@ -149,7 +149,7 @@ The channel will be created during the first usage and it will be added to the l
 
 = How to create a password-protected private channel? =
 
-First, create a regular channel (see the previous question) and then go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Specify the password and confirm it by clicking "Set Password" button. From now the channel is secured and only users that enter valid password are allowed to join.
+First, create a regular channel (see the previous question) and then go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Specify the password and confirm it by clicking "Set Password" button. From now the channel is secured and only users that enter valid password are allowed to join. 
 
 = How to convert a password-protected channel into an open channel? =
 
@@ -174,7 +174,7 @@ You can do it by yourself. Go to Settings -> Wise Chat Settings page, select Loc
 
 = What about the support for mobile devices and responsiveness? =
 
-Wise Chat plugin works on any mobile device that supports Javascript and cookies. The interface is responsive, but you should enable submit button in order an user could send a message. Go to Settings -> Wise Chat Settings page, select Appearance tab and select checkbox "Show Submit Button".
+Wise Chat plugin works on any mobile device that supports Javascript and cookies. The interface is responsive, but you should enable submit button in order an user could send a message. Go to Settings -> Wise Chat Settings page, select Appearance tab and select checkbox "Show Submit Button". 
 
 = The chat generates anonymous names for every new user. How to force every user to choose their name on first use? =
 
@@ -190,7 +190,7 @@ Log in as an administrator and go to Settings -> Wise Chat Settings page, select
 
 Alternatively log in as an administrator and type the command:
 `/ban [UserName] [Duration]`
-where "UserName" is the chosen user's name and "Duration" is constructed as follows: 1m (a ban for 1 minute), 7m (a ban for 7 minutes), 1h (a ban for one hour), 2d (a ban for 2 days), etc. Notice: IP addresses are actually blocked.
+where "UserName" is the chosen user's name and "Duration" is constructed as follows: 1m (a ban for 1 minute), 7m (a ban for 7 minutes), 1h (a ban for one hour), 2d (a ban for 2 days), etc. Notice: IP addresses are actually blocked. 
 
 Alternatively you can go to Settings -> Wise Chat Settings page, select Bans tab. In "New Ban" row specify: IP address, duration and finally click "Add Ban" button.
 
@@ -246,15 +246,15 @@ Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderat
 
 Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderation tab and enable "Enable Admin Actions" option. Next, in "Delete Message Permission" field select a role that is allowed to delete messages. From now users belonging to the selected role have permission to delete messages.
 
-Alternatively: add "wise_chat_delete_message" capability to a role you want to have that permission. It could be either standard WordPress role or a custom role.
+Alternatively: add "wise_chat_delete_message" capability to a role you want to have that permission. It could be either standard WordPress role or a custom role. 
 
 = How does "Enable Images" option actually work? =
 
-If you enable "Enable Images" option every link posted in the chat which points to an image will be converted into image. The image will be downloaded into Media Library and then displayed on the chat window. Those downloaded images will be removed from Media Library together with the related chat messages (either when removing all messages or a single one). If an image cannot be downloaded the regular link is displayed instead.
+If you enable "Enable Images" option every link posted in the chat which points to an image will be converted into image. The image will be downloaded into Media Library and then displayed on the chat window. Those downloaded images will be removed from Media Library together with the related chat messages (either when removing all messages or a single one). If an image cannot be downloaded the regular link is displayed instead. 
 
 = Option "Enable Images" does not work. I see regular hyperlinks instead of images. What is wrong? =
 
-The option requires a few prerequisites in order to operate correctly: GD and Curl extensions must be installed, Media Library must operate correctly, posted image link must have a valid extension (jpg, jpeg, gif  or png), HTTP status code of the response must be equal 200, image cannot be larger than 3MB (the default limit that can be adjusted in settings). Try to read PHP logs in case of any problems.
+The option requires a few prerequisites in order to operate correctly: GD and Curl extensions must be installed, Media Library must operate correctly, posted image link must have a valid extension (jpg, jpeg, gif  or png), HTTP status code of the response must be equal 200, image cannot be larger than 3MB (the default limit that can be adjusted in settings). Try to read PHP logs in case of any problems. 
 
 = What if I would like the images to be opened in a popup layer using Lightbox? =
 
@@ -262,7 +262,7 @@ By default all images open using Lightbox 2 library but only if the library is i
 
 = I have installed a plugin containing Lightbox library and newly added messages are not displayed on the Lightbox layer. What is wrong?
 
-If you installed a plugin that incorporates Lightbox library and it still doesn't work make sure that the plugin uses original Lightbox 2 Javascript library. The chat is compatible only with the original Lightbox 2 library.
+If you installed a plugin that incorporates Lightbox library and it still doesn't work make sure that the plugin uses original Lightbox 2 Javascript library. The chat is compatible only with the original Lightbox 2 library. 
 
 = Image uploader does not work. What is wrong? =
 
@@ -274,39 +274,39 @@ You can use filters feature. Go to Settings -> Wise Chat Settings, select Filter
 
 = Chat window is showing up but it does not work. I cannot receive or send messages. What is wrong? =
 
-Ensure that jQuery library is installed in your theme. Wise Chat cannot operate without jQuery.
+Ensure that jQuery library is installed in your theme. Wise Chat cannot operate without jQuery. 
 
 = Wise Chat plugin is making a lot of long-running HTTP requests. How to improve the performance? =
 
-Every 3 seconds the plugin checks for new messages using AJAX request. By default admin-ajax.php is used as a backend script and this script has poor performance. However, it is the most compatible solution. If you want to reduce server load try to change "AJAX Engine" property to "Lightweight AJAX". It can be set on Settings -> Wise Chat Settings page, select Advanced tab and then select "Lightweight AJAX" from the dropdown list. This option enables dedicated backend script that has a lot better performance.
+Every 3 seconds the plugin checks for new messages using AJAX request. By default admin-ajax.php is used as a backend script and this script has poor performance. However, it is the most compatible solution. If you want to reduce server load try to change "AJAX Engine" property to "Lightweight AJAX". It can be set on Settings -> Wise Chat Settings page, select Advanced tab and then select "Lightweight AJAX" from the dropdown list. This option enables dedicated backend script that has a lot better performance. 
 
 = How to customize CSS styles using "Custom CSS Styles" setting? =
 
-All CSS classes related to the chat begins with "wc" prefix. Go to Settings -> Wise Chat Settings, select Appearance tab, go to Advanced Customization section. Use "Custom CSS Styles" field to specifiy your own definitions of Wise Chat CSS classes. Valid CSS syntax is required.
+All CSS classes related to the chat begins with "wc" prefix. Go to Settings -> Wise Chat Settings, select Appearance tab, go to Advanced Customization section. Use "Custom CSS Styles" field to specifiy your own definitions of Wise Chat CSS classes. Valid CSS syntax is required. 
 
 = How to backup messages posted in a channel? I would like to save all messages for offline reading. =
 
-Go to Settings -> Wise Chat Settings, select Channels tab and click "Backup" link next to the desired channel. All messages from the selected channel will be downloaded as a CSV file. You can open it using MS Excel, OpenOffice or any other editor that supports CSV format.
+Go to Settings -> Wise Chat Settings, select Channels tab and click "Backup" link next to the desired channel. All messages from the selected channel will be downloaded as a CSV file. You can open it using MS Excel, OpenOffice or any other editor that supports CSV format. 
 
 = Are old messages being deleted from the chat window? =
 
-By default - no, however, you can enable auto-cleaning messages feature. Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Auto-remove Messages" type number of minutes. Messages older than given amount of minutes will be auto-deleted.
+By default - no, however, you can enable auto-cleaning messages feature. Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Auto-remove Messages" type number of minutes. Messages older than given amount of minutes will be auto-deleted. 
 
 = How to limit the amount of users that are allowed to enter a channel? =
 
-Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Users Limit" type number of users that allow to participate in a channel.
+Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Users Limit" type number of users that allow to participate in a channel.  
 
 = How to limit the amount of channels that an user can participate simultaneously? =
 
-Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Channels Limit" type number of channels that an user is allowed to participate simultaneously.
+Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Channels Limit" type number of channels that an user is allowed to participate simultaneously.  
 
 = How to reset username prefix (a number that is added to anonymous users name) anonymous users? =
 
-Go to Settings -> Wise Chat Settings, select General tab and click "Reset Username Prefix" button.
+Go to Settings -> Wise Chat Settings, select General tab and click "Reset Username Prefix" button.  
 
 = When I upload an animated GIF the thumbnail is not animated. What is wrong? =
 
-WordPress has no support for resizing animated GIFs.
+WordPress has no support for resizing animated GIFs. 
 
 = Why I can change background color of the chat window but I cannot change background color of the input field, buttons or borders? =
 
