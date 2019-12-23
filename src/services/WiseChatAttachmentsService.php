@@ -342,7 +342,7 @@ class WiseChatAttachmentsService {
 	*/
 	private function createTempFile() {
 		$this->deleteTempFile();
-		$this->tempFileName = tempnam('/tmp', 'php_files');
+		$this->tempFileName = tempnam(sys_get_temp_dir(), 'php_files');
 	}
 	
 	/**
