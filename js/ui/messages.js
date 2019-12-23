@@ -13,10 +13,10 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	var refresherInitialized = false;
 
 	var messagesEndpoint = options.apiMessagesEndpointBase + '?action=wise_chat_messages_endpoint';
-	var messageEndpoint = options.apiEndpointBase + '?action=wise_chat_message_endpoint';
-	var messageDeleteEndpoint = options.apiEndpointBase + '?action=wise_chat_delete_message_endpoint';
-	var userBanEndpoint = options.apiEndpointBase + '?action=wise_chat_user_ban_endpoint';
-	var userKickEndpoint = options.apiEndpointBase + '?action=wise_chat_user_kick_endpoint';
+	var messageEndpoint = options.apiWPEndpointBase + '?action=wise_chat_message_endpoint';
+	var messageDeleteEndpoint = options.apiWPEndpointBase + '?action=wise_chat_delete_message_endpoint';
+	var userBanEndpoint = options.apiWPEndpointBase + '?action=wise_chat_user_ban_endpoint';
+	var userKickEndpoint = options.apiWPEndpointBase + '?action=wise_chat_user_kick_endpoint';
 	var spamReportEndpoint = options.apiWPEndpointBase + '?action=wise_chat_spam_report_endpoint';
 
 	var container = jQuery('#' + options.chatId);
