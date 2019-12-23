@@ -347,6 +347,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 2.8.2 =
 * Fixed: images uploading error: Call to undefined function filter_block_content
+* Fixed: stopped /wp-content/plugins hard-coding
 
 = 2.8.1 =
 * Tested on WordPress 5.3
