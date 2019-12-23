@@ -101,7 +101,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * Lightbox 2 library (for showing images in the nice looking popup)
 
 = Installation: =
-1. Upload the entire `wise-chat` folder to the `/wp-content/plugins/` directory.
+1. Upload the entire wise-chat folder to the plugins directory (usually `/wp-content/plugins/`) of WordPress instance.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Place a shortcode `[wise-chat]` in your posts or pages. See below for details.
 1. Alternatively install it in your templates via `<?php if (function_exists('wise_chat')) { wise_chat(); } ?>` code.

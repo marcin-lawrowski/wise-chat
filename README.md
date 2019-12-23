@@ -41,7 +41,7 @@
 ```sh
 $ git clone https://github.com/marcin-lawrowski/wise-chat.git
 ```
- 2. Upload the entire wise-chat folder to the `/wp-content/plugins/` directory of WordPress instance.
+ 2. Upload the entire wise-chat folder to the plugins directory (usually `/wp-content/plugins/`) of WordPress instance.
  3. Log in as an administrator to WordPress and activate Wise Chat plugin through the "Plugins" menu.
  4. Place  `[wise-chat]` shortcode in your post (or page) and visit the post (or page).
  5. Alternatively install it in your template using `<?php if (function_exists('wise_chat')) { wise_chat(); } ?>` code.

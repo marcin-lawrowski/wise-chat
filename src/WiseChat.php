@@ -452,7 +452,7 @@ class WiseChat {
 	private function getEndpointBase() {
 		$endpointBase = get_site_url().'/wp-admin/admin-ajax.php';
 		if (in_array($this->options->getEncodedOption('ajax_engine', null), array('lightweight', 'ultralightweight'))) {
-			$endpointBase = get_site_url().'/wp-content/plugins/wise-chat/src/endpoints/';
+			$endpointBase = plugin_dir_url(__FILE__).'endpoints/';
 		}
 		
 		return $endpointBase;
@@ -463,7 +463,7 @@ class WiseChat {
      */
 	private function getMessagesEndpointBase() {
 		if ($this->options->getEncodedOption('ajax_engine', null) === 'ultralightweight') {
-			$endpointBase = get_site_url().'/wp-content/plugins/wise-chat/src/endpoints/ultra/index.php';
+			$endpointBase = plugin_dir_url(__FILE__).'endpoints/ultra/index.php';
 		} else {
 			$endpointBase = $this->getEndpointBase();
 		}
