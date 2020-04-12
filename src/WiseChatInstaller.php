@@ -56,6 +56,8 @@ class WiseChatInstaller {
 			return;
 		}
 
+		$charsetCollate = $wpdb->get_charset_collate();
+
 		$tableName = self::getUsersTable();
 		$sql = "CREATE TABLE ".$tableName." (
 				id bigint(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -65,7 +67,7 @@ class WiseChatInstaller {
 				ip text,
 				created bigint(11) DEFAULT '0' NOT NULL,
 				data text
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		
@@ -80,7 +82,7 @@ class WiseChatInstaller {
 				channel text NOT NULL, 
 				text text NOT NULL, 
 				ip text NOT NULL
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		// drop column: channel_user_id
@@ -94,7 +96,7 @@ class WiseChatInstaller {
 				time bigint(11) DEFAULT '0' NOT NULL,
 				created bigint(11) DEFAULT '0' NOT NULL,
 				ip text NOT NULL
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 
@@ -104,7 +106,7 @@ class WiseChatInstaller {
 				last_user_name text NOT NULL,
 				created bigint(11) DEFAULT '0' NOT NULL,
 				ip text NOT NULL
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		
@@ -114,7 +116,7 @@ class WiseChatInstaller {
 				time bigint(11) DEFAULT '0' NOT NULL,
 				user_id bigint(11),
 				command text NOT NULL
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		// drop column: user
@@ -126,7 +128,7 @@ class WiseChatInstaller {
 				user_id bigint(11),
 				active boolean not null default 1,
 				last_activity_time bigint(11) DEFAULT '0' NOT NULL
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		// drop column: user, channel, session_id, ip
@@ -136,13 +138,45 @@ class WiseChatInstaller {
 				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				name text NOT NULL,
 				password text
-		) DEFAULT CHARSET=utf8;";
+		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		
 		// set default options after installation:
 		$settings = WiseChatContainer::get('WiseChatSettings');
 		$settings->setDefaultSettings();
+
+		self::upgradeMessagesTableCharset();
+	}
+
+	private static function upgradeMessagesTableCharset()
+	{
+		global $wpdb;
+
+		$convert = false;
+		if (method_exists($wpdb, 'get_col_charset')) {
+			$convert = $wpdb->get_col_charset(self::getMessagesTable(), 'text') === 'utf8';
+		} else {
+			$results = $wpdb->get_results(sprintf("SHOW CREATE TABLE %s;", self::getMessagesTable()), ARRAY_N);
+			if (count($results) > 0 && count($results[0]) > 0) {
+				$convert = preg_match("/CHARSET=utf8 /m", $results[0][1]) > 0;
+			}
+		}
+
+		if ($convert && $wpdb->charset !== 'utf8') {
+			$charsetCollate = '';
+
+			if (!empty($wpdb->charset)) {
+				$charsetCollate = "CHARACTER SET ".$wpdb->charset;
+			}
+			if (!empty($wpdb->collate)) {
+				$charsetCollate .= " COLLATE ".$wpdb->collate;
+			}
+
+			if (strlen($charsetCollate) > 0) {
+				$wpdb->query(sprintf('ALTER TABLE %s CONVERT TO %s;', self::getMessagesTable(), $charsetCollate));
+			}
+		}
 	}
 	
 	public static function deactivate() {
