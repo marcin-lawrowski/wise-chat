@@ -347,6 +347,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 2.8.3 =
 * Fixed: no message when posting emojis (messages table converted from utf8 to utf8mb4)
+* Fixed: links errors in multiline messages
 
 = 2.8.2 =
 * Fixed: images uploading error: Call to undefined function filter_block_content

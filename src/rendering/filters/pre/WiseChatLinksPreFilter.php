@@ -6,10 +6,10 @@
  * @author Kainex <contact@kaine.pl>
  */
 class WiseChatLinksPreFilter {
-	const URL_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?]*)?(\?[^\"'<> ]+)?/i";
-	const URL_YOUTUBE_REGEXP = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtube\.com\/watch\?v\=([^\&\"'<> ]+)[^\"'<> ]*/i";
-    const URL_YOUTUBE_REGEXP_2 = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtu\.be\/([^\&\"'<> ]+)[^\"'<> ]*/i";
-	const URL_IMAGE_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?]*)?\.(jpg|jpeg|gif|png)(\?[^\"'<> ]+)?/i";
+	const URL_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?\n\t\r]*)?(\?[^\"'<> \n\t\r]+)?/i";
+	const URL_YOUTUBE_REGEXP = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtube\.com\/watch\?v\=([^\&\"'<> \n\t\r]+)[^\"'<> \n\t\r]*/i";
+    const URL_YOUTUBE_REGEXP_2 = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtu\.be\/([^\&\"'<> \n\t\r]+)[^\"'<> \n\t\r]*/i";
+	const URL_IMAGE_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?\n\t\r]*)?\.(jpg|jpeg|gif|png)(\?[^\"'<> \n\t\r]+)?/i";
 	const URL_PROTOCOLS_REGEXP = "/^(https|http|ftp)\:\/\//i";
 	
 	/**
