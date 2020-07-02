@@ -349,6 +349,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 * Fixed: PHP Deprecated: session.php error
 * Fixed: CSV Injection
 * Fixed: &gt; / &lt; characters issues in the users list
+* Fixed: {% if allowToReceiveMessages %} errors caused by template processing class
 
 = 2.8.3 =
 * Fixed: no message when posting emojis (messages table converted from utf8 to utf8mb4)

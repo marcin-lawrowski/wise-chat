@@ -61,8 +61,8 @@ class WiseChatTemplater {
 	* @return string
 	*/
 	public function render($data) {
-		$template = $this->renderVariables($this->template, $data);
-		$template = $this->renderIfBlocks($template, $data);
+		$template = $this->renderIfBlocks($this->template, $data);
+		$template = $this->renderVariables($template, $data);
 		
 		$template = $this->detectVariablesCreation($template, $data);
 		$template = $this->renderVariables($template, $data);
