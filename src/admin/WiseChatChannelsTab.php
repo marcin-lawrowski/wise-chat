@@ -73,13 +73,25 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 			$messageArray = array(
 				$message->getId(), date("Y-m-d H:i:s", $message->getTime()), $message->getUserName(), $message->getText(), $message->getIp()
 			);
-			fputcsv($df, $messageArray);
+			fputcsv($df, $this->cleanCSVRow($messageArray));
 		}
 		fclose($df);
 		
 		echo ob_get_clean();
 		
 		die();
+	}
+
+	private function cleanCSVRow($row) {
+		$specialCharacters = array('+', '-', '=', '@');
+		foreach ($row as $key => $value) {
+			foreach ($specialCharacters as $character) {
+				$value = preg_replace('/^'.preg_quote($character).'/', "'".$character, $value);
+			}
+			$row[$key] = $value;
+		}
+
+		return $row;
 	}
 	
 	public function clearAllChannelsAction() {
