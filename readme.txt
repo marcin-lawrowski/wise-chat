@@ -346,6 +346,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.8.4 =
+* Fixed: PHP Deprecated: session.php error
 * Fixed: CSV Injection
 
 = 2.8.3 =

@@ -34,7 +34,12 @@
 	
 	require_once(ABSPATH.WPINC.'/default-filters.php');
 	require_once(ABSPATH.WPINC.'/l10n.php');
-	requireIfExists('session.php');
+	if (file_exists(ABSPATH.WPINC.'/class-wp-session-tokens.php')) {
+		requireIfExists('class-wp-session-tokens.php');
+		requireIfExists('class-wp-user-meta-session-tokens.php');
+	} else {
+		requireIfExists('session.php');
+	}
 	
 	// features enabled:
 	requireIfExists('class-wp-query.php');
