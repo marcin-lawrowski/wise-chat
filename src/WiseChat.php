@@ -376,7 +376,7 @@ class WiseChat {
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
 			'totalUsers' => $totalUsers,
 			'showUserName' => $this->options->isOptionEnabled('show_user_name', true),
-			'currentUserName' => htmlentities($this->authentication->getUserNameOrEmptyString(), ENT_QUOTES, 'UTF-8'),
+			'currentUserName' => htmlentities($this->authentication->getUserNameOrEmptyString(), ENT_QUOTES, 'UTF-8', false),
 			'isCurrentUserNameNotEmpty' => $this->authentication->isAuthenticated(),
 			
 			'inputControlsTopLocation' => $this->options->getEncodedOption('input_controls_location') == 'top',

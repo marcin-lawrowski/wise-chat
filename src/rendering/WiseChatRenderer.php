@@ -286,7 +286,7 @@ class WiseChatRenderer {
                 }
             }
 
-			$encodedName = htmlspecialchars($channelUser->getUser()->getName(), ENT_QUOTES, 'UTF-8');
+			$encodedName = htmlspecialchars($channelUser->getUser()->getName(), ENT_QUOTES, 'UTF-8', false);
 			if ($this->options->isOptionEnabled('users_list_linking', false)) {
 				$encodedName = $this->getRenderedUserNameInternal($encodedName, $channelUser->getUser()->getWordPressId(), $channelUser->getUser());
 			}

@@ -329,7 +329,7 @@ After you type a message use the key combination: Shift + ENTER
 Just use `Wise Chat Channel Users` widget. It displays a block containing list of online users for given channel. Go to `Appearance -> Widgets` and add `Wise Chat Channel Users` widget to the sidebar. You can additionally set:
 
 * title - a title for the block (it may be empty)
-* channel - a name of the channel (empty value means the deafult channel is used)
+* channel - a name of the channel (empty value means the default channel is used)
 * options - use here the syntax and list of attributes of `[wise-chat]` shortcode
 
 == Screenshots ==
@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 = 2.8.4 =
 * Fixed: PHP Deprecated: session.php error
 * Fixed: CSV Injection
+* Fixed: &gt; / &lt; characters issues in the users list
 
 = 2.8.3 =
 * Fixed: no message when posting emojis (messages table converted from utf8 to utf8mb4)
