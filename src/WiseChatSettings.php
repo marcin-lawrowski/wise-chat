@@ -11,8 +11,8 @@ class WiseChatSettings {
 	
 	const PAGE_TITLE = 'Settings Admin';
 	const MENU_TITLE = 'Wise Chat Settings';
-	const SESSION_MESSAGE_KEY = 'wc_plugin_data_messages_update';
-	const SESSION_MESSAGE_ERROR_KEY = 'wc_plugin_data_messages_error';
+	const COOKIE_MESSAGE = 'wc_messages_update_'.COOKIEHASH;
+	const COOKIE_MESSAGE_ERROR = 'wc_messages_error_'.COOKIEHASH;
 	
 	const SECTION_FIELD_KEY = '_section';
 	
@@ -317,26 +317,26 @@ class WiseChatSettings {
 	}
 	
 	/**
-	* Shows a message stored in session.
-	*
-	* @return null
+	* Shows a message stored in the cookie.
 	*/
 	private function showUpdatedMessage() {
-		if (isset($_SESSION[self::SESSION_MESSAGE_KEY])) {
-			add_settings_error(md5($_SESSION[self::SESSION_MESSAGE_KEY]), esc_attr('settings_updated'), $_SESSION[self::SESSION_MESSAGE_KEY], 'updated');
-			unset($_SESSION[self::SESSION_MESSAGE_KEY]);
+		if (isset($_COOKIE[self::COOKIE_MESSAGE])) {
+			add_settings_error(md5($_COOKIE[self::COOKIE_MESSAGE]), esc_attr('settings_updated'), strip_tags($_COOKIE[self::COOKIE_MESSAGE]), 'updated');
+			unset($_COOKIE[self::COOKIE_MESSAGE]);
+			$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
+			setcookie(self::COOKIE_MESSAGE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
 		}
 	}
 	
 	/**
-	* Shows a message stored in session.
-	*
-	* @return null
+	* Shows a message stored in the cookie.
 	*/
 	private function showErrorMessage() {
-		if (isset($_SESSION[self::SESSION_MESSAGE_ERROR_KEY])) {
-			add_settings_error(md5($_SESSION[self::SESSION_MESSAGE_ERROR_KEY]), esc_attr('settings_updated'), $_SESSION[self::SESSION_MESSAGE_ERROR_KEY], 'error');
-			unset($_SESSION[self::SESSION_MESSAGE_ERROR_KEY]);
+		if (isset($_COOKIE[self::COOKIE_MESSAGE_ERROR])) {
+			add_settings_error(md5($_COOKIE[self::COOKIE_MESSAGE_ERROR]), esc_attr('settings_updated'), strip_tags($_COOKIE[self::COOKIE_MESSAGE_ERROR]), 'error');
+			unset($_COOKIE[self::COOKIE_MESSAGE_ERROR]);
+			$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
+			setcookie(self::COOKIE_MESSAGE_ERROR, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
 		}
 	}
 

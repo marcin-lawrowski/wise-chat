@@ -455,7 +455,7 @@ class WiseChatEndpoints {
 							'users' => $this->userService->getAbsentUsersForChannel($channel)
 						)
 					);
-					$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
+					$this->userService->persistUsersList($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
 				}
 				// load new users:
 				if ($this->options->isOptionEnabled('enable_join_notification', true) || strlen($this->options->getOption('join_sound_notification')) > 0) {
@@ -465,7 +465,7 @@ class WiseChatEndpoints {
 							'users' => $this->userService->getNewUsersForChannel($channel)
 						)
 					);
-					$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
+					$this->userService->persistUsersList($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
 				}
 			}
 

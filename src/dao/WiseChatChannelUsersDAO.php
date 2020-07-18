@@ -326,24 +326,21 @@ class WiseChatChannelUsersDAO {
 	}
 
 	/**
-	 * Returns the amount of active channel-user associations for given session ID.
+	 * Returns the amount of active channel-user pair associated with given user.
 	 *
-	 * @param string $sessionId
+	 * @param integer $userId
 	 *
 	 * @return integer
 	 */
-	public function getAmountOfActiveBySessionId($sessionId) {
+	public function getAmountOfActiveByUserId($userId) {
 		global $wpdb;
 
-		$sessionId = addslashes($sessionId);
 		$table = WiseChatInstaller::getChannelUsersTable();
-		$usersTable = WiseChatInstaller::getUsersTable();
 		$sql = sprintf(
-			'SELECT count(usc.user_id) AS quantity '.
+			'SELECT count(usc.channel_id) AS quantity '.
 			'FROM %s AS usc '.
-			'LEFT JOIN %s AS us ON (usc.user_id = us.id) '.
-			'WHERE usc.active = 1 AND us.session_id = "%s";',
-			$table, $usersTable, addslashes($sessionId)
+			'WHERE usc.active = 1 AND usc.user_id = %d;',
+			$table, $userId
 		);
 
 		$results = $wpdb->get_results($sql);
@@ -356,19 +353,17 @@ class WiseChatChannelUsersDAO {
 	}
 
 	/**
-	* Checks whether the given user name belongs to a different user (with different session ID) either active or inactive.
+	* Checks whether the given user name belongs to a different user.
 	*
 	* @param string $userName Username to check
-	* @param string $sessionId Session ID to check
-	* @param boolean $includeActiveOnly
+	* @param boolean $includeActiveOnly Whether to limit the search to active users only
 	*
 	* @return boolean
 	*/
-	public function isUserNameOccupied($userName, $sessionId, $includeActiveOnly = false) {
+	public function isUserNameOccupied($userName, $includeActiveOnly = false) {
 		global $wpdb;
 
 		$userName = addslashes($userName);
-		$sessionId = addslashes($sessionId);
 		$table = WiseChatInstaller::getChannelUsersTable();
 		$usersTable = WiseChatInstaller::getUsersTable();
 		$activeOnlyCondition = $includeActiveOnly ? ' AND usc.active = 1 ' : '';
@@ -376,8 +371,8 @@ class WiseChatChannelUsersDAO {
 			'SELECT * '.
 			'FROM %s AS usc '.
 			'LEFT JOIN %s AS us ON (usc.user_id = us.id) '.
-			'WHERE us.name = "%s" AND us.session_id != "%s" %s LIMIT 1;',
-			$table, $usersTable, $userName, $sessionId, $activeOnlyCondition
+			'WHERE us.name = "%s" %s LIMIT 1;',
+			$table, $usersTable, $userName, $activeOnlyCondition
 		);
 		$results = $wpdb->get_results($sql);
 		

@@ -8,8 +8,7 @@
 	<div class="wcWindowContent">
 		<div class="wcChannelProtectionHint">{{ messageChannelPasswordAuthorizationHint }}</div>
 		
-		<form method="post" class="wcChannelProtectionForm">
-			<input type="hidden" value="1" name="wcChannelAuthorization" />
+		<form method="post" class="wcChannelProtectionForm" action="{{ formAction }}">
 			<input type="password" name="wcChannelPassword" required />
 			<input type="submit" value="{{ messageLogin }}" />
 		</form>

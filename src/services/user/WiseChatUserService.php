@@ -8,7 +8,7 @@
 class WiseChatUserService {
 	const USERS_ACTIVITY_TIME_FRAME = 80;
 	const USERS_PRESENCE_TIME_FRAME = 86400;
-	const USERS_LIST_SESSION_KEY = 'wise_chat_current_users_list_channel_';
+	const USERS_LIST_PROPERTY_NAME = 'current_users_list_channel_';
 	const USERS_LIST_CATEGORY_NEW = '_new';
 	const USERS_LIST_CATEGORY_ABSENT = '_absent';
 
@@ -31,11 +31,6 @@ class WiseChatUserService {
 	* @var WiseChatUsersDAO
 	*/
 	private $usersDAO;
-
-	/**
-	 * @var WiseChatUserSessionDAO
-	 */
-	private $userSessionDAO;
 	
 	/**
 	* @var WiseChatChannelUsersDAO
@@ -61,7 +56,6 @@ class WiseChatUserService {
 		$this->options = WiseChatOptions::getInstance();
 		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->usersDAO = WiseChatContainer::getLazy('dao/user/WiseChatUsersDAO');
-		$this->userSessionDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSessionDAO');
 		$this->actions = WiseChatContainer::getLazy('services/user/WiseChatActions');
 		$this->channelUsersDAO = WiseChatContainer::getLazy('dao/WiseChatChannelUsersDAO');
 		$this->messagesDAO = WiseChatContainer::getLazy('dao/WiseChatMessagesDAO');
@@ -87,8 +81,10 @@ class WiseChatUserService {
 	* @return null
 	*/
 	public function startUpMaintenance($channel) {
-		$this->userEvents->resetEventTracker('usersList', $channel->getName());
-		$this->userEvents->resetEventTracker('ping', $channel->getName());
+		if ($this->authentication->isAuthenticated()) {
+			$this->userEvents->resetEventTracker('usersList', $channel->getName());
+			$this->userEvents->resetEventTracker('ping', $channel->getName());
+		}
 	}
 	
 	/**
@@ -285,8 +281,66 @@ class WiseChatUserService {
 	}
 
 	/**
+	 * Gets user property.
+	 *
+	 * @param string $property
+	 * @return mixed|null
+	 *
+	 * @throws Exception If an error occurred
+	 */
+	public function getProperty($property) {
+		if (!$this->authentication->isAuthenticated()) {
+			throw new Exception('Could not get a property on unauthenticated user');
+		}
+
+		return $this->authentication->getUser()->getDataProperty($property);
+	}
+
+	/**
+	 * Sets user property.
+	 *
+	 * @param string $property
+	 * @param mixed $value
+	 *
+	 * @throws Exception If an error occurred
+	 */
+	public function setProperty($property, $value) {
+		if (!$this->authentication->isAuthenticated()) {
+			throw new Exception('Could not set a property on unauthenticated user');
+		}
+
+		$user = $this->authentication->getUser();
+		$user->setDataProperty($property, $value);
+		$this->usersDAO->save($user);
+	}
+
+	/**
+	 * Unsets all properties that match the prefix.
+	 *
+	 * @param string $prefix
+	 *
+	 * @throws Exception If an error occurred
+	 */
+	public function unsetPropertiesByPrefix($prefix) {
+		if (!$this->authentication->isAuthenticated()) {
+			throw new Exception('Could not unset a property on unauthenticated user');
+		}
+
+		$user = $this->authentication->getUser();
+		$allProperties = $user->getData();
+		if (is_array($allProperties)) {
+			foreach ($allProperties as $key => $value) {
+				if (strpos($key, $prefix) === 0) {
+					unset($allProperties[$key]);
+				}
+			}
+			$user->setData($allProperties);
+			$this->usersDAO->save($user);
+		}
+	}
+
+	/**
 	 * Returns absent users since the last check.
-	 * Status is preserved in user session.
 	 *
 	 * @param WiseChatChannel $channel
 	 *
@@ -301,7 +355,7 @@ class WiseChatUserService {
 		$lastUsersRaw = $this->getPersistedUsersList($channel, self::USERS_LIST_CATEGORY_ABSENT);
 
 		// if the last users list is empty - return empty array:
-		if (count($lastUsersRaw) === 0) {
+		if ($lastUsersRaw === null || count($lastUsersRaw) === 0) {
 			return array();
 		}
 
@@ -323,7 +377,6 @@ class WiseChatUserService {
 
 	/**
 	 * Returns new users since the last check.
-	 * Status is preserved in user session.
 	 *
 	 * @param WiseChatChannel $channel
 	 *
@@ -337,7 +390,7 @@ class WiseChatUserService {
 		// get the last status:
 		$lastUsersRaw = $this->getPersistedUsersList($channel, self::USERS_LIST_CATEGORY_NEW);
 		$users = $this->getUsersListForChannel($channel);
-		if (count($users) === 0) {
+		if ($lastUsersRaw === null || count($users) === 0) {
 			return array();
 		}
 
@@ -362,12 +415,12 @@ class WiseChatUserService {
 
 
 	/**
-	 * Loads users list for the given channel and saves it in user session.
+	 * Persists the current users of the channel.
 	 *
 	 * @param WiseChatChannel $channel
 	 * @param string $listCategory
 	 */
-	public function persistUsersListInSession($channel, $listCategory) {
+	public function persistUsersList($channel, $listCategory) {
 		if ($channel === null) {
 			return;
 		}
@@ -380,41 +433,38 @@ class WiseChatUserService {
 				'name' => $user->getName()
 			);
 		}
-		$this->userSessionDAO->set(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory, json_encode($usersRaw));
+
+		$this->setProperty(self::USERS_LIST_PROPERTY_NAME.$channel->getId().$listCategory, json_encode($usersRaw));
 	}
 
 	/**
-	 * Clears users list for the given channel.
+	 * Clears persisted users of the channel
 	 *
 	 * @param WiseChatChannel $channel
 	 * @param string $listCategory
 	 */
-	public function clearUsersListInSession($channel, $listCategory) {
+	public function clearUsersList($channel, $listCategory) {
 		if ($channel === null) {
 			return;
 		}
 
-		$this->userSessionDAO->drop(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory);
+		$this->setProperty(self::USERS_LIST_PROPERTY_NAME.$channel->getId().$listCategory, null);
 	}
 
 	/**
-	 * Returns users list for the given channel (persisted in session).
+	 * Returns users list for the given channel.
 	 *
 	 * @param WiseChatChannel $channel
 	 * @param string $listCategory
-	 * @return array
+	 * @return array|null
 	 */
 	private function getPersistedUsersList($channel, $listCategory) {
-		if ($channel === null) {
-			return array();
-		}
-
-		$lastUsersRawJSON = $this->userSessionDAO->get(self::USERS_LIST_SESSION_KEY.$channel->getId().$listCategory);
-		$lastUsersRaw = array();
+		$lastUsersRawJSON = $this->getProperty(self::USERS_LIST_PROPERTY_NAME.$channel->getId().$listCategory);
+		$lastUsersRaw = null;
 		if ($lastUsersRawJSON !== null) {
 			$lastUsersRaw = json_decode($lastUsersRawJSON, true);
 			if (!is_array($lastUsersRaw)) {
-				$lastUsersRaw = array();
+				$lastUsersRaw = null;
 			}
 		}
 

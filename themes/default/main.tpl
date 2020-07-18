@@ -117,9 +117,3 @@
 
 {{ cssDefinitions }}
 {{ customCssDefinitions }}
-
-<script>
-    {% if redirectURL %}
-        window.location.href = '{{ redirectURL }}';
-    {% endif redirectURL %}
-</script>

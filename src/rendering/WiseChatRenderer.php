@@ -31,6 +31,16 @@ class WiseChatRenderer {
 	 * @var WiseChatAuthentication
 	 */
 	private $authentication;
+
+	/**
+	 * @var WiseChatAuthorization
+	 */
+	private $authorization;
+
+	/**
+	 * @var WiseChatHttpRequestService
+	 */
+	private $httpRequestService;
 	
 	/**
 	* @var WiseChatOptions
@@ -49,11 +59,10 @@ class WiseChatRenderer {
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
 		$this->channelUsersDAO = WiseChatContainer::get('dao/WiseChatChannelUsersDAO');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
+		$this->authorization = WiseChatContainer::getLazy('services/user/WiseChatAuthorization');
+		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
-
-
-
 
 		$this->templater = new WiseChatTemplater($this->options->getPluginBaseDir());
 	}
@@ -61,22 +70,23 @@ class WiseChatRenderer {
     /**
      * Returns rendered password authorization page.
      *
-     * @param string|null $authorizationError
+     * @param WiseChatChannel $channel
      *
      * @return string HTML source
      * @throws Exception
      */
-	public function getRenderedPasswordAuthorization($authorizationError = null) {
+	public function getRenderedPasswordAuthorization($channel) {
 		$this->templater->setTemplateFile(WiseChatThemes::getInstance()->getPasswordAuthorizationTemplate());
 		
 		$data = array(
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
+			'formAction' => $this->authorization->getChannelPasswordActionLoginURL($channel),
 			'messageChannelPasswordAuthorizationHint' => $this->options->getEncodedOption(
 				'message_channel_password_authorization_hint', 'This channel is protected. Enter your password:'
 			),
 			'messageLogin' => $this->options->getEncodedOption('message_login', 'Log in'),
-			'authorizationError' => $authorizationError
+			'authorizationError' => $this->httpRequestService->getRequestParam('authorizationError', null)
 		);
 		
 		return $this->templater->render($data);
@@ -104,19 +114,20 @@ class WiseChatRenderer {
 	}
 
 	/**
-	 * Returns the form which allows to enter username.
+	 * Returns username authentication form.
 	 *
-	 * @param string|null $errorMessage
+	 * @param WiseChatChannel $channel
 	 *
 	 * @return string HTML source
 	 * @throws Exception
 	 */
-	public function getRenderedUserNameForm($errorMessage = null) {
+	public function getRenderedUserNameForm($channel) {
 		$this->templater->setTemplateFile(WiseChatThemes::getInstance()->getUserNameFormTemplate());
 		$data = array(
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
-			'errorMessage' => $errorMessage,
+			'formAction' => $this->authentication->getUserNameActionLoginURL(),
+			'authenticationError' => $this->httpRequestService->getRequestParam('authenticationError', null),
 			'messageLogin' => $this->options->getEncodedOption('message_login', 'Log in'),
 			'messageEnterUserName' => $this->options->getEncodedOption('message_enter_user_name', 'Enter your username'),
 		);

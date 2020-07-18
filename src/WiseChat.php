@@ -190,7 +190,7 @@ class WiseChat {
 	}
 
 	/**
-	 * Returns chat HTML for given channel.
+	 * Returns rendered chat window.
 	 *
 	 * @param string|null $channelName
 	 *
@@ -198,15 +198,16 @@ class WiseChat {
 	 * @throws Exception
 	 */
 	public function getRenderedChat($channelName = null) {
-		$redirectURL = null;
 		$channel = $this->service->createAndGetChannel($this->service->getValidChatChannelName($channelName));
 
-		// saves users list in session for this channel (it will be updated in maintenance task):
-		if ($this->options->isOptionEnabled('enable_leave_notification', true) || strlen($this->options->getOption('leave_sound_notification')) > 0) {
-			$this->userService->clearUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
-		}
-		if ($this->options->isOptionEnabled('enable_join_notification', true) || strlen($this->options->getOption('join_sound_notification')) > 0) {
-			$this->userService->persistUsersListInSession($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
+		// saves the current list of users (it will be updated in maintenance task):
+		if ($this->authentication->isAuthenticated()) {
+			if ($this->options->isOptionEnabled('enable_leave_notification', true) || strlen($this->options->getOption('leave_sound_notification')) > 0) {
+				$this->userService->clearUsersList($channel, WiseChatUserService::USERS_LIST_CATEGORY_ABSENT);
+			}
+			if ($this->options->isOptionEnabled('enable_join_notification', true) || strlen($this->options->getOption('join_sound_notification')) > 0) {
+				$this->userService->persistUsersList($channel, WiseChatUserService::USERS_LIST_CATEGORY_NEW);
+			}
 		}
 
 		if ($this->service->isIpKicked()) {
@@ -246,28 +247,9 @@ class WiseChat {
 		}
 
 		if ($this->service->hasUserToBeForcedToEnterName()) {
-			if ($this->getPostParam('wcUserNameSelection') !== null) {
-				try {
-					$this->authentication->authenticate($this->getPostParam('wcUserName'));
-					$redirectURL = $this->httpRequestService->getCurrentURL();
-				} catch (Exception $e) {
-					return $this->renderer->getRenderedUserNameForm($e->getMessage());
-				}
-			} else {
-				return $this->renderer->getRenderedUserNameForm();
-			}
-		}
-		
-		if ($this->service->hasUserToBeAuthorizedInChannel($channel)) {
-			if ($this->getPostParam('wcChannelAuthorization') !== null) {
-				if (!$this->service->authorize($channel, $this->getPostParam('wcChannelPassword'))) {
-					return $this->renderer->getRenderedPasswordAuthorization($this->options->getOption('message_error_9', 'Invalid password.'));
-				} else {
-					$redirectURL = $this->httpRequestService->getCurrentURL();
-				}
-			} else {
-				return $this->renderer->getRenderedPasswordAuthorization();
-			}
+			return $this->renderer->getRenderedUserNameForm($channel);
+		} else if ($this->service->hasUserToBeAuthorizedInChannel($channel)) {
+			return $this->renderer->getRenderedPasswordAuthorization($channel);
 		}
 
 		$chatId = $this->service->getChatID();
@@ -363,7 +345,6 @@ class WiseChat {
 		$data = array(
 			'chatId' => $chatId,
 			'baseDir' => $this->options->getBaseDir(),
-			'redirectURL' => $redirectURL,
 			'messages' => $renderedMessages,
 			'themeStyles' => $this->options->getBaseDir().WiseChatThemes::getInstance()->getCss(),
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button', true),
@@ -469,14 +450,5 @@ class WiseChat {
 		}
 
 		return $endpointBase;
-	}
-
-    /**
-     * @param string $name
-     * @param mixed|null $default
-     * @return mixed
-     */
-	private function getPostParam($name, $default = null) {
-		return array_key_exists($name, $_POST) ? $_POST[$name] : $default;
 	}
 }

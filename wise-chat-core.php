@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 2.8.4
+	Version: 2.9
 	Plugin URI: https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Kainex
@@ -89,6 +89,17 @@ function wise_chat_action_delete_attachment($attachmentId) {
 }
 add_action('delete_attachment', 'wise_chat_action_delete_attachment');
 
+// register action that handles authentication features:
+function wise_chat_authentication_action() {
+	/** @var WiseChatAuthentication $authentication */
+	$authentication = WiseChatContainer::get('services/user/WiseChatAuthentication');
+	$authentication->handleAuthentication();
+
+	/** @var WiseChatAuthorization $authorization */
+	$authorization = WiseChatContainer::get('services/user/WiseChatAuthorization');
+	$authorization->handleAuthorization();
+}
+add_action('template_redirect', 'wise_chat_authentication_action');
 
 function wise_chat_panels_plugin_action_links($links) {
 	unset( $links['edit'] );

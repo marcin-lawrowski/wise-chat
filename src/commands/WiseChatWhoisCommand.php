@@ -25,8 +25,8 @@ class WiseChatWhoisCommand extends WiseChatAbstractCommand {
                 "User: %s \n".
                 "ID: %d \n".
                 "IP address: %s \n".
-                "PHP session ID: %s \n",
-                $userName, $user->getId(), $user->getIp(), $user->getSessionId(), $user->get
+                "Unique ID: %s \n",
+                $userName, $user->getId(), $user->getIp(), $user->getSessionId()
             );
 
             $this->addMessage($details);

@@ -8,14 +8,13 @@
 	<div class="wcWindowContent">
 		<div class="wcUserNameHint">{{ messageEnterUserName }}</div>
 		
-		<form method="post" class="wcUserNameForm">
-			<input type="hidden" value="1" name="wcUserNameSelection" />
+		<form method="post" class="wcUserNameForm" action="{{ formAction }}">
 			<input type="text" name="wcUserName" required />
 			<input type="submit" value="{{ messageLogin }}" />
 		</form>
 		
-		{% if errorMessage %}
-			<div class='wcError wcUserNameError'>{{ errorMessage }}</div>
-		{% endif errorMessage %}
+		{% if authenticationError %}
+			<div class='wcError wcUserNameError'>{{ authenticationError }}</div>
+		{% endif authenticationError %}
 	</div>
 </div>

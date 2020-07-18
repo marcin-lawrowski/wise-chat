@@ -6,12 +6,12 @@
  * @author Kainex <contact@kaine.pl>
  */
 class WiseChatUserEvents {
-    const SESSION_KEY_EVENT_TIME = 'wise_chat_activity_time';
+	const PROPERTY_NAME_PREFIX = 'activity_time';
 
-    /**
-     * @var WiseChatUserSessionDAO
-     */
-    private $userSessionDAO;
+	/**
+	 * @var WiseChatUserService
+	 */
+	private $userService;
 
     /**
      * @var array Events thresholds in seconds
@@ -26,54 +26,54 @@ class WiseChatUserEvents {
      * WiseChatUserEvents constructor.
      */
     public function __construct() {
-        $this->userSessionDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSessionDAO');
+	    $this->userService = WiseChatContainer::get('services/user/WiseChatUserService');
     }
 
-    /**
-     * Checks whether it is time to trigger an event identified by group and id.
-     *
-     * @param string $group Event group
-     * @param string $id Event id
-     *
-     * @return boolean
-     */
-    public function shouldTriggerEvent($group, $id) {
-        $sessionKey = self::SESSION_KEY_EVENT_TIME.md5($group).'_'.md5($id);
+	/**
+	 * Checks whether it is time to trigger an event identified by group and id.
+	 *
+	 * @param string $group Event group
+	 * @param string $id Event id
+	 *
+	 * @return boolean
+	 */
+	public function shouldTriggerEvent($group, $id) {
+		$propertyKey = self::PROPERTY_NAME_PREFIX.md5($group).'_'.md5($id);
 
-        if (!$this->userSessionDAO->contains($sessionKey)) {
-            $this->userSessionDAO->set($sessionKey, time());
-            return true;
-        } else {
-            $diff = time() - $this->userSessionDAO->get($sessionKey);
-            if ($diff > $this->getEventTimeThreshold($group)) {
-                $this->userSessionDAO->set($sessionKey, time());
-                return true;
-            }
-        }
+		if ($this->userService->getProperty($propertyKey) === null) {
+			$this->userService->setProperty($propertyKey, time());
+			return true;
+		} else {
+			$diff = time() - $this->userService->getProperty($propertyKey);
+			if ($diff > $this->getEventTimeThreshold($group)) {
+				$this->userService->setProperty($propertyKey, time());
+				return true;
+			}
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    /**
-     * Resets tracking of the given event. Resets all events if event ID equals null.
-     *
-     * @param string $group Event group
-     * @param string|null $id Event id
-     *
-     * @return null
-     */
-    public function resetEventTracker($group, $id = null) {
-        $prefix = self::SESSION_KEY_EVENT_TIME.md5($group).'_';
-        if ($id !== null) {
-            $sessionKey = $prefix.md5($id);
+	/**
+	 * Resets tracking of the given event. Resets all events if event ID equals null.
+	 *
+	 * @param string $group Event group
+	 * @param string|null $id Event id
+	 *
+	 * @return null
+	 */
+	public function resetEventTracker($group, $id = null) {
+		$prefix = self::PROPERTY_NAME_PREFIX.md5($group).'_';
+		if ($id !== null) {
+			$propertyKey = $prefix.md5($id);
 
-            if ($this->userSessionDAO->contains($sessionKey)) {
-                $this->userSessionDAO->drop($sessionKey);
-            }
-        } else {
-            $this->userSessionDAO->dropAllByPrefix($prefix);
-        }
-    }
+			if ($this->userService->getProperty($propertyKey) !== null) {
+				$this->userService->setProperty($propertyKey, null);
+			}
+		} else {
+			$this->userService->unsetPropertiesByPrefix($prefix);
+		}
+	}
 
     /**
      * Returns time threshold for given event group.

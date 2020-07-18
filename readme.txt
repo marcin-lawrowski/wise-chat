@@ -5,7 +5,7 @@ Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, cha
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 5.4.2
-Stable tag: 2.8.4
+Stable tag: 2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,13 +71,15 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Private messages to offline users**: Send private messages to offline users.
-* **Avatars**: Display avatars either in the chat or the users list.
-* **BuddyPress integration**: Integrate Wise Chat Pro in BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
+* **Facebook-like mode**: Display the chat attached to the right side of the browser.
+* **Avatars**: Display avatars both in the chat window and in the users list.
+* **BuddyPress integration**: Integrate Wise Chat Pro with BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
 * **Custom emoticons**: Compose your own set of emoticons.
 * **Facebook / Twitter / Google+ authentication**: Increase range of potential users by allowing them to log in using their accounts on social networking sites like Facebook, Twitter or Google+
 * **Multisite support**: Wise Chat Pro supports WordPress multisite environment.
-* **E-mail notifications**: Configure notifications sent to admin.
+* **E-mail notifications**: Configure notifications sent to admin or chat participants.
 * **Pro themes**: Use one of 3 extra modern looking Pro themes.
+* **Hooks**: Add your own code to the main points of the chat’s logic.
 * **Pending messages**: Set up full moderation which allows to publish approved messages only.
 * **Users list search option**: Search users list.
 * **Edit posted messages**: Modify posted messages in the chat window.
@@ -344,6 +346,11 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 08. Cold Dark theme: responsive design
 
 == Changelog ==
+
+= 2.9 =
+* Switched user session handling to cookies (remembering users for a long time)
+* Performance optimization: removed PHP session usage
+* Fixed: Error: cURL error 28: Operation timed out after 10001 milliseconds with 0 bytes received
 
 = 2.8.4 =
 * Fixed: PHP Deprecated: session.php error

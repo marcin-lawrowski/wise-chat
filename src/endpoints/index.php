@@ -1,6 +1,4 @@
 <?php
-	session_start();
-	
 	define('DOING_AJAX', true);
 	define('SHORTINIT', true);
 	

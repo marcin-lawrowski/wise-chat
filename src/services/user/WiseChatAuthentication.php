@@ -4,47 +4,108 @@
  * Wise Chat authentication service.
  */
 class WiseChatAuthentication {
-    const SESSION_KEY_ORIGINAL_USERNAME = 'wise_chat_user_name_auto';
-    const SESSION_KEY_USER_ID = 'wise_chat_user_id';
-    const SYSTEM_USER_NAME = 'System';
+	const USER_PROPERTY_KEY_ORIGINAL_USERNAME = 'wise_chat_user_name_auto';
+	const SYSTEM_USER_NAME = 'System';
+	const COOKIE_NAME = 'wc_auth_'.COOKIEHASH;
+	const MINUTE_IN_SECONDS = 60;
+	const HOUR_IN_SECONDS = 3600;
+	const DAY_IN_SECONDS = 86400;
+	const YEAR_IN_SECONDS = 31622400;
 
-    /**
-     * @var WiseChatUsersDAO
-     */
-    private $usersDAO;
+	/**
+	 * @var WiseChatUsersDAO
+	 */
+	private $usersDAO;
 
-    /**
-     * @var WiseChatUserSessionDAO
-     */
-    private $userSessionDAO;
+	/**
+	 * @var WiseChatChannelUsersDAO
+	 */
+	private $channelUsersDAO;
 
-    /**
-     * @var WiseChatChannelUsersDAO
-     */
-    private $channelUsersDAO;
+	/**
+	 * @var WiseChatUserService
+	 */
+	private $userService;
 
-    /**
-     * @var WiseChatOptions
-     */
-    private $options;
+	/**
+	 * @var WiseChatHttpRequestService
+	 */
+	private $httpRequestService;
+
+	/**
+	 * @var WiseChatOptions
+	 */
+	private $options;
 
     /**
      * WiseChatAuthentication constructor.
      */
     public function __construct() {
-        $this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
-        $this->userSessionDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSessionDAO');
-        $this->channelUsersDAO = WiseChatContainer::getLazy('dao/WiseChatChannelUsersDAO');
-        $this->options = WiseChatOptions::getInstance();
+	    $this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
+	    $this->channelUsersDAO = WiseChatContainer::getLazy('dao/WiseChatChannelUsersDAO');
+	    $this->userService = WiseChatContainer::get('services/user/WiseChatUserService');
+	    $this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
+	    $this->options = WiseChatOptions::getInstance();
     }
 
+	public function getUserNameActionLoginURL() {
+		$parameters = array(
+			'wcLoginAction' => 'un',
+			'nonce' => wp_create_nonce('un'.$this->httpRequestService->getRemoteAddress())
+		);
+
+		return $this->httpRequestService->getCurrentURLWithParameters($parameters);
+	}
+
+	public function handleAuthentication() {
+		// validate parameters:
+		$method = $this->httpRequestService->getParam('wcLoginAction');
+		if ($method === null) {
+			return;
+		}
+		$nonce = $this->httpRequestService->getParam('nonce');
+		if ($method !== null && $nonce === null) {
+			$this->httpRequestService->reload(array('wcLoginAction', 'nonce'));
+		}
+
+		// verify nonce:
+		$nonceAction = null;
+		switch ($method) {
+			case 'un':
+				$nonceAction = $method.$this->httpRequestService->getRemoteAddress();
+				break;
+			default:
+				$this->httpRequestService->reload(array('wcLoginAction', 'nonce'));
+		}
+		if (!wp_verify_nonce($nonce, $nonceAction)) {
+			$this->httpRequestService->setRequestParam('authenticationError', 'Bad request');
+			return;
+		}
+
+		try {
+			$user = null;
+
+			if ($method === 'un' && !$this->isAuthenticated() && $this->options->isOptionEnabled('force_user_name_selection', false)) {
+				$user = $this->authenticate($this->httpRequestService->getPostParam('wcUserName'));
+			}
+
+			if ($user === null) {
+				throw new Exception('Authentication error');
+			}
+
+			$this->httpRequestService->reload(array('wcLoginAction', 'nonce'));
+		} catch (Exception $e) {
+			$this->httpRequestService->setRequestParam('authenticationError', $e->getMessage());
+		}
+	}
+
     /**
-     * Determines whether the current user is the authenticated chat user.
+     * Determines whether the current user is authenticated.
      *
      * @return boolean
      */
     public function isAuthenticated() {
-        return $this->userSessionDAO->contains(self::SESSION_KEY_USER_ID) && intval($this->userSessionDAO->get(self::SESSION_KEY_USER_ID)) > 0;
+	    return $this->validateAuthenticationCookie() !== null;
     }
 
     /**
@@ -53,17 +114,13 @@ class WiseChatAuthentication {
      * @return WiseChatUser|null
      */
     public function getUser() {
-        static $cache = null;
+	    static $cache = null;
 
-        if ($this->isAuthenticated()) {
-            if ($cache === null) {
-                $cache = $this->usersDAO->get($this->userSessionDAO->get(self::SESSION_KEY_USER_ID));
-            }
+	    if ($cache === null) {
+		    $cache = $this->validateAuthenticationCookie();
+	    }
 
-            return $cache;
-        }
-
-        return null;
+	    return $cache;
     }
 
     /**
@@ -77,7 +134,7 @@ class WiseChatAuthentication {
         $user = new WiseChatUser();
         $user->setId(0);
         $user->setName(self::SYSTEM_USER_NAME);
-        $user->setSessionId($this->userSessionDAO->getSessionId());
+        $user->setSessionId(wp_generate_password());
 		$user->setIp($this->getServerAddress());
 		
         return $user;
@@ -140,12 +197,38 @@ class WiseChatAuthentication {
 
         return $this->createUserAndSave($userName);
     }
+
+	/**
+	 * Authenticates user by user object if no user is authenticated yet.
+	 *
+	 * @param WiseChatUser $user
+	 *
+	 * @return WiseChatUser
+	 * @throws Exception
+	 */
+	public function authenticateWithUser($user) {
+		if ($this->isAuthenticated()) {
+			throw new Exception('Could not authenticate user');
+		}
+
+		$user->setSessionId(wp_generate_password());
+		$user->setIp($this->getRemoteAddress());
+		if ($this->options->isOptionEnabled('collect_user_stats', true)) {
+			$this->fillWithGeoDetails($user);
+		}
+
+		// save the user in the database and send auth cookie:
+		$this->usersDAO->save($user);
+		$this->sendAuthenticationCookie($user);
+
+		return $user;
+	}
     
     /**
      * Drops authentication.
      */
     public function dropAuthentication() {
-        $this->userSessionDAO->drop(self::SESSION_KEY_USER_ID);
+	    $this->clearAuthenticationCookie();
     }
 
     /**
@@ -178,7 +261,7 @@ class WiseChatAuthentication {
             $this->getUserNameOrEmptyString() == $userName ||
             $this->usersDAO->getWpUserByDisplayName($userName) !== null ||
             $this->usersDAO->getWpUserByLogin($userName) !== null ||
-            $this->channelUsersDAO->isUserNameOccupied($userName, $this->userSessionDAO->getSessionId(), $disableUserNameCheck) ||
+            $this->channelUsersDAO->isUserNameOccupied($userName, $disableUserNameCheck) ||
             preg_match("/^{$prefix}/", $userName) ||
             $userName == $this->getSystemUser()->getName()
         ) {
@@ -194,11 +277,7 @@ class WiseChatAuthentication {
      * @return string|null
      */
     public function getOriginalUserName() {
-        if ($this->userSessionDAO->contains(self::SESSION_KEY_ORIGINAL_USERNAME)) {
-            return $this->userSessionDAO->get(self::SESSION_KEY_ORIGINAL_USERNAME);
-        } else {
-            return null;
-        }
+	    return $this->userService->getProperty(self::USER_PROPERTY_KEY_ORIGINAL_USERNAME);
     }
 
     /**
@@ -207,8 +286,121 @@ class WiseChatAuthentication {
      * @param string $userName
      */
     public function setOriginalUserName($userName) {
-        $this->userSessionDAO->set(self::SESSION_KEY_ORIGINAL_USERNAME, $userName);
+	    $this->userService->setProperty(self::USER_PROPERTY_KEY_ORIGINAL_USERNAME, $userName);
     }
+
+	/**
+	 * Sends authentication cookie.
+	 *
+	 * @param WiseChatUser $user
+	 */
+	private function sendAuthenticationCookie($user) {
+		$expiration = $this->getAuthenticationCookieExpirationTime();
+		$authCookieValue = $this->getAuthenticationCookieValue($user, $expiration);
+
+		$expire = $expiration > 0 ? $expiration + (12 * self::HOUR_IN_SECONDS) : 0;
+		$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
+
+		setcookie(self::COOKIE_NAME, $authCookieValue, $expire, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		if (COOKIEPATH != SITECOOKIEPATH) {
+			setcookie(self::COOKIE_NAME, $authCookieValue, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		}
+
+		// set the cookie for further processing in the current request:
+		$_COOKIE[self::COOKIE_NAME] = $authCookieValue;
+	}
+
+	/**
+	 * Clears authentication cookie.
+	 */
+	private function clearAuthenticationCookie() {
+		setcookie(self::COOKIE_NAME, ' ', time() - self::YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN);
+		setcookie(self::COOKIE_NAME, ' ', time() - self::YEAR_IN_SECONDS, SITECOOKIEPATH, COOKIE_DOMAIN);
+	}
+
+	/**
+	 * Returns authentication cookie value.
+	 *
+	 * @param WiseChatUser $user
+	 * @param string $expiration
+	 *
+	 * @return string
+	 */
+	private function getAuthenticationCookieValue($user, $expiration) {
+		$key = wp_hash($user->getId() . '|' . $user->getSessionId() . '|'. $expiration, 'auth');
+		$hash = hash_hmac(function_exists('hash') ? 'sha256' : 'sha1', $user->getId() . '|' . $expiration, $key);
+
+		return $user->getId() . '|' . $expiration . '|' . $hash;
+	}
+
+	private function getAuthenticationCookieExpirationTime() {
+		$timeout = $this->options->getIntegerOption('user_auth_expiration_days', 14);
+		if ($timeout === 0) {
+			return 0;
+		}
+
+		return time() + $timeout * self::DAY_IN_SECONDS;
+	}
+
+	/**
+	 * Returns the authenticated user or null.
+	 *
+	 * @return WiseChatUser|null
+	 */
+	private function validateAuthenticationCookie() {
+		if (!is_array($_COOKIE) || !array_key_exists(self::COOKIE_NAME, $_COOKIE) || strlen($_COOKIE[self::COOKIE_NAME]) === 0) {
+			return null;
+		}
+
+		$cookie = $_COOKIE[self::COOKIE_NAME];
+		$cookieElements = explode('|', $cookie);
+		if (count($cookieElements) !== 3) {
+			return null;
+		}
+
+		$userId = $cookieElements[0];
+		$expiration = $cookieElements[1];
+		$hashMac = $cookieElements[2];
+
+		if ($expiration > 0 && $expiration < time()) {
+			return null;
+		}
+
+		$user = $this->usersDAO->get($userId);
+		if ($user === null) {
+			return null;
+		}
+
+		$key = wp_hash($user->getId().'|'.$user->getSessionId().'|'.$expiration, 'auth');
+		$hash = hash_hmac(function_exists('hash') ? 'sha256' : 'sha1', $user->getId().'|'.$expiration, $key);
+		if (!hash_equals($hash, $hashMac)) {
+			return null;
+		}
+
+		$this->refreshAuthenticationCookie($expiration, $user);
+
+		return $user;
+	}
+
+	/**
+	 * Refresh the cookie if expiration time is less than half.
+	 *
+	 * @param integer $expiration
+	 * @param WiseChatUser $user
+	 */
+	private function refreshAuthenticationCookie($expiration, $user) {
+		$timeout = $this->options->getIntegerOption('user_auth_expiration_days', 14);
+		if ($expiration === 0 || headers_sent() || $timeout === 0 || !$this->options->isOptionEnabled('user_auth_keep_logged_in', true)) {
+			return;
+		}
+
+		$half = $timeout * self::DAY_IN_SECONDS / 2;
+		$lifeTime = $expiration - time();
+		if ($lifeTime < $half) {
+			header("X-Wise-Chat-Pro: refreshed cookie $lifeTime < $half");
+			$this->sendAuthenticationCookie($user);
+		}
+	}
 
     /**
      * @param string $userName
@@ -216,22 +408,13 @@ class WiseChatAuthentication {
      * @return WiseChatUser
      */
     private function createUserAndSave($userName) {
-        WiseChatContainer::load('model/WiseChatUser');
+	    WiseChatContainer::load('model/WiseChatUser');
 
-        // construct username and user object:
-        $user = new WiseChatUser();
-        $user->setName($userName);
-        $user->setSessionId($this->userSessionDAO->getSessionId());
-        $user->setIp($this->getRemoteAddress());
-        if ($this->options->isOptionEnabled('collect_user_stats', true)) {
-            $this->fillWithGeoDetails($user);
-        }
+	    // construct username and user object:
+	    $user = new WiseChatUser();
+	    $user->setName($userName);
 
-        // save user in DB and in the session:
-        $this->usersDAO->save($user);
-        $this->userSessionDAO->set(self::SESSION_KEY_USER_ID, $user->getId());
-
-        return $user;
+	    return $this->authenticateWithUser($user);
     }
 
     /**

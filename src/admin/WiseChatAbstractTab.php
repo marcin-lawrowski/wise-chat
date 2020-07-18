@@ -80,22 +80,20 @@ abstract class WiseChatAbstractTab {
 	* Shows the message. 
 	*
 	* @param string $message
-	*
-	* @return null
 	*/
 	protected function addMessage($message) {
-		$_SESSION[WiseChatSettings::SESSION_MESSAGE_KEY] = $message;
+		$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
+		setcookie(WiseChatSettings::COOKIE_MESSAGE, $message, 0, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
 	}
 	
 	/**
 	* Shows error message. 
 	*
 	* @param string $message
-	*
-	* @return null
 	*/
 	protected function addErrorMessage($message) {
-		$_SESSION[WiseChatSettings::SESSION_MESSAGE_ERROR_KEY] = $message;
+		$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
+		setcookie(WiseChatSettings::COOKIE_MESSAGE_ERROR, $message, 0, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
 	}
 	
 	/**

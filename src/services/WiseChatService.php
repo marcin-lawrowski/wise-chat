@@ -239,7 +239,7 @@ class WiseChatService {
 	* @return boolean
 	*/
 	public function hasUserToBeAuthorizedInChannel($channel) {
-		return strlen($channel->getPassword()) > 0 && !$this->authorization->isUserAuthorizedForChannel($channel);
+		return strlen($channel->getPassword()) > 0 && (!$this->authentication->isAuthenticated() || !$this->authorization->isUserAuthorizedForChannel($channel));
 	}
 
 	/**
@@ -252,23 +252,6 @@ class WiseChatService {
 	}
 	
 	/**
-	* Authorizes the current user in the given channel.
-	*
-	* @param WiseChatChannel $channel
-	* @param string $password
-	*
-	* @return boolean
-	*/
-	public function authorize($channel, $password) {
-		if ($channel->getPassword() === md5($password)) {
-			$this->authorization->markAuthorizedForChannel($channel);
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
 	* Determines if the number of channels that current user participates has been reached.
 	*
 	* @param WiseChatChannel $channel
@@ -277,12 +260,12 @@ class WiseChatService {
 	*/
 	public function isChatChannelsLimitReached($channel) {
 		$limit = $this->options->getIntegerOption('channels_limit', 0);
-		if ($limit > 0) {
+		if ($limit > 0 && $this->authentication->isAuthenticated()) {
 			$this->userService->refreshChannelUsersData();
-			$amountOfChannels = $this->channelUsersDAO->getAmountOfActiveBySessionId(session_id());
 			$user = $this->authentication->getUser();
-			
-			if ($user === null || $channel === null || $this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $channel->getId()) === null) {
+			$amountOfChannels = $this->channelUsersDAO->getAmountOfActiveByUserId($user->getId());
+
+			if ($this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $channel->getId()) === null) {
 				$amountOfChannels++;
 			}
 			

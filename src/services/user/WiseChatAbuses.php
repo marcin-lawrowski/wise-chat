@@ -4,44 +4,43 @@
  * Wise Chat user abuses
  */
 class WiseChatAbuses {
-    const SESSION_KEY_ABUSES_COUNTER = 'wise_chat_ban_detector_counter';
+	const PROPERTY_NAME = 'ban_detector_counter';
 
-    /**
-     * @var WiseChatUserSessionDAO
-     */
-    private $userSessionDAO;
+	/**
+	 * @var WiseChatUserService
+	 */
+	private $userService;
 
-    /**
-     * WiseChatAbuses constructor.
-     */
-    public function __construct() {
-        $this->userSessionDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSessionDAO');
-    }
+	/**
+	 * WiseChatAbuses constructor.
+	 */
+	public function __construct() {
+		$this->userService = WiseChatContainer::get('services/user/WiseChatUserService');
+	}
 
-    /**
-     * Increments and returns abuses counter.
-     * The counter is stored in user's session.
-     *
-     * @return integer
-     */
-    public function incrementAndGetAbusesCounter() {
-        $key = self::SESSION_KEY_ABUSES_COUNTER;
-        $counter = 1;
+	/**
+	 * Increments and returns the abuses counter.
+	 *
+	 * @return integer
+	 */
+	public function incrementAndGetAbusesCounter() {
+		$counter = $this->userService->getProperty(self::PROPERTY_NAME);
+		if ($counter === null) {
+			$counter = 0;
+		}
+		$counter++;
 
-        if ($this->userSessionDAO->contains($key)) {
-           $counter += $this->userSessionDAO->get(self::SESSION_KEY_ABUSES_COUNTER);
-        }
-        $this->userSessionDAO->set(self::SESSION_KEY_ABUSES_COUNTER, $counter);
+		$this->userService->setProperty(self::PROPERTY_NAME, $counter);
 
-        return $counter;
-    }
+		return $counter;
+	}
 
-    /**
-     * Clears abuses counter. The counter is stored in user's session.
-     *
-     * @return null
-     */
-    public function clearAbusesCounter() {
-        $this->userSessionDAO->set(self::SESSION_KEY_ABUSES_COUNTER, 0);
-    }
+	/**
+	 * Clears the abuses counter.
+	 *
+	 * @return null
+	 */
+	public function clearAbusesCounter() {
+		$this->userService->setProperty(self::PROPERTY_NAME, 0);
+	}
 }
