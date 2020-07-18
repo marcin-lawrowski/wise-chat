@@ -351,6 +351,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 * Switched user session handling to cookies (remembering users for a long time)
 * Performance optimization: removed PHP session usage
 * Fixed: Error: cURL error 28: Operation timed out after 10001 milliseconds with 0 bytes received
+* Fixed: auto-scroll issue
 
 = 2.8.4 =
 * Fixed: PHP Deprecated: session.php error

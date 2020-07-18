@@ -52,7 +52,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 	function isFullyScrolled() {
 		if (isAscendingOrder()) {
             var padding = messagesContainer.innerHeight() - messagesContainer.height();
-            return (messagesContainer.height() + messagesContainer.scrollTop() + padding) >= messagesContainer[0].scrollHeight;
+            return (messagesContainer.height() + Math.ceil(messagesContainer.scrollTop()) + padding) >= messagesContainer[0].scrollHeight;
 		} else {
 			return messagesContainer.scrollTop() == 0;
 		}
@@ -211,7 +211,7 @@ function WiseChatMessages(options, messagesHistory, messageAttachments, dateAndT
 			var response = result;
 			if (response.result && response.result.length > 0) {
 				var wasFullyScrolled = isFullyScrolled();
-				var messagesScrollPosition = messagesContainer.scrollTop();
+				var messagesScrollPosition = Math.ceil(messagesContainer.scrollTop());
 				var messagesScrollHeight = messagesContainer[0].scrollHeight;
 
 				if (!isAscendingOrder()) {
