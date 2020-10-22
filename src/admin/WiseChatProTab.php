@@ -32,7 +32,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; Facebook-like chat mode</li>'.
 				'<li>&#8226; BuddyPress integration: friends and groups</li>'.
 				'<li>&#8226; Custom emoticons</li>'.
-				'<li>&#8226; E-mail notifications to admin</li>'.
+				'<li>&#8226; E-mail notifications</li>'.
 				'<li>&#8226; Pending messages (fully moderated messages)</li>'.
 				'<li>&#8226; External authentication (via Facebook, Twitter or Google+)</li>'.
 				'<li>&#8226; WordPress multisite support</li>'.
@@ -40,12 +40,14 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; Users list search option</li>'.
 				'<li>&#8226; Chat button on profile page</li>'.
 				'<li>&#8226; Edit posted messages</li>'.
-				'<li>&#8226; Free update for 6, 12 or 18 months</li>'.
+				'<li>&#8226; Replying to messages</li>'.
+				'<li>&#8226; Hooks</li>'.
+				'<li>&#8226; Free updates for 6, 12 or 18 months</li>'.
 				'<li>&#8226; Eternal license</li>'.
 				'<li>&#8226; Pay once, use forever</li>'.
 				'</ul>'.
 				'<a target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
-					<img src="'.$this->options->getBaseDir().'/gfx/pro/wise-chat-pro-lead.png" />
+					<img src="'.$this->options->getBaseDir().'/gfx/pro/wise-chat-pro-lead.jpg" />
 				</a>'.
 				'<br />'.
 				'<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">

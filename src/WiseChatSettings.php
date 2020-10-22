@@ -27,6 +27,7 @@ class WiseChatSettings {
 		'wise-chat-appearance' => 'Appearance',
 		'wise-chat-emoticons' => 'Emoticons',
 		'wise-chat-channels' => 'Channels',
+		'wise-chat-notifications' => 'Notifications',
 		'wise-chat-filters' => 'Filters',
 		'wise-chat-bans' => 'Bans',
 		'wise-chat-kicks' => 'Kicks',
@@ -155,7 +156,7 @@ class WiseChatSettings {
 						vertical-align: middle; padding-right: 6px; padding-left: 40px; font-style: normal;
 					}
 					#wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
-						padding-top: 10px; padding-bottom: 10px; height: 50px; background-position: 10px center;
+						padding-top: 10px; padding-bottom: 10px; background-position: 10px center;
 						padding-left: 60px; padding-right: 40px;
 					}
 

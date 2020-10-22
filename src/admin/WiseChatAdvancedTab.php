@@ -43,6 +43,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				'enabled_xhr_check', 'Enable XHR Request Check', 'booleanFieldCallback', 'boolean',
 				'Enabled check for "X-Requested-With" header in AJAX requests'
 			),
+			array('user_actions', 'Admin Actions', 'adminActionsCallback', 'void'),
 		);
 	}
 	
@@ -81,5 +82,29 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			60000 => '60s',
 			120000 => '120s',
 		);
+	}
+
+	public function adminActionsCallback() {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter");
+		$urlResetSettings = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings");
+
+		printf(
+			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>'.
+			'<br />'.
+			'<a class="button-secondary" href="%s" title="Resets all settings to default" onclick="return confirm(\'Are you sure you want to reset all settings to default? \\n\\nWarning: this cannot be reversed!\')">Reset All Settings</a><p class="description">Resets all settings to default values.</p>',
+			wp_nonce_url($url),
+			wp_nonce_url($urlResetSettings)
+		);
+	}
+
+	public function resetAnonymousCounterAction() {
+		$this->options->resetUserNameSuffix();
+		$this->addMessage('The prefix has been reset.');
+	}
+
+	public function resetSettingsAction() {
+		$this->options->dropAllOptions();
+		WiseChatContainer::get('WiseChatSettings')->setDefaultSettings();
+		$this->addMessage('All settings have been reset to defaults.');
 	}
 }

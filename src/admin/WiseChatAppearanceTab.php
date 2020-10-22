@@ -64,6 +64,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
                 '),
 			array('show_avatars', 'Show Avatar', 'booleanFieldCallback', 'boolean', 'Shows user avatar next to each message'),
 			array('enable_edit_own_messages', 'Enable Message Editing', 'booleanFieldCallback', 'boolean', 'Enables editing of own messages'),
+			array('enable_reply_to_messages', 'Enable Reply-To Feature', 'booleanFieldCallback', 'boolean', 'Enables replying to messages'),
 
 			array('_section', 'Input Section Appearance', 'Input section is the rectangular area around message input field'),
 			array('background_color_input', 'Background Color', 'colorFieldCallback', 'string', ''),
@@ -102,14 +103,14 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
                 Shows city and country code next to each user on the list. City and country are obtained from IP address and this may not be successful sometimes.<br />
                 <strong>Notice:</strong> In order to show cities and countries enable "Collect User Statistics" option in General tab
                 '),
+			array('show_users_online_offline_mark', 'Show Online / Offline Mark', 'booleanFieldCallback', 'boolean', '
+                Displays little icon that indicates whether user is online or offline. It usually goes with "Enable Offline Users" option (see few lines below).'),
 			array('users_list_width', 'Users List Width', 'stringFieldCallback', 'integer', 'Percentage width of the list of users. Empty field sets default value of 29%.'),
 			array('background_color_users_list', 'Background Color', 'colorFieldCallback', 'string', 'Background color of the users list'),
 			array('text_color_users_list', 'Font Color', 'colorFieldCallback', 'string', 'Font color of the texts inside the users list'),
 			array('text_size_users_list', 'Font Size', 'selectCallback', 'string', 'Font size', WiseChatAppearanceTab::getFontSizes()),
 			array('autohide_users_list', 'Auto-hide Users List', 'booleanFieldCallback', 'boolean', 'Auto-hides users lists when the chat window gets narrow enough (see the threshold below)'),
 			array('autohide_users_list_width', 'Auto-hide Width Threshold', 'stringFieldCallback', 'integer', 'Minimum width of the chat window when users list is visible'),
-			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
-			array('users_list_hide_roles', 'Hide User Roles', 'checkboxesCallback', 'multivalues', 'Hides users belonging to these roles on the users list', self::getRoles()),
 			array('users_list_linking', 'Usernames Mode', 'booleanFieldCallback', 'boolean', 'Makes usernames like it is set in Username Display Mode option.'),
 
 			array('_section', 'Users List Info Window Appearance', 'Information windows are displayed when mouse pointer enters username on the users list'),
@@ -117,6 +118,16 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			array(
 				'users_list_info_windows_template', 'Info Window Template', 'multilineFieldCallback', 'multilinestring',
 				'HTML template of info windows. Dynamic variables: {profileLink}, {role}, {roles}, {profileURL}, {avatar}, {privateMessageButton}, {id}, {username}, {displayname}'),
+
+			array('_section', 'Users List Sources', 'Settings to configure which users are visible on the users list'),
+			array('users_list_offline_enable', 'Enable Offline Users', 'booleanFieldCallback', 'boolean', 'Lists users that are not online and allows to send private messages to them.'),
+			array(
+				'users_list_bp_users_only', 'BuddyPress Friends Only', 'booleanFieldCallback', 'boolean',
+				'Displays BuddyPress friends only.<br />'.
+				'<strong>Notice:</strong> Please remember to enable BuddyPress integration in General settings and friends component in BuddyPress configuration.'
+			),
+			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
+			array('users_list_hide_roles', 'Hide User Roles', 'checkboxesCallback', 'multivalues', 'Hides users belonging to these roles on the users list', self::getRoles()),
 
 			array('_section', 'Facebook-like Mode Appearance', 'These are additional settings that take effect only when Facebook-like mode is enabled'),
 			array('fb_users_list_top_offset', 'Users List Top Offset', 'stringFieldCallback', 'integer',
@@ -228,7 +239,8 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 		return array(
 			'enable_private_messages', 'show_users_list_avatars', 'show_avatars', 'enable_edit_own_messages', 'show_users_list_info_windows',
 			'users_list_info_windows_template', 'fb_users_list_top_offset', 'fb_bottom_offset', 'fb_bottom_offset_threshold', 'fb_show_users_list_title',
-			'fb_minimize_users_list_option', 'fb_minimize_on_start', 'fb_disable_channel', 'bp_member_profile_chat_button'
+			'fb_minimize_users_list_option', 'fb_minimize_on_start', 'fb_disable_channel', 'bp_member_profile_chat_button', 'enable_reply_to_messages',
+			'show_users_online_offline_mark', 'users_list_offline_enable', 'users_list_bp_users_only'
 		);
 	}
 

@@ -184,7 +184,7 @@ abstract class WiseChatAbstractTab {
 		return $newInputValue;
 	}
 
-	private function printProFeatureNotice() {
+	protected function printProFeatureNotice() {
 		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">
 						Check Wise Chat <strong>Pro</strong>
 					</a>';

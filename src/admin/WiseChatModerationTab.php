@@ -16,6 +16,10 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 				'User roles allowed to edit posted messages.<br /> Alternatively you can assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
 			),
 			array(
+				'permission_edit_message_role', 'Edit Message Permission', 'checkboxesCallback', 'multivalues',
+				'An user role that is allowed to edit posted messages.<br /> Alternatively you can assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
+			),
+			array(
 				'permission_delete_message_role', 'Delete Message Permission', 'checkboxesCallback', 'multivalues',
 				'User roles allowed to delete posted messages.<br /> Alternatively you can assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
 			),
@@ -110,7 +114,11 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	}
 
 	public function getProFields() {
-		return array('new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode', 'permission_edit_message_role', 'permission_approve_message_role', 'enable_approval_confirmation');
+		return array(
+			'new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode',
+			'permission_edit_message_role', 'permission_approve_message_role', 'enable_approval_confirmation',
+			'permission_edit_message_role'
+		);
 	}
 
 	public function getPendingMessagesApprovalModes() {
