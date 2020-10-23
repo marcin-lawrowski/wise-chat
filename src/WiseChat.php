@@ -100,8 +100,7 @@ class WiseChat {
 		WiseChatContainer::load('WiseChatCrypt');
 		WiseChatContainer::load('WiseChatThemes');
 		WiseChatContainer::load('rendering/WiseChatTemplater');
-		
-		$this->userService->initMaintenance();
+
 		$this->shortCodeOptions = array();
 	}
 	

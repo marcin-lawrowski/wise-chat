@@ -22,16 +22,6 @@ class WiseChatUserSettingsDAO {
 	);
 	
 	/**
-	* Initialization of the settings. The method should be invoked before sending the headers
-	* because it sets cookies.
-	*/
-	public function initialize() {
-		if (!$this->isUserCookieAvailable()) {
-			$this->setUserCookie('{}');
-		}
-	}
-	
-	/**
 	* Sets a key-value setting.
 	*
 	* @param string $settingName
@@ -43,17 +33,15 @@ class WiseChatUserSettingsDAO {
 		if (!in_array($settingName, array_keys($this->defaultSettings))) {
 			throw new Exception('Unsupported property');
 		}
-		
-		if ($this->isUserCookieAvailable()) {
-			$settings = $this->getUserCookieSettings();
-			if (is_array($settings)) {
-				$propertyType = $this->settingsTypes[$settingName];
-				if ($propertyType == 'boolean') {
-					$settingValue = $settingValue == 'true';
-				}
-				$settings[$settingName] = $settingValue;
-				$this->setUserCookie(json_encode($settings));
+
+		$settings = $this->getUserCookieSettings();
+		if (is_array($settings)) {
+			$propertyType = $this->settingsTypes[$settingName];
+			if ($propertyType == 'boolean') {
+				$settingValue = $settingValue == 'true';
 			}
+			$settings[$settingName] = $settingValue;
+			$this->setUserCookie(json_encode($settings));
 		}
 	}
 	

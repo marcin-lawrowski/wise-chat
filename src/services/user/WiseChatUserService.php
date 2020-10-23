@@ -64,16 +64,6 @@ class WiseChatUserService {
 	}
 	
 	/**
-	* Maintenance actions performed on the init phase.
-	*
-	* @return null
-	*/
-	public function initMaintenance() {
-		$userSettingsDAO = WiseChatContainer::get('dao/user/WiseChatUserSettingsDAO');
-		$userSettingsDAO->initialize();
-	}
-	
-	/**
 	* Maintenance actions performed at start-up.
 	*
 	* @param WiseChatChannel $channel

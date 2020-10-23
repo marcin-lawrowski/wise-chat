@@ -33,7 +33,6 @@ if (is_admin()) {
 function wise_chat_after_setup_theme_action() {
     /** @var WiseChatUserService $userService */
 	$userService = WiseChatContainer::get('services/user/WiseChatUserService');
-	$userService->initMaintenance();
 	$userService->switchUser();
 }
 add_action('after_setup_theme', 'wise_chat_after_setup_theme_action');

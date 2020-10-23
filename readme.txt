@@ -348,7 +348,8 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.1 =
-Fixed: restored deleted AJAX Engine option in Advanced settings
+* Fixed: sending wcUserSettings cookie only if necessary
+* Fixed: restored deleted AJAX Engine option in Advanced settings
 
 = 2.9 =
 * Switched user session handling to cookies (remembering users for a long time)
