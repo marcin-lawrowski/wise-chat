@@ -1,0 +1,188 @@
+# Copyright (C) 2020 Kainex
+# This file is distributed under the same license as the Wise Chat plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Wise Chat 2.9.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wise-chat\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-10-28T00:26:36+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: wise-chat\n"
+
+#. Plugin Name of the plugin
+msgid "Wise Chat"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-donate"
+msgstr ""
+
+#. Description of the plugin
+msgid "Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more."
+msgstr ""
+
+#. Author of the plugin
+msgid "Kainex"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://kaine.pl"
+msgstr ""
+
+#: src/endpoints/WiseChatEndpoints.php:686
+#: src/WiseChat.php:232
+msgid "The chat is closed now"
+msgstr ""
+
+#: src/rendering/WiseChatRenderer.php:86
+msgid "This channel is protected. Enter your password:"
+msgstr ""
+
+#: src/rendering/WiseChatRenderer.php:88
+#: src/rendering/WiseChatRenderer.php:131
+msgid "Log in"
+msgstr ""
+
+#: src/rendering/WiseChatRenderer.php:132
+msgid "Enter your username"
+msgstr ""
+
+#: src/rendering/WiseChatRenderer.php:395
+msgid "Insert into message"
+msgstr ""
+
+#: src/services/user/WiseChatAuthentication.php:247
+msgid "Only letters, number, spaces, hyphens and underscores are allowed"
+msgstr ""
+
+#: src/services/user/WiseChatAuthentication.php:257
+msgid "This name is already occupied"
+msgstr ""
+
+#: src/services/user/WiseChatAuthorization.php:99
+msgid "Invalid password."
+msgstr ""
+
+#: src/services/WiseChatImagesService.php:43
+#: src/WiseChat.php:304
+msgid "The size of the file exceeds allowed limit."
+msgstr ""
+
+#: src/services/WiseChatImagesService.php:244
+#: src/services/WiseChatImagesService.php:268
+msgid "Unsupported type of file"
+msgstr ""
+
+#: src/services/WiseChatMessagesService.php:114
+msgid "You were banned from posting messages"
+msgstr ""
+
+#: src/WiseChat.php:181
+msgid "No users in the channel"
+msgstr ""
+
+#: src/WiseChat.php:214
+msgid "You are blocked from using the chat"
+msgstr ""
+
+#: src/WiseChat.php:220
+msgid "Only logged in users are allowed to enter the chat"
+msgstr ""
+
+#: src/WiseChat.php:226
+msgid "You are not allowed to enter the chat."
+msgstr ""
+
+#: src/WiseChat.php:238
+msgid "The chat is full now. Try again later."
+msgstr ""
+
+#: src/WiseChat.php:244
+msgid "You cannot enter the chat due to the limit of channels you can participate simultaneously."
+msgstr ""
+
+#: src/WiseChat.php:298
+msgid "Sending ..."
+msgstr ""
+
+#: src/WiseChat.php:300
+msgid "sec. ago"
+msgstr ""
+
+#: src/WiseChat.php:301
+msgid "min. ago"
+msgstr ""
+
+#: src/WiseChat.php:302
+msgid "yesterday"
+msgstr ""
+
+#: src/WiseChat.php:303
+msgid "Unsupported type of file."
+msgstr ""
+
+#: src/WiseChat.php:305
+#: src/WiseChat.php:387
+msgid "Use Shift+ENTER in order to move to the next line."
+msgstr ""
+
+#: src/WiseChat.php:306
+msgid "has left the channel"
+msgstr ""
+
+#: src/WiseChat.php:307
+msgid "has joined the channel"
+msgstr ""
+
+#: src/WiseChat.php:308
+msgid "Are you sure you want to report the message as spam?"
+msgstr ""
+
+#: src/WiseChat.php:352
+msgid "Send"
+msgstr ""
+
+#: src/WiseChat.php:377
+msgid "Customize"
+msgstr ""
+
+#: src/WiseChat.php:378
+msgid "Name"
+msgstr ""
+
+#: src/WiseChat.php:379
+msgid "Save"
+msgstr ""
+
+#: src/WiseChat.php:380
+msgid "Reset"
+msgstr ""
+
+#: src/WiseChat.php:381
+msgid "Mute sounds"
+msgstr ""
+
+#: src/WiseChat.php:382
+msgid "Text color"
+msgstr ""
+
+#: src/WiseChat.php:383
+msgid "Total users"
+msgstr ""
+
+#: src/WiseChat.php:384
+msgid "Upload a picture"
+msgstr ""
+
+#: src/WiseChat.php:385
+msgid "Attach a file"
+msgstr ""
+
+#: src/WiseChat.php:386
+msgid "Insert an emoticon"
+msgstr ""
