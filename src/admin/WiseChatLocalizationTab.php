@@ -10,19 +10,16 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 	public function getFields() {
 		return array(
 			array('_section', 'Localization Settings'),
+			array('custom_i18n', 'Enable Custom Localization', 'booleanFieldCallback', 'boolean', 'Enable the option to use the translations defined below. By default Wise Chat plugin uses WordPress translations.'),
+			array('_section', 'Translations'),
 			array(
 				'hint_message', 'Hint Message', 'stringFieldCallback', 'string',
 				'A hint message displayed in the message input field'
 			),
 			array(
-				'user_name_prefix', 'User Name Prefix', 'stringFieldCallback', 'string',
-				'Anonymous user\'s name prefix'
-			),
-			array(
 				'message_submit_button_caption', 'Submit Button Caption', 'stringFieldCallback', 'string',
 				'Caption for message submit button'
 			),
-			array('window_title', 'Window Title', 'stringFieldCallback', 'string', 'Title of the messages window'),
 			array('message_save', '"Save" message', 'stringFieldCallback', 'string'),
 			array('message_reset', '"Reset" message', 'stringFieldCallback', 'string'),
 			array('message_name', '"Name" message', 'stringFieldCallback', 'string'),
@@ -65,8 +62,8 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 	
 	public function getDefaultValues() {
 		return array(
+			'custom_i18n' => 0,
 			'hint_message' => 'Enter message here',
-			'user_name_prefix' => 'Anonymous',
 			'message_submit_button_caption' => 'Send',
 			'message_save' => 'Save',
 			'message_reset' => 'Reset',
@@ -86,7 +83,6 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			'message_error_11' => 'You are not allowed to enter the chat.',
 			'message_error_12' => 'You are blocked from using the chat.',
 			'message_text_1' => 'Are you sure you want to report the message as spam?',
-			'window_title' => 'Wise Chat',
 			'message_mute_sounds' => 'Mute sounds',
 			'message_text_color' => 'Text color',
 			'message_total_users' => 'Total users',
@@ -104,6 +100,48 @@ class WiseChatLocalizationTab extends WiseChatAbstractTab {
 			'message_has_left_the_channel' => 'has left the channel',
 			'message_has_joined_the_channel' => 'has joined the channel',
 			'message_users_list_empty' => 'No users in the channel',
+		);
+	}
+
+	public function getParentFields() {
+		return array(
+			'hint_message' => 'custom_i18n',
+			'message_submit_button_caption' => 'custom_i18n',
+			'message_save' => 'custom_i18n',
+			'message_reset' => 'custom_i18n',
+			'message_name' => 'custom_i18n',
+			'message_customize' => 'custom_i18n',
+			'message_sending' => 'custom_i18n',
+			'message_error_1' => 'custom_i18n',
+			'message_error_2' => 'custom_i18n',
+			'message_error_3' => 'custom_i18n',
+			'message_error_4' => 'custom_i18n',
+			'message_error_5' => 'custom_i18n',
+			'message_error_6' => 'custom_i18n',
+			'message_error_7' => 'custom_i18n',
+			'message_error_8' => 'custom_i18n',
+			'message_error_9' => 'custom_i18n',
+			'message_error_10' => 'custom_i18n',
+			'message_error_11' => 'custom_i18n',
+			'message_error_12' => 'custom_i18n',
+			'message_text_1' => 'custom_i18n',
+			'message_mute_sounds' => 'custom_i18n',
+			'message_text_color' => 'custom_i18n',
+			'message_total_users' => 'custom_i18n',
+			'message_sec_ago' => 'custom_i18n',
+			'message_min_ago' => 'custom_i18n',
+			'message_yesterday' => 'custom_i18n',
+			'message_insert_emoticon' => 'custom_i18n',
+			'message_insert_into_message' => 'custom_i18n',
+			'message_picture_upload_hint' => 'custom_i18n',
+			'message_attach_file_hint' => 'custom_i18n',
+			'message_channel_password_authorization_hint' => 'custom_i18n',
+			'message_login' => 'custom_i18n',
+			'message_enter_user_name' => 'custom_i18n',
+			'message_input_title' => 'custom_i18n',
+			'message_has_left_the_channel' => 'custom_i18n',
+			'message_has_joined_the_channel' => 'custom_i18n',
+			'message_users_list_empty' => 'custom_i18n',
 		);
 	}
 }

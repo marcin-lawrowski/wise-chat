@@ -6,6 +6,7 @@
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Kainex
 	Author URI: https://kaine.pl
+	Text Domain: wise-chat
 */
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');

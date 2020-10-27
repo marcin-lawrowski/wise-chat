@@ -43,6 +43,10 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				'enabled_xhr_check', 'Enable XHR Request Check', 'booleanFieldCallback', 'boolean',
 				'Enabled check for "X-Requested-With" header in AJAX requests'
 			),
+			array(
+				'user_name_prefix', 'User Name Prefix', 'stringFieldCallback', 'string',
+				'Anonymous username prefix'
+			),
 			array('user_actions', 'Admin Actions', 'adminActionsCallback', 'void'),
 		);
 	}
@@ -57,6 +61,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 			'enabled_xhr_check' => 1,
 			'user_auth_expiration_days' => 14,
 			'user_auth_keep_logged_in' => 1,
+			'user_name_prefix' => 'Anonymous',
 		);
 	}
 	

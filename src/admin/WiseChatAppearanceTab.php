@@ -20,6 +20,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 					'_DISABLED_pro_3' => 'Balloon (available in Wise Chat Pro)',
 				))
 			),
+			array('window_title', 'Window Title', 'stringFieldCallback', 'string', 'Title of the chat window'),
 			array('background_color_chat', 'Background Color', 'colorFieldCallback', 'string', ''),
 			array('text_color_chat', 'Font Color', 'colorFieldCallback', 'string', ''),
 			array('text_size_chat', 'Font Size', 'selectCallback', 'string', '', WiseChatAppearanceTab::getFontSizes()),
@@ -169,6 +170,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 	public function getDefaultValues() {
 		return array(
 			'theme' => 'lightgray',
+			'window_title' => 'Wise Chat',
 			'background_color_chat' => '',
 			'text_color_chat' => '',
 			'text_size_chat' => '',

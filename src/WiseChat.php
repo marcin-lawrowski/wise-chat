@@ -178,7 +178,7 @@ class WiseChat {
 			'usersList' => $this->renderer->getRenderedUsersList($channel, false),
 			'cssDefinitions' => $this->cssRenderer->getCssDefinition($chatId),
 			'customCssDefinitions' => $this->cssRenderer->getCustomCssDefinition(),
-			'messageUsersListEmpty' => $this->options->getEncodedOption('message_users_list_empty', 'No users in the channel'),
+			'messageUsersListEmpty' => $this->options->getEncodedOption('message_users_list_empty', __('No users in the channel', 'wise-chat')),
 		);
 		$data = array_merge($data, $this->userSettingsDAO->getAll());
 		if ($this->authentication->isAuthenticated()) {
@@ -211,37 +211,37 @@ class WiseChat {
 
 		if ($this->service->isIpKicked()) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_12', 'You are blocked from using the chat'), 'wcAccessDenied'
+				$this->options->getOption('message_error_12', __('You are blocked from using the chat', 'wise-chat')), 'wcAccessDenied'
 			);
 		}
 
 		if ($this->service->isChatRestrictedForAnonymousUsers()) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_4', 'Only logged in users are allowed to enter the chat'), 'wcAccessDenied'
+				$this->options->getOption('message_error_4', __('Only logged in users are allowed to enter the chat', 'wise-chat')), 'wcAccessDenied'
 			);
 		}
 
 		if ($this->service->isChatRestrictedForCurrentUserRole()) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_11', 'You are not allowed to enter the chat.'), 'wcAccessDenied'
+				$this->options->getOption('message_error_11', __('You are not allowed to enter the chat.', 'wise-chat')), 'wcAccessDenied'
 			);
 		}
 		
 		if (!$this->service->isChatOpen()) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_5', 'The chat is closed now'), 'wcChatClosed'
+				$this->options->getOption('message_error_5', __('The chat is closed now', 'wise-chat')), 'wcChatClosed'
 			);
 		}
 		
 		if ($this->service->isChatChannelFull($channel)) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_6', 'The chat is full now. Try again later.'), 'wcChatFull'
+				$this->options->getOption('message_error_6', __('The chat is full now. Try again later.', 'wise-chat')), 'wcChatFull'
 			);
 		}
 		
 		if ($this->service->isChatChannelsLimitReached($channel)) {
 			return $this->renderer->getRenderedAccessDenied(
-				$this->options->getOption('message_error_10', 'You cannot enter the chat due to the limit of channels you can participate simultaneously.'), 'wcChatChannelLimitFull'
+				$this->options->getOption('message_error_10', __('You cannot enter the chat due to the limit of channels you can participate simultaneously.', 'wise-chat')), 'wcChatChannelLimitFull'
 			);
 		}
 
@@ -295,17 +295,17 @@ class WiseChat {
 			'messagesTimeFormat' => trim($this->options->getEncodedOption('messages_time_format')),
 			'channelUsersLimit' => $this->options->getIntegerOption('channel_users_limit', 0),
 			'messages' => array(
-				'message_sending' => $this->options->getEncodedOption('message_sending', 'Sending ...'),
+				'message_sending' => $this->options->getEncodedOption('message_sending', __('Sending ...', 'wise-chat')),
 				'hint_message' => $this->options->getEncodedOption('hint_message'),
-				'messageSecAgo' => $this->options->getEncodedOption('message_sec_ago', 'sec. ago'),
-				'messageMinAgo' => $this->options->getEncodedOption('message_min_ago', 'min. ago'),
-				'messageYesterday' => $this->options->getEncodedOption('message_yesterday', 'yesterday'),
-				'messageUnsupportedTypeOfFile' => $this->options->getEncodedOption('message_error_7', 'Unsupported type of file.'),
-				'messageSizeLimitError' => $this->options->getEncodedOption('message_error_8', 'The size of the file exceeds allowed limit.'),
-				'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
-				'messageHasLeftTheChannel' => $this->options->getEncodedOption('message_has_left_the_channel', 'has left the channel'),
-				'messageHasJoinedTheChannel' => $this->options->getEncodedOption('message_has_joined_the_channel', 'has joined the channel'),
-				'messageSpamReportQuestion' => $this->options->getEncodedOption('message_text_1', 'Are you sure you want to report the message as spam?'),
+				'messageSecAgo' => $this->options->getEncodedOption('message_sec_ago', __('sec. ago', 'wise-chat')),
+				'messageMinAgo' => $this->options->getEncodedOption('message_min_ago', __('min. ago', 'wise-chat')),
+				'messageYesterday' => $this->options->getEncodedOption('message_yesterday', __('yesterday', 'wise-chat')),
+				'messageUnsupportedTypeOfFile' => $this->options->getEncodedOption('message_error_7', __('Unsupported type of file.', 'wise-chat')),
+				'messageSizeLimitError' => $this->options->getEncodedOption('message_error_8', __('The size of the file exceeds allowed limit.', 'wise-chat')),
+				'messageInputTitle' => $this->options->getEncodedOption('message_input_title', __('Use Shift+ENTER in order to move to the next line.', 'wise-chat')),
+				'messageHasLeftTheChannel' => $this->options->getEncodedOption('message_has_left_the_channel', __('has left the channel', 'wise-chat')),
+				'messageHasJoinedTheChannel' => $this->options->getEncodedOption('message_has_joined_the_channel', __('has joined the channel', 'wise-chat')),
+				'messageSpamReportQuestion' => $this->options->getEncodedOption('message_text_1', __('Are you sure you want to report the message as spam?', 'wise-chat')),
 			),
 			'userSettings' => $this->userSettingsDAO->getAll(),
 			'attachmentsValidFileFormats' => $this->attachmentsService->getAllowedFormats(),
@@ -349,7 +349,7 @@ class WiseChat {
 			'showMessageSubmitButton' => $this->options->isOptionEnabled('show_message_submit_button', true),
             'showEmoticonInsertButton' => $this->options->isOptionEnabled('show_emoticon_insert_button', true),
 			'messagesInline' => $this->options->isOptionEnabled('messages_inline', false),
-			'messageSubmitButtonCaption' => $this->options->getEncodedOption('message_submit_button_caption', 'Send'),
+			'messageSubmitButtonCaption' => $this->options->getEncodedOption('message_submit_button_caption', __('Send', 'wise-chat')),
 			'showUsersList' => $this->options->isOptionEnabled('show_users'),
 			'usersList' => $this->options->isOptionEnabled('show_users') ? $this->renderer->getRenderedUsersList($channel) : '',
 			'showUsersCounter' => $this->options->isOptionEnabled('show_users_counter'),
@@ -374,17 +374,17 @@ class WiseChat {
 
             'allowToSendMessages' => $this->userService->isSendingMessagesAllowed(),
 				
-			'messageCustomize' => $this->options->getEncodedOption('message_customize', 'Customize'),
-			'messageName' => $this->options->getEncodedOption('message_name', 'Name'),
-			'messageSave' => $this->options->getEncodedOption('message_save', 'Save'),
-			'messageReset' => $this->options->getEncodedOption('message_reset', 'Reset'),
-			'messageMuteSounds' => $this->options->getEncodedOption('message_mute_sounds', 'Mute sounds'),
-			'messageTextColor' => $this->options->getEncodedOption('message_text_color', 'Text color'),
-			'messageTotalUsers' => $this->options->getEncodedOption('message_total_users', 'Total users'),
-			'messagePictureUploadHint' => $this->options->getEncodedOption('message_picture_upload_hint', 'Upload a picture'),
-			'messageAttachFileHint' => $this->options->getEncodedOption('message_attach_file_hint', 'Attach a file'),
-            'messageInsertEmoticon' => $this->options->getEncodedOption('message_insert_emoticon', 'Insert an emoticon'),
-			'messageInputTitle' => $this->options->getEncodedOption('message_input_title', 'Use Shift+ENTER in order to move to the next line.'),
+			'messageCustomize' => $this->options->getEncodedOption('message_customize', __('Customize', 'wise-chat')),
+			'messageName' => $this->options->getEncodedOption('message_name', __('Name', 'wise-chat')),
+			'messageSave' => $this->options->getEncodedOption('message_save', __('Save', 'wise-chat')),
+			'messageReset' => $this->options->getEncodedOption('message_reset', __('Reset', 'wise-chat')),
+			'messageMuteSounds' => $this->options->getEncodedOption('message_mute_sounds', __('Mute sounds', 'wise-chat')),
+			'messageTextColor' => $this->options->getEncodedOption('message_text_color', __('Text color', 'wise-chat')),
+			'messageTotalUsers' => $this->options->getEncodedOption('message_total_users', __('Total users', 'wise-chat')),
+			'messagePictureUploadHint' => $this->options->getEncodedOption('message_picture_upload_hint', __('Upload a picture', 'wise-chat')),
+			'messageAttachFileHint' => $this->options->getEncodedOption('message_attach_file_hint', __('Attach a file', 'wise-chat')),
+            'messageInsertEmoticon' => $this->options->getEncodedOption('message_insert_emoticon', __('Insert an emoticon', 'wise-chat')),
+			'messageInputTitle' => $this->options->getEncodedOption('message_input_title', __('Use Shift+ENTER in order to move to the next line.', 'wise-chat')),
             'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 
             'enableAttachmentsPanel' => $this->options->isOptionEnabled('enable_images_uploader', true) || $this->options->isOptionEnabled('enable_attachments_uploader', true),

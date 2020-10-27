@@ -683,7 +683,7 @@ class WiseChatEndpoints {
 	 */
 	private function checkChatOpen() {
 		if (!$this->service->isChatOpen()) {
-			throw new Exception($this->options->getEncodedOption('message_error_5', 'The chat is closed now'));
+			throw new Exception($this->options->getEncodedOption('message_error_5', __('The chat is closed now', 'wise-chat')));
 		}
 	}
 

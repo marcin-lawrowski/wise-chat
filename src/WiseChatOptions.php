@@ -33,6 +33,9 @@ class WiseChatOptions {
 	
 	private function __construct() {
 		$this->options = get_option(WiseChatOptions::OPTIONS_NAME);
+		if ($this->options === false) {
+			$this->options = array();
+		}
 	}
 	
 	public static function getInstance() {
@@ -94,6 +97,17 @@ class WiseChatOptions {
 	* @return string
 	*/
 	public function getOption($property, $default = '') {
+		$excludeFromI18n = array('message_max_length');
+
+		if (!in_array($property, $excludeFromI18n)) {
+			if (preg_match('/^message_/', $property) || $property === 'hint_message') {
+				// translate the string using WordPress i18n:
+				if (!array_key_exists('custom_i18n', $this->options) || $this->options['custom_i18n'] !== 1) {
+					return $default;
+				}
+			}
+		}
+
 		return is_array($this->options) && array_key_exists($property, $this->options) ? $this->options[$property] : $default;
 	}
 	

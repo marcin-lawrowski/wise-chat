@@ -96,7 +96,7 @@ class WiseChatAuthorization {
 
 				$this->markAuthorizedForChannel($channel);
 			} else {
-				throw new Exception($this->options->getOption('message_error_9', 'Invalid password.'));
+				throw new Exception($this->options->getOption('message_error_9', __('Invalid password.', 'wise-chat')));
 			}
 
 			$this->httpRequestService->reload(array('wcAuthorizationAction', 'nonce', 'wcChannelId'));

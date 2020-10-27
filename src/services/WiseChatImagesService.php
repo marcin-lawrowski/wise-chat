@@ -40,7 +40,7 @@ class WiseChatImagesService {
 		$this->checkImagesRequirements();
 		
 		if (strlen($binaryImageData) > $this->options->getIntegerOption('images_size_limit', 3145728)) {
-			throw new Exception($this->options->getEncodedOption('message_error_8'));
+			throw new Exception($this->options->getEncodedOption('message_error_8', __('The size of the file exceeds allowed limit.', 'wise-chat')));
 		}
 		
 		try {
@@ -241,7 +241,7 @@ class WiseChatImagesService {
 			$mimeType = $fileInfo['mime'];
 			if (!array_key_exists($mimeType, $this->supportedExtensions)) {
 				$this->logError('Unsupported mime type: '.$mimeType);
-				throw new Exception($this->options->getEncodedOption('message_error_7', 'Unsupported type of file'));
+				throw new Exception($this->options->getEncodedOption('message_error_7', __('Unsupported type of file', 'wise-chat')));
 			}
 			$fileName = date('Ymd-His').'-'.uniqid(rand()).'.'.$this->supportedExtensions[$mimeType];
 			
@@ -265,7 +265,7 @@ class WiseChatImagesService {
 		}
 		
 		$this->logError('The file is not an image');
-		throw new Exception($this->options->getEncodedOption('message_error_7', 'Unsupported type of file'));
+		throw new Exception($this->options->getEncodedOption('message_error_7', __('Unsupported type of file', 'wise-chat')));
 	}
 	
 	/**

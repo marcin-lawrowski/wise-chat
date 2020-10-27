@@ -111,7 +111,7 @@ class WiseChatMessagesService {
 		}
 
 		if ($this->authentication->getSystemUser()->getId() != $user->getId() && $this->bansService->isIpAddressBanned($user->getIp())) {
-			throw new Exception($this->options->getOption('message_error_3', 'You were banned from posting messages'));
+			throw new Exception($this->options->getOption('message_error_3', __('You were banned from posting messages', 'wise-chat')));
 		}
 
         // use bad words filtering:

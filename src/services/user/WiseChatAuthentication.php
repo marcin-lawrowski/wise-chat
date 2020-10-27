@@ -244,7 +244,7 @@ class WiseChatAuthentication {
 
         // check for valid characters:
         if (strlen($userName) == 0 || !preg_match('/^[\p{L}a-zA-Z0-9\-_ ’]+$/u', $userName)) {
-            throw new Exception($this->options->getOption('message_error_1', 'Only letters, number, spaces, hyphens and underscores are allowed'));
+            throw new Exception($this->options->getOption('message_error_1', __('Only letters, number, spaces, hyphens and underscores are allowed', 'wise-chat')));
         }
 
         // filter the new username:
@@ -254,7 +254,7 @@ class WiseChatAuthentication {
         }
 
         // check if the new username is already occupied:
-        $occupiedException = new Exception($this->options->getOption('message_error_2', 'This name is already occupied'));
+        $occupiedException = new Exception($this->options->getOption('message_error_2', __('This name is already occupied', 'wise-chat')));
         $prefix = $this->options->getOption('user_name_prefix', 'Anonymous');
         $disableUserNameCheck = $this->options->isOptionEnabled('disable_user_name_duplication_check', false);
         if (

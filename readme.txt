@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.1 =
+* Added WordPress translations support
 * Fixed: sending wcUserSettings cookie only if necessary
 * Fixed: restored deleted AJAX Engine option in Advanced settings
 

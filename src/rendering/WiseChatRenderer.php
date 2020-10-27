@@ -83,9 +83,9 @@ class WiseChatRenderer {
 			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 			'formAction' => $this->authorization->getChannelPasswordActionLoginURL($channel),
 			'messageChannelPasswordAuthorizationHint' => $this->options->getEncodedOption(
-				'message_channel_password_authorization_hint', 'This channel is protected. Enter your password:'
+				'message_channel_password_authorization_hint', __('This channel is protected. Enter your password:', 'wise-chat')
 			),
-			'messageLogin' => $this->options->getEncodedOption('message_login', 'Log in'),
+			'messageLogin' => $this->options->getEncodedOption('message_login', __('Log in', 'wise-chat')),
 			'authorizationError' => $this->httpRequestService->getRequestParam('authorizationError', null)
 		);
 		
@@ -95,8 +95,8 @@ class WiseChatRenderer {
 	/**
 	* Returns rendered access-denied page.
 	*
-	* @param object $errorMessage
-	* @param object $cssClass
+	* @param string $errorMessage
+	* @param string $cssClass
 	*
 	* @return string HTML source
 	*/
@@ -128,8 +128,8 @@ class WiseChatRenderer {
 			'windowTitle' => $this->options->getEncodedOption('window_title', 'Wise Chat'),
 			'formAction' => $this->authentication->getUserNameActionLoginURL(),
 			'authenticationError' => $this->httpRequestService->getRequestParam('authenticationError', null),
-			'messageLogin' => $this->options->getEncodedOption('message_login', 'Log in'),
-			'messageEnterUserName' => $this->options->getEncodedOption('message_enter_user_name', 'Enter your username'),
+			'messageLogin' => $this->options->getEncodedOption('message_login', __('Log in', 'wise-chat')),
+			'messageEnterUserName' => $this->options->getEncodedOption('message_enter_user_name', __('Enter your username', 'wise-chat')),
 		);
 
 		return $this->templater->render($data);
@@ -392,7 +392,7 @@ class WiseChatRenderer {
 			}
 		} else if ($displayMode === 2) {
             $replyTag = '@'.$formattedUserName.':';
-            $title = htmlspecialchars($this->options->getOption('message_insert_into_message', 'Insert into message').': '.$replyTag, ENT_COMPAT);
+            $title = htmlspecialchars($this->options->getOption('message_insert_into_message', __('Insert into message', 'wise-chat')).': '.$replyTag, ENT_COMPAT);
 
             $formattedUserName = sprintf(
                 "<a href='javascript://' class='wcMessageUserReplyTo' %s title='%s'>%s</a>", $styles, $title, $formattedUserName
