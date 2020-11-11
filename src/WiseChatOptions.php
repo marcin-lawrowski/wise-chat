@@ -156,8 +156,7 @@ class WiseChatOptions {
 	public function replaceOptions($options) {
 		// detect arrays in the following format: {element1, element2, ..., elementN} or {key1: element1, key2: element2, ..., keyN: elementN}
 		foreach ($options as $key => $value) {
-			echo "repl ".gettype($value).' '.$value.' '.$key.' ';
-			if (strlen($value) > 1 && $value[0] == '{' && $value[strlen($value) - 1] == '}') {
+			if (is_string($value) && strlen($value) > 1 && $value[0] == '{' && $value[strlen($value) - 1] == '}') {
 				$value = trim($value, '{}');
 
 				$elements = array();
