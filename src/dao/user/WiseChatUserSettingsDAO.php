@@ -74,6 +74,9 @@ class WiseChatUserSettingsDAO {
 	}
 	
 	private function setUserCookie($value) {
+		if (headers_sent()) {
+			return;
+		}
 		setcookie(self::USER_SETTINGS_COOKIE_NAME, $value, strtotime('+60 days'), '/');
 		$_COOKIE[self::USER_SETTINGS_COOKIE_NAME] = $value;
 	}
