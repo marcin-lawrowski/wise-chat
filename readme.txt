@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.3 =
+* Fixed: 403 error when saving the settings
 * Fixed: Notice: Trying to access array offset on value of type int in /wp-content/plugins/wise-chat/src/WiseChatOptions.php
 * Fixed: PHP Warning:  Cannot modify header information - headers already sent in /wp-content/plugins/wise-chat/src/dao/user/WiseChatUserSettingsDAO.php
 

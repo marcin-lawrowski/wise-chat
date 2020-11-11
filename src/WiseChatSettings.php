@@ -318,26 +318,24 @@ class WiseChatSettings {
 	}
 	
 	/**
-	* Shows a message stored in the cookie.
+	* Shows a message stored in the transient.
 	*/
 	private function showUpdatedMessage() {
-		if (isset($_COOKIE[self::COOKIE_MESSAGE])) {
-			add_settings_error(md5($_COOKIE[self::COOKIE_MESSAGE]), esc_attr('settings_updated'), strip_tags($_COOKIE[self::COOKIE_MESSAGE]), 'updated');
-			unset($_COOKIE[self::COOKIE_MESSAGE]);
-			$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
-			setcookie(self::COOKIE_MESSAGE, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		$message = get_transient('wc_admin_settings_message');
+		if (is_string($message) && strlen($message) > 0) {
+			add_settings_error(md5($message), esc_attr('settings_updated'), strip_tags($message), 'updated');
+			delete_transient('wc_admin_settings_message');
 		}
 	}
 	
 	/**
-	* Shows a message stored in the cookie.
+	* Shows a message stored in the transient.
 	*/
 	private function showErrorMessage() {
-		if (isset($_COOKIE[self::COOKIE_MESSAGE_ERROR])) {
-			add_settings_error(md5($_COOKIE[self::COOKIE_MESSAGE_ERROR]), esc_attr('settings_updated'), strip_tags($_COOKIE[self::COOKIE_MESSAGE_ERROR]), 'error');
-			unset($_COOKIE[self::COOKIE_MESSAGE_ERROR]);
-			$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
-			setcookie(self::COOKIE_MESSAGE_ERROR, '', time() - 3600, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		$message = get_transient('wc_admin_settings_error_message');
+		if (is_string($message) && strlen($message) > 0) {
+			add_settings_error(md5($message), esc_attr('settings_updated'), strip_tags($message), 'error');
+			delete_transient('wc_admin_settings_error_message');
 		}
 	}
 

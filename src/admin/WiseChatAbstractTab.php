@@ -82,8 +82,7 @@ abstract class WiseChatAbstractTab {
 	* @param string $message
 	*/
 	protected function addMessage($message) {
-		$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
-		setcookie(WiseChatSettings::COOKIE_MESSAGE, $message, 0, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		set_transient("wc_admin_settings_message", $message, 10);
 	}
 	
 	/**
@@ -92,8 +91,7 @@ abstract class WiseChatAbstractTab {
 	* @param string $message
 	*/
 	protected function addErrorMessage($message) {
-		$secureLoggedInCookie = is_ssl() && 'https' === parse_url(get_option('home'), PHP_URL_SCHEME);
-		setcookie(WiseChatSettings::COOKIE_MESSAGE_ERROR, $message, 0, COOKIEPATH, COOKIE_DOMAIN, $secureLoggedInCookie, true);
+		set_transient("wc_admin_settings_error_message", $message, 10);
 	}
 	
 	/**
