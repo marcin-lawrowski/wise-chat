@@ -438,7 +438,17 @@ class WiseChatAuthentication {
      * @return string
      */
     private function getRemoteAddress() {
-        return $_SERVER['REMOTE_ADDR'];
+	    if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
+		    $ipAddresses = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+
+		    return trim($ipAddresses[0]);
+	    } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
+		    return $_SERVER["REMOTE_ADDR"];
+	    } else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
+		    return $_SERVER["HTTP_CLIENT_IP"];
+	    }
+
+	    return '';
     }
     
     /**
@@ -447,6 +457,13 @@ class WiseChatAuthentication {
      * @return string
      */
     private function getServerAddress() {
-        return $_SERVER['SERVER_ADDR'];
+    	if (is_array($_SERVER) && array_key_exists('SERVER_ADDR', $_SERVER)) {
+    		return $_SERVER['SERVER_ADDR'];
+	    }
+	    if (is_array($_SERVER) && array_key_exists('LOCAL_ADDR', $_SERVER)) {
+		    return $_SERVER['LOCAL_ADDR'];
+	    }
+
+	    return '';
     }
 }
