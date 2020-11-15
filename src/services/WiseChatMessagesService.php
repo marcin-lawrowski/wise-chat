@@ -363,13 +363,13 @@ class WiseChatMessagesService {
 		$recipient = $this->options->getOption('spam_report_recipient', get_option('admin_email'));
 		$subject = $this->options->getOption('spam_report_subject', '[Wise Chat] Spam Report');
 		$contentDefaultTemplate = "Wise Chat Spam Report\n\n".
-			'Channel: ${channel}'."\n".
-			'Message: ${message}'."\n".
-			'Posted by: ${message-user}'."\n".
-			'Posted from IP: ${message-user-ip}'."\n\n".
+			'Channel: {channel}'."\n".
+			'Message: {message}'."\n".
+			'Posted by: {message-user}'."\n".
+			'Posted from IP: {message-user-ip}'."\n\n".
 			"--\n".
-			'This e-mail was sent by ${report-user} from ${url}'."\n".
-			'${report-user-ip}';
+			'This e-mail was sent by {report-user} from {url}'."\n".
+			'{report-user-ip}';
 		$content = $this->options->getOption('spam_report_content', $contentDefaultTemplate);
 
 		if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
@@ -392,7 +392,7 @@ class WiseChatMessagesService {
 			'report-user-ip' => $currentUser->getIp()
 		);
 		foreach ($variables as $key => $variable) {
-			$content = str_replace('${'.$key.'}', $variable, $content);
+			$content = str_replace(array('${'.$key.'}', '{'.$key.'}'), $variable, $content);
 		}
 
 		wp_mail($recipient, $subject, $content);

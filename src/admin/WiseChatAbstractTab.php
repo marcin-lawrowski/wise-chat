@@ -193,8 +193,6 @@ abstract class WiseChatAbstractTab {
 	* Callback method for displaying plain text field with a hint. If the property is not defined the default value is used.
 	*
 	* @param array $args Array containing keys: id, name and hint
-	*
-	* @return null
 	*/
 	public function stringFieldCallback($args) {
 		$id = $args['id'];
@@ -207,7 +205,7 @@ abstract class WiseChatAbstractTab {
 		printf(
 			'<input type="text" id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" value="%s" %s data-parent-field="%s" />',
 			$id, $id,
-			$this->options->getEncodedOption($id, $defaultValue),
+			$this->fixImmunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue)),
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
@@ -223,8 +221,6 @@ abstract class WiseChatAbstractTab {
 	* Callback method for displaying multiline text field with a hint. If the property is not defined the default value is used.
 	*
 	* @param array $args Array containing keys: id, name and hint
-	*
-	* @return null
 	*/
 	public function multilineFieldCallback($args) {
 		$id = $args['id'];
@@ -239,7 +235,7 @@ abstract class WiseChatAbstractTab {
 			$id, $id,
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : '',
-			$this->options->getEncodedOption($id, $defaultValue)
+			$this->fixImmunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue))
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
@@ -247,6 +243,21 @@ abstract class WiseChatAbstractTab {
 		if ($isProFeature) {
 			$this->printProFeatureNotice();
 		}
+	}
+
+	/**
+	 * @see https://blog.imunify360.com/waf-rules-v.3.43-released  (rule #77142267)
+	 * @param string $id
+	 * @param string $value
+	 * @return string
+	 */
+	private function fixImmunify360Rule($id, $value) {
+		$affectedFields = array('spam_report_subject', 'spam_report_content');
+		if (!in_array($id, $affectedFields)) {
+			return $value;
+		}
+
+		return str_replace('${', '{', $value);
 	}
 	
 	/**

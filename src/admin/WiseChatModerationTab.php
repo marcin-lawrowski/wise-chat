@@ -58,7 +58,7 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			),
 			array('spam_report_recipient', 'Recipient', 'stringFieldCallback', 'string'),
 			array('spam_report_subject', 'Subject', 'stringFieldCallback', 'string'),
-			array('spam_report_content', 'Content', 'multilineFieldCallback', 'multilinestring', 'Available variables: ${url}, ${channel}, ${message}, ${message-user}, ${message-user-ip}, ${report-user}, ${report-user-ip}'),
+			array('spam_report_content', 'Content', 'multilineFieldCallback', 'multilinestring', 'Available variables: {url}, {channel}, {message}, {message-user}, {message-user-ip}, {report-user}, {report-user-ip}'),
 
 			array('_section', 'Pending Messages',
 				'After enabling this feature all posted messages are hidden until they are manually approved using Approve button (enable corresponding moderation permissions in the section above).'
@@ -94,13 +94,13 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 			'spam_report_recipient' => get_option('admin_email'),
 			'spam_report_subject' => '[Wise Chat] Spam Report',
 			'spam_report_content' => "Wise Chat Spam Report\n\n".
-				'Channel: ${channel}'."\n".
-				'Message: ${message}'."\n".
-				'Posted by: ${message-user}'."\n".
-				'Posted from IP: ${message-user-ip}'."\n\n".
+				'Channel: {channel}'."\n".
+				'Message: {message}'."\n".
+				'Posted by: {message-user}'."\n".
+				'Posted from IP: {message-user-ip}'."\n\n".
 				"--\n".
-				'This e-mail was sent by ${report-user} from ${url}'."\n".
-				'${report-user-ip}'
+				'This e-mail was sent by {report-user} from {url}'."\n".
+				'{report-user-ip}'
 		);
 	}
 	
