@@ -869,7 +869,7 @@ function WiseChatEmoticonsPanel(options, messages) {
 }
 
 // chat init script:
-jQuery(window).load(function() {
+jQuery(window).on('load', function() {
 	jQuery(".wcContainer[data-wc-config]").each(function(index) {
 		var config = jQuery(this).data('wc-config');
 		if (typeof config !== 'object') {

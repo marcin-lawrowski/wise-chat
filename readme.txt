@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.5 =
+* Fixed: jQuery error in some WordPress setups
 
 = 2.9.4 =
 * Fixed: 403 error when saving the settings (this was caused by Imunify360 rule #77142267)
