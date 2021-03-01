@@ -48,7 +48,7 @@ Wise Chat: **[Try DEMO here](https://kaine.pl/projects/wp-plugins/wise-chat/wise
 * **Messages auto cleanup**: Auto cleanup messages older than defined amount of time.
 * **Localization**: Provide a translation for your language. All texts are translatable.
 * **Appearance adjustments**: Adjust visual appearance to match your website by editing colors, font sizing, showing / hiding interface elements, changing sort order of messages and positioning chat elements. All this can be done using settings page.
-* **Chat Moderation**: Protect your chat by enabling swearing control using built-in bad words filter. It supports English and Polish languages.
+* **Chat Moderation**: Protect your chat by enabling swearing control using built-in bad words filter. It supports English, Polish and German languages.
 * **Chat Channel Statistics Shortcode**: Display basic statistics of a channel using the shortcode.
 * **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages. It is good for cutting links for example.
 * **Messages history**: All recently published messages are available in input field for resending.
@@ -184,7 +184,7 @@ You can enable a form that appears every time a new user tries to enter the chat
 
 = How does the bad words filter work? =
 
-The plugin has its own implementation of bad words filtering mechanism. Currently it supports two languages: English and Polish. It is turned on by default. It detects not only simple words but also variations of words like: "H.a.c_ki.n_g" (assuming that "hacking" is a bad word).
+The plugin has its own implementation of bad words filtering mechanism. Currently it supports three languages: English, Polish and German. It is turned on by default. It detects not only simple words but also variations of words like: "H.a.c_ki.n_g" (assuming that "hacking" is a bad word).
 
 = How to ban an user? =
 
@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.6 =
+* Added German bad words dictionary
 
 = 2.9.5 =
 * Fixed: jQuery error in some WordPress setups
