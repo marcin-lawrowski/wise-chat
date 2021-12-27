@@ -150,7 +150,7 @@ class WiseChatUsersDAO {
 		if (strlen($rawUserData->id) > 0) {
 			$user->setId(intval($rawUserData->id));
 		}
-        if (strlen($rawUserData->wp_id) > 0) {
+        if (strlen((string) $rawUserData->wp_id) > 0) {
             $user->setWordPressId(intval($rawUserData->wp_id));
         }
 		$user->setName($rawUserData->name);

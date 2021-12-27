@@ -314,8 +314,6 @@ class WiseChatAttachmentsService {
 	
 	/**
 	* Adds error log to the list of logs.
-	*
-	* @return null
 	*/
 	private function logError($message) {
 		trigger_error('WordPress Wise Chat plugin error: '.$message, E_USER_NOTICE);
@@ -326,8 +324,6 @@ class WiseChatAttachmentsService {
 	* Saves given data in the temporary file.
 	*
 	* @param string $data
-	*
-	* @return null
 	*/
 	private function saveTempFile($data) {
 		$fp = fopen($this->tempFileName,'w');
@@ -337,21 +333,20 @@ class WiseChatAttachmentsService {
 	
 	/**
 	* Creates a temporary file in /tmp directory.
-	*
-	* @return null
 	*/
 	private function createTempFile() {
 		$this->deleteTempFile();
 		$this->tempFileName = tempnam(sys_get_temp_dir(), 'php_files');
+		if ($this->tempFileName === false) {
+			throw new Exception('Could not create temporary file with tempnam() function. Please check your PHP configuration.');
+		}
 	}
 	
 	/**
 	* Removes the temporary file which was created by the $this->createTempFile() method.
-	*
-	* @return null
 	*/
 	private function deleteTempFile() {
-		if (strlen($this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
+		if (strlen((string) $this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
 			unlink($this->tempFileName);
 		}
 	}

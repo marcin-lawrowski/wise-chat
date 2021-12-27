@@ -336,8 +336,7 @@ class WiseChatImagesService {
 	
 	/**
 	* Checks requirements of images processing.
-	*
-	* @return null
+	 *
 	* @throws Exception
 	*/
 	private function checkImagesRequirements() {
@@ -350,8 +349,7 @@ class WiseChatImagesService {
 	
 	/**
 	* Checks cURL requirement.
-	*
-	* @return null
+	 *
 	* @throws Exception
 	*/
 	private function checkCurlRequirements() {
@@ -366,8 +364,6 @@ class WiseChatImagesService {
 	* Saves given data in the temporary file.
 	*
 	* @param string $data
-	*
-	* @return null
 	*/
 	private function saveTempFile($data) {
 		$fp = fopen($this->tempFileName,'w');
@@ -377,30 +373,28 @@ class WiseChatImagesService {
 	
 	/**
 	* Creates a temporary file in /tmp directory.
-	*
-	* @return null
 	*/
 	private function createTempFile() {
 		$this->deleteTempFile();
 		$this->tempFileName = tempnam(sys_get_temp_dir(), 'php_files');
-	}
-	
-	/**
-	* Removes the temporary file which was created by the $this->createTempFile() method.
-	*
-	* @return null
-	*/
-	private function deleteTempFile() {
-		if (strlen($this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
-			unlink($this->tempFileName);
+		if ($this->tempFileName === false) {
+			throw new Exception('Could not create temporary file with tempnam() function. Please check your PHP configuration.');
 		}
 	}
 	
 	/**
-	* Triggers PHP notice with error message.
-	*
-	* @return null
+	* Removes the temporary file which was created by the $this->createTempFile() method.
 	*/
+	private function deleteTempFile() {
+		if (strlen((string) $this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
+			unlink($this->tempFileName);
+		}
+	}
+
+	/**
+	 * Triggers PHP notice with error message.
+	 * @param string $message
+	 */
 	private function logError($message) {
 		@trigger_error('WordPress Wise Chat plugin error (ImagesService): '.$message, E_USER_NOTICE);
 	}

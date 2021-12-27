@@ -239,7 +239,7 @@ class WiseChatService {
 	* @return boolean
 	*/
 	public function hasUserToBeAuthorizedInChannel($channel) {
-		return strlen($channel->getPassword()) > 0 && (!$this->authentication->isAuthenticated() || !$this->authorization->isUserAuthorizedForChannel($channel));
+		return strlen((string) $channel->getPassword()) > 0 && (!$this->authentication->isAuthenticated() || !$this->authorization->isUserAuthorizedForChannel($channel));
 	}
 
 	/**

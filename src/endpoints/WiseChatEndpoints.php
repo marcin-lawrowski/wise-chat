@@ -704,7 +704,7 @@ class WiseChatEndpoints {
 	private function checkChannelAuthorization($channel) {
 		if (
 			$channel !== null &&
-			strlen($channel->getPassword()) > 0 &&
+			strlen((string) $channel->getPassword()) > 0 &&
 			!$this->authorization->isUserAuthorizedForChannel($channel)
 		) {
 			throw new WiseChatUnauthorizedAccessException('Not authorized in this channel');
@@ -715,11 +715,11 @@ class WiseChatEndpoints {
 		$checksum = $this->getParam('checksum');
 
 		if ($checksum !== null) {
-			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
+			$decoded = unserialize(WiseChatCrypt::decryptFromString($checksum));
 			if (is_array($decoded)) {
 				$decoded['ts'] = time();
 
-				return base64_encode(WiseChatCrypt::encrypt(serialize($decoded)));
+				return WiseChatCrypt::encryptToString(serialize($decoded));
 			}
 		}
 
@@ -730,7 +730,7 @@ class WiseChatEndpoints {
 		$checksum = $this->getParam('checksum');
 
 		if ($checksum !== null) {
-			$decoded = unserialize(WiseChatCrypt::decrypt(base64_decode($checksum)));
+			$decoded = unserialize(WiseChatCrypt::decryptFromString($checksum));
 			if (is_array($decoded)) {
 				$timestamp = array_key_exists('ts', $decoded) ? $decoded['ts'] : time();
 				$validityTime = $this->options->getIntegerOption('ajax_validity_time', 1440) * 60;

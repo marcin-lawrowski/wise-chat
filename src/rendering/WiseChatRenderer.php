@@ -150,13 +150,13 @@ class WiseChatRenderer {
 
 		// text color defined by role:
 		$textColor = $this->getTextColorDefinedByUserRole($message->getUser());
-		if (strlen($textColor) > 0) {
+		if (strlen((string) $textColor) > 0) {
 			$isTextColorSet = true;
 			$textColorAffectedParts = array('messageUserName');
 		}
 
 		// custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $message->getUser() !== null && strlen($message->getUser()->getDataProperty('textColor')) > 0) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $message->getUser() !== null && strlen((string) $message->getUser()->getDataProperty('textColor')) > 0) {
 			$isTextColorSet = true;
 			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
 			$textColor = $message->getUser()->getDataProperty('textColor');
@@ -256,11 +256,11 @@ class WiseChatRenderer {
 			// custom text color:
 			if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
-				if (strlen($textColorProposal) > 0) {
+				if (strlen((string) $textColorProposal) > 0) {
 					$textColor = $textColorProposal;
 				}
 			}
-			if (strlen($textColor) > 0) {
+			if (strlen((string) $textColor) > 0) {
 				$styles = sprintf('style="color: %s"', $textColor);
 			}
 
@@ -272,8 +272,8 @@ class WiseChatRenderer {
 
             $flag = '';
             if ($this->options->isOptionEnabled('collect_user_stats', true) && $this->options->isOptionEnabled('show_users_flags', false)) {
-                $countryCode = $channelUser->getUser()->getDataProperty('countryCode');
-                $country = $channelUser->getUser()->getDataProperty('country');
+                $countryCode = (string) $channelUser->getUser()->getDataProperty('countryCode');
+                $country = (string) $channelUser->getUser()->getDataProperty('country');
                 if (strlen($countryCode) > 0) {
                     $flagURL = $this->options->getFlagURL(strtolower($countryCode));
                     $flag = " <img src='{$flagURL}' class='wcUsersListFlag wcIcon' alt='{$countryCode}' title='{$country}'/>";
@@ -282,12 +282,12 @@ class WiseChatRenderer {
             $cityAndCountry = '';
             if ($this->options->isOptionEnabled('collect_user_stats', true) && $this->options->isOptionEnabled('show_users_city_and_country', false)) {
                 $cityAndCountryArray = array();
-                $city = $channelUser->getUser()->getDataProperty('city');
+                $city = (string) $channelUser->getUser()->getDataProperty('city');
                 if (strlen($city) > 0) {
                     $cityAndCountryArray[] = $city;
                 }
 
-                $countryCode = $channelUser->getUser()->getDataProperty('countryCode');
+                $countryCode = (string) $channelUser->getUser()->getDataProperty('countryCode');
                 if (strlen($countryCode) > 0) {
                     $cityAndCountryArray[] = $countryCode;
                 }
@@ -354,17 +354,17 @@ class WiseChatRenderer {
 
 		// text color defined by role:
 		$textColor = $this->getTextColorDefinedByUserRole($user);
-		if (strlen($textColor) > 0) {
+		if (strlen((string) $textColor) > 0) {
 			$textColorAffectedParts = array('messageUserName');
 		}
 
 		// custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen((string) $user->getDataProperty('textColor')) > 0) {
 			$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
 			$textColor = $user->getDataProperty('textColor');
 		}
 
-		if (strlen($textColor) > 0 && in_array('messageUserName', $textColorAffectedParts)) {
+		if (strlen((string) $textColor) > 0 && in_array('messageUserName', $textColorAffectedParts)) {
 			$styles = sprintf('style="color: %s"', $textColor);
 		}
 

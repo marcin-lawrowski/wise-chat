@@ -131,7 +131,7 @@ class WiseChatOptions {
 	* @return string
 	*/
 	public function getEncodedOption($property, $default = '') {
-		return htmlentities($this->getOption($property, $default), ENT_QUOTES, 'UTF-8');
+		return htmlentities((string) $this->getOption($property, $default), ENT_QUOTES, 'UTF-8');
 	}
 	
 	/**

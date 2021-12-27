@@ -262,7 +262,7 @@ class WiseChatMessagesDAO {
 		if (strlen($messageRawData->time) > 0) {
 			$message->setTime(intval($messageRawData->time));
 		}
-		if (strlen($messageRawData->user_id) > 0) {
+		if (strlen((string) $messageRawData->user_id) > 0) {
 			$message->setWordPressUserId(intval($messageRawData->user_id));
 		}
 
@@ -338,7 +338,7 @@ class WiseChatMessagesDAO {
 		foreach ($channels as $channel) {
 			if (array_key_exists($channel->getName(), $mainSummaryMap)) {
 				$channelPrepared = $mainSummaryMap[$channel->getName()];
-				$channelPrepared->secured = strlen($channel->getPassword()) > 0;
+				$channelPrepared->secured = strlen((string) $channel->getPassword()) > 0;
 				$fullSummary[] = $channelPrepared;
 			} else {
 				$fullSummary[] = (object) array(
@@ -346,7 +346,7 @@ class WiseChatMessagesDAO {
 					'messages' => 0,
 					'users' => array_key_exists($channel->getName(), $usersSummaryMap) ? $usersSummaryMap[$channel->getName()] : 0,
 					'last_message' => null,
-					'secured' => strlen($channel->getPassword()) > 0
+					'secured' => strlen((string) $channel->getPassword()) > 0
 				);
 			}
 		}
