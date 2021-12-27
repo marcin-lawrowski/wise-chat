@@ -698,7 +698,7 @@ function WiseChatEmoticonsPanel(options, messages) {
 	var LAYER_WIDTH_1 = null;
 
 	var EMOTICONS_2 = [
-		'angry', 'bulb', 'cafe', 'clap', 'clouds', 'cry', 'devil', 'gift', 'handshake',
+		'bulb', 'cafe', 'clap', 'clouds', 'cry', 'devil', 'gift', 'handshake',
 		'heart', 'kissy', 'laugh-big', 'no', 'ok', 'feel_peace', 'oh_please', 'rain', 'scared',
 		'silly', 'snail', 'sun', 'baloons', 'bye', 'cake', 'cleaver', 'cool', 'cry_big',
 		'drink', 'hat', 'heart_big', 'laugh', 'moon', 'offended', 'omg', 'a_phone',

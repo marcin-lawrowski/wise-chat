@@ -349,6 +349,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 2.9.7 =
 * PHP8 updates
+* Removed duplicated emoticons
 * Tests on the latest WordPress
 
 = 2.9.6 =
