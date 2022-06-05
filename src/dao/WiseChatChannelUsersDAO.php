@@ -356,23 +356,21 @@ class WiseChatChannelUsersDAO {
 	* Checks whether the given user name belongs to a different user.
 	*
 	* @param string $userName Username to check
-	* @param boolean $includeActiveOnly Whether to limit the search to active users only
 	*
 	* @return boolean
 	*/
-	public function isUserNameOccupied($userName, $includeActiveOnly = false) {
+	public function isUserNameOccupied($userName) {
 		global $wpdb;
 
 		$userName = addslashes($userName);
 		$table = WiseChatInstaller::getChannelUsersTable();
 		$usersTable = WiseChatInstaller::getUsersTable();
-		$activeOnlyCondition = $includeActiveOnly ? ' AND usc.active = 1 ' : '';
 		$sql = sprintf(
 			'SELECT * '.
 			'FROM %s AS usc '.
 			'LEFT JOIN %s AS us ON (usc.user_id = us.id) '.
-			'WHERE us.name = "%s" %s LIMIT 1;',
-			$table, $usersTable, $userName, $activeOnlyCondition
+			'WHERE us.name = "%s" AND usc.active = 1 LIMIT 1;',
+			$table, $usersTable, $userName
 		);
 		$results = $wpdb->get_results($sql);
 		

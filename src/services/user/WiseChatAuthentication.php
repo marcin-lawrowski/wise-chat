@@ -256,12 +256,16 @@ class WiseChatAuthentication {
         // check if the new username is already occupied:
         $occupiedException = new Exception($this->options->getOption('message_error_2', __('This name is already occupied', 'wise-chat')));
         $prefix = $this->options->getOption('user_name_prefix', 'Anonymous');
-        $disableUserNameCheck = $this->options->isOptionEnabled('disable_user_name_duplication_check', false);
+
+		if ($this->options->isOptionEnabled('disable_user_name_duplication_check', false)) {
+			return $userName;
+		}
+
         if (
             $this->getUserNameOrEmptyString() == $userName ||
             $this->usersDAO->getWpUserByDisplayName($userName) !== null ||
             $this->usersDAO->getWpUserByLogin($userName) !== null ||
-            $this->channelUsersDAO->isUserNameOccupied($userName, $disableUserNameCheck) ||
+            $this->channelUsersDAO->isUserNameOccupied($userName) ||
             preg_match("/^{$prefix}/", $userName) ||
             $userName == $this->getSystemUser()->getName()
         ) {
