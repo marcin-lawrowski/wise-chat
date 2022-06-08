@@ -348,6 +348,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 2.9.8 =
+* Tested on WordPress 6.0
 * Fixed: username duplication error despite disabled checking
 
 = 2.9.7 =
