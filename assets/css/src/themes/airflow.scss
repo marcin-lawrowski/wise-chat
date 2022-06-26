@@ -1,0 +1,574 @@
+@mixin airflow {
+  @include airflow-common;
+
+  .wcClassic {
+    border: 0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #f3f6f7;
+
+    .wcTitle {
+      padding: 10px 13px; font-size: 150%; color: #0e2849; background-color: #dfe7ea;
+    }
+
+    .wcLoadingContainer, .wcAuthContainer {
+      padding: 0;
+    }
+
+    // desktop:
+    &.wcDesktop {
+      .wcBody {
+        // messages area:
+        .wcMessagesArea {
+          .wcTabsContainer {
+            background-color: #e9eef0;
+
+            .wcTabs {
+              .wcTab {
+                &.wcCurrent {
+                  border-bottom: 3px solid transparent;
+                  background: #f9fafb;
+                  border-radius: 5px 5px 0 0;
+
+                  &:first-child {
+                    border-top-left-radius: 0;
+                  }
+                }
+
+                .wcName {
+                  font-size: 16px;
+                  padding-top: 4px;
+                  padding-bottom: 4px;
+                }
+              }
+            }
+
+          }
+
+          .wcCustomizations {
+            padding: 0 2% 2% 2%;
+            background-color: #f3f6f7;
+          }
+        }
+
+        // browser area:
+        &.wcBrowserAreaRight {
+          .wcMessagesArea {
+            padding-left: 0;
+            padding-right: 0;
+          }
+        }
+
+        &.wcBrowserAreaLeft {
+          .wcMessagesArea {
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .wcBrowserArea {
+            padding-right: 2%;
+            padding-left: 1%;
+          }
+        }
+
+        .wcBrowserArea {
+          background-color: #e9eef0;
+        }
+      }
+    }
+  }
+
+  .wcMobile {
+    .wcContent {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .wcTabs {
+      background-color: #ededed;
+      .wcTab {
+        padding-bottom: 6px;
+        padding-top: 6px;
+
+        .wcName {
+          font-size: 16px;
+        }
+        border-bottom: 0;
+        &.wcCurrent {
+          border-bottom: 0;
+          background-color: #f9fafb;
+          border-radius: 5px 5px 0 0;
+        }
+
+        .wcRedCounter {
+          width: 22px;
+          height: 22px;
+          font-size: 1em;
+        }
+      }
+
+      .wcTabContent {
+        .wcChannel {
+          padding-left: 1%;
+          padding-right: 1%;
+        }
+      }
+    }
+
+    .wcTabContent {
+      .wcChannelEntry {
+        padding: 5px 10px 5px 10px;
+
+        &:focus, &:active, &:hover {
+          background-color: rgba(9, 193, 121, 0.10);
+        }
+      }
+
+      .wcBrowser {
+        padding-top: 0;
+        background-color: transparent;
+
+        .wcChannels {
+          .wcChannelTrigger {
+            &:hover {
+              background-color: #d1e6ef;
+            }
+          }
+        }
+      }
+
+      .wcRecentChats {
+        .wcHeader {
+          font-size: 1.1em;
+          color: #444;
+          padding-left: 10px
+        }
+
+        .wcRecent {
+          padding: 5px 10px 5px 10px;
+
+          .wcRight .wcHead {
+            margin-bottom: 0;
+          }
+        }
+      }
+
+      .wcCustomizations {
+        padding-left: 2%;
+        padding-right: 2%;
+      }
+
+    }
+  }
+
+  .wcMobile.wcSizeXXs {
+    .wcTabs.wcTabsCompact {
+     // padding-top: 6px;
+      //padding-bottom: 6px;
+      .wcTab {
+        //background-size: contain;
+      }
+    }
+  }
+
+  // common:
+  .wcCustomizations {
+    a, a:hover {
+      color: #151618; outline: none;
+    }
+  }
+
+  .wcCounter {
+    font-size: 10px;
+  }
+
+  a.wcChannelClose {
+    background: transparent url("../../gfx/themes/airflow/gfx/x.svg") no-repeat 50%;
+    border-color: #7593AA;
+    &:hover {
+      background-color: #d1e6ef;
+    }
+  }
+
+  .wcBrowser {
+    .wcChannels {
+      .wcLabel {
+        font-weight: bold;
+      }
+      .wcChannelTrigger {
+        color: #151618;
+
+        &.wcUnLockedChannel .wcDetails .wcName {
+          background-image: url("../../gfx/themes/airflow/gfx/lock-semi.svg");
+        }
+        &.wcLockedChannel .wcDetails .wcName {
+          background-image: url("../../gfx/themes/airflow/gfx/lock-full.svg");
+        }
+
+        &:hover {
+          background-color: #d1e6ef;
+          border-radius: 5px;
+        }
+      }
+
+      .wcLabel {
+        font-size: 1.1em;
+        color: #444;
+      }
+    }
+
+    background-color: transparent;
+    color: #151618;
+
+    .wcCounter {
+      border: 0;
+      border-top: 1px solid #e9eef0;
+    }
+
+    .wcFooter {
+      border-top: none;
+      padding: 5px 5px 5px 10px;
+
+      .wcSearch {
+        background-color: #FFF;
+        border-radius: 15px;
+        background-position: 10px center;
+
+        input {
+          height: 40px;
+          margin-left: 30px;
+        }
+      }
+    }
+  }
+
+  .wcChannel {
+    .wcMessages {
+      color: #111;
+      background: #f3f6f7;
+      margin-bottom: 2%;
+
+      .wcMessage {
+        padding-left: 2%;
+        padding-right: 2%;
+
+        a {
+          color: #119bd4;
+          text-decoration: none;
+          &:hover {
+	        text-decoration: underline;
+          }
+        }
+
+        .wcUser {
+          line-height: 22px;
+          color: #0e2849;
+          text-decoration: none;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+
+        .wcTime {
+          &, & * {
+            color: #a2a8ad; line-height: 22px;
+          }
+        }
+
+        .wcContent {
+          background-color: #FFF; border-radius: 0 10px 10px 10px; box-shadow: 0 0 15px rgba(14,40,73,0.03);
+        }
+
+        .wcRowBody .wcContent .wcQuote {
+          border-left-color: #0194d2;
+          background-color: #f8f8f8;
+          border-radius: 0 10px 0 0;
+        }
+
+
+        .wcActions {
+          background-color: #ffffff;
+
+          .wcAction {
+            border-color: #7593AA;
+
+            &:hover {
+              background-color: #d1e6ef;
+            }
+          }
+
+          .wcDelete {
+            background: transparent url("../../gfx/themes/airflow/gfx/x.svg") no-repeat 50%;
+          }
+
+          .wcMute {
+            background: transparent url("../../gfx/themes/airflow/gfx/mute.svg") no-repeat 50%;
+          }
+
+          .wcBan {
+            background: transparent url("../../gfx/themes/airflow/gfx/ban.svg") no-repeat 50%;
+          }
+
+          .wcSpam {
+            background: transparent url("../../gfx/themes/airflow/gfx/spam.svg") no-repeat 50%;
+          }
+        }
+
+        &.wcCurrentUser {
+          .wcContent {
+            background-color: #d1e6ef; box-shadow: none;
+          }
+          .wcRowBody .wcContent .wcQuote {
+            background-color: #cbdfe8;
+          }
+          .wcRowHead .wcUser {
+            color: #0e2849;
+          }
+        }
+      }
+    }
+
+    .wcCounter {
+      padding: 0 2% 1% 2%;
+    }
+
+    .wcChannelInput {
+      background-color: #f3f6f7;
+      padding: 0 2% 2% 2%;
+
+      .wcCurrentUserName {
+        padding-bottom: 7px;
+        font-weight: bold;
+        color: #444;
+      }
+
+      .wcInputs {
+        .wcInputButtons {
+          .wcInputButton {
+
+            border-radius: 15px;
+            border: none;
+            box-shadow: none;
+            height: 40px;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+            filter: alpha(opacity=60);
+            -moz-opacity: 0.6;
+            -khtml-opacity: 0.6;
+            opacity: 0.6;
+            outline: none;
+            -webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+            -o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+            transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+            display: inline-block;
+
+
+            &:hover, &:hover > * {
+              cursor: pointer;
+            }
+
+            &.wcImageAttachment {
+              background: transparent url('../../gfx/themes/airflow/gfx/camera.svg') center center no-repeat;
+            }
+
+            &.wcFileAttachment {
+              background: transparent url('../../gfx/themes/airflow/gfx/attach.svg') center center no-repeat;
+              cursor: pointer;
+            }
+
+            &.wcEmoticon {
+              background: transparent url('../../gfx/themes/airflow/gfx/emoticon.svg') center center no-repeat;
+            }
+
+            &:focus, &:active, &:hover {
+              -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+              filter: alpha(opacity=100);
+              -moz-opacity: 1;
+              -khtml-opacity: 1;
+              opacity: 1;
+              border: none;
+              background-color: transparent;
+            }
+          }
+
+          .wcInputButtonSupplementary {
+            background-color: transparent;
+          }
+        }
+
+        div.wcInput {
+          min-height: 40px; background-color: #ffffff; border-radius: 15px; margin: 0; border: 1px solid transparent; padding: 6px 5px 6px 15px;
+
+          &:focus {
+             border: 1px solid transparent;
+          }
+        }
+
+        .wcSubmit {
+          border-radius: 15px !important;
+        }
+      }
+
+      .wcAttachments {
+        .wcAttachment {
+          .wcDelete {
+            border-color: #7593AA;
+            background-image: url("../../gfx/themes/airflow/gfx/x.svg");
+            &:hover {
+              background-color: #d1e6ef;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .wcToasts {
+    .wcToast {
+      background-color: #f3f6f7;
+      box-shadow: 2px 2px 15px rgba(60,60,60,0.1);
+    }
+  }
+}
+
+@mixin airflow-global {
+
+  [role=tooltip].wcPopup-content.wcAirflowTheme-content,
+  [role=dialog].wcPopup-content.wcAirflowTheme-content {
+    @include airflow-common;
+
+    border-color: #e1e8ed;
+    box-shadow: 2px 2px 15px rgba(60,60,60,0.1);
+    border-radius: 15px;
+    overflow: hidden;
+
+    > .wcBody {
+      background: #FFF !important;
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    > .wcHeader, > .wcFooter {
+      background: #e9eef0 !important;
+      border: none;
+    }
+    > .wcHeader {
+      color: #151618;
+      h5 {
+        font-size: 1.1em;
+        text-transform: uppercase;
+      }
+      .wcClose {
+        background-image: url("../../gfx/themes/airflow/gfx/x.svg");
+      }
+    }
+  }
+
+  .wcEmoticonsPopup-content.wcAirflowTheme-content a:hover {
+    border: none;
+  }
+
+}
+
+@mixin airflow-common {
+  &, * {
+    @import url('https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext');
+    font: 13px/22px 'Maven Pro', sans-serif;
+    color: #0e2849;
+  }
+
+  a {
+    color: #119bd4;
+    box-shadow: none;
+  }
+
+  button:not(.wcFunctional),button:not(.wcFunctional):focus, button:not(.wcFunctional):active,
+  input[type="button"], input[type="button"]:focus, input[type="button"]:active,
+  input[type="submit"], input[type="submit"]:focus, input[type="submit"]:active {
+    border-radius: 15px !important; background-image: none; background-repeat: no-repeat; border: 0!important;
+	color: #FFF !important; padding: 5px 20px !important; box-shadow: none; font-weight: normal !important; line-height: 20px !important;
+	height: 40px; outline: none; min-height: 40px !important;
+
+	background: #0194d2 !important; /* Old browsers */
+	background: -moz-linear-gradient(top,  #0194d2 0%, #0081b7 100%) !important; /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #0194d2 0%,#0081b7 100%) !important; /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #0194d2 0%,#0081b7 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0194d2', endColorstr='#0081b7',GradientType=0 ) !important; /* IE6-9 */
+
+	text-transform: none !important;
+
+	-webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	-o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+	transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+  }
+
+  input[type="button"]:hover, input[type="submit"]:hover, button:not(.wcFunctional):hover {
+	background: #01567a !important; /* Old browsers */
+	background: -moz-linear-gradient(top,  #01567a 0%, #024460 100%) !important; /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #01567a 0%,#024460 100%) !important; /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #01567a 0%,#024460 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01567a', endColorstr='#024460',GradientType=0 ) !important; /* IE6-9 */
+	box-shadow: none !important; font-weight: normal !important;
+  }
+
+  input[type="text"], input[type="password"], textarea {
+    height: 40px; font-size: 1em; line-height: 40px; box-shadow: none;
+	background-color: #ffffff; border-radius: 15px; margin: 0; outline: 0 none; padding: 4px;
+	padding-left: 15px; border: 1px solid transparent;
+  }
+
+  input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+    background-color: #ffffff; border: 1px solid transparent;
+  }
+
+  ::placeholder {
+    color: #afb1b8;
+    font-family: 'Maven Pro', sans-serif;
+  }
+
+  input[type="button"].wcSubmit {
+      border-radius: 15px !important;
+  }
+
+  /* Progress bar - background */
+  progress, progress[role][aria-valuenow] {
+    background: #d7dfe3 !important;
+  }
+
+  progress::-webkit-progress-bar {
+    background: #d7dfe3;
+  }
+  /* Progress bar - foreground */
+  progress {
+    color: #0194d2;
+  }
+
+  progress::-moz-progress-bar {
+    background: #0194d2;
+  }
+
+  progress::-webkit-progress-value {
+    background: #0194d2;
+  }
+
+  progress[aria-valuenow]:before  {
+    background: #0194d2;
+  }
+
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    * {
+      select,
+      textarea,
+      button,
+      input {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .wcErrorBox {
+    border-radius: 5px;
+    background-color: #ffe9e9;
+    border: none;
+  }
+
+}

@@ -3,9 +3,11 @@
 /**
  * Wise Chat message shortcodes builders.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatShortcodeConstructor {
+	const SHORTCODES = array('img', 'link', 'attachment', 'youtube', 'emoticon');
+
 	const IMAGE_SHORT_TAG = '[img id="%d" src="%s" src-th="%s" src-org="%s"]';
 	const ATTACHMENT_SHORT_TAG = '[attachment id="%d" src="%s" name-org="%s"]';
 	const YOUTUBE_SHORT_TAG = '[youtube movie-id="%s" src-org="%s"]';
@@ -36,7 +38,7 @@ class WiseChatShortcodeConstructor {
 	public static function getAttachmentShortcode($id, $source, $originalName) {
 		return sprintf(self::ATTACHMENT_SHORT_TAG, $id, $source, $originalName);
 	}
-	
+
 	/**
 	* Constructs YouTube shortcode.
 	*

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WiseChat kick model.
  */
@@ -79,4 +78,5 @@ class WiseChatKick {
 	public function setIp($ip) {
 		$this->ip = $ip;
 	}
+
 }

@@ -1,0 +1,130 @@
+@mixin channel-input {
+
+  .wcChannelInput {
+
+    button {
+      margin: 0;
+    }
+
+    .wcInputs {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+
+      .wcInput {
+        flex-grow: 1;
+        min-height: 55px;
+        padding: 14px 5px 14px 15px;
+        border: 0;
+        outline: 0;
+        width: auto;
+        min-width: 250px;
+        resize: none;
+        overflow: hidden;
+        &, * {
+          font-size: 16px;
+          line-height: 24px;
+        }
+      }
+
+      .wcInput[contentEditable=true]:empty:not(:focus):before {
+        content:attr(data-placeholder);
+        pointer-events: none;
+        color: grey;
+      }
+
+      .wcInputButtons {
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+
+        .wcInputButton {
+          cursor: pointer !important;
+          display: inline-block;
+          width: 55px;
+          height: 55px;
+          position: relative;
+          overflow: hidden;
+          transition: all .2s ease-in;
+
+          input {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0.001;
+            cursor: pointer;
+            z-index: 1000;
+            margin: 0;
+          }
+        }
+
+        .wcInputButton.wcFileAttachment {
+          background: #f7f7f7 url(../../gfx/icons/attach.svg) center center no-repeat;
+          width: 46px;
+        }
+
+        .wcInputButton.wcImageAttachment {
+          background: #f7f7f7 url(../../gfx/icons/camera.svg) center center no-repeat;
+          width: 50px;
+        }
+
+        .wcInputButton.wcEmoticon {
+          background: #f7f7f7 url(../../gfx/icons/emoticon.svg) center center no-repeat;
+          width: 46px;
+        }
+
+        .wcInputButton:hover {
+          cursor: pointer !important;
+          background-color: #dfdfdf;
+        }
+
+        .wcInputButtonSupplementary {
+          background-color: #f7f7f7;
+          height: 55px;
+          overflow: hidden;
+          display: inline-flex;
+          align-items: center;
+        }
+
+      }
+    }
+
+    /* Attachments section */
+    .wcAttachments {
+      .wcAttachment {
+        display: flex;
+        align-items: center;
+        margin-top: 2px;
+
+        .wcImagePreview {
+          max-width: 70px;
+          max-height: 50px;
+          cursor: pointer;
+          display: inline-block;
+          vertical-align: middle;
+          margin-right: 3px;
+          border-radius: 5px;
+        }
+
+        .wcDelete {
+          background: transparent url(../../gfx/icons/x.svg) center center no-repeat;
+          width: 21px;
+          height: 21px;
+          border: 1px solid #A6A6A6;
+          border-radius: 50%;
+          transition: all .2s ease-in;
+          margin-left: 5px;
+          flex-shrink: 0;
+        }
+
+        .wcDelete:hover {
+          background-color: #dfdfdf;
+        }
+      }
+    }
+  }
+}

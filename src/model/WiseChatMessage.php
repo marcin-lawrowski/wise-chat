@@ -35,6 +35,11 @@ class WiseChatMessage {
     private $userId;
 
     /**
+     * @var string
+     */
+    private $avatarUrl;
+
+    /**
      * @var WiseChatUser Chat plugin user
      */
     private $user;
@@ -155,6 +160,20 @@ class WiseChatMessage {
     /**
      * @return string
      */
+    public function getAvatarUrl() {
+        return $this->avatarUrl;
+    }
+
+    /**
+     * @param string $avatarUrl
+     */
+    public function setAvatarUrl($avatarUrl) {
+        $this->avatarUrl = $avatarUrl;
+    }
+
+    /**
+     * @return string
+     */
     public function getText() {
         return $this->text;
     }
@@ -192,5 +211,26 @@ class WiseChatMessage {
      */
     public function setTime($time) {
         $this->time = $time;
+    }
+
+    /**
+     * Returns a clone of the current message
+     *
+     * @returns WiseChatMessage
+     */
+    public function getClone() {
+        $clone = new WiseChatMessage();
+
+        $clone->setAdmin($this->isAdmin());
+        $clone->setUserName($this->getUserName());
+        $clone->setChannelName($this->getChannelName());
+        $clone->setWordPressUserId($this->getWordPressUserId());
+        $clone->setUserId($this->getUserId());
+        $clone->setAvatarUrl($this->getAvatarUrl());
+        $clone->setText($this->getText());
+        $clone->setIp($this->getIp());
+        $clone->setTime($this->getTime());
+
+        return $clone;
     }
 }

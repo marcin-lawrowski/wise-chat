@@ -1,0 +1,19 @@
+@import "./classic/mobile";
+@import "./classic/desktop";
+
+.wcClassic {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dfdfdf;
+
+  &.wcMobile {
+    @include classic-mobile;
+  }
+
+  &.wcDesktop {
+    @include desktop;
+  }
+
+}

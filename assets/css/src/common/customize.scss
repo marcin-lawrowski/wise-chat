@@ -1,0 +1,75 @@
+@mixin customize {
+  .wcCustomizations {
+    a.wcCustomizeButton {
+      padding-left: 20px;
+      position: relative;
+      font-size: 80%;
+      text-decoration: none !important;
+      display: inline-block;
+    }
+
+    a.wcCustomizeButton:before {
+      content: '';
+      display: block;
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url(../../gfx/icons/custom.svg) center center no-repeat;
+    }
+
+    .wcCustomizationsPanel {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      overflow: hidden;
+
+      .wcProperty {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+
+        > * {
+          display: inline-block;
+        }
+
+        > *:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        > *:last-child {
+          margin-right: 25px;
+        }
+
+        input[type="checkbox"] {
+          margin-left: 7px;
+        }
+
+        input[type="text"] {
+          width: 100%;
+        }
+
+        .wcColorSelect {
+          height: 16px;
+          background-color: transparent;
+          width: 16px;
+          padding: 0;
+          border: 1px solid #ccc;
+          cursor: pointer;
+          line-height: 16px;
+          font-size: .75em;
+          font-weight: 700;
+          text-align: center;
+          display: inline-block;
+          border-radius: 3px;
+        }
+      }
+
+
+    }
+  }
+
+}

@@ -5,7 +5,7 @@ WiseChatContainer::load('commands/WiseChatAbstractCommand');
 /**
  * WiseChat commands resolver.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatCommandsResolver {
 	
@@ -37,14 +37,14 @@ class WiseChatCommandsResolver {
 	public function resolve($user, $systemUser, $channel, $message) {
 		if ($this->isPotentialCommand($message) && $this->usersDAO->isWpUserAdminLogged()) {
 			// print typed command (visible only for admins):
-			$this->messagesService->addMessage($user, $channel, $message, true);
+			$this->messagesService->addMessage($user, $channel, $message, array(), true);
 		
 			// execute command:
 			$resolver = $this->getCommandResolver($channel, $message);
 			if ($resolver !== null) {
 				$resolver->execute();
 			} else {
-				$this->messagesService->addMessage($systemUser, $channel, 'Command not found', true);
+				$this->messagesService->addMessage($systemUser, $channel, 'Command not found', array(), true);
 			}
 		
 			return true;

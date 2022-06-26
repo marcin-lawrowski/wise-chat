@@ -3,13 +3,14 @@
 /**
  * WiseChat class for accessing plugin options.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatOptions {
 	const OPTIONS_NAME = 'wise_chat_options_name';
 	const LAST_NAME_ID_OPTION = 'wise_chat_last_name_id';
     const EMOTICONS_BASE_DIR = "gfx/emoticons";
     const FLAGS_BASE_DIR = "gfx/flags";
+    const ICONS_BASE_DIR = "gfx/icons";
 
 	/**
 	* @var WiseChatOptions
@@ -36,6 +37,7 @@ class WiseChatOptions {
 		if ($this->options === false) {
 			$this->options = array();
 		}
+		add_action('update_option_'.WiseChatOptions::OPTIONS_NAME, array($this, 'onOptionsUpdated'), 10, 3);
 	}
 	
 	public static function getInstance() {
@@ -61,6 +63,10 @@ class WiseChatOptions {
     public function getEmoticonsBaseURL() {
         return $this->getBaseDir().self::EMOTICONS_BASE_DIR.'/';
     }
+
+	public function getIconsURL() {
+		return $this->getBaseDir().self::ICONS_BASE_DIR.'/';
+	}
 
     /**
      * @param string $countryIsoCode
@@ -197,7 +203,7 @@ class WiseChatOptions {
 				}
 				$options[$key] = $transformedValues;
 			}
-		}
+ 		}
 
 		$this->options = array_merge(is_array($this->options) ? $this->options : array(), $options);
 	}
@@ -206,7 +212,7 @@ class WiseChatOptions {
 	* Sets option's value.
 	*
 	* @param string $name
-	* @param string $value
+	* @param mixed $value
 	*
 	* @return null
 	*/
@@ -221,6 +227,17 @@ class WiseChatOptions {
 	*/
 	public function saveOptions() {
 		update_option(WiseChatOptions::OPTIONS_NAME, $this->options);
+	}
+
+	/**
+	 * Fired when the options are saved.
+	 *
+	 * @param mixed $oldValue
+	 * @param mixed $value
+	 * @param string $option
+	 */
+	public function onOptionsUpdated($oldValue, $value, $option) {
+		delete_transient('wise_chat_wp_users_cache');
 	}
 	
 	/**

@@ -3,7 +3,7 @@
 /**
  * WiseChat messages DAO
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatMessagesDAO {
 
@@ -72,8 +72,9 @@ class WiseChatMessagesDAO {
 			'user' => $message->getUserName(),
 			'chat_user_id' => $message->getUserId(),
 			'text' => $message->getText(),
+			'avatar_url' => $message->getAvatarUrl(),
 			'channel' => $message->getChannelName(),
-			'ip' => $message->getIp()
+			'ip' => $message->getIp(),
 		);
 
 		// update or insert:
@@ -121,7 +122,7 @@ class WiseChatMessagesDAO {
 		$sql = sprintf('SELECT * FROM %s WHERE id = %d;', $this->table, intval($id));
 		$results = $wpdb->get_results($sql);
 		if (is_array($results) && count($results) > 0) {
-			return $this->populateData($results[0]);
+			return self::populateData($results[0]);
 		}
 
 		return null;
@@ -201,6 +202,18 @@ class WiseChatMessagesDAO {
 	}
 
 	/**
+	 * Updates user name by specified WordPress user ID.
+	 *
+	 * @param string $name
+	 * @param integer $wpUserId
+	 */
+	public function updateUserNameByWordPressUserId($name, $wpUserId) {
+		global $wpdb;
+
+		$wpdb->update($this->table, array('user' => $name), array('user_id' => $wpUserId), '%s', '%d');
+	}
+
+	/**
 	 * Returns array of SQL WHERE conditions based on given criteria.
 	 *
 	 * @param WiseChatMessagesCriteria $criteria
@@ -209,9 +222,14 @@ class WiseChatMessagesDAO {
 	 */
 	private function getSQLConditionsByCriteria($criteria) {
 		$conditions = array();
-		if ($criteria->getChannelName() !== null) {
-			$channelName = addslashes($criteria->getChannelName());
-			$conditions[] = "channel = '{$channelName}'";
+		if (count($criteria->getChannelNames()) > 0) {
+			$channelNames = array_map('addslashes', $criteria->getChannelNames());
+
+			if (count($channelNames) === 1) {
+				$conditions[] = "channel = '{$channelNames[0]}'";
+			} else {
+				$conditions[] = "channel IN ('".implode("', '", $channelNames)."')";
+			}
 		}
 		if ($criteria->getUserId() !== null) {
 			$conditions[] = "chat_user_id = ".intval($criteria->getUserId());
@@ -246,7 +264,7 @@ class WiseChatMessagesDAO {
 	 *
 	 * @return WiseChatMessage
 	 */
-	private function populateData($messageRawData) {
+	public static function populateData($messageRawData) {
 		$message = new WiseChatMessage();
 		if (strlen($messageRawData->id) > 0) {
 			$message->setId(intval($messageRawData->id));
@@ -258,11 +276,12 @@ class WiseChatMessagesDAO {
 			$message->setUserId(intval($messageRawData->chat_user_id));
 		}
 		$message->setText($messageRawData->text);
+		$message->setAvatarUrl($messageRawData->avatar_url);
 		$message->setIp($messageRawData->ip);
 		if (strlen($messageRawData->time) > 0) {
 			$message->setTime(intval($messageRawData->time));
 		}
-		if (strlen((string) $messageRawData->user_id) > 0) {
+		if (strlen($messageRawData->user_id) > 0) {
 			$message->setWordPressUserId(intval($messageRawData->user_id));
 		}
 
@@ -283,16 +302,27 @@ class WiseChatMessagesDAO {
 
 		$messages = array();
 		$messagesToComplete = array();
+		$messagesRecipientsToComplete = array();
 		foreach ($messagesRaw as $messageRaw) {
-			$message = $this->populateData($messageRaw);
+			$message = self::populateData($messageRaw);
 			$messagesToComplete[$message->getUserId()][] = $message;
 			$messages[] = $message;
 		}
+
 		$users = $this->usersDAO->getAll(array_keys($messagesToComplete));
 		foreach ($users as $user) {
 			if (array_key_exists($user->getId(), $messagesToComplete)) {
 				foreach ($messagesToComplete[$user->getId()] as $message) {
 					$message->setUser($user);
+				}
+			}
+		}
+
+		$users = $this->usersDAO->getAll(array_keys($messagesRecipientsToComplete));
+		foreach ($users as $user) {
+			if (array_key_exists($user->getId(), $messagesRecipientsToComplete)) {
+				foreach ($messagesRecipientsToComplete[$user->getId()] as $message) {
+					$message->setRecipient($user);
 				}
 			}
 		}
@@ -312,24 +342,15 @@ class WiseChatMessagesDAO {
 		
 		$conditions = array();
 		$conditions[] = "user != 'System'";
-		$sql = "SELECT channel, count(*) AS messages, max(time) AS last_message FROM {$table} ".
+		$sql = "SELECT channel, count(*) AS messages, count(distinct(user_id)) AS users, max(time) AS last_message FROM {$table} ".
 				" WHERE ".implode(" AND ", $conditions).
 				" GROUP BY channel ".
 				" ORDER BY channel ASC ".
 				" LIMIT 1000;";
 		$mainSummary = $wpdb->get_results($sql);
 		
-		$usersSummary = $this->channelUsersDAO->getAllChannelsStats();
-		$usersSummaryMap = array();
-		foreach ($usersSummary as $userDetails) {
-			if ($userDetails->getChannel() !== null) {
-				$usersSummaryMap[$userDetails->getChannel()->getName()] = intval($userDetails->getNumberOfUsers());
-			}
-		}
-		
 		$mainSummaryMap = array();
 		foreach ($mainSummary as $mainDetails) {
-			$mainDetails->users = array_key_exists($mainDetails->channel, $usersSummaryMap) ? $usersSummaryMap[$mainDetails->channel] : 0;
 			$mainSummaryMap[$mainDetails->channel] = $mainDetails;
 		}
 		
@@ -338,15 +359,15 @@ class WiseChatMessagesDAO {
 		foreach ($channels as $channel) {
 			if (array_key_exists($channel->getName(), $mainSummaryMap)) {
 				$channelPrepared = $mainSummaryMap[$channel->getName()];
-				$channelPrepared->secured = strlen((string) $channel->getPassword()) > 0;
+				$channelPrepared->secured = strlen($channel->getPassword()) > 0;
 				$fullSummary[] = $channelPrepared;
 			} else {
 				$fullSummary[] = (object) array(
 					'channel' => $channel->getName(),
 					'messages' => 0,
-					'users' => array_key_exists($channel->getName(), $usersSummaryMap) ? $usersSummaryMap[$channel->getName()] : 0,
+					'users' => 0,
 					'last_message' => null,
-					'secured' => strlen((string) $channel->getPassword()) > 0
+					'secured' => strlen($channel->getPassword()) > 0
 				);
 			}
 		}

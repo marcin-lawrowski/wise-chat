@@ -3,7 +3,7 @@
 /**
  * Wise Chat text filtering service.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatFilterChain {
 	/**

@@ -1,0 +1,17 @@
+@mixin current {
+  display: flex;
+  flex-direction: column;
+  > .ScrollbarsCustom {
+    flex-grow: 1; // this is to fix Safari's 100% height bug
+  }
+
+  .wcChannelEntry {
+    justify-content: space-between;
+
+    .wcDetails {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+}

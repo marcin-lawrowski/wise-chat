@@ -3,13 +3,13 @@
 /**
  * Wise Chat links pre-filter.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatLinksPreFilter {
-	const URL_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?\n\t\r]*)?(\?[^\"'<> \n\t\r]+)?/i";
-	const URL_YOUTUBE_REGEXP = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtube\.com\/watch\?v\=([^\&\"'<> \n\t\r]+)[^\"'<> \n\t\r]*/i";
-    const URL_YOUTUBE_REGEXP_2 = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtu\.be\/([^\&\"'<> \n\t\r]+)[^\"'<> \n\t\r]*/i";
-	const URL_IMAGE_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?\n\t\r]*)?\.(jpg|jpeg|gif|png)(\?[^\"'<> \n\t\r]+)?/i";
+	const URL_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^\n\r \?]*)?(\?[^\"'<>\n\r ]+)?/i";
+	const URL_YOUTUBE_REGEXP = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtube\.com\/watch\?v\=([^\&\"'<>\n\r ]+)[^\"'<>\n\r ]*/i";
+    const URL_YOUTUBE_REGEXP_2 = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtu\.be\/([^\&\"'<>\n\r ]+)[^\"'<>\n\r ]*/i";
+	const URL_IMAGE_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?]*)?\.(jpg|jpeg|gif|png)(\?[^\"'<>\n\r ]+)?/i";
 	const URL_PROTOCOLS_REGEXP = "/^(https|http|ftp)\:\/\//i";
 	
 	/**
@@ -26,12 +26,7 @@ class WiseChatLinksPreFilter {
 	* @var array
 	*/
 	private $createdAttachments = array();
-	
-	/**
-	* Constructor
-	*
-	* @return WiseChatLinksPreFilter
-	*/
+
 	public function __construct() {
         $this->imagesService = WiseChatContainer::get('services/WiseChatImagesService');
 		WiseChatContainer::load('rendering/filters/WiseChatShortcodeConstructor');

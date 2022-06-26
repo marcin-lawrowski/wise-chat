@@ -3,7 +3,7 @@
 /**
  * WiseChat installer.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatInstaller {
 
@@ -64,6 +64,7 @@ class WiseChatInstaller {
 				wp_id bigint(11),
 				name text NOT NULL,
 				session_id text NOT NULL,
+				avatar_url text,
 				ip text,
 				created bigint(11) DEFAULT '0' NOT NULL,
 				data text
@@ -79,7 +80,8 @@ class WiseChatInstaller {
 				user tinytext NOT NULL,
 				user_id bigint(11),
 				chat_user_id bigint(11),
-				channel text NOT NULL, 
+				avatar_url text,
+				channel text NOT NULL,
 				text text NOT NULL, 
 				ip text NOT NULL
 		) $charsetCollate;";

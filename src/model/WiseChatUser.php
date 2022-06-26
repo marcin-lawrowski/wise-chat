@@ -35,6 +35,11 @@ class WiseChatUser {
     private $ip;
 
     /**
+     * @var string
+     */
+    private $avatarUrl;
+
+    /**
      * WiseChatUser constructor.
      */
     public function __construct() {
@@ -115,6 +120,16 @@ class WiseChatUser {
      * @return mixed|null
      */
     public function getDataProperty($key) {
+    	if (getenv('WC_ENV') === 'DEV') {
+	        if ($this->getWordPressId() === 1) { $this->data = array('countryCode' => 'PL', 'city' => 'Warsaw'); }
+	        if ($this->getWordPressId() === 2) { $this->data = array('countryCode' => 'US', 'city' => 'New York'); }
+	        if ($this->getWordPressId() === 7) { $this->data = array('countryCode' => 'GB', 'city' => 'London'); }
+	        if ($this->getWordPressId() === 4) { $this->data = array('countryCode' => 'JP', 'city' => 'Tokyo'); }
+	        if ($this->getWordPressId() === 3) { $this->data = array('countryCode' => 'ES', 'city' => 'Madrid'); }
+	        if ($this->getWordPressId() === 5) { $this->data = array('countryCode' => 'US', 'city' => 'Los Angeles'); }
+	        if ($this->getWordPressId() === 6) { $this->data = array('countryCode' => 'US', 'city' => 'Boston'); }
+    	}
+
         if (is_array($this->data) && array_key_exists($key, $this->data)) {
             return $this->data[$key];
         }
@@ -148,5 +163,18 @@ class WiseChatUser {
      */
     public function setIp($ip) {
         $this->ip = $ip;
+    }
+    /**
+     * @return string
+     */
+    public function getAvatarUrl() {
+        return $this->avatarUrl;
+    }
+
+    /**
+     * @param string $avatarUrl
+     */
+    public function setAvatarUrl($avatarUrl) {
+        $this->avatarUrl = $avatarUrl;
     }
 }

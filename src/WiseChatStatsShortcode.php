@@ -3,7 +3,7 @@
 /**
  * Shortcode that renders Wise Chat basic statistics for given channel.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatStatsShortcode {
     /**
@@ -61,7 +61,7 @@ class WiseChatStatsShortcode {
         if ($channel !== null) {
             $this->options->replaceOptions($attributes);
 
-            $this->messagesService->startUpMaintenance($channel);
+            $this->messagesService->startUpMaintenance();
 
             return $this->renderer->getRenderedChannelStats($channel);
         } else {

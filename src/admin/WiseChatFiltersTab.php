@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin messages filters tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatFiltersTab extends WiseChatAbstractTab {
 	
@@ -12,7 +12,7 @@ class WiseChatFiltersTab extends WiseChatAbstractTab {
 			array('_section', 'Bad Words Filter', 'Uses a dictionary to filter bad words (supported languages: English and Polish)'),
 			array('filter_bad_words', 'Enable Filter', 'booleanFieldCallback', 'boolean'),
 			array('bad_words_replacement_text', 'Replacement Text', 'stringFieldCallback', 'string', 'A text that is used to replace a bad word. Empty field means that asterisk is used.'),
-			array('_section', 'Custom Filters', 'Filters are rules that are applied to every message that is posted'),
+			array('_section', 'Custom Filters', 'Filters are rules that are applied to every message that is posted', array('hideSubmitButton' => true)),
 			array('filters', 'Filters', 'filterListCallback', 'void'),
 			array('filter_add', 'New Filter', 'filterAddCallback', 'void'),
 		);

@@ -3,7 +3,7 @@
 /**
  * Wise Chat main services class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatService {
 
@@ -28,8 +28,8 @@ class WiseChatService {
 	private $userService;
 
 	/**
-	 * @var WiseChatKicksService
-	 */
+	* @var WiseChatKicksService
+	*/
 	private $kicksService;
 
 	/**
@@ -90,6 +90,7 @@ class WiseChatService {
 	
 	/**
 	* Returns unique ID for the plugin.
+	* NOTICE: It generates a new ID every time it is called (!)
 	*
 	* @return string
 	*/
@@ -104,24 +105,6 @@ class WiseChatService {
 	*/
 	public function isChatRestrictedForAnonymousUsers() {
 		return $this->options->getOption('access_mode') == 1 && !$this->usersDAO->isWpUserLogged();
-	}
-
-	/**
-	 * Determines whether IP is kicked.
-	 *
-	 * @return boolean
-	 */
-	public function isIpKicked() {
-		return isset($_SERVER['REMOTE_ADDR']) && $this->kicksService->isIpAddressKicked($_SERVER['REMOTE_ADDR']);
-	}
-
-	/**
-	 * Determines whether the chat is allowed only for logged in WP users.
-	 *
-	 * @return boolean
-	 */
-	public function isChatAllowedForWPUsersOnly() {
-		return $this->options->getOption('access_mode') == 1;
 	}
 
 	/**
@@ -149,6 +132,37 @@ class WiseChatService {
 			return false;
 		}
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isChatRestrictedToCurrentUser() {
+		$accessUsers = $this->options->getOption('access_users', array());
+		if (is_array($accessUsers) && count($accessUsers) > 0) {
+			$wpUser = $this->usersDAO->getCurrentWpUser();
+			return $wpUser === null || !in_array($wpUser->ID, $accessUsers);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Determines whether IP is kicked.
+	 *
+	 * @return boolean
+	 */
+	public function isIpKicked() {
+		return isset($_SERVER['REMOTE_ADDR']) && $this->kicksService->isIpAddressKicked($_SERVER['REMOTE_ADDR']);
+	}
+
+	/**
+	 * Determines whether the chat is allowed only for logged in WP users.
+	 *
+	 * @return boolean
+	 */
+	public function isChatAllowedForWPUsersOnly() {
+		return $this->options->getOption('access_mode') == 1;
+	}
 	
 	/**
 	* Determines whether the chat is open according to the settings.
@@ -163,40 +177,38 @@ class WiseChatService {
 			}
 			
 			$chatOpeningHours = $this->options->getOption('opening_hours');
-			if (is_array($chatOpeningHours)) {
-				$openingHour = isset($chatOpeningHours['opening']) ? $chatOpeningHours['opening'] : '00:00';
-				$openingMode = isset($chatOpeningHours['openingMode']) ? $chatOpeningHours['openingMode'] : '24h';
-				$startHourDate = null;
-				if ($openingMode != '24h') {
-					$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d') . ' ' . $openingHour . ' ' . $openingMode);
+			$openingHour = $chatOpeningHours['opening'];
+			$openingMode = $chatOpeningHours['openingMode'];
+			$startHourDate = null;
+			if ($openingMode != '24h') {
+				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode);
+			} else {
+				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour);
+			}
+			
+			$closingHour = $chatOpeningHours['closing'];
+			$closingMode = $chatOpeningHours['closingMode'];
+			$endHourDate = null;
+			if ($closingMode != '24h') {
+				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode);
+			} else {
+				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour);
+			}
+			
+			if ($startHourDate != null && $endHourDate != null) {
+				$nowDate = new DateTime();
+				
+				$nowU = $nowDate->format('U');
+				$startHourDateU = $startHourDate->format('U');
+				$endHourDateU = $endHourDate->format('U');
+				
+				if ($startHourDateU <= $endHourDateU) {
+					if ($nowU < $startHourDateU || $nowU > $endHourDateU) {
+						return false;
+					}
 				} else {
-					$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $openingHour);
-				}
-
-				$closingHour = isset($chatOpeningHours['closing']) ? $chatOpeningHours['closing'] : '23:59';
-				$closingMode = isset($chatOpeningHours['closingMode']) ? $chatOpeningHours['closingMode'] : '24h';
-				$endHourDate = null;
-				if ($closingMode != '24h') {
-					$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d') . ' ' . $closingHour . ' ' . $closingMode);
-				} else {
-					$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d') . ' ' . $closingHour);
-				}
-
-				if ($startHourDate != null && $endHourDate != null) {
-					$nowDate = new DateTime();
-
-					$nowU = $nowDate->format('U');
-					$startHourDateU = $startHourDate->format('U');
-					$endHourDateU = $endHourDate->format('U');
-
-					if ($startHourDateU <= $endHourDateU) {
-						if ($nowU < $startHourDateU || $nowU > $endHourDateU) {
-							return false;
-						}
-					} else {
-						if ($nowU > $endHourDateU && $nowU < $startHourDateU) {
-							return false;
-						}
+					if ($nowU > $endHourDateU && $nowU < $startHourDateU) {
+						return false;
 					}
 				}
 			}
@@ -206,20 +218,20 @@ class WiseChatService {
 	}
 	
 	/**
-	* Determines if the chat is full according to the users limit in the channel.
+	* Determines if the chat is full according to the users limit.
 	*
-	* @param WiseChatChannel $channel
+    * TODO: do not send messages if chat is full
 	*
 	* @return boolean
 	*/
-	public function isChatChannelFull($channel) {
+	public function isChatFull() {
 		$limit = $this->options->getIntegerOption('channel_users_limit', 0);
 		if ($limit > 0) {
-			$this->userService->refreshChannelUsersData();
-			$amountOfCurrentUsers = $channel != null ? $this->channelUsersDAO->getAmountOfUsersInChannel($channel->getId()) : 0;
+			$this->userService->setInactiveUsersOfflineStatus();
+			$amountOfCurrentUsers = $this->channelUsersDAO->countOnlineUsers();
 			$user = $this->authentication->getUser();
 			
-			if ($user === null || $channel === null || $this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $channel->getId()) === null) {
+			if ($user === null || !$this->channelUsersDAO->isOnline($user->getId())) {
 				$amountOfCurrentUsers++;
 			}
 			
@@ -230,17 +242,6 @@ class WiseChatService {
 		
 		return false;
 	}
-	
-	/**
-	* Determines whether the current user has to be authorized.
-	*
-	* @param WiseChatChannel $channel
-	*
-	* @return boolean
-	*/
-	public function hasUserToBeAuthorizedInChannel($channel) {
-		return strlen((string) $channel->getPassword()) > 0 && (!$this->authentication->isAuthenticated() || !$this->authorization->isUserAuthorizedForChannel($channel));
-	}
 
 	/**
 	 * Determines if the current user has to enter his/her name.
@@ -249,31 +250,5 @@ class WiseChatService {
 	 */
 	public function hasUserToBeForcedToEnterName() {
 		return $this->options->isOptionEnabled('force_user_name_selection') && !$this->authentication->isAuthenticated();
-	}
-	
-	/**
-	* Determines if the number of channels that current user participates has been reached.
-	*
-	* @param WiseChatChannel $channel
-	*
-	* @return boolean
-	*/
-	public function isChatChannelsLimitReached($channel) {
-		$limit = $this->options->getIntegerOption('channels_limit', 0);
-		if ($limit > 0 && $this->authentication->isAuthenticated()) {
-			$this->userService->refreshChannelUsersData();
-			$user = $this->authentication->getUser();
-			$amountOfChannels = $this->channelUsersDAO->getAmountOfActiveByUserId($user->getId());
-
-			if ($this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $channel->getId()) === null) {
-				$amountOfChannels++;
-			}
-			
-			if ($amountOfChannels > $limit) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 }

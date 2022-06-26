@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin abstract tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 abstract class WiseChatAbstractTab {
 
@@ -18,8 +18,8 @@ abstract class WiseChatAbstractTab {
 	protected $bansDAO;
 
 	/**
-	 * @var WiseChatKicksDAO
-	 */
+	* @var WiseChatKicksDAO
+	*/
 	protected $kicksDAO;
 	
 	/**
@@ -48,8 +48,8 @@ abstract class WiseChatAbstractTab {
 	protected $bansService;
 
 	/**
-	 * @var WiseChatKicksService
-	 */
+	* @var WiseChatKicksService
+	*/
 	protected $kicksService;
 
 	/**
@@ -74,22 +74,25 @@ abstract class WiseChatAbstractTab {
 		$this->bansService = WiseChatContainer::get('services/WiseChatBansService');
 		$this->kicksService = WiseChatContainer::get('services/WiseChatKicksService');
 		$this->messagesService = WiseChatContainer::get('services/WiseChatMessagesService');
+		$this->messagesService = WiseChatContainer::get('services/WiseChatMessagesService');
+
+		WiseChatContainer::load('services/WiseChatChannelsService');
 	}
-	
+
 	/**
-	* Shows the message. 
-	*
-	* @param string $message
-	*/
+	 * Shows the message.
+	 *
+	 * @param string $message
+	 */
 	protected function addMessage($message) {
 		set_transient("wc_admin_settings_message", $message, 10);
 	}
-	
+
 	/**
-	* Shows error message. 
-	*
-	* @param string $message
-	*/
+	 * Shows error message.
+	 *
+	 * @param string $message
+	 */
 	protected function addErrorMessage($message) {
 		set_transient("wc_admin_settings_error_message", $message, 10);
 	}
@@ -125,7 +128,7 @@ abstract class WiseChatAbstractTab {
 	public function getProFields() {
 		return array();
 	}
-	
+
 	/**
 	* Filters values of fields.
 	*
@@ -164,6 +167,7 @@ abstract class WiseChatAbstractTab {
 					}
 					break;
 				case 'multilinestring':
+				case 'rawString':
 					if (isset($inputValue[$id])) {
 						$newInputValue[$id] = $value;
 					}
@@ -176,6 +180,9 @@ abstract class WiseChatAbstractTab {
 					}
 					
 					break;
+				case 'json':
+					$newInputValue[$id] = is_array($value) ? json_encode($value) : '{}';
+					break;
 			}
 		}
 		
@@ -183,7 +190,7 @@ abstract class WiseChatAbstractTab {
 	}
 
 	protected function printProFeatureNotice() {
-		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">
+		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">
 						Check Wise Chat <strong>Pro</strong>
 					</a>';
 		printf('<p class="description wcProDescription">%s</p>', 'Notice: This feature is available after upgrading to Wise Chat Pro. '.$button);
@@ -201,11 +208,11 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
 		$isProFeature = in_array($id, $this->getProFields());
-	
+
 		printf(
 			'<input type="text" id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" value="%s" %s data-parent-field="%s" />',
 			$id, $id,
-			$this->fixImmunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue)),
+			$this->fixImunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue)),
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
@@ -215,6 +222,15 @@ abstract class WiseChatAbstractTab {
 		if ($isProFeature) {
 			$this->printProFeatureNotice();
 		}
+	}
+
+	/**
+	 * Callback method for displaying plain text field with a hint. If the property is not defined the default value is used.
+	 *
+	 * @param array $args Array containing keys: id, name and hint
+	 */
+	public function rawStringFieldCallback($args) {
+		$this->stringFieldCallback($args);
 	}
 	
 	/**
@@ -229,13 +245,13 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
 		$isProFeature = in_array($id, $this->getProFields());
-		
+
 		printf(
 			'<textarea id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" cols="70" rows="6" %s data-parent-field="%s">%s</textarea>',
 			$id, $id,
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : '',
-			$this->fixImmunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue))
+			$this->fixImunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue))
 		);
 		if (strlen($hint) > 0) {
 			printf('<p class="description">%s</p>', $hint);
@@ -251,12 +267,16 @@ abstract class WiseChatAbstractTab {
 	 * @param string $value
 	 * @return string
 	 */
-	private function fixImmunify360Rule($id, $value) {
+	protected function fixImunify360Rule($id, $value) {
 		$affectedFields = array('spam_report_subject', 'spam_report_content');
 		if (!in_array($id, $affectedFields)) {
 			return $value;
 		}
 
+		return $this->fixImunify360RuleText($value);
+	}
+
+	protected function fixImunify360RuleText($value) {
 		return str_replace('${', '{', $value);
 	}
 	
@@ -320,8 +340,6 @@ abstract class WiseChatAbstractTab {
 	* Callback method for displaying select field with a hint. If the property is not defined the default value is used.
 	*
 	* @param array $args Array containing keys: id, name, hint, options
-	*
-	* @return null
 	*/
 	public function selectCallback($args) {
 		$id = $args['id'];
@@ -353,6 +371,53 @@ abstract class WiseChatAbstractTab {
 			$this->printProFeatureNotice();
 		}
 	}
+
+	/**
+	* Callback method for displaying radio group with a hint. If the property is not defined the default value is used.
+	*
+	* @param array $args Array containing keys: id, name, hint, options
+	*/
+	public function radioCallback($args) {
+		$id = $args['id'];
+		$hint = $args['hint'];
+		$options = $args['options'];
+		$defaults = $this->getDefaultValues();
+		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
+		$value = $this->options->getEncodedOption($id, $defaultValue);
+		$parentId = $this->getFieldParent($id);
+		$isProFeature = in_array($id, $this->getProFields());
+
+		$optionHints = array();
+		foreach ($options as $optionValue => $optionDisplay) {
+			$optionLabel = is_array($optionDisplay) ? $optionDisplay[0] : $optionDisplay;
+			$radioId = $id.'_'.$optionValue;
+
+			printf(
+				"<label><input id='%s' class='wc-radio-option' data-radio-group-id='%s' type='radio' name='%s[%s]' value='%s' %s %s data-parent-field='%s' />%s&nbsp;&nbsp;&nbsp;&nbsp;</label>",
+				$radioId, $id, WiseChatOptions::OPTIONS_NAME, $id, $optionValue,
+				$optionValue == $value ? ' checked' : '',
+				$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
+				$parentId != null ? $parentId : '',
+				$optionLabel
+			);
+
+			if (is_array($optionDisplay) && count($optionDisplay) > 1) {
+				$optionHints[] = sprintf(
+					'<p class="description wc-radio-hint-group-%s wc-radio-hint-%s" %s>%s</p>',
+					$id, $radioId, $optionValue == $value ? '' : 'style="display: none"', $optionDisplay[1]
+				);
+			}
+		}
+
+		print(implode('', $optionHints));
+
+		if (strlen($hint) > 0) {
+			printf('<p class="description">%s</p>', $hint);
+		}
+		if ($isProFeature) {
+			$this->printProFeatureNotice();
+		}
+	}
 	
 	/**
 	* Callback method for displaying list of checkboxes with a hint.
@@ -370,11 +435,11 @@ abstract class WiseChatAbstractTab {
 		$values = $this->options->getOption($id, $defaultValue);
 		$parentId = $this->getFieldParent($id);
 		$isProFeature = in_array($id, $this->getProFields());
-		
+
 		$html = '';
 		foreach ($options as $key => $value) {
 			$html .= sprintf(
-				'<label><input type="checkbox" value="%s" name="%s[%s][]" %s %s data-parent-field="%s" />%s</label>&nbsp;&nbsp; ',
+				'<label><input type="checkbox" value="%s" name="%s[%s][]" %s %s data-parent-field="%s" />%s</label>&nbsp;&nbsp; ', 
 				$key, WiseChatOptions::OPTIONS_NAME, $id, 
 				in_array($key, (array) $values) ? 'checked="1"' : '',
 				$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? 'disabled="1"' : '',

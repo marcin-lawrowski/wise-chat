@@ -1,28 +1,28 @@
 <?php 
 
 /**
- * Wise Chat admin bans settings tab class.
+ * Wise Chat admin muting settings tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatBansTab extends WiseChatAbstractTab {
 
 	public function getFields() {
 		return array(
-			array('_section', 'Bans', 'Bans prevent IP address from publishing new messages in all channels'),
-			array('bans', 'Current Bans', 'bansCallback', 'void'),
-			array('ban_add', 'Add New Ban', 'banAddCallback', 'void'),
+			array('_section', 'Muted Users', 'Prevents IP addresses from posting messages in all channels.', array('hideSubmitButton' => true)),
+			array('bans', 'Muted IPs', 'bansCallback', 'void'),
+			array('ban_add', 'Mute IP', 'banAddCallback', 'void'),
 			
-			array('_section', 'Automatic Bans', 'Counts how many bad words are being used by every user and when the threshold is reached then the user is banned from posting messages'),
-			array('enable_autoban', 'Enable Automatic Bans', 'booleanFieldCallback', 'boolean'),
-			array('autoban_threshold', 'Threshold', 'stringFieldCallback', 'integer', 'Determines how many messages containing bad words can be posted by an user before the user gets automatically banned'),
-			array('autoban_duration', 'Duration', 'stringFieldCallback', 'integer', 'Duration of the automatic ban (in minutes). Empty field sets the value to 1440 minutes (1 day)'),
+			array('_section', 'Automatic Muting', 'Automatically mutes IP addresses after posting certain number of messages containing bad words.'),
+			array('enable_autoban', 'Enable Automatic Muting', 'booleanFieldCallback', 'boolean'),
+			array('autoban_threshold', 'Threshold', 'stringFieldCallback', 'integer', 'Determines how many messages containing bad words can be posted before the user gets automatically muted'),
+			array('autoban_duration', 'Duration', 'stringFieldCallback', 'integer', 'Duration of the automatic muting (in minutes). Empty field sets the value to 1440 minutes (1 day)'),
 
-			array('_section', 'Flood Control', 'Detects spammers by counting how often their post messages and bans them'),
+			array('_section', 'Flood Control', 'Detects spammers by counting how often their post messages and mutes them.'),
 			array('enable_flood_control', 'Enable Flood Control', 'booleanFieldCallback', 'boolean'),
-			array('flood_control_threshold', 'Threshold', 'stringFieldCallback', 'integer', 'Determines how many messages (in given time window) could be posted by an user before the user gets automatically banned'),
-			array('flood_control_time_frame', 'Time Window', 'stringFieldCallback', 'integer', 'Time window (in minutes) for flood control'),
-			array('flood_control_ban_duration', 'Duration', 'stringFieldCallback', 'integer', 'Duration of the ban (in minutes). Empty field sets the value to 1440 minutes (1 day)'),
+			array('flood_control_threshold', 'Threshold', 'stringFieldCallback', 'integer', 'Determines how many messages (in given time window) could be posted before the user gets automatically muted'),
+			array('flood_control_time_frame', 'Time Window', 'stringFieldCallback', 'integer', 'Time window (in minutes) of the flood control'),
+			array('flood_control_ban_duration', 'Duration', 'stringFieldCallback', 'integer', 'Determines how long the IP address is muted (in minutes). Empty field sets the value to 1440 minutes (1 day)'),
 
 		);
 	}
@@ -56,7 +56,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 		$ban = $this->bansDAO->getByIp($ip);
 		if ($ban !== null) {
 			$this->bansDAO->deleteByIp($ip);
-			$this->addMessage('Ban has been deleted');
+			$this->addMessage('IP address has been deleted from the muted list');
 		}
 	}
 	
@@ -66,7 +66,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 		
 		$ban = $this->bansDAO->getByIp($newBanIP);
 		if ($ban !== null) {
-			$this->addErrorMessage('This IP is already banned');
+			$this->addErrorMessage('This IP is already muted');
 			return;
 		}
 		
@@ -74,7 +74,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 			$duration = $this->bansService->getDurationFromString($newBanDuration);
 			
 			$this->bansService->banIpAddress($newBanIP, $duration);
-			$this->addMessage("Ban has been added");
+			$this->addMessage("IP address has been added to the muted list");
 		}
 	}
 	
@@ -84,7 +84,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 		
 		$html = "<div style='height: 150px; overflow: scroll; border: 1px solid #aaa; padding: 5px;'>";
 		if (count($bans) == 0) {
-			$html .= '<small>No bans were added yet</small>';
+			$html .= '<small>No muted IP addresses added yet</small>';
 		}
 		foreach ($bans as $ban) {
 			$deleteURL = $url.'&wc_action=deleteBan&ip='.urlencode($ban->getIp());
@@ -99,9 +99,9 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addBan");
 		
 		printf(
-			'<input type="text" value="" placeholder="IP address to ban" id="newBanIP" name="newBanIP" />'.
+			'<input type="text" value="" placeholder="IP address to mute" id="newBanIP" name="newBanIP" />'.
 			'<input type="text" value="" placeholder="Duration, e.g. 4m, 2d, 16h" id="newBanDuration" name="newBanDuration" />'.
-			'<a class="button-secondary" href="%s" title="Adds a new ban for given IP address and duration" onclick="%s">Add Ban</a>',
+			'<a class="button-secondary" href="%s" onclick="%s">Mute IP</a>',
 			wp_nonce_url($url),
 			'this.href += \'&newBanIP=\' + jQuery(\'#newBanIP\').val() + \'&newBanDuration=\' + jQuery(\'#newBanDuration\').val();'
 		);

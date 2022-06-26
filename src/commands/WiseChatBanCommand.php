@@ -3,7 +3,7 @@
 /**
  * WiseChat command: /ban [userName] [duration]
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatBanCommand extends WiseChatAbstractCommand {
 	public function execute() {
@@ -15,12 +15,6 @@ class WiseChatBanCommand extends WiseChatAbstractCommand {
 		
         $user = $this->usersDAO->getLatestByName($userName);
         if ($user === null) {
-            $this->addMessage('User was not found');
-            return;
-        }
-
-        $channelUser = $this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $this->channel->getId());
-        if ($channelUser === null) {
             $this->addMessage('User was not found');
             return;
         }

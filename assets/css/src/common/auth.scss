@@ -1,0 +1,63 @@
+@mixin auth {
+  .wcAuthContainer {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+
+    .wcAuth {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+
+      .wcAuthForm {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .wcFormRow {
+          display: flex;
+          align-items: center;
+
+          > *:not(:last-child) {
+            margin-right: 5px;
+          }
+
+          .wcFacebookLoginButton {
+            background: #507cc0 url(../../gfx/icons/facebook.png) 12px center no-repeat;
+            display: inline-block;
+            color: #fff;
+            padding: 20px 50px;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 1.3em;
+            width: 200px;
+          }
+
+          .wcTwitterLoginButton {
+            background: #64ccf1 url(../../gfx/icons/twitter.png) 12px center no-repeat;
+            display: inline-block;
+            color: #fff;
+            padding: 20px 50px;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 1.3em;
+            width: 200px;
+          }
+
+          .wcGoogleLoginButton {
+            background: #df4930 url(../../gfx/icons/google.png) 12px center no-repeat;
+            display: inline-block;
+            color: #fff;
+            padding: 20px 50px;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 1.3em;
+            width: 200px;
+          }
+        }
+      }
+
+    }
+  }
+}

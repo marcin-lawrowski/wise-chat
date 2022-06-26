@@ -3,7 +3,7 @@
 /**
  * WiseChat bans services.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatBansService {
 
@@ -42,50 +42,31 @@ class WiseChatBansService {
 	}
 	
 	/**
-	* Maintenance actions performed at start-up.
-	*
-	* @return null
-	*/
-	public function startUpMaintenance() {
-		$this->bansDAO->deleteOlder(time());
-	}
-	
-	/**
 	* Maintenance actions performed periodically.
-	*
-	* @return null
 	*/
 	public function periodicMaintenance() {
 		$this->bansDAO->deleteOlder(time());
 	}
 	
 	/**
-	* Bans an user by message ID.
+	* Bans user by message ID.
 	*
 	* @param integer $messageId
-	* @param WiseChatChannel $channel
 	* @param string $durationString
 	*
-	* @throws Exception If the message or user was not found
+	* @throws Exception If the message is not found
 	*/
-	public function banByMessageId($messageId, $channel, $durationString = '1d') {
+	public function banByMessageId($messageId, $durationString = '1d') {
 		$message = $this->messagesDAO->get($messageId);
 		if ($message === null) {
 			throw new Exception('Message was not found');
 		}
-		
-		$channelUser = $this->channelUsersDAO->getByUserIdAndChannelId($message->getUserId(), $channel->getId());
-		if ($channelUser !== null) {
-			$user = $this->usersDAO->get($message->getUserId());
-			if ($user !== null) {
-				$duration = $this->getDurationFromString($durationString);
-				$this->banIpAddress($user->getIp(), $duration);
 
-				return;
-			}
+		$user = $this->usersDAO->get($message->getUserId());
+		if ($user !== null) {
+			$duration = $this->getDurationFromString($durationString);
+			$this->banIpAddress($user->getIp(), $duration);
 		}
-
-		throw new Exception('User was not found in this channel');
 	}
 
 	/**

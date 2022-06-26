@@ -1,0 +1,147 @@
+@import "./mobile/current";
+@import "./mobile/channel";
+@import "./mobile/users";
+@import "./mobile/customize";
+
+@mixin classic-mobile {
+
+  .wcTitle {
+    padding-bottom: 2%;
+    text-align: center;
+  }
+
+  // Top tabs:
+  .wcTabs {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dfdfdf;
+
+    > * {
+      flex-grow: 1;
+      text-align: center;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .wcTab.wcCurrent {
+      border-bottom: 2px solid #dfdfdf;
+    }
+
+    .wcTabCustomize {
+      background: url(../../gfx/icons/custom.svg) center center no-repeat;
+      background-size: 1em;
+      vertical-align: middle;
+
+      .wcName {
+        display: none;
+      }
+    }
+    .wcTab {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &.wcSizeXXs {
+    .wcTabs.wcTabsCompact {
+      padding-top: 6px;
+      //padding-bottom: 6px;
+     .wcTab {
+        height: 30px;
+        .wcName {
+          display: none;
+        }
+
+        background-size: 40%;
+
+        &.wcTabRecent {
+          background: url(../../gfx/icons/recent-chats-inactive.svg) center center no-repeat;
+
+          vertical-align: middle;
+          position: relative;
+          .wcRedCounter {
+            right: 0;
+            position: absolute;
+          }
+        }
+
+        &.wcTabChats {
+          background: url(../../gfx/icons/chats.svg) center center no-repeat;
+          vertical-align: middle;
+        }
+
+        &.wcTabUsers {
+          background: url(../../gfx/icons/user.svg) center center no-repeat;
+          vertical-align: middle;
+          //background-size: 0.8em;
+        }
+
+        &.wcTabChannels {
+          background: url(../../gfx/icons/group.svg) center center no-repeat;
+          //background-size: 1em;
+          vertical-align: middle;
+        }
+     }
+    }
+  }
+
+  .wcTabContent {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    flex-grow: 1;
+
+    &.wcTabContentChats {
+      @include current;
+    }
+    &.wcTabContentChannels {
+      display: flex;
+      flex-direction: column;
+      > .ScrollbarsCustom {
+        flex-grow: 1; // this is to fix Safari's 100% height bug
+      }
+    }
+    &.wcTabContentChannel {
+      @include channel;
+    }
+    &.wcTabContentUsers {
+      @include users;
+    }
+
+    &.wcTabContentCustomize {
+      @include customize;
+    }
+
+    // Common to all views:
+    .wcChannelEntry {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 1px 5px;
+
+      &:hover, &:active {
+        background-color: #f7f7f7;
+      }
+
+      &.wcLockedChannel {
+        .wcName {
+          background-image: url(../../gfx/icons/lock-full.svg);
+          background-position: right center;
+          background-repeat: no-repeat;
+          background-size: 16px 16px;
+          padding-right: 20px;
+        }
+      }
+      &.wcUnLockedChannel {
+        .wcName {
+          background-image: url(../../gfx/icons/lock-semi.svg);
+          background-position: right center;
+          background-repeat: no-repeat;
+          background-size: 16px 16px;
+          padding-right: 20px;
+        }
+      }
+    }
+  }
+
+
+}

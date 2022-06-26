@@ -3,7 +3,7 @@
 /**
  * Wise Chat widget.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatWidget extends WP_Widget {
 	
@@ -45,24 +45,20 @@ class WiseChatWidget extends WP_Widget {
 	
 	public function widget($args, $instance) {
 		extract($args, EXTR_SKIP);
-	
-		echo $before_widget;
 
+		/** @var WiseChat $wiseChat */
 		$wiseChat = WiseChatContainer::get('WiseChat');
 		$channel = $instance['channel'];
 		$options = $instance['options'];
 
 		$parsedOptions = shortcode_parse_atts($options);
-
-		if (is_array($parsedOptions)) {
-			$parsedOptions['channel'] = $channel;
-			echo $wiseChat->getRenderedShortcode($parsedOptions);
+		if (!is_array($parsedOptions)) {
+			$parsedOptions = array('channel' => $channel);
 		} else {
-			echo $wiseChat->getRenderedChat($channel);
+			$parsedOptions['channel'] = $channel;
 		}
-	
-		echo $after_widget;
-		
+
+		echo $wiseChat->getRenderedShortcode($parsedOptions);
 		$wiseChat->registerResources();
 	}
 }

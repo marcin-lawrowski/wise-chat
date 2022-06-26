@@ -26,10 +26,11 @@ class WiseChatUserSettingsDAO {
 	*
 	* @param string $settingName
 	* @param string $settingValue
+	* @param WiseChatUser $user
 	*
 	* @throws Exception If an error occurs
 	*/
-	public function setSetting($settingName, $settingValue) {
+	public function setSetting($settingName, $settingValue, $user) {
 		if (!in_array($settingName, array_keys($this->defaultSettings))) {
 			throw new Exception('Unsupported property');
 		}
@@ -52,10 +53,9 @@ class WiseChatUserSettingsDAO {
 	*/
 	public function getAll() {
 		if ($this->isUserCookieAvailable()) {
-			$cookieValue = stripslashes_deep($_COOKIE[self::USER_SETTINGS_COOKIE_NAME]);
-			return array_merge($this->defaultSettings, json_decode($cookieValue, true));
+			return array_merge($this->defaultSettings, $this->getUserCookieSettings());
 		} else {
-			return array();
+			return $this->defaultSettings;
 		}
 	}
 	

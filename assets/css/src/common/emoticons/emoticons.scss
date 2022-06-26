@@ -1,0 +1,13 @@
+@import "./set01";
+
+@mixin emoticons {
+  img.wcEmoticon, span.wcEmoticon {
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 2px;
+    margin-left: 2px;
+
+    @include set01;
+  }
+}

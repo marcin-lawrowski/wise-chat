@@ -1,0 +1,144 @@
+@import "./emoticons/emoticons";
+
+@mixin popups {
+  .wcPopup-overlay {
+    background: rgba(255,255,255,.7);
+  }
+
+  .wcPopup-content {
+    @include emoticons;
+  }
+
+  [role=tooltip].wcEmoticonsPopup-content {
+    background-color: #f7f7f7;
+    width: 185px;
+    height: 280px;
+    text-align: center;
+    padding: 10px 5px;
+
+    a {
+      display: inline-block;
+      border: 1px solid transparent;
+      line-height: 28px;
+      border-radius: 50%;
+      text-decoration: none;
+      outline: none;
+    }
+
+    a:hover {
+      background: #FFF;
+      border-color: #a6a6a6;
+    }
+
+    a img {
+      border: none;
+      border-radius: 0;
+      margin: 3px;
+      padding: 0;
+      max-width: 28px;
+    }
+  }
+
+  [role=tooltip].wcColorsPopup-content {
+    background-color: #f7f7f7;
+    width: 220px;
+    height: 157px;
+    text-align: center;
+    padding: 5px 5px;
+    line-height: 12px;
+    overflow: hidden;
+
+    a {
+      display: inline-block;
+      text-decoration: none;
+      outline: none;
+      height: 12px;
+      width: 12px;
+      border: 1px solid #000;
+      margin: 2px;
+      cursor: pointer;
+      line-height: 12px;
+      border-radius: 3px;
+    }
+
+    a:hover {
+      border-color: #a6a6a6;
+    }
+  }
+
+  .wcAlertPopup-content {
+    @media only screen and (max-width: 576px) {
+      width: 95%;
+    }
+    @media only screen and (min-width: 992px) {
+      width: 26%;
+    }
+
+    padding: 0;
+
+    .wcHeader {
+      padding: 10px;
+      border-bottom: 1px solid #dfdfdf;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      h5 {
+        margin: 0;
+        padding: 0;
+        font-size: 1.1rem;
+      }
+      .wcClose {
+        display: inline-block;
+        text-decoration: none;
+        outline: none;
+        background: transparent url(../../gfx/icons/x.svg) center center no-repeat;
+        background-size: 100%;
+        width: 42px;
+        height: 42px;
+        margin: 0;
+        cursor: pointer;
+      }
+    }
+
+    .wcBody {
+      padding: 10px;
+    }
+
+    .wcFooter {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid #dfdfdf;
+
+      > * {
+        width: auto;
+        display: inline-block;
+        float: none;
+      }
+
+      > *:not(:last-child) {
+        margin-right: 10px;
+
+      }
+    }
+  }
+
+  .wcDebugPopup-content {
+    .wcDebugPopupBody {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .wcLogs {
+        overflow-y: auto;
+        flex-grow: 1;
+        border: 1px solid #dfdfdf;
+        padding: 5px;
+      }
+      .wcFooter {
+        padding-top: 10px;
+        text-align: right;
+      }
+    }
+  }
+}

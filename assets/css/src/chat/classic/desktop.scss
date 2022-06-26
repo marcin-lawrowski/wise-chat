@@ -1,0 +1,134 @@
+@mixin desktop {
+
+  .wcTitle {
+    position: relative;
+    padding: 2%;
+
+    .wcRecentTrigger {
+      position: absolute;
+      right: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+
+  .wcBody {
+    flex-grow: 1;
+    display: flex;
+
+    &.wcBrowserAreaLeft {
+      .wcMessagesArea {
+        order: 1;
+        padding-right: 2%;
+        padding-left: 1%;
+      }
+      .wcBrowserArea {
+        order: 0;
+        padding-right: 1%;
+        padding-left: 2%;
+      }
+    }
+
+    &.wcBrowserAreaRight {
+      .wcBrowserArea {
+        padding-right: 2%;
+        padding-left: 1%;
+      }
+
+      .wcMessagesArea {
+        padding-left: 2%;
+        padding-right: 1%;
+      }
+    }
+
+    .wcMessagesArea {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 10px; // HACK - prevent tabs to grow too much
+
+      .wcTabsContainer {
+        display: flex;
+
+        .wcTabs {
+          flex-grow: 1;
+          display: flex;
+          overflow: hidden;
+
+          .wcTab {
+            padding: 3px 9px 3px 9px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+
+            &.wcCurrent {
+              border-bottom: 3px solid #dfdfdf;
+            }
+          }
+
+        }
+
+        .wcTabsNav {
+          padding: 5px;
+          display: none;
+          align-items: center;
+
+          .wcLeft {
+            width: 32px;
+            height: 26px;
+            background: transparent url(../../gfx/icons/arrow-left.svg) no-repeat 50%;
+            background-size: 100%;
+            display: inline-block;
+          }
+
+          .wcRight {
+            width: 32px;
+            height: 26px;
+            background: transparent url(../../gfx/icons/arrow-right.svg) no-repeat 50%;
+            background-size: 100%;
+            display: inline-block;
+          }
+        }
+      }
+
+      .wcTabsContainer.wcTabsTooMany .wcTabsNav {
+        display: flex;
+      }
+
+      .wcTabContent:not(.wcInvisible) {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        .wcChannel {
+          flex-grow: 1;
+
+        }
+
+        &.wcTabContentEmpty {
+          align-items: center;
+          justify-content: center;
+
+          .wcEmptyChannel {
+            font-size: 0.8em;
+          }
+        }
+      }
+
+      .wcCustomizations {
+        padding: 2%;
+      }
+    }
+
+    .wcBrowserArea {
+      flex: 0 1 30%;
+      min-width: 30%;
+    }
+
+  }
+
+
+
+}

@@ -3,7 +3,7 @@
 /**
  * Wise Chat geo-targeting service class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatGeoService {
 
@@ -15,10 +15,11 @@ class WiseChatGeoService {
 	 * @return WiseChatGeoDetails
 	 */
 	public function getGeoDetails($ipAddress) {
+        WiseChatContainer::load('model/WiseChatGeoDetails');
+
         if (!function_exists('curl_init') || strlen($ipAddress) == 0 || $ipAddress == '127.0.0.1' || $ipAddress == '::1') {
             return null;
         }
-        WiseChatContainer::load('model/WiseChatGeoDetails');
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

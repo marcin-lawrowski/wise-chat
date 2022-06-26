@@ -1,15 +1,25 @@
-<?php
+<?php 
 
 /**
  * Wise Chat admin emoticons settings tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatEmoticonsTab extends WiseChatAbstractTab {
 
 	public function getFields() {
 		return array(
-			array('_section', 'Custom Emoticons', 'Below you can compose and enable your own set of emoticons.'),
+			array('_section', 'General Settings'),
+			array(
+				'emoticons_enabled', 'Emoticons Set', 'selectCallback', 'integer',
+				'A collection of emoticons ready to insert into a message via Emoticon button (see Appearance settings).<br />
+				<strong>Notice:</strong> This setting has no effect if Custom Emoticons option is enabled (see below).',
+				self::getEmoticonSets()
+			),
+			array(
+				'emoticons_size', 'Emoticon Size', 'selectCallback', 'integer', '', self::getEmoticonSize()
+			),
+			array('_section', 'Custom Emoticons', 'Compose and enable your own collection of emoticons.'),
 			array('custom_emoticons_enabled', 'Enable Custom Emoticons', 'booleanFieldCallback', 'boolean', 'Enable custom set of emoticons. Below you can specify width of the emoticons layer and the list of emoticons.'),
 			array('custom_emoticons_popup_width', 'Popup Width', 'stringFieldCallback', 'integer', 'Width of the emoticons popup (<strong>px</strong> unit). If the value is empty a default width is used.'),
 			array('custom_emoticons_popup_height', 'Popup Height', 'stringFieldCallback', 'integer', 'Height of the emoticons popup (<strong>px</strong> unit). If the value is empty the height is set to contain all emoticons.'),
@@ -19,16 +29,11 @@ class WiseChatEmoticonsTab extends WiseChatAbstractTab {
 			array('custom_emoticons', 'Emoticons', 'emoticonsCallback', 'void'),
 		);
 	}
-
-	public function getProFields() {
-		return array(
-			'custom_emoticons_enabled', 'custom_emoticons_popup_width', 'custom_emoticons_popup_height', 'custom_emoticons_emoticon_max_width_in_popup',
-			'custom_emoticons_emoticon_width', 'custom_emoticon_add', 'custom_emoticons',
-		);
-	}
-
+	
 	public function getDefaultValues() {
 		return array(
+			'emoticons_enabled' => 1,
+			'emoticons_size' => 32,
 			'custom_emoticons_enabled' => 0,
 			'custom_emoticons_popup_width' => '',
 			'custom_emoticons_popup_height' => '',
@@ -37,7 +42,39 @@ class WiseChatEmoticonsTab extends WiseChatAbstractTab {
 		);
 	}
 
+	public function getParentFields() {
+		return array(
+			'custom_emoticons_popup_width' => 'custom_emoticons_enabled',
+			'custom_emoticons_popup_height' => 'custom_emoticons_enabled',
+			'custom_emoticons_emoticon_max_width_in_popup' => 'custom_emoticons_enabled',
+			'custom_emoticons_emoticon_width' => 'custom_emoticons_enabled',
+		);
+	}
 
+	public function getProFields() {
+		return array(
+			'custom_emoticons_enabled', 'custom_emoticons_popup_width', 'custom_emoticons_popup_height', 'custom_emoticons_emoticon_max_width_in_popup',
+			'custom_emoticons_emoticon_width'
+		);
+	}
+
+	public static function getEmoticonSets() {
+		return array(
+			0 => '-- No emoticons --',
+			1 => 'Set 1',
+			'_DISABLED_pro_2' => 'Set 2 (available in Wise Chat Pro)',
+			'_DISABLED_pro_3' => 'Set 3 (available in Wise Chat Pro)',
+			'_DISABLED_pro_4' => 'Set 4 (available in Wise Chat Pro)',
+		);
+	}
+
+	public static function getEmoticonSize() {
+		return array(
+			32 => '32',
+			64 => '64',
+			128 => '128',
+		);
+	}
 
 	public static function getImageSizes() {
 		$defaultNames = array(
@@ -69,28 +106,24 @@ class WiseChatEmoticonsTab extends WiseChatAbstractTab {
 		printf(
 			'<input type="hidden" value="" id="newEmoticonId" name="newEmoticonId" />'.
 			'<div id="newEmoticonImageContainerId"></div>'.
-			'<button class="wc-image-picker button-secondary" disabled data-parent-field="custom_emoticons_enabled" data-target-id="newEmoticonId" data-image-container-id="newEmoticonImageContainerId">Select Image</button>'.
-			'<input type="text" value="" id="newEmoticonAlias" disabled data-parent-field="custom_emoticons_enabled" name="newEmoticonAlias" placeholder="Shortcut" autocomplete="false" />'.
+			'<button class="wc-image-picker button-secondary" data-parent-field="custom_emoticons_enabled" data-target-id="newEmoticonId" data-image-container-id="newEmoticonImageContainerId">Select Image</button>'.
 			' | '.
-			'<a class="button-primary new-emoticon-submit" href="%s" disabled data-parent-field="custom_emoticons_enabled">Add Emoticon</a>'.
-			'<p class="description">Select the image and click Add Emoticon button. Optionally you can choose a shortcut for the emoticon. For example - for smiley you might want to put the shortcut: <strong>:)</strong></p>'.
-			'<p class="description wcProDescription">Notice: This feature is available after upgrading to Wise Chat Pro.
-				<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">Check Wise Chat <strong>Pro</strong></a>
-			</p>',
+			'<a class="button-primary new-emoticon-submit" href="%s" data-parent-field="custom_emoticons_enabled">Add Emoticon</a>'.
+			'<p class="description">Select the image and click Add Emoticon button. Optionally you can choose a shortcut for the emoticon. For example - for smiley you might want to put the shortcut: <strong>:)</strong></p>',
 			wp_nonce_url($url)
 		);
+
+		$this->printProFeatureNotice();
 	}
 
 	public function emoticonsCallback() {
-		$emoticons = array();
 
 		$html = "<table class='wp-list-table widefat emotstable'>";
 		$html .= '<tr><td>No custom emoticons added yet. Use the form above in order to add you own emoticons.</td></tr>';
 		$html .= "</table>";
-		$html .= '<p class="description wcProDescription">Notice: This feature is available after upgrading to Wise Chat Pro.
-			<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">Check Wise Chat <strong>Pro</strong></a>
-		</p>';
 
 		print($html);
+
+		$this->printProFeatureNotice();
 	}
 }

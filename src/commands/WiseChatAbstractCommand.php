@@ -3,7 +3,7 @@
 /**
  * WiseChat abstract command.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 abstract class WiseChatAbstractCommand {
 
@@ -69,7 +69,7 @@ abstract class WiseChatAbstractCommand {
 	}
 	
 	protected function addMessage($message) {
-		$this->messagesService->addMessage($this->authentication->getSystemUser(), $this->channel, $message, true);
+		$this->messagesService->addMessage($this->authentication->getSystemUser(), $this->channel, $message, array(), true);
 	}
 
     /**

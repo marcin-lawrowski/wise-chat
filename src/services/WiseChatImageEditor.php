@@ -3,7 +3,7 @@
 /**
  * Wise Chat images editor class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatImageEditor {
 	/**
@@ -71,15 +71,16 @@ class WiseChatImageEditor {
 		$this->imageData = $imageData;
 		$this->imagePath = $imagePath;
 	}
-
+	
 	/**
-	 * Resizes the image.
-	 *
-	 * @param integer $maxWidth
-	 * @param integer $maxHeight
-	 * @param boolean $constraint
-	 * @throws Exception
-	 */
+	* Resizes the image.
+	*
+	* @param integer $maxWidth
+	* @param integer $maxHeight
+	* @param boolean $constraint
+	*
+	* @return null
+	*/
 	public function resize($maxWidth, $maxHeight, $constraint = true) {
 		if ($this->image === null) {
 			throw new Exception('WiseChatImageEditor: Image was not loaded');
@@ -124,7 +125,7 @@ class WiseChatImageEditor {
 		}
 		
 		if ($newW != $origSize[0] || $newH != $origSize[1]) {
-			$imageResized = imagecreatetruecolor((int) $newW, (int) $newH);
+			$imageResized = imagecreatetruecolor($newW, $newH);
 			
 			// take care of transparency when resizing:
 			$imageType = $this->imageData[2];
@@ -139,7 +140,7 @@ class WiseChatImageEditor {
 				imagesavealpha($imageResized, true);
 			};
 			
-			imagecopyresampled($imageResized, $image, 0, 0, 0, 0, (int) $newW, (int) $newH, $origSize[0], $origSize[1]);
+			imagecopyresampled($imageResized, $image, 0, 0, 0, 0, $newW, $newH, $origSize[0], $origSize[1]);
 			imagedestroy($image);
 			$this->image = $imageResized;
 		}
@@ -150,6 +151,8 @@ class WiseChatImageEditor {
 	
 	/**
 	* Fixes image orientation.
+	*
+	* @return null
 	*/
 	public function fixOrientation() {
 		if ($this->image === null) {
@@ -164,7 +167,7 @@ class WiseChatImageEditor {
 		if (!in_array($type, array(IMAGETYPE_JPEG, IMAGETYPE_TIFF_II, IMAGETYPE_TIFF_MM))) {
 			return;
 		}
-		$exif = @exif_read_data($this->imagePath); // due to "Incorrect APP1 Exif Identifier Code" errors on some JPGs
+		$exif = exif_read_data($this->imagePath);
 
 		if (is_array($exif) && !empty($exif['Orientation'])) {
 			switch ($exif['Orientation']) {

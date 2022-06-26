@@ -3,7 +3,7 @@
 /**
  * Wise Chat command: /whois [userName]
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatWhoisCommand extends WiseChatAbstractCommand {
 	public function execute() {
@@ -19,19 +19,14 @@ class WiseChatWhoisCommand extends WiseChatAbstractCommand {
             return;
         }
 
-        $channelUser = $this->channelUsersDAO->getActiveByUserIdAndChannelId($user->getId(), $this->channel->getId());
-        if ($channelUser !== null) {
-            $details = sprintf(
-                "User: %s \n".
-                "ID: %d \n".
-                "IP address: %s \n".
-                "Unique ID: %s \n",
-                $userName, $user->getId(), $user->getIp(), $user->getSessionId()
-            );
+        $details = sprintf(
+            "User: %s \n".
+            "ID: %d \n".
+            "IP address: %s \n".
+            "Unique ID: %s \n",
+            $userName, $user->getId(), $user->getIp(), $user->getSessionId()
+        );
 
-            $this->addMessage($details);
-        } else {
-            $this->addMessage(sprintf('User "%s" was not found', $userName));
-        }
+        $this->addMessage($details);
 	}
 }

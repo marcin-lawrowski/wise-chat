@@ -3,16 +3,16 @@
 /**
  * WiseChat messages DAO criteria
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatMessagesCriteria {
     const ORDER_DESCENDING = 'descending';
     const ORDER_ASCENDING = '';
 
     /**
-     * @var string
+     * @var array
      */
-    private $channelName;
+    private $channelNames;
 
     /**
      * @var integer
@@ -33,6 +33,16 @@ class WiseChatMessagesCriteria {
      * @var boolean
      */
     private $includeAdminMessages;
+
+    /**
+     * @var integer
+     */
+    private $recipientOrSenderId;
+
+    /**
+     * @var boolean
+     */
+    private $privateMessages;
 
     /**
      * @var integer
@@ -59,7 +69,9 @@ class WiseChatMessagesCriteria {
      */
     public function __construct() {
         $this->includeAdminMessages = false;
+        $this->privateMessages = false;
         $this->orderMode = self::ORDER_ASCENDING;
+        $this->channelNames = array();
     }
 
     /**
@@ -70,24 +82,23 @@ class WiseChatMessagesCriteria {
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getChannelName() {
-        return $this->channelName;
+    public function getChannelNames() {
+        return $this->channelNames;
     }
 
     /**
-     * @param string $channelName
+     * @param array $channelNames
      *
      * @return WiseChatMessagesCriteria
-     * @throws Exception If channel name is empty string
+     * @throws Exception If channel name is empty
      */
-    public function setChannelName($channelName) {
-        $channelName = trim($channelName);
-        if (strlen($channelName) == 0) {
-            throw new Exception("Channel name cannot be empty");
+    public function setChannelNames($channelNames) {
+        if (count($channelNames) == 0) {
+            throw new Exception("Channel names cannot be empty");
         }
-        $this->channelName = $channelName;
+        $this->channelNames = $channelNames;
 
         return $this;
     }
@@ -226,6 +237,37 @@ class WiseChatMessagesCriteria {
      */
     public function setMinimumTime($minimumTime) {
         $this->minimumTime = $minimumTime;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRecipientOrSenderId() {
+        return $this->recipientOrSenderId;
+    }
+
+    /**
+     * @param int $recipientOrSenderId
+     */
+    public function setRecipientOrSenderId($recipientOrSenderId) {
+        $this->recipientOrSenderId = $recipientOrSenderId;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIncludeOnlyPrivateMessages() {
+        return $this->privateMessages;
+    }
+
+    /**
+     * @param boolean $privateMessages
+     *
+     * @return WiseChatMessagesCriteria
+     */
+    public function setIncludeOnlyPrivateMessages($privateMessages) {
+        $this->privateMessages = $privateMessages;
         return $this;
     }
 }

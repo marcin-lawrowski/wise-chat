@@ -3,7 +3,7 @@
 /**
  * Wise Chat bans DAO
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatBansDAO {
 	/**
@@ -124,8 +124,6 @@ class WiseChatBansDAO {
 	 * Deletes bans that are older than the given time.
 	 *
 	 * @param integer $time
-	 *
-	 * @return null
 	 */
 	public function deleteOlder($time) {
 		global $wpdb;

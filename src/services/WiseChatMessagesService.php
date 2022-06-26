@@ -3,9 +3,14 @@
 /**
  * WiseChat messages services.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatMessagesService {
+
+	/**
+	 * @var WiseChatClientSide
+	 */
+	private $clientSide;
 
 	/**
 	 * @var WiseChatUsersDAO
@@ -51,9 +56,13 @@ class WiseChatMessagesService {
 	* @var WiseChatOptions
 	*/
 	private $options;
+
+	/** @var WiseChatChannelsDAO */
+	private $channelsDAO;
 	
 	public function __construct() {
 		WiseChatContainer::load('dao/criteria/WiseChatMessagesCriteria');
+		WiseChatContainer::load('services/message/WiseChatTextProcessing');
 		$this->options = WiseChatOptions::getInstance();
 		$this->usersDAO = WiseChatContainer::get('dao/user/WiseChatUsersDAO');
 		$this->messagesDAO = WiseChatContainer::get('dao/WiseChatMessagesDAO');
@@ -63,28 +72,24 @@ class WiseChatMessagesService {
 		$this->abuses = WiseChatContainer::getLazy('services/user/WiseChatAbuses');
 		$this->bansService = WiseChatContainer::get('services/WiseChatBansService');
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
+		$this->clientSide = WiseChatContainer::getLazy('services/client-side/WiseChatClientSide');
+		$this->channelsDAO = WiseChatContainer::getLazy('dao/WiseChatChannelsDAO');
 	}
 	
 	/**
 	* Maintenance actions performed at start-up.
-	*
-	* @param WiseChatChannel $channel
-	*
-	* @return null
 	*/
-	public function startUpMaintenance($channel) {
-		$this->deleteOldMessages($channel);
+	public function startUpMaintenance() {
+		$this->deleteOldMessages();
 	}
-	
+
 	/**
-	* Maintenance actions performed periodically.
-	*
-	* @param WiseChatChannel $channel
-	*
-	* @return null
-	*/
-	public function periodicMaintenance($channel) {
-		$this->deleteOldMessages($channel);
+	 * Maintenance actions performed periodically.
+	 *
+	 * @throws Exception
+	 */
+	public function periodicMaintenance() {
+		$this->deleteOldMessages();
 	}
 
 	/**
@@ -93,12 +98,13 @@ class WiseChatMessagesService {
 	 * @param WiseChatUser $user Author of the message
 	 * @param WiseChatChannel $channel A channel to publish in
 	 * @param string $text Content of the message
+	 * @param array $attachments Array of attachments (only single image is supported)
 	 * @param boolean $isAdmin Indicates whether to mark the message as admin-owned
 	 *
 	 * @return WiseChatMessage|null
 	 * @throws Exception On validation error
 	 */
-	public function addMessage($user, $channel, $text, $isAdmin = false) {
+	public function addMessage($user, $channel, $text, $attachments, $isAdmin = false) {
 		$text = trim($text);
 		$filteredMessage = $text;
 
@@ -110,8 +116,9 @@ class WiseChatMessagesService {
 			throw new Exception('Channel cannot be null');
 		}
 
-		if ($this->authentication->getSystemUser()->getId() != $user->getId() && $this->bansService->isIpAddressBanned($user->getIp())) {
-			throw new Exception($this->options->getOption('message_error_3', __('You were banned from posting messages', 'wise-chat')));
+		// check if the user has been muted
+		if ($user->getId() > 0 && $this->authentication->getSystemUser()->getId() != $user->getId() && $this->bansService->isIpAddressBanned($user->getIp())) {
+			throw new Exception($this->options->getOption('message_error_15', __('You are not allowed to send messages. You have been muted.', 'wise-chat')));
 		}
 
         // use bad words filtering:
@@ -157,22 +164,20 @@ class WiseChatMessagesService {
 		}
 
 		// go through the custom filters:
+		/** @var WiseChatFilterChain $filterChain */
 		$filterChain = WiseChatContainer::get('services/WiseChatFilterChain');
 		$filteredMessage = $filterChain->filter($filteredMessage);
 
 		// cut the message:
-		$messageMaxLength = $this->options->getIntegerOption('message_max_length', 100);
-		if ($messageMaxLength > 0) {
-			$filteredMessage = substr($filteredMessage, 0, $messageMaxLength);
-		}
+		$filteredMessage = WiseChatTextProcessing::cutMessageText($filteredMessage, $this->options->getIntegerOption('message_max_length', 100));
 
 		// convert images and links into proper shortcodes and download images (if enabled):
 		/** @var WiseChatLinksPreFilter $linksPreFilter */
 		$linksPreFilter = WiseChatContainer::get('rendering/filters/pre/WiseChatLinksPreFilter');
 		$filteredMessage = $linksPreFilter->filter(
 			$filteredMessage,
-			$this->options->isOptionEnabled('allow_post_images', true),
-            $this->options->isOptionEnabled('enable_youtube', true)
+			$this->options->isOptionEnabled('allow_post_images'),
+            $this->options->isOptionEnabled('enable_youtube')
 		);
 
 		$message = new WiseChatMessage();
@@ -180,11 +185,19 @@ class WiseChatMessagesService {
 		$message->setAdmin($isAdmin);
 		$message->setUserName($user->getName());
 		$message->setUserId($user->getId());
+		$message->setAvatarUrl($this->getUserAvatar($user));
 		$message->setText($filteredMessage);
 		$message->setChannelName($channel->getName());
 		$message->setIp($user->getIp());
 		if ($user->getWordPressId() !== null) {
 			$message->setWordPressUserId($user->getWordPressId());
+		}
+
+		// save the attachment and include it into the message:
+		$attachmentIds = array();
+		if (count($attachments) > 0) {
+			list($attachmentShortcode, $attachmentIds) = $this->saveAttachments($channel, $attachments);
+			$message->setText($message->getText() . $attachmentShortcode);
 		}
 
 		$message = $this->messagesDAO->save($message);
@@ -195,27 +208,10 @@ class WiseChatMessagesService {
 			$this->attachmentsService->markAttachmentsWithDetails($createdAttachments, $channel->getName(), $message->getId());
 		}
 
-		return $message;
-	}
-
-	/**
-	 * Publishes a message with given attachments in the given channel.
-	 *
-	 * @param WiseChatUser $user Author of the message
-	 * @param WiseChatChannel $channel A channel to publish in
-	 * @param string $text Content of the message
-	 * @param array $attachments Array of attachments (only single image is supported)
-	 *
-	 * @return WiseChatMessage|null Added message
-	 * @throws Exception On validation error
-	 */
-	public function addMessageWithAttachments($user, $channel, $text, $attachments) {
-		$message = $this->addMessage($user, $channel, $text);
-		list($attachmentShortcode, $attachmentIds)= $this->saveAttachments($channel, $attachments);
-		$this->attachmentsService->markAttachmentsWithDetails($attachmentIds, $channel->getName(), $message->getId());
-
-		$message->setText($message->getText().$attachmentShortcode);
-		$this->messagesDAO->save($message);
+		// mark attachments uploaded together with the message:
+		if (count($attachmentIds) > 0) {
+			$this->attachmentsService->markAttachmentsWithDetails($attachmentIds, $channel->getName(), $message->getId());
+		}
 
 		return $message;
 	}
@@ -241,7 +237,7 @@ class WiseChatMessagesService {
 
 		$attachmentShortcode = null;
 		$attachmentIds = array();
-		if ($this->options->isOptionEnabled('enable_images_uploader', true) && $firstAttachment['type'] === 'image') {
+		if ($this->options->isOptionEnabled('enable_images_uploader') && $firstAttachment['type'] === 'image') {
 			$image = $this->imagesService->saveImage($decodedData);
 			if (is_array($image)) {
 				$attachmentShortcode = ' '.WiseChatShortcodeConstructor::getImageShortcode($image['id'], $image['image'], $image['image-th'], '_');
@@ -249,7 +245,7 @@ class WiseChatMessagesService {
 			}
 		}
 
-		if ($this->options->isOptionEnabled('enable_attachments_uploader', true) && $firstAttachment['type'] === 'file') {
+		if ($this->options->isOptionEnabled('enable_attachments_uploader') && $firstAttachment['type'] === 'file') {
 			$fileName = $firstAttachment['name'];
 			$file = $this->attachmentsService->saveAttachment($fileName, $decodedData, $channel->getName());
 			if (is_array($file)) {
@@ -263,25 +259,41 @@ class WiseChatMessagesService {
 
 	/**
 	 * Returns all messages from the given channel and (optionally) beginning from the given offset.
-	 * Limit, order and admin messages inclusion are taken from the plugin's options.
+	 * Limit and admin messages inclusion are taken from the plugin's options.
 	 *
-	 * @param string $channelName Name of the channel
+	 * @param array $channelNames Channels
 	 * @param integer $fromId Begin from specific message ID
 	 *
 	 * @return WiseChatMessage[]
+	 * @throws Exception
 	 */
-	public function getAllByChannelNameAndOffset($channelName, $fromId = null) {
-		$orderMode = $this->options->getEncodedOption('messages_order', '');
-
-
+	public function getAllByChannelNamesAndOffset($channelNames, $fromId = null) {
 		$criteria = new WiseChatMessagesCriteria();
-		$criteria->setChannelName($channelName);
+		$criteria->setChannelNames($channelNames);
 		$criteria->setOffsetId($fromId);
 		$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
 		$criteria->setLimit($this->options->getIntegerOption('messages_limit', 100));
-		$criteria->setOrderMode(
-			$orderMode == WiseChatMessagesCriteria::ORDER_DESCENDING ? $orderMode : WiseChatMessagesCriteria::ORDER_ASCENDING
-		);
+		$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+
+		return $this->messagesDAO->getAllByCriteria($criteria);
+	}
+
+	/**
+	 * Returns all messages from the given channel.
+	 * Limit and admin messages inclusion are taken from the plugin's options.
+	 *
+	 * @param string $channelName Name of the channel
+	 *
+	 * @return WiseChatMessage[]
+	 * @throws Exception
+	 */
+	public function getAllPublicByChannelNameAndUser($channelName) {
+		$criteria = new WiseChatMessagesCriteria();
+		$criteria->setChannelNames(array($channelName));
+		$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
+		$criteria->setIncludeOnlyPrivateMessages(false);
+		$criteria->setLimit($this->options->getIntegerOption('messages_limit', 100));
+		$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
 
 		return $this->messagesDAO->getAllByCriteria($criteria);
 	}
@@ -295,7 +307,43 @@ class WiseChatMessagesService {
 	 * @return WiseChatMessage[]
 	 */
 	public function getAllByChannelName($channelName) {
-		return $this->messagesDAO->getAllByCriteria(WiseChatMessagesCriteria::build()->setChannelName($channelName));
+		return $this->messagesDAO->getAllByCriteria(WiseChatMessagesCriteria::build()->setChannelNames(array($channelName)));
+	}
+
+	/**
+	 * Returns all private messages from the given channel.
+	 *
+	 * @param string $channelName Name of the channel
+	 *
+	 * @return WiseChatMessage[]
+	 */
+	public function getAllPrivateByChannelName($channelName) {
+		$criteria = new WiseChatMessagesCriteria();
+		$criteria->setChannelNames(array($channelName));
+		$criteria->setIncludeAdminMessages(false);
+		$criteria->setIncludeOnlyPrivateMessages(true);
+
+		return $this->messagesDAO->getAllByCriteria($criteria);
+	}
+
+	/**
+	 * Returns message by ID.
+	 *
+	 * @param integer $id
+	 * @param bool $populateUser
+	 * @return WiseChatMessage|null
+	 */
+	public function getById($id, $populateUser = false) {
+		$message = $this->messagesDAO->get($id);
+		if (!$message) {
+			return null;
+		}
+
+		if ($populateUser) {
+			$message->setUser($this->usersDAO->get($message->getUserId()));
+		}
+
+		return $message;
 	}
 
 	/**
@@ -306,7 +354,7 @@ class WiseChatMessagesService {
 	 * @return integer
 	 */
 	public function getNumberByChannelName($channelName) {
-		return $this->messagesDAO->getNumberByCriteria(WiseChatMessagesCriteria::build()->setChannelName($channelName));
+		return $this->messagesDAO->getNumberByCriteria(WiseChatMessagesCriteria::build()->setChannelNames(array($channelName)));
 	}
 
 	/**
@@ -314,11 +362,10 @@ class WiseChatMessagesService {
 	 * Images connected to the message (WordPress Media Library attachments) are also deleted.
 	 *
 	 * @param integer $id
-	 *
-	 * @return null
 	 */
 	public function deleteById($id) {
-		if ($this->messagesDAO->get($id) !== null) {
+		$message = $this->messagesDAO->get($id);
+		if ($message !== null) {
 			$this->messagesDAO->deleteById($id);
 			$this->attachmentsService->deleteAttachmentsByMessageIds(array($id));
 		}
@@ -327,11 +374,10 @@ class WiseChatMessagesService {
 	/**
 	 * Deletes all messages (in all channels).
 	 * Images connected to the messages (WordPress Media Library attachments) are also deleted.
-	 *
-	 * @return null
 	 */
 	public function deleteAll() {
 		$this->messagesDAO->deleteAllByCriteria(WiseChatMessagesCriteria::build()->setIncludeAdminMessages(true));
+		$this->messagesDAO->deleteAllByCriteria(WiseChatMessagesCriteria::build()->setIncludeAdminMessages(true)->setIncludeOnlyPrivateMessages(true));
 		$this->attachmentsService->deleteAllAttachments();
 	}
 
@@ -340,15 +386,20 @@ class WiseChatMessagesService {
 	 * Images connected to the messages (WordPress Media Library attachments) are also deleted.
 	 *
 	 * @param string $channelName Name of the channel
-	 *
-	 * @return null
+	 * @throws Exception
 	 */
 	public function deleteByChannel($channelName) {
 		$this->messagesDAO->deleteAllByCriteria(
             WiseChatMessagesCriteria::build()
-                ->setChannelName($channelName)
+                ->setChannelNames(array($channelName))
                 ->setIncludeAdminMessages(true)
         );
+		$this->messagesDAO->deleteAllByCriteria(
+			WiseChatMessagesCriteria::build()
+				->setChannelNames(array($channelName))
+				->setIncludeAdminMessages(true)
+				->setIncludeOnlyPrivateMessages(true)
+		);
 		$this->attachmentsService->deleteAttachmentsByChannel($channelName);
 	}
 
@@ -371,17 +422,14 @@ class WiseChatMessagesService {
 			'This e-mail was sent by {report-user} from {url}'."\n".
 			'{report-user-ip}';
 		$content = $this->options->getOption('spam_report_content', $contentDefaultTemplate);
-
 		if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
 			return;
 		}
-
 		$currentUser = $this->authentication->getUser();
 		$message = $this->messagesDAO->get($messageId);
 		if ($message === null || $currentUser === null) {
 			return;
 		}
-
 		$variables = array(
 			'url' => $url,
 			'channel' => $message->getChannelName(),
@@ -394,26 +442,26 @@ class WiseChatMessagesService {
 		foreach ($variables as $key => $variable) {
 			$content = str_replace(array('${'.$key.'}', '{'.$key.'}'), $variable, $content);
 		}
-
 		wp_mail($recipient, $subject, $content);
 	}
 
 	/**
-	 * Deletes old messages according to the plugin's settings.
+	 * Deletes old messages if auto-remove option is on.
 	 * Images connected to the messages (WordPress Media Library attachments) are also deleted.
-	 *
-	 * @param WiseChatChannel $channel
 	 *
 	 * @throws Exception
 	 */
-	private function deleteOldMessages($channel) {
+	private function deleteOldMessages() {
 		$minutesThreshold = $this->options->getIntegerOption('auto_clean_after', 0);
 		
 		if ($minutesThreshold > 0) {
+			$channels = $this->channelsDAO->getByNames((array) $this->options->getOption('channel'));
+
 			$criteria = new WiseChatMessagesCriteria();
-			$criteria->setChannelName($channel->getName());
+			$criteria->setChannelNames(array_map(function($channel) { return $channel->getName(); }, $channels));
 			$criteria->setIncludeAdminMessages(true);
 			$criteria->setMaximumTime(time() - $minutesThreshold * 60);
+			$criteria->setIncludeOnlyPrivateMessages(false);
 			$messages = $this->messagesDAO->getAllByCriteria($criteria);
 
 			$messagesIds = array();
@@ -423,9 +471,36 @@ class WiseChatMessagesService {
 
 			if (count($messagesIds) > 0) {
 				$this->attachmentsService->deleteAttachmentsByMessageIds($messagesIds);
-				$this->actions->publishAction('deleteMessages', array('ids' => $messagesIds));
+				$this->actions->publishAction('deleteMessages', array('ids' => $this->clientSide->encryptMessageIds($messagesIds)));
 				$this->messagesDAO->deleteAllByCriteria($criteria);
 			}
 		}
+	}
+
+	/**
+	 * @param WiseChatUser $user
+	 *
+	 * @return string|null
+	 */
+	private function getUserAvatar($user) {
+		$imageSrc = null;
+
+		if ($user !== null && $user->getWordPressId() !== null) {
+			$imageTag = get_avatar($user->getWordPressId());
+			if ($imageTag === false) {
+				$imageSrc = $this->options->getIconsURL().'user.png';
+			} else {
+				$doc = new DOMDocument();
+				$doc->loadHTML($imageTag);
+				$imageTags = $doc->getElementsByTagName('img');
+				foreach ($imageTags as $tag) {
+					$imageSrc = $tag->getAttribute('src');
+				}
+			}
+		} else {
+			$imageSrc = $this->options->getIconsURL().'user.png';
+		}
+
+		return $imageSrc;
 	}
 }

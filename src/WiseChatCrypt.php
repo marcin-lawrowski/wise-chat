@@ -3,7 +3,7 @@
 /**
  * WiseChat encryption support.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatCrypt {
 	const PUBLIC_KEY = 'Ci0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tCk1Gd3dEUVlKS29aSWh2Y05BUUVCQlFBRFN3QXdTQUpCQU4rc1p5VkVMOURDWkRQNks3Nml3dnBJb2J5NWQrUDkKUmtZRzRDQkJaQ3Q5dnh3N1dqLzhlbjk3RU9ENW53bDJqVFAzalRPNmFhRHdGRFc0dDU5U3Baa0NBd0VBQVE9PQotLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0K';

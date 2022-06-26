@@ -3,54 +3,70 @@
 /**
  * Wise Chat admin moderation settings tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatModerationTab extends WiseChatAbstractTab {
 
+	private $rights = array(
+		'approve' => 'Approve messages',
+		'edit' => 'Edit messages',
+		'delete' => 'Delete messages',
+		'mute' => 'Mute users',
+		'ban' => 'Ban users',
+		'spam' => 'Report spam messages',
+	);
+
 	public function getFields() {
 		return array(
-			array('_section', 'Moderation Settings'),
-			array('enable_message_actions', 'Enable Admin Actions', 'booleanFieldCallback', 'boolean', 'Displays ban and removal buttons next to each message. The buttons are visible only for roles defined below'),
-			array(
-				'permission_edit_message_role', 'Edit Message Permission', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to edit posted messages.<br /> Alternatively you can assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
+			array('_section', 'Moderators - Users', 'Grant moderation rights to individual users. Moderation buttons are visible when moving the cursor in front of a message in the chat window. In the mobile version the buttons become visible after tapping a message.'),
+			array('moderators', 'Moderators List', 'moderatorsCallback', 'void'),
+			array('moderator_add', 'Add a Moderator', 'moderatorAddCallback', 'void'),
+
+			array('_section', 'Own Messages Moderation',
+				'Grant rights to moderate own messages.'
+			),
+			array('enable_edit_own_messages', 'Edit Own Messages', 'booleanFieldCallback', 'boolean'),
+			array('enable_delete_own_messages', 'Delete Own Messages', 'booleanFieldCallback', 'boolean'),
+
+			array('_section', 'Moderators - User Roles',
+				'Grant moderation rights to user roles. Moderation buttons are visible when moving the cursor in front of a message in the chat window. In the mobile version the buttons become visible after tapping a message.'
 			),
 			array(
-				'permission_edit_message_role', 'Edit Message Permission', 'checkboxesCallback', 'multivalues',
-				'An user role that is allowed to edit posted messages.<br /> Alternatively you can assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
-			),
-			array(
-				'permission_delete_message_role', 'Delete Message Permission', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to delete posted messages.<br /> Alternatively you can assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
-			),
-			array(
-				'permission_ban_user_role', 'Ban User Permission', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to ban users.<br /> Alternatively you can assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
-			),
-			array(
-				'permission_kick_user_role', 'Kick User Permission', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to kick users.<br /> Alternatively you can assign "wise_chat_kick_user" capability to any custom role.', self::getRoles()
-			),
-			array(
-				'permission_approve_message_role', 'Approve Message Permission', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to approve posted messages.<br />Alternatively you can assign "wise_chat_approve_message" capability to any custom role.<br />',
+				'permission_approve_message_role', 'Approve Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to approve pending messages when Pending Messages feature is on (see below).<br />Alternatively, assign "wise_chat_approve_message" capability to any custom role.<br />',
 				self::getRoles()
 			),
-			array('enable_approval_confirmation', 'Approval Confirmation', 'booleanFieldCallback', 'boolean',
-				'Displays confirmation after clicking approval button.'
+			array('enable_approval_confirmation', 'Approve Action Confirmation', 'booleanFieldCallback', 'boolean',
+				'Displays a confirmation message after clicking the approval button.'
 			),
-			array('moderation_ban_duration', 'Ban Duration', 'stringFieldCallback', 'integer', 'Duration of the ban (in minutes) created by clicking on Ban button next a message. Empty field sets the value to 1440 minutes (1 day)'),
+			array(
+				'permission_edit_message_role', 'Edit Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to edit messages.<br /> Alternatively, assign "wise_chat_edit_message" capability to any custom role.', self::getRoles()
+			),
 
-			array('_section', 'Spam Reporting',
-				'Configuration of the spam reporting feature. It displays spam reporting button next to the posted message.'
+			array('enable_reply_to_messages', 'Reply-To Action', 'booleanFieldCallback', 'boolean'),
+			array(
+				'permission_delete_message_role', 'Delete Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to delete messages.<br /> Alternatively, assign "wise_chat_delete_message" capability to any custom role.', self::getRoles()
+			),
+
+			array(
+				'permission_ban_user_role', 'Mute Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to mute users.<br /> Alternatively, assign "wise_chat_mute_user" capability to any custom role.', self::getRoles()
+			),
+			array('moderation_ban_duration', 'Mute Duration', 'stringFieldCallback', 'integer', 'Empty field means that the user is muted for 1440 minutes (1 day).'),
+			array(
+				'permission_kick_user_role', 'Ban Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to ban users.<br /> Alternatively, assign "wise_chat_ban_user" capability to any custom role.', self::getRoles()
+			),
+
+			array(
+				'permission_spam_report_role', 'Spam Report Action', 'checkboxesCallback', 'multivalues',
+				'User roles allowed to report spam messages.<br /> Alternatively, assign "wise_chat_spam_report" capability to any custom role.', self::getRoles()
 			),
 			array(
-				'spam_report_enable_all', 'Enable All', 'booleanFieldCallback', 'boolean',
-				'Enables spam reporting for all - including anonymous users.'
-			),
-			array(
-				'permission_spam_report_role', 'Enable Roles Only', 'checkboxesCallback', 'multivalues',
-				'User roles allowed to report spam messages.<br /> Alternatively you can assign "wise_chat_spam_report" capability to any custom role.', self::getRoles()
+				'spam_report_enable_all', 'Spam Report Action For All', 'booleanFieldCallback', 'boolean',
+				'Enables spam reporting button for all (including anonymous users).'
 			),
 
 			array('_section', 'Spam Reporting Notification',
@@ -84,10 +100,15 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	
 	public function getDefaultValues() {
 		return array(
-			'enable_message_actions' => 1,
+			'enable_approval_confirmation' => 1,
+			'permission_approve_message_role' => 'administrator',
+			'permission_edit_message_role' => 'administrator',
 			'permission_delete_message_role' => 'administrator',
 			'permission_ban_user_role' => 'administrator',
 			'permission_kick_user_role' => 'administrator',
+			'enable_edit_own_messages' => 0,
+			'enable_reply_to_messages' => 1,
+			'enable_delete_own_messages' => 0,
 			'moderation_ban_duration' => 1440,
 			'spam_report_enable_all' => 1,
 			'permission_spam_report_role' => 'administrator',
@@ -100,33 +121,29 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 				'Posted from IP: {message-user-ip}'."\n\n".
 				"--\n".
 				'This e-mail was sent by {report-user} from {url}'."\n".
-				'{report-user-ip}'
+				'{report-user-ip}',
+			'new_messages_hidden' => 0,
+			'approving_messages_mode' => 1,
+			'show_hidden_messages_roles' => 'administrator',
+			'no_hidden_messages_roles' => 'administrator',
 		);
 	}
 	
 	public function getParentFields() {
 		return array(
-			'permission_delete_message_role' => 'enable_message_actions',
-			'permission_ban_user_role' => 'enable_message_actions',
-			'permission_kick_user_role' => 'enable_message_actions',
-			'moderation_ban_duration' => 'enable_message_actions'
+			'show_hidden_messages_roles' => 'new_messages_hidden',
+			'no_hidden_messages_roles' => 'new_messages_hidden',
+			'approving_messages_mode' => 'new_messages_hidden',
 		);
 	}
 
 	public function getProFields() {
-		return array(
-			'new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode',
-			'permission_edit_message_role', 'permission_approve_message_role', 'enable_approval_confirmation',
-			'permission_edit_message_role'
-		);
-	}
-
-	public function getPendingMessagesApprovalModes() {
-		return array(
-			1 => 'Date and time of the message',
-			2 => 'Date and time of the approval'
-		);
-	}
+        return array(
+            'enable_edit_own_messages', 'enable_reply_to_messages', 'enable_approval_confirmation', 'permission_approve_message_role',
+	        'permission_edit_message_role', 'approving_messages_mode', 'show_hidden_messages_roles', 'no_hidden_messages_roles',
+	        'new_messages_hidden'
+        );
+    }
 	
 	public function getRoles() {
 		$editableRoles = array_reverse(get_editable_roles());
@@ -140,4 +157,37 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 		return $rolesOptions;
 	}
 
+	public function getPendingMessagesApprovalModes() {
+		return array(
+			1 => 'Date and time of the message',
+			2 => 'Date and time of the approval'
+		);
+	}
+
+	public function moderatorsCallback() {
+		$html = "<div style='height: 150px; overflow-y: auto; border: 1px solid #aaa; padding: 5px;'>";
+		$html .= '<small>No moderators were added yet</small>';
+		$html .= "</div>";
+		print($html);
+
+		$this->printProFeatureNotice();
+	}
+
+	public function moderatorAddCallback() {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addModerator");
+
+		$checkboxes = array();
+		foreach ($this->rights as $slug => $name) {
+			$checkboxes[] = sprintf('<label><input type="checkbox" value="%s" id="addModerator-%s" disabled name="addModerator-%s" class="wc-add-moderator-right" />%s</label>', $slug, $slug, $slug, $name);
+		}
+
+		printf(
+			'<input type="text" value="" placeholder="User Login" disabled class="wc-add-moderator-user-login" style="margin-bottom: 10px;" /><br />%s<br />'.
+			'<a class="button-secondary wc-add-moderator-button" href="%s" title="Adds user to the moderators list" disabled style="margin-top: 10px;">Add</a>',
+			implode('<br/>', $checkboxes),
+			wp_nonce_url($url)
+		);
+
+		$this->printProFeatureNotice();
+	}
 }

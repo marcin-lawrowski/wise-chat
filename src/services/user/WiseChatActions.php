@@ -16,6 +16,15 @@ class WiseChatActions {
         $this->actionsDAO = WiseChatContainer::get('dao/WiseChatActionsDAO');
     }
 
+	/**
+	 * @return int|null
+	 */
+    public function getLastActionId() {
+	    $lastAction = $this->actionsDAO->getLast();
+
+	    return $lastAction !== null ? $lastAction->getId() : null;
+    }
+
     /**
      * Publishes the action in the queue. If the user is not specified the action is public.
      * Otherwise it is directed to the specified user.

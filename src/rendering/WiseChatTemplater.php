@@ -3,7 +3,7 @@
 /**
  * Wise Chat simple template engine.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatTemplater {
 	const REGEXP_VARIABLE = '/\{\{\s*([\w\d]+)\s*\}\}/is';
@@ -63,7 +63,7 @@ class WiseChatTemplater {
 	public function render($data) {
 		$template = $this->renderIfBlocks($this->template, $data);
 		$template = $this->renderVariables($template, $data);
-		
+
 		$template = $this->detectVariablesCreation($template, $data);
 		$template = $this->renderVariables($template, $data);
 	

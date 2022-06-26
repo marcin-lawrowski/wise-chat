@@ -1,0 +1,40 @@
+@import "./channel-input";
+@import "./channel-messages";
+
+@mixin channel {
+
+  .wcChannel {
+    display: flex;
+    flex-direction: column;
+
+    @include channel-messages;
+    @include channel-input;
+
+    .wcCounter {
+      text-align: right;
+    }
+
+    &.wcTopInput {
+      .wcChannelInput {
+        order: 1;
+      }
+
+      .wcMessages {
+        order: 2;
+      }
+    }
+
+    .wcChannelCoverContainer {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      .wcChannelCover {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
 /**
  * WiseChat command: /unban
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatUnbanCommand extends WiseChatAbstractCommand {
 	public function execute() {

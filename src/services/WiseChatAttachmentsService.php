@@ -3,7 +3,7 @@
 /**
  * Wise Chat attachments services class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatAttachmentsService {
 	const UPLOAD_FILE_NAME = '_wise_chat_upload_attachment';
@@ -66,9 +66,9 @@ class WiseChatAttachmentsService {
 	* @return array
 	*/
 	public function getAllowedFormats() {
-		$validFormats = array();
+		$validFormats = array('mp3');
 		
-		if ($this->options->isOptionEnabled('enable_attachments_uploader', true)) {
+		if ($this->options->isOptionEnabled('enable_attachments_uploader')) {
 			$formats = $this->options->getEncodedOption('attachments_file_formats');
 			$formatsSplited = preg_split('/,/', $formats);
 			
@@ -135,6 +135,7 @@ class WiseChatAttachmentsService {
 			'post_status' => 'any',
 			'posts_per_page' => -1,
 			'meta_query' => array(
+				'relation' => 'OR',
 				array(
 					'key' => 'wise_chat_message_id',
 					'value' => $messagesIds,
@@ -326,7 +327,7 @@ class WiseChatAttachmentsService {
 	* @param string $data
 	*/
 	private function saveTempFile($data) {
-		$fp = fopen($this->tempFileName,'w');
+		$fp = fopen($this->tempFileName, 'w');
 		fwrite($fp, $data);
 		fclose($fp);
 	}
@@ -337,16 +338,13 @@ class WiseChatAttachmentsService {
 	private function createTempFile() {
 		$this->deleteTempFile();
 		$this->tempFileName = tempnam(sys_get_temp_dir(), 'php_files');
-		if ($this->tempFileName === false) {
-			throw new Exception('Could not create temporary file with tempnam() function. Please check your PHP configuration.');
-		}
 	}
 	
 	/**
 	* Removes the temporary file which was created by the $this->createTempFile() method.
 	*/
 	private function deleteTempFile() {
-		if (strlen((string) $this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
+		if (strlen($this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
 			unlink($this->tempFileName);
 		}
 	}

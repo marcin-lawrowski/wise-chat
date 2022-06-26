@@ -3,7 +3,7 @@
 /**
  * Wise Chat admin messages settings tab class.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatMessagesTab extends WiseChatAbstractTab {
 
@@ -13,23 +13,18 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('message_max_length', 'Message Maximum Length', 'stringFieldCallback', 'integer', 'Maximum length of a message sent by an user'),
 			array('allow_post_links', 'Enable Links', 'booleanFieldCallback', 'boolean', 'Makes posted links clickable'),
 			array('enable_twitter_hashtags', 'Enable Twitter Hashtags', 'booleanFieldCallback', 'boolean', 'Detects Twitter hashtags and converts them to links'),
-			array(
-				'emoticons_enabled', 'Emoticons Set', 'selectCallback', 'integer',
-				'Displays posted emoticons (like :-) or ;-)) as images. You can display a button that allows to insert emoticons. The option is in appearance settings.',
-				self::getEmoticonSets()
-			),
 
 			array(
 				'_section', 'Users Notifications',
-				'Configure text notifications or sounds for various events such as new messages, new users in the channel, etc. You can give users an option to mute all sounds. Check appearance settings. '
+				'Configure various notifications in reaction to certain events such as new messages, new users, etc. You can give users an option to mute all sounds. Please check the appearance settings. '
 			),
-			array('enable_title_notifications', 'Enable Title Notifications', 'booleanFieldCallback', 'boolean', 'Shows notifications in browser\'s window title when new messages arrives and the browser window is hidden / inactive'),
-			array('sound_notification', 'Message  Sound Notification', 'selectCallback', 'string', 'Plays a sound when new messages arrives.', WiseChatMessagesTab::getNotificationSounds()),
-			array('enable_join_notification', 'Enable Join Notification', 'booleanFieldCallback', 'boolean', 'When user joins the channel it displays the following message: User has joined the channel.'),
-			array('join_sound_notification', 'Join Sound Notification', 'selectCallback', 'string', 'Plays a sound when user joins the chat.', WiseChatMessagesTab::getNotificationSounds()),
-			array('enable_leave_notification', 'Enable Leave Notification', 'booleanFieldCallback', 'boolean', 'When user leaves the channel it displays the following message: User has left the channel.'),
-			array('leave_sound_notification', 'Leave Sound Notification', 'selectCallback', 'string', 'Plays a sound when user leaves the chat.', WiseChatMessagesTab::getNotificationSounds()),
-			array('mentioning_sound_notification', 'Mentioning Sound Notification', 'selectCallback', 'string', 'Plays a sound when user has been mentioned using @UserName notation.', WiseChatMessagesTab::getNotificationSounds()),
+			array('enable_title_notifications', 'Window Title', 'booleanFieldCallback', 'boolean', 'Shows the asterisk symbol in the browser\'s window title when a new message arrives and the window is minimized or inactive'),
+			array('sound_notification', 'New Message Sound', 'selectCallback', 'string', 'Plays a sound when new messages arrive.', WiseChatMessagesTab::getNotificationSounds()),
+			array('enable_join_notification', 'User Online Highlight', 'booleanFieldCallback', 'boolean', 'When user becomes online its name is highlighted on the users list.'),
+			array('join_sound_notification', 'User Online Sound', 'selectCallback', 'string', 'Plays a sound when user becomes online.', WiseChatMessagesTab::getNotificationSounds()),
+			array('enable_leave_notification', 'User Offline Highlight', 'booleanFieldCallback', 'boolean', 'When user becomes offline its name is highlighted on the users list.'),
+			array('leave_sound_notification', 'User Offline Sound', 'selectCallback', 'string', 'Plays a sound when user becomes offline.', WiseChatMessagesTab::getNotificationSounds()),
+			array('mentioning_sound_notification', 'Mentioning Sound', 'selectCallback', 'string', 'Plays a sound when user is mentioned using <i>@UserName:</i> notation.', WiseChatMessagesTab::getNotificationSounds()),
 
 			array('_section', 'Images Settings'),
 			array('allow_post_images', 'Enable Images', 'booleanFieldCallback', 'boolean', 'Downloads posted images (links pointing to images) into Media Library and displays them'),
@@ -40,6 +35,11 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('images_thumbnail_width_limit', 'Thumbnails Maximum Width', 'stringFieldCallback', 'integer', 'Maximum width of the generated thumbnail'),
 			array('images_thumbnail_height_limit', 'Thumbnails Maximum Height', 'stringFieldCallback', 'integer', 'Maximum height of the generated thumbnail'),
 			
+			array('_section', 'Voice Messages Settings', 'Option to record and post voice messages. It requires HTTPS. All sounds are compressed to Mp3 files and stored in Media Library.'),
+			array('enable_voice_messages', 'Enable', 'booleanFieldCallback', 'boolean', 'Enables voice messages.'),
+			array('voice_message_max_length', 'Maximum Length (s)', 'stringFieldCallback', 'integer', 'Maximal length of a voice message (in seconds). Allowed range: 1 - 300.'),
+			array('voice_message_mp3_bitrate', 'MP3 bit rate', 'stringFieldCallback', 'integer', 'Bit rate of voice messages. Allowed range: 64 - 320.'),
+
 			array('_section', 'File Attachments Settings'),
 			array('enable_attachments_uploader', 'Enable Uploader', 'booleanFieldCallback', 'boolean', 'Enables the uploader for sending file attachments from local storage. You can specify allowed file formats below'),
 			array('attachments_file_formats', 'Allowed File Extensions', 'stringFieldCallback', 'string', 'Comma-separated list of allowed extensions'),
@@ -62,26 +62,35 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'mention_sound_notification' => '',
 			'sound_notification' => '',
 			'message_max_length' => 400,
-			'allow_post_links' => 1,
-			'emoticons_enabled' => 1,
-			'allow_post_images' => 1,
-			'enable_images_uploader' => 1,
-			'enable_twitter_hashtags' => 1,
-			'enable_attachments_uploader' => 1,
+			'allow_post_links' => 0,
+			'allow_post_images' => 0,
+			'enable_images_uploader' => 0,
+			'enable_twitter_hashtags' => 0,
+			'enable_attachments_uploader' => 0,
 			'attachments_file_formats' => 'pdf,doc,docx',
 			'attachments_size_limit' => 3145728,
-			
+
+			'enable_voice_messages' => false,
+			'voice_message_max_length' => 60,
+			'voice_message_mp3_bitrate' => 160,
+
 			'images_size_limit' => 3145728,
 			'images_width_limit' => 1000,
 			'images_height_limit' => 1000,
 			'images_thumbnail_width_limit' => 60,
 			'images_thumbnail_height_limit' => 60,
 			
-			'enable_youtube' => 1,
+			'enable_youtube' => 0,
 			'youtube_width' => 186,
 			'youtube_height' => 105
 		);
 	}
+
+	public function getProFields() {
+        return array(
+            'enable_voice_messages', 'voice_message_max_length', 'voice_message_mp3_bitrate'
+        );
+    }
 	
 	public function getParentFields() {
 		return array(
@@ -89,6 +98,9 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'attachments_size_limit' => 'enable_attachments_uploader',
 			'youtube_width' => 'enable_youtube',
 			'youtube_height' => 'enable_youtube',
+
+			'voice_message_max_length' => 'enable_voice_messages',
+			'voice_message_mp3_bitrate' => 'enable_voice_messages',
 		);
 	}
 	
@@ -119,16 +131,6 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'wise-chat-18' => 'Wise Chat 18',
 			'wise-chat-19' => 'Wise Chat 19',
 			'wise-chat-20' => 'Wise Chat 20',
-		);
-	}
-
-	public static function getEmoticonSets() {
-		return array(
-			0 => '-- No emoticons --',
-			1 => 'Basic Wise Chat',
-			2 => 'Animated',
-			3 => 'Steel',
-			4 => 'Pidgin',
 		);
 	}
 }

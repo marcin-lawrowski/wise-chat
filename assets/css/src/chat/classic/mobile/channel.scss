@@ -1,0 +1,30 @@
+@mixin channel {
+  &:not(.wcInvisible) {
+    display: flex;
+    flex-direction: column;
+    > .ScrollbarsCustom {
+      flex-grow: 1; // this is to fix Safari's 100% height bug
+    }
+  }
+
+  .wcChannelContainer:not(.wcInvisible) {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    .wcChannel {
+      flex-grow: 1;
+      padding-right: 2%;
+      padding-left: 2%;
+    }
+
+    &.wcChannelContainerEmpty {
+      align-items: center;
+      justify-content: center;
+
+      .wcEmptyChannel {
+        font-size: 0.8em;
+      }
+    }
+  }
+}

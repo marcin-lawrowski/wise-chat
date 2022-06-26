@@ -1,0 +1,198 @@
+@mixin browser {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+
+  .wcPublicChannels {
+    flex-grow: 0;
+    margin-bottom: 12px;
+
+    .wcList {
+      min-height: 150px;
+      flex-grow: 1;
+    }
+  }
+
+  .wcDirectChannels {
+    flex-grow: 1;
+    flex-shrink: 0;
+
+    .wcList {
+      flex-grow: 1;
+      min-height: 150px;
+    }
+  }
+
+  .wcCounter {
+    padding: 5px 15px 5px 10px;
+    margin-top: 12px;
+  }
+
+  // browser footer:
+  .wcFooter {
+    flex-grow: 0;
+    margin-top: 5px;
+    border-top: 1px solid #dfdfdf;
+    padding: 5px 15px 5px 10px;
+
+    .wcSearch {
+      flex-grow: 0;
+
+      margin: 0;
+      background-image: url(../../gfx/icons/search.svg);
+      background-position: 0 center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+
+
+      input {
+        outline: none;
+        border: none;
+        height: 2em;
+        margin: 0 0 0 20px;
+        width: 100%;
+        padding: 3px;
+        box-shadow: none;
+        font-size: 1em;
+      }
+
+      .wcClear {
+        width: 35px;
+        height: 35px;
+        background-image: url(../../gfx/icons/x.svg);
+        background-position: 50%;
+        background-size: contain;
+        cursor: pointer;
+        transition: all .2s ease-in;
+      }
+    }
+  }
+
+  // common to all channels sections
+  .wcChannels {
+    display: flex;
+    flex-direction: column;
+
+    .wcLabel {
+      flex-grow: 0;
+      padding: 5px 15px 5px 10px;
+      line-height: 1em;
+    }
+
+    .wcChannelTrigger {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      width: 100%;
+      padding: 5px 15px 5px 10px;
+      margin: 0;
+      outline: none;
+      text-decoration: none;
+      border: none;
+      font-weight: normal;
+      line-height: 1em;
+
+      >:not(:last-child) {
+        margin-right: 5px;
+      }
+
+      &.wcFocusedChannel {
+        font-weight: bold;
+        .wcDetails {
+          .wcCity, .wcCountry {
+            font-weight: normal;
+          }
+        }
+      }
+      &.wcLockedChannel {
+        .wcDetails {
+          .wcName {
+            background-image: url(../../gfx/icons/lock-full.svg);
+            background-position: right center;
+            background-size: 16px 16px;
+            background-repeat: no-repeat;
+            padding-right: 20px;
+          }
+        }
+      }
+
+      &.wcUnLockedChannel {
+        .wcDetails {
+          .wcName {
+            background-image: url(../../gfx/icons/lock-semi.svg);
+            background-position: right center;
+            background-repeat: no-repeat;
+            background-size: 16px 16px;
+            padding-right: 20px;
+          }
+        }
+      }
+
+      .wcDetails {
+        flex-grow: 1;
+        min-width: 0;
+
+        .wcName {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          -ms-word-break: break-all;
+          -ms-hyphens: auto;
+          -moz-hyphens: auto;
+          -webkit-hyphens: auto;
+          hyphens: auto;
+          flex-grow: 1;
+          min-width: 0;
+        }
+
+        >:not(:last-child) {
+          margin-right: 5px;
+        }
+
+        .wcCity, .wcCountry {
+          font-size: 0.8em;
+          color: #a6a6a6;
+          line-height: 1;
+        }
+      }
+
+      .wcAvatar {
+        max-width: 25px;
+        margin: 0 4px 2px 0;
+        border-radius: 50%;
+        box-shadow: none;
+        border: none;
+        display: inline-block;
+        vertical-align: middle;
+        flex-grow: 0;
+      }
+
+      .wcStatus {
+        display: inline-block;
+        height: 10px;
+        width: 10px;
+        border-radius: 50%;
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &.wcOnline {
+          background: rgb(9, 193, 121);
+        }
+        &.wcOffline {
+          background: rgba(244, 31, 31, 0.5);
+        }
+      }
+    }
+
+    .wcChannelTrigger:hover {
+      background-color: #f7f7f7;
+    }
+
+  }
+
+}

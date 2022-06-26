@@ -3,7 +3,7 @@
 /**
  * WiseChat admin settings page.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatSettings {
 	const OPTIONS_GROUP = 'wise_chat_options_group';
@@ -11,8 +11,6 @@ class WiseChatSettings {
 	
 	const PAGE_TITLE = 'Settings Admin';
 	const MENU_TITLE = 'Wise Chat Settings';
-	const COOKIE_MESSAGE = 'wc_messages_update_'.COOKIEHASH;
-	const COOKIE_MESSAGE_ERROR = 'wc_messages_error_'.COOKIEHASH;
 	
 	const SECTION_FIELD_KEY = '_section';
 	
@@ -20,20 +18,23 @@ class WiseChatSettings {
 	* @var array Tabs definition
 	*/
 	private $tabs = array(
-		'wise-chat-general' => 'General', 
+		'wise-chat-general' => 'General',
 		'wise-chat-externalLogin' => 'External Login',
 		'wise-chat-messages' => 'Messages Posting',
 		'wise-chat-moderation' => 'Moderation',
+		'wise-chat-permissions' => 'Permissions',
+		'wise-chat-modes' => 'Chat Modes',
+		'wise-chat-features' => 'Features',
 		'wise-chat-appearance' => 'Appearance',
 		'wise-chat-emoticons' => 'Emoticons',
 		'wise-chat-channels' => 'Channels',
 		'wise-chat-notifications' => 'Notifications',
 		'wise-chat-filters' => 'Filters',
-		'wise-chat-bans' => 'Bans',
-		'wise-chat-kicks' => 'Kicks',
+		'wise-chat-bans' => 'Muted Users',
+		'wise-chat-kicks' => 'Banned Users',
 		'wise-chat-localization' => 'Localization',
 		'wise-chat-advanced' => 'Advanced',
-		'wise-chat-pro' => 'PRO Options',
+		'wise-chat-pro' => 'Wise Chat Pro',
 	);
 	
 	/**
@@ -47,13 +48,14 @@ class WiseChatSettings {
 	
 	/**
 	* Initializes settings page link in admin menu.
-	*
-	* @return null
 	*/
 	public function initialize() {
 		add_action('admin_menu', array($this, 'addAdminMenu'));
 		add_action('admin_enqueue_scripts', array($this, 'enqueueScripts'));
 		add_action('admin_init', array($this, 'pageInit'));
+		if (array_key_exists('showDocs', $_GET)) {
+			add_filter('admin_init', array($this, 'showDocs'));
+		}
 	}
 	
 	public function addAdminMenu() {
@@ -84,7 +86,8 @@ class WiseChatSettings {
 					$this->sections[$key][] = array(
 						'id' => $sectionKey,
 						'name' => $name,
-						'hint' => array_key_exists(2, $field) ? $field[2] : ''
+						'hint' => array_key_exists(2, $field) ? $field[2] : '',
+						'options' => array_key_exists(3, $field) ? $field[3] : array()
 					);
 				} else {
 					$args = array(
@@ -169,15 +172,12 @@ class WiseChatSettings {
 				</style>
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>
-				<div class="wcAdminDonation">
-					<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
-						Wise Chat <strong>Pro</strong>
-					</a>
-					<a class="button-secondary" target="_blank" href="https://kaine.pl/" title="Kainex software">Visit Us</a>
-					<a class="button-secondary" target="_blank" href="https://kaine.pl/projects/wp-plugins/wise-chat/wise-chat-feedback" title="Send quick feedback">Send Feedback</a>
-				</div>
 				
 				<form method="post" action="options.php" class="metabox-holder">
+					<!-- Disabling autocomplete: -->
+					<input type="text" style="display: none" />
+					<input type="password" style="display: none" />
+
 					<?php settings_fields(self::OPTIONS_GROUP); ?>
 					
 					<?php $this->renderMenu(); ?>
@@ -189,17 +189,19 @@ class WiseChatSettings {
 							echo "<div id='{$pageId}Container' class='wcAdminTabContainer' style='{$hideContainer}'>";
 							
 							$sections = $this->sections[$pageId];
-							foreach ($sections as $section) {
+							foreach ($sections as $sectionKey => $section) {
 								echo "<div class='postbox'>";
 								echo "<h3 class='hndle'><span>".$section['name']."</span></h3>";
 								echo "<div class='inside'>";
 								echo '<table class="form-table">';
 								if (strlen($section['hint']) > 0) {
-									echo '<tr><td colspan="2" style="padding:0px"><p class="description">'.$section['hint'].'</p></td></tr>';
+									echo '<tr><td colspan="2" style="padding:0"><p class="description">'.$section['hint'].'</p></td></tr>';
 								}
 								do_settings_fields($pageId, $section['id']);
 								echo '<tr><td colspan="2">';
-								submit_button('', 'primary large', 'submit', false, array('onclick' => 'wise_chat_append_tab(\''.str_replace('wise-chat-', '', $pageId).'\')'));
+								if (!array_key_exists('hideSubmitButton', $section['options']) || $section['options']['hideSubmitButton'] !== true) {
+									submit_button('', 'primary large', 'submit', false, array('id' => "submit_{$pageId}_{$sectionKey}", 'onclick' => 'wise_chat_append_tab(\'' . str_replace('wise-chat-', '', $pageId) . '\')'));
+								}
 								echo '</td></tr>';
 								echo '</table>';
 								echo "</div></div>";
@@ -219,7 +221,7 @@ class WiseChatSettings {
 						referrer.val(referrer.val() + '#tab=' + tab);
 					}
 
-					jQuery(window).load(function() {
+					jQuery(window).on('load', function() {
 						jQuery('.wcAdminMenu a').click(function() {
 							jQuery('.wcAdminTabContainer').hide();
 							jQuery('#' + jQuery(this).attr('id') + 'Container').show();
@@ -276,7 +278,7 @@ class WiseChatSettings {
 					$tabObject->$actionMethod();
 				}
 			}
-
+			
 			$redirURL = admin_url("options-general.php?page=".self::MENU_SLUG).(isset($_GET['tab']) ? '#wc_tab='.urlencode($_GET['tab']) : '');
 			echo '<script type="text/javascript">location.replace("' . $redirURL . '");</script>';
 		} else {
@@ -316,10 +318,10 @@ class WiseChatSettings {
 		
 		return WiseChatContainer::get($classPathAndName);
 	}
-	
+
 	/**
-	* Shows a message stored in the transient.
-	*/
+	 * Shows a message stored in the transient.
+	 */
 	private function showUpdatedMessage() {
 		$message = get_transient('wc_admin_settings_message');
 		if (is_string($message) && strlen($message) > 0) {
@@ -327,10 +329,10 @@ class WiseChatSettings {
 			delete_transient('wc_admin_settings_message');
 		}
 	}
-	
+
 	/**
-	* Shows a message stored in the transient.
-	*/
+	 * Shows a message stored in the transient.
+	 */
 	private function showErrorMessage() {
 		$message = get_transient('wc_admin_settings_error_message');
 		if (is_string($message) && strlen($message) > 0) {
@@ -342,17 +344,11 @@ class WiseChatSettings {
 	/**
 	 * Shows the documentation of all shortcode attributes.
 	 */
-	private function showDocs() {
+	public function showDocs() {
 		$excludedFields = array(
-			'mode', 'anonymous_login_enabled', 'facebook_login_enabled', 'facebook_login_app_id', 'facebook_login_app_secret',
-			'twitter_login_enabled', 'twitter_login_api_key', 'twitter_login_api_secret', 'google_login_enabled', 'google_login_client_id', 'google_login_client_secret', 'permission_approve_message_role',
 			'user_actions', 'enable_opening_control', 'opening_days', 'opening_hours',
-			'enable_approval_confirmation', 'new_messages_hidden', 'show_hidden_messages_roles', 'no_hidden_messages_roles', 'approving_messages_mode', 'show_avatars', 'enable_edit_own_messages',
 			'bans', 'ban_add', 'channels', 'admin_actions', 'filters', 'filter_add',
-			'enable_private_messages', 'show_users_list_avatars', 'show_users_list_info_windows', 'users_list_info_windows_template', 'fb_users_list_top_offset', 'fb_bottom_offset',
-			'fb_bottom_offset_threshold', 'fb_show_users_list_title', 'fb_minimize_users_list_option', 'fb_minimize_on_start', 'fb_disable_channel', 'bp_member_profile_chat_button', 'custom_emoticons_enabled',
-			'custom_emoticons_popup_width', 'custom_emoticons_popup_height', 'custom_emoticons_emoticon_max_width_in_popup', 'custom_emoticons_emoticon_width', 'custom_emoticon_add', 
-			'custom_emoticons', 'kicks', 'kick_add',
+			'kicks', 'kick_add', 'custom_emoticons'
 		);
 		foreach ($this->tabs as $key => $caption) {
 			$tabObject = $this->getTabObject($key);
@@ -417,6 +413,39 @@ class WiseChatSettings {
 			}
 		}
 
+		die();
+	}
+
+	public function userSearchEndpoint() {
+		$searchTerm = $_POST['keyword'];
+		$out = array('type' => 'success', 'users' => array());
+
+		$args = array (
+			'order' => 'ASC',
+			'orderby' => 'display_name',
+			'search' => '*'.esc_attr($searchTerm).'*',
+			'number' => 5,
+			'search_columns' => array(
+				'user_login',
+				'user_nicename',
+				'user_email',
+				'user_url',
+				'display_name',
+			)
+		);
+		$query = new WP_User_Query($args);
+		$users = $query->get_results();
+
+		if (!empty($users)) {
+			foreach ($users as $user) {
+				$out['users'][] = array(
+					'login' => $user->user_login,
+					'text' => $user->user_login.' ('.$user->display_name.')'
+				);
+			}
+		}
+
+		echo json_encode($out);
 		die();
 	}
 }

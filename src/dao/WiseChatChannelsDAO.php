@@ -3,7 +3,7 @@
 /**
  * Wise Chat channels DAO
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatChannelsDAO {
 	
@@ -111,6 +111,43 @@ class WiseChatChannelsDAO {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns channels by names. The method is cached.
+	 *
+	 * @param string[] $names
+	 *
+	 * @return WiseChatChannel[]
+	 */
+	public function getByNames($names) {
+		global $wpdb;
+		static $cache = array();
+
+		$names = array_filter(array_map('addslashes', $names));
+		if (count($names) === 0) {
+			return array();
+		}
+		$namesCondition = implode("', '", $names);
+
+		$cacheKey = md5($namesCondition);
+		if (array_key_exists($cacheKey, $cache)) {
+			return $cache[$cacheKey];
+		}
+
+		$table = WiseChatInstaller::getChannelsTable();
+		$sql = sprintf("SELECT * FROM %s WHERE name IN ('%s');", $table, $namesCondition);
+		$results = $wpdb->get_results($sql);
+		$channels = array();
+		if (is_array($results)) {
+			foreach ($results as $result) {
+				$channels[] = $this->populateChannelData($result);
+			}
+		}
+
+		$cache[$cacheKey] = $channels;
+
+		return $channels;
 	}
 
     /**

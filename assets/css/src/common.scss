@@ -1,0 +1,72 @@
+@import "./common/globals";
+@import "./common/emoticons/emoticons";
+@import "./common/browser";
+@import "./common/channel/channel";
+@import "./common/customize";
+@import "./common/image-viewer";
+@import "./common/popups";
+@import "./common/toasts";
+@import "./common/auth";
+@import "./common/anims";
+@import "./themes/default";
+@import "./themes/lightgray";
+@import "./themes/colddark";
+@import "./themes/airflow";
+
+.wcContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  @include globals;
+  @include emoticons;
+  @include channel;
+
+  .wcBrowser {
+    @include browser;
+  }
+
+  .wcLoadingContainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+
+    .wcLoading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+    }
+  }
+
+  @include customize;
+  @include toasts;
+  @include auth;
+  @include animations;
+
+  // themes:
+  &.wcTheme {
+    @include default;
+  }
+  &.wcLightgrayTheme {
+    @include lightgray;
+  }
+  &.wcColddarkTheme {
+    @include colddark;
+  }
+  &.wcAirflowTheme {
+    @include airflow;
+  }
+}
+
+@include image-viewer;
+@include popups;
+
+// themes:
+@include lightgray-global;
+@include colddark-global;
+@include airflow-global;
+
+.wcScrollOff {
+  overflow: hidden;
+}
