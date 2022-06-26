@@ -32,7 +32,7 @@
 		"gulp-uglify": "^3.0.2",
 		"gulp-uglify-es": "^2.0.0",
 		"jquery": "^3.5.1",
-		"moment": "^2.29.1",
+		"moment": "^2.29.2",
 		"node-html-parser": "^4.1.5",
 		"prop-types": "^15.7.2",
 		"react": "^17.0.0",
