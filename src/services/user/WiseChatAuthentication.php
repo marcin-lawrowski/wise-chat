@@ -171,7 +171,7 @@ class WiseChatAuthentication {
 
         $user->setSessionId(wp_generate_password());
         $user->setIp($this->getRemoteAddress());
-        if ($this->options->isOptionEnabled('collect_user_stats', true)) {
+        if ($this->options->isOptionEnabled('collect_user_stats', false)) {
             $this->fillWithGeoDetails($user);
         }
 

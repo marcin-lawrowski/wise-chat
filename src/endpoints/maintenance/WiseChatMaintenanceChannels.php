@@ -106,7 +106,7 @@ class WiseChatMaintenanceChannels {
 			$textColor = $this->userService->getTextColorDefinedByUserRole($channelUser->getUser());
 
 			// custom text color:
-			if ($this->options->isOptionEnabled('allow_change_text_color')) {
+			if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
 				if (strlen($textColorProposal) > 0) {
 					$textColor = $textColorProposal;
@@ -114,7 +114,7 @@ class WiseChatMaintenanceChannels {
 			}
 
 			// avatar:
-			$avatarSrc = $this->options->isOptionEnabled('show_users_list_avatars', false) ? $this->userService->getUserAvatar($channelUser->getUser()) : null;
+			$avatarSrc = $this->options->isOptionEnabled('show_users_list_avatars', true) ? $this->userService->getUserAvatar($channelUser->getUser()) : null;
 
 			$isCurrentUser =  $userId === $channelUser->getUserId();
 
@@ -126,14 +126,14 @@ class WiseChatMaintenanceChannels {
 			$country = null;
 			$city = null;
 
-			if ($this->options->isOptionEnabled('collect_user_stats', true) && $this->options->isOptionEnabled('show_users_flags', false)) {
+			if ($this->options->isOptionEnabled('collect_user_stats', false) && $this->options->isOptionEnabled('show_users_flags', false)) {
 				$countryCode = $channelUser->getUser()->getDataProperty('countryCode');
 				$country = $channelUser->getUser()->getDataProperty('country');
 				if (strlen($countryCode) > 0) {
 					$countryFlagSrc = $this->options->getFlagURL(strtolower($countryCode));
 				}
 			}
-			if ($this->options->isOptionEnabled('collect_user_stats', true) && $this->options->isOptionEnabled('show_users_city_and_country', false)) {
+			if ($this->options->isOptionEnabled('collect_user_stats', false) && $this->options->isOptionEnabled('show_users_city_and_country', false)) {
 				$city = $channelUser->getUser()->getDataProperty('city');
 				$countryCode = $channelUser->getUser()->getDataProperty('countryCode');
 			}

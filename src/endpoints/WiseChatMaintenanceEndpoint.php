@@ -119,7 +119,7 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 			);
 
 			// direct channels:
-			if ($this->options->isOptionEnabled('show_users')) {
+			if ($this->options->isOptionEnabled('show_users', true)) {
 				$events[] = array(
 					'name' => 'directChannels',
 					'data' => $this->maintenanceChannels->getDirectChannels()

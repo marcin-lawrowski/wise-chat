@@ -194,7 +194,7 @@ class WiseChatUserService {
 	*/
 	public function changeUserName($userName) {
 		if (
-			!$this->options->isOptionEnabled('allow_change_user_name') ||
+			!$this->options->isOptionEnabled('allow_change_user_name', true) ||
 			$this->usersDAO->getCurrentWpUser() !== null ||
 			!$this->authentication->isAuthenticated()
 		) {
@@ -469,7 +469,7 @@ class WiseChatUserService {
 		$textColor = $this->getTextColorDefinedByUserRole($user);
 
 		// get custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color') && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
 			$textColor = $user->getDataProperty('textColor');
 		}
 

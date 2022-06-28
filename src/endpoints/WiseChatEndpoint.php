@@ -185,7 +185,7 @@ class WiseChatEndpoint {
 			'current' => $this->authentication->getUser()->getId() == $message->getUserId(),
 			'color' => in_array('messageUserName', $textColorAffectedParts) ? $this->userService->getUserTextColor($message->getUser()) : null,
 			'profileUrl' => $this->options->getIntegerOption('link_wp_user_name', 0) === 1 ? $this->userService->getUserProfileLink($message->getUser(), $message->getUserName(), $message->getWordPressUserId()) : null,
-			'avatarUrl' => $this->options->isOptionEnabled('show_avatars', false) ? $this->userService->getUserAvatarFromMessage($message) : null
+			'avatarUrl' => $this->options->isOptionEnabled('show_avatars', true) ? $this->userService->getUserAvatarFromMessage($message) : null
 		);
 	}
 

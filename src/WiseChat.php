@@ -112,8 +112,8 @@ class WiseChat {
 		$jsOptions = array(
 			'chatId' => $chatId,
 			'checksum' => $this->getCheckSum(),
-			'theme' => $this->options->getEncodedOption('theme', ''),
-			'themeClassName' => 'wc'.ucfirst($this->options->getEncodedOption('theme', '')).'Theme',
+			'theme' => $this->options->getEncodedOption('theme', 'lightgray'),
+			'themeClassName' => 'wc'.ucfirst($this->options->getEncodedOption('theme', 'lightgray')).'Theme',
 			'baseDir' => $this->options->getBaseDir(),
 			'mode' => 0,
 			'channelIds' => [$channel->getId()],
@@ -137,21 +137,21 @@ class WiseChat {
 					'inputLocation' => $this->options->getEncodedOption('input_controls_location') === 'top' ? 'top' : 'bottom'
 				),
 				'message' => array(
-					'timeMode' => $this->options->getEncodedOption('messages_time_mode'),
+					'timeMode' => $this->options->getEncodedOption('messages_time_mode', 'elapsed'),
 					'dateFormat' => trim($this->options->getEncodedOption('messages_date_format')),
 					'timeFormat' => trim($this->options->getEncodedOption('messages_time_format')),
 					'senderMode' => $this->options->getIntegerOption('link_wp_user_name', 0),
-					'links' => $this->options->isOptionEnabled('allow_post_links'),
-					'attachments' => $this->options->isOptionEnabled('enable_attachments_uploader'),
-					'images' => $this->options->isOptionEnabled('allow_post_images'),
-					'yt' => $this->options->isOptionEnabled('enable_youtube'),
+					'links' => $this->options->isOptionEnabled('allow_post_links', true),
+					'attachments' => $this->options->isOptionEnabled('enable_attachments_uploader', true),
+					'images' => $this->options->isOptionEnabled('allow_post_images', true),
+					'yt' => $this->options->isOptionEnabled('enable_youtube', true),
 					'ytWidth' => $this->options->getIntegerOption('youtube_width', 186),
 					'ytHeight' => $this->options->getIntegerOption('youtube_height', 105),
-					'tt' => $this->options->isOptionEnabled('enable_twitter_hashtags')
+					'tt' => $this->options->isOptionEnabled('enable_twitter_hashtags', true)
 				),
 				'input' => array(
 					'userName' => $this->options->isOptionEnabled('show_user_name'),
-					'submit' => $this->options->isOptionEnabled('show_message_submit_button'),
+					'submit' => $this->options->isOptionEnabled('show_message_submit_button', true),
 					'multiline' => $this->options->isOptionEnabled('multiline_support'),
 					'multilineEasy' => $this->options->isOptionEnabled('multiline_easy_mode', false),
 					'maxLength' => $this->options->getIntegerOption('message_max_length', 100),
@@ -162,11 +162,11 @@ class WiseChat {
 						'baseURL' => $this->options->getEmoticonsBaseURL(),
 					),
 					'images' => array(
-						'enabled' => $this->options->isOptionEnabled('enable_images_uploader'),
+						'enabled' => $this->options->isOptionEnabled('enable_images_uploader', true),
 						'sizeLimit' => $this->options->getIntegerOption('images_size_limit', 3145728),
 					),
 					'attachments' => array(
-						'enabled' => $this->options->isOptionEnabled('enable_attachments_uploader'),
+						'enabled' => $this->options->isOptionEnabled('enable_attachments_uploader', true),
 						'extensionsList' => $this->attachmentsService->getAllowedExtensionsList(),
 						'validFileFormats' => $this->attachmentsService->getAllowedFormats(),
 						'sizeLimit' => $this->attachmentsService->getSizeLimit()
@@ -176,7 +176,7 @@ class WiseChat {
 					'userNameLengthLimit' => $this->options->getIntegerOption('user_name_length_limit', 25),
 				),
 				'browser' => array(
-					'enabled' => $this->options->isOptionEnabled('show_users'),
+					'enabled' => $this->options->isOptionEnabled('show_users', true),
 					'searchSubChannels' => $this->options->isOptionEnabled('show_users_list_search_box', true),
 					'location' => $this->options->getEncodedOption('browser_location') === 'left' ? 'left' : 'right',
 					'status' => $this->options->isOptionEnabled('show_users_online_offline_mark', true),
@@ -243,7 +243,7 @@ class WiseChat {
 		$data = array(
 			'chatId' => $chatId,
 			'title' => $this->options->getOption('window_title', ''),
-			'themeClassName' => 'wc'.ucfirst($this->options->getEncodedOption('theme', '')).'Theme',
+			'themeClassName' => 'wc'.ucfirst($this->options->getEncodedOption('theme', 'lightgray')).'Theme',
 			'loading' => $this->options->getEncodedOption('message_loading_chat', __('Loading the chat ...', 'wise-chat')),
 			'classicMode' => true,
 			'baseDir' => $this->options->getBaseDir(),

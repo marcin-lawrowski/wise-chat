@@ -54,7 +54,7 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			'access_users' => array(),
 			'force_user_name_selection' => 0,
             'read_only_for_anonymous' => 0,
-            'collect_user_stats' => 1,
+            'collect_user_stats' => 0,
 			'enable_buddypress' => 1,
 			'username_source' => 'display_name',
 			'enable_opening_control' => 0,

@@ -176,8 +176,8 @@ class WiseChatMessagesService {
 		$linksPreFilter = WiseChatContainer::get('rendering/filters/pre/WiseChatLinksPreFilter');
 		$filteredMessage = $linksPreFilter->filter(
 			$filteredMessage,
-			$this->options->isOptionEnabled('allow_post_images'),
-            $this->options->isOptionEnabled('enable_youtube')
+			$this->options->isOptionEnabled('allow_post_images', true),
+            $this->options->isOptionEnabled('enable_youtube', true)
 		);
 
 		$message = new WiseChatMessage();
@@ -237,7 +237,7 @@ class WiseChatMessagesService {
 
 		$attachmentShortcode = null;
 		$attachmentIds = array();
-		if ($this->options->isOptionEnabled('enable_images_uploader') && $firstAttachment['type'] === 'image') {
+		if ($this->options->isOptionEnabled('enable_images_uploader', true) && $firstAttachment['type'] === 'image') {
 			$image = $this->imagesService->saveImage($decodedData);
 			if (is_array($image)) {
 				$attachmentShortcode = ' '.WiseChatShortcodeConstructor::getImageShortcode($image['id'], $image['image'], $image['image-th'], '_');
@@ -245,7 +245,7 @@ class WiseChatMessagesService {
 			}
 		}
 
-		if ($this->options->isOptionEnabled('enable_attachments_uploader') && $firstAttachment['type'] === 'file') {
+		if ($this->options->isOptionEnabled('enable_attachments_uploader', true) && $firstAttachment['type'] === 'file') {
 			$fileName = $firstAttachment['name'];
 			$file = $this->attachmentsService->saveAttachment($fileName, $decodedData, $channel->getName());
 			if (is_array($file)) {

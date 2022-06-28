@@ -96,10 +96,10 @@ class WiseChatMaintenanceAuth {
 		$userSettings = array(
 			'enableNotifications' => !array_key_exists('disableNotifications', $userData) ? true : !$userData['disableNotifications'],
 			'textColor' => array_key_exists('textColor', $userData) ? $userData['textColor'] : null,
-			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
+			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color', true),
 			'allowControlUserNotifications' => $this->options->isOptionEnabled('allow_control_user_notifications') && $this->options->isOptionEnabled('enable_private_messages', false) && $user->getWordPressId() > 0,
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
-			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name') && !($user->getWordPressId() > 0),
+			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name', true) && !($user->getWordPressId() > 0),
 		);
 
 		$userSettings['allowCustomize'] = $userSettings['allowChangeTextColor'] || $userSettings['allowControlUserNotifications'] || $userSettings['allowMuteSound'] || $userSettings['allowChangeUserName'];
