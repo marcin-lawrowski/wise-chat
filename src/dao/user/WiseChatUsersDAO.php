@@ -500,7 +500,7 @@ class WiseChatUsersDAO {
 		}
 		$usersCacheTime = $this->options->getIntegerOption('users_cache_time', 1200);
 		if ($usersCacheTime > 0) {
-			$transientKey = 'wise_chat_wp_users_cache_'.sha1(implode(',', $limitToUsers));
+			$transientKey = 'wise_chat_wp_users_cache';
 			if (false === ($wpUsers = get_transient($transientKey))) {
 				$wpUsers = get_users($args);
 				set_transient($transientKey, $wpUsers, $usersCacheTime);

@@ -49,7 +49,7 @@ class WiseChatChannelsSourcesService {
 	 * @return WiseChatChannelUser[]
 	 */
 	public function getDirectChannels() {
-		$channelUsers = $this->getOnlineDirectChannels();
+		$channelUsers = $this->channelUsersDAO->getAllActive();
 
 		if ($this->options->isOptionEnabled('users_list_offline_enable', true)) {
 			$channelUsers = $this->appendOfflineUsers($channelUsers);
@@ -58,27 +58,6 @@ class WiseChatChannelsSourcesService {
 		$channelUsers = array_filter($channelUsers, function($channelUser) { return $this->isChannelUserVisible($channelUser); });
 
 		return $channelUsers;
-	}
-
-	/**
-	 * All active users.
-	 *
-	 * @return WiseChatChannelUser[]
-	 */
-	private function getOnlineDirectChannels() {
-		$accessUsers = (array) $this->options->getOption('access_users', array());
-		$visibleUsers = (array) $this->options->getOption('visible_users', array());
-		$limitToWordPressUsersIds = array();
-		if (count($accessUsers) > 0 && count($visibleUsers) > 0) {
-			$limitToWordPressUsersIds = array_intersect($accessUsers, $visibleUsers);
-		} else if (count($accessUsers) > 0) {
-			$limitToWordPressUsersIds = $accessUsers;
-		} else if (count($visibleUsers) > 0) {
-			$limitToWordPressUsersIds = $visibleUsers;
-		}
-
-
-		return $this->channelUsersDAO->getAllActive($limitToWordPressUsersIds);
 	}
 
 	/**
@@ -129,8 +108,7 @@ class WiseChatChannelsSourcesService {
 		}
 
 		// append offline users:
-		$accessUsers = $this->options->getOption('access_users', array());
-		$wpUsers = $this->usersDAO->getWPUsers(is_array($accessUsers) ? $accessUsers : array());
+		$wpUsers = $this->usersDAO->getWPUsers();
 		$chatUsersMap = $this->usersDAO->getLatestChatUsersByWordPressIds($wpUsers);
 		foreach ($wpUsers as $key => $wpUser) {
 

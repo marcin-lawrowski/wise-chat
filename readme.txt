@@ -9,21 +9,39 @@ Stable tag: 3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Advanced chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, appearance settings, bans and more.
+Advanced chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, appearance settings, moderation, bans and more.
 
 == Description ==
 
-Wise Chat is a leading chat plugin that helps to build a social network and to increase user engagement on your website by providing the possibility to exchange real time messages in chat rooms. The plugin is easily installable and extremely configurable. Its features list is growing all the time. The plugin is supported by its authors.
+**Wise Chat** is a leading chat plugin that helps to build social networks and this way it increases user's engagement on your website. The plugin provides a platform to send real time messages in chat rooms. The chat is easy to setup and configure. Its every single feature is extremely adjustable. Our development team is constantly working on new features and supporting the existing ones.
 
-**[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**: Private one-to-one chats, Private messages to offline users, Avatars, Facebook-like sidebar mode, 3 Pro themes, Custom emoticons, E-mail notifications to admin, Pending messages, Multisite support, BuddyPress integration (friends and groups), Facebook/Twitter/G+ login, Users list search option, Edit posted messages and more! **Buy once, use forever!**
+**[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**:
+* Private one-to-one chats
+* Facebook/Twitter/G+ login
+* Voice messages
+* Avatars
+* Reactions (liking chat messages)
+* Facebook-like sidebar mode
+* 3 Pro themes
+* Custom emoticons and 3 use pre-defined sets
+* E-mail notifications
+* Pending messages (full moderation)
+* Multisite support
+* BuddyPress integration (friends and groups)
+* Edit and reply to messages
+* Hooks
+* Premium support and free updates for 6/12/18 months (depending on option)
+**Buy once, use forever, no subscription, no recurring payments!**
+
+Scroll down to find out more about Wise Chat Pro benefits, for more product details go to **[Wise Chat Pro site](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
 
 Wise Chat: **[Try DEMO here](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](https://kainex.pl/projects/wp-plugins/wise-chat/features)**
 
-= List of features: =
+= Wise Chat features: =
 
-* **Easy installation**: The chat can be installed using a convenient shortcode, widget or PHP function. Multiple chat installations can be embedded on the same page.
-* **Mobile ready**: Fully responsive design and mobile ready interface.
-* **Themes**: Use one of 3 nice themes to quickly adjust the style of the chat. The simple theme adjusts to your styles.
+* **Easy installation**: Install the chat using a shortcode, widget or PHP function.
+* **Mobile ready**: Fully responsive design.
+* **Themes**: Use one of 4 nice themes.
 * **No external server required**: There is no need to set up, maintain or pay for a server. Regular hosting is sufficient.
 * **Unlimited Chat Channels**: Let people post messages in dedicated chat rooms (called channels). Run multiple channels either simultaneously on the same page or on separate pages.
 * **Private Chat Channels**: Make individual chat channels private by protecting them with a password. Only users that know the password could access the channel.
@@ -43,19 +61,17 @@ Wise Chat: **[Try DEMO here](https://kainex.pl/projects/wp-plugins/wise-chat/wis
 * **YouTube movies**: Display links to YouTube movies as a video player with adjustable width and height.
 * **File attachments**: Attach files directly to the messages using convenient uploader.
 * **Multiline messages**: Let your users post long messages in multiple lines. Keyboard shortcut Shift+Enter can be used to send such messages.
-* **Notifications**: Notifications signalizing new messages, new users, absent users or mentioned users. It can be a sound or a counter in browser's title.
-* **24 sounds**: Use any of 24 ready-to-use sounds dedicated for notifications.
+* **Notifications**: Signal new messages, new users, absent users or mentioned users. It can be a sound or a counter in browser's title.
+* **24 sounds**: Use any of 24 ready-to-use notification sounds.
 * **Messages auto cleanup**: Auto cleanup messages older than defined amount of time.
-* **Localization**: Provide a translation for your language. All texts are translatable.
-* **Appearance adjustments**: Adjust visual appearance to match your website by editing colors, font sizing, showing / hiding interface elements, changing sort order of messages and positioning chat elements. All this can be done using settings page.
-* **Chat Moderation**: Protect your chat by enabling swearing control using built-in bad words filter. It supports English, Polish and German languages.
-* **Chat Channel Statistics Shortcode**: Display basic statistics of a channel using the shortcode.
-* **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages. It is good for cutting links for example.
-* **Messages history**: All recently published messages are available in input field for resending.
+* **Localization**: Translate the chat to your language.
+* **Appearance adjustments**: Adjust visual appearance on the settings page.
+* **Chat Moderation**: Protect your chat by enabling abusive words control using built-in bad words filter. It supports English, Polish and German languages.
+* **Messages filtering**: Create rules that detect and replace specific words / patterns in posted messages.
 * **Chat Opening Hours / Days**: Define days and range of hours when the chat is open for users.
 * **Spam Reporting**: Chat participants can report spam messages.
 * **Bans**: Administrator can ban (IP based) users who do not follow rules of the chat.
-* **Kicks**: Administrator can kick (IP based) users who do not follow rules of the chat.
+* **Muting**: Administrator can mute (IP based) users who do not follow rules of the chat.
 * **Automatic bans**: An option that automatically blocks an user if he / she exceeds the defined number of bad words.
 * **Moderation**: Administrators (or other specified user roles) can delete single messages or ban users that violate chat rules.
 * **Emoticons**: See nice smiles in messages by enabling emoticons support. Emoticons can be inserted either using shortcuts or the list.
@@ -71,6 +87,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Private messages to offline users**: Send private messages to offline users.
+* **Voice chats**: Publish voice messages.
 * **Facebook-like mode**: Display the chat attached to the right side of the browser.
 * **Avatars**: Display avatars both in the chat window and in the users list.
 * **BuddyPress integration**: Integrate Wise Chat Pro with BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
@@ -82,7 +99,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * **Hooks**: Add your own code to the main points of the chat’s logic.
 * **Pending messages**: Set up full moderation which allows to publish approved messages only.
 * **Users list search option**: Search users list.
-* **Edit posted messages**: Modify posted messages in the chat window.
+* **Reply or edit posted messages**: Modify or reply to posted messages.
 * **One-time payment**: Pay once and use it forever.
 * **6 / 12 / 18 - month upgrade**: Update your Wise Chat Pro to the new version for free during 6 / 12 / 18 - month period after the purchase.
 
@@ -151,22 +168,13 @@ The channel will be created during the first usage and it will be added to the l
 
 = How to create a password-protected private channel? =
 
-First, create a regular channel (see the previous question) and then go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Specify the password and confirm it by clicking "Set Password" button. From now the channel is secured and only users that enter valid password are allowed to join. 
+First, create a regular channel (see the previous question) and then go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Specify the password and confirm it by clicking "Set Password" button. From now the channel is secured and only users that enter valid password are allowed to join.
 
 = How to convert a password-protected channel into an open channel? =
 
 Go to Settings -> Wise Chat Settings page, select Channels tab. In the right to the chosen channel click "Password" link and a form will appear below. Click "Delete Password" button.
 
-= Is there a way to show simple statistics of the chat channel in a post or a page? =
-
-Yes. Place "wise-chat-channel-stats" shortcode in the page or post. You can choose what to display using "template" attribute. Here is a fully-featured example:
-`[wise-chat-channel-stats channel="my-channel" template="Channel: {channel} Messages: {messages} Users: {users}"]`
-
-* channel - displays channel's name
-* messages - displays the amount of total messages in the channel
-* users - displays the amount of total active users in the channel
-
-= How to install the chat using the widget? =
+= How to install the chat using a widget? =
 
 Go to Appearance -> Widgets page, drag and drop "Wise Chat Window" widget on the desired sidebar. The name of the channel can be specified as well.
 
@@ -176,7 +184,7 @@ You can do it by yourself. Go to Settings -> Wise Chat Settings page, select Loc
 
 = What about the support for mobile devices and responsiveness? =
 
-Wise Chat plugin works on any mobile device that supports Javascript and cookies. The interface is responsive, but you should enable submit button in order an user could send a message. Go to Settings -> Wise Chat Settings page, select Appearance tab and select checkbox "Show Submit Button". 
+Wise Chat plugin works on any mobile device that supports Javascript and cookies. The interface is responsive, but you should enable submit button in order an user could send a message. Go to Settings -> Wise Chat Settings page, select Appearance tab and select checkbox "Show Submit Button".
 
 = The chat generates anonymous names for every new user. How to force every user to choose their name on first use? =
 
@@ -192,7 +200,7 @@ Log in as an administrator and go to Settings -> Wise Chat Settings page, select
 
 Alternatively log in as an administrator and type the command:
 `/ban [UserName] [Duration]`
-where "UserName" is the chosen user's name and "Duration" is constructed as follows: 1m (a ban for 1 minute), 7m (a ban for 7 minutes), 1h (a ban for one hour), 2d (a ban for 2 days), etc. Notice: IP addresses are actually blocked. 
+where "UserName" is the chosen user's name and "Duration" is constructed as follows: 1m (a ban for 1 minute), 7m (a ban for 7 minutes), 1h (a ban for one hour), 2d (a ban for 2 days), etc. Notice: IP addresses are actually blocked.
 
 Alternatively you can go to Settings -> Wise Chat Settings page, select Bans tab. In "New Ban" row specify: IP address, duration and finally click "Add Ban" button.
 
@@ -248,15 +256,15 @@ Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderat
 
 Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderation tab and enable "Enable Admin Actions" option. Next, in "Delete Message Permission" field select a role that is allowed to delete messages. From now users belonging to the selected role have permission to delete messages.
 
-Alternatively: add "wise_chat_delete_message" capability to a role you want to have that permission. It could be either standard WordPress role or a custom role. 
+Alternatively: add "wise_chat_delete_message" capability to a role you want to have that permission. It could be either standard WordPress role or a custom role.
 
 = How does "Enable Images" option actually work? =
 
-If you enable "Enable Images" option every link posted in the chat which points to an image will be converted into image. The image will be downloaded into Media Library and then displayed on the chat window. Those downloaded images will be removed from Media Library together with the related chat messages (either when removing all messages or a single one). If an image cannot be downloaded the regular link is displayed instead. 
+If you enable "Enable Images" option every link posted in the chat which points to an image will be converted into image. The image will be downloaded into Media Library and then displayed on the chat window. Those downloaded images will be removed from Media Library together with the related chat messages (either when removing all messages or a single one). If an image cannot be downloaded the regular link is displayed instead.
 
 = Option "Enable Images" does not work. I see regular hyperlinks instead of images. What is wrong? =
 
-The option requires a few prerequisites in order to operate correctly: GD and Curl extensions must be installed, Media Library must operate correctly, posted image link must have a valid extension (jpg, jpeg, gif  or png), HTTP status code of the response must be equal 200, image cannot be larger than 3MB (the default limit that can be adjusted in settings). Try to read PHP logs in case of any problems. 
+The option requires a few prerequisites in order to operate correctly: GD and Curl extensions must be installed, Media Library must operate correctly, posted image link must have a valid extension (jpg, jpeg, gif  or png), HTTP status code of the response must be equal 200, image cannot be larger than 3MB (the default limit that can be adjusted in settings). Try to read PHP logs in case of any problems.
 
 = What if I would like the images to be opened in a popup layer using Lightbox? =
 
@@ -264,7 +272,7 @@ By default all images open using Lightbox 2 library but only if the library is i
 
 = I have installed a plugin containing Lightbox library and newly added messages are not displayed on the Lightbox layer. What is wrong?
 
-If you installed a plugin that incorporates Lightbox library and it still doesn't work make sure that the plugin uses original Lightbox 2 Javascript library. The chat is compatible only with the original Lightbox 2 library. 
+If you installed a plugin that incorporates Lightbox library and it still doesn't work make sure that the plugin uses original Lightbox 2 Javascript library. The chat is compatible only with the original Lightbox 2 library.
 
 = Image uploader does not work. What is wrong? =
 
@@ -276,39 +284,39 @@ You can use filters feature. Go to Settings -> Wise Chat Settings, select Filter
 
 = Chat window is showing up but it does not work. I cannot receive or send messages. What is wrong? =
 
-Ensure that jQuery library is installed in your theme. Wise Chat cannot operate without jQuery. 
+Ensure that jQuery library is installed in your theme. Wise Chat cannot operate without jQuery.
 
 = Wise Chat plugin is making a lot of long-running HTTP requests. How to improve the performance? =
 
-Every 3 seconds the plugin checks for new messages using AJAX request. By default admin-ajax.php is used as a backend script and this script has poor performance. However, it is the most compatible solution. If you want to reduce server load try to change "AJAX Engine" property to "Lightweight AJAX". It can be set on Settings -> Wise Chat Settings page, select Advanced tab and then select "Lightweight AJAX" from the dropdown list. This option enables dedicated backend script that has a lot better performance. 
+Every 3 seconds the plugin checks for new messages using AJAX request. By default admin-ajax.php is used as a backend script and this script has poor performance. However, it is the most compatible solution. If you want to reduce server load try to change "AJAX Engine" property to "Lightweight AJAX". It can be set on Settings -> Wise Chat Settings page, select Advanced tab and then select "Lightweight AJAX" from the dropdown list. This option enables dedicated backend script that has a lot better performance.
 
 = How to customize CSS styles using "Custom CSS Styles" setting? =
 
-All CSS classes related to the chat begins with "wc" prefix. Go to Settings -> Wise Chat Settings, select Appearance tab, go to Advanced Customization section. Use "Custom CSS Styles" field to specifiy your own definitions of Wise Chat CSS classes. Valid CSS syntax is required. 
+All CSS classes related to the chat begins with "wc" prefix. Go to Settings -> Wise Chat Settings, select Appearance tab, go to Advanced Customization section. Use "Custom CSS Styles" field to specifiy your own definitions of Wise Chat CSS classes. Valid CSS syntax is required.
 
 = How to backup messages posted in a channel? I would like to save all messages for offline reading. =
 
-Go to Settings -> Wise Chat Settings, select Channels tab and click "Backup" link next to the desired channel. All messages from the selected channel will be downloaded as a CSV file. You can open it using MS Excel, OpenOffice or any other editor that supports CSV format. 
+Go to Settings -> Wise Chat Settings, select Channels tab and click "Backup" link next to the desired channel. All messages from the selected channel will be downloaded as a CSV file. You can open it using MS Excel, OpenOffice or any other editor that supports CSV format.
 
 = Are old messages being deleted from the chat window? =
 
-By default - no, however, you can enable auto-cleaning messages feature. Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Auto-remove Messages" type number of minutes. Messages older than given amount of minutes will be auto-deleted. 
+By default - no, however, you can enable auto-cleaning messages feature. Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Auto-remove Messages" type number of minutes. Messages older than given amount of minutes will be auto-deleted.
 
 = How to limit the amount of users that are allowed to enter a channel? =
 
-Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Users Limit" type number of users that allow to participate in a channel.  
+Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Users Limit" type number of users that allow to participate in a channel.
 
 = How to limit the amount of channels that an user can participate simultaneously? =
 
-Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Channels Limit" type number of channels that an user is allowed to participate simultaneously.  
+Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Channels Limit" type number of channels that an user is allowed to participate simultaneously.
 
 = How to reset username prefix (a number that is added to anonymous users name) anonymous users? =
 
-Go to Settings -> Wise Chat Settings, select General tab and click "Reset Username Prefix" button.  
+Go to Settings -> Wise Chat Settings, select General tab and click "Reset Username Prefix" button.
 
 = When I upload an animated GIF the thumbnail is not animated. What is wrong? =
 
-WordPress has no support for resizing animated GIFs. 
+WordPress has no support for resizing animated GIFs.
 
 = Why I can change background color of the chat window but I cannot change background color of the input field, buttons or borders? =
 
@@ -404,7 +412,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 = 2.8.4 =
 * Fixed: PHP Deprecated: session.php error
 * Fixed: CSV Injection
-* Fixed: &gt; / &lt; characters issues in the users list
+* Fixed: > / < characters issues in the users list
 * Fixed: {% if allowToReceiveMessages %} errors caused by template processing class
 
 = 2.8.3 =

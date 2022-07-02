@@ -58,7 +58,8 @@
     display: inline;
     height: auto; }
   .wcContainer .wcButton {
-    display: inline-block; }
+    display: inline-block;
+    white-space: nowrap; }
   .wcContainer .wcCenter {
     display: -webkit-box;
     display: -ms-flexbox;

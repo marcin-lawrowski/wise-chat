@@ -117,7 +117,7 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 				'A template of info windows. Dynamic variables: {role}, {roles}, {id}, {username}, {displayname}, {email}'),
 
 			array('_section', 'Users List Sources', 'Settings to configure which users are visible on the users list'),
-			array('users_list_offline_enable', 'Enable Offline Users', 'booleanFieldCallback', 'boolean', 'Lists users that are not online and allows to send private messages to them.'),
+			array('users_list_offline_enable', 'Enable Offline Users', 'booleanFieldCallback', 'boolean', 'Lists all users (including offline).'),
 			array(
 				'users_list_bp_users_only', 'BuddyPress Friends Only', 'booleanFieldCallback', 'boolean',
 				'Displays BuddyPress friends only.<br />'.
