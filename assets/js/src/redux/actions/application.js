@@ -24,3 +24,10 @@ export function markChannelAuthorized(channelId) {
 		data: channelId
 	}
 }
+
+export function updateDOMPresence(isPresent) {
+	return {
+		type: 'application.dom.present',
+		data: isPresent
+	}
+}

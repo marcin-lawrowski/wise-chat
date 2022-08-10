@@ -5,7 +5,7 @@ Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, cha
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.0
-Stable tag: 3.0
+Stable tag: 3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -354,6 +354,9 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 08. Cold Dark theme: responsive design
 
 == Changelog ==
+
+= 3.1 =
+* Elementor integration
 
 = 3.0 =
 * Plugin re-implemented to new code

@@ -30,18 +30,24 @@ function renderApplication(element, configuration) {
 
 jQuery(window).on('load', function() {
 	matchAll.shim(); // Edge missing matchAll method
+	installXhrProgressEvent();
+
+	window._wiseChat = {
+		init: function(element) {
+			let config = jQuery(element).data('wc-config');
+
+			if (typeof config !== 'object') {
+				jQuery(element).html('<strong style="color:#f00;">Error: invalid Wise Chat configuration</strong>');
+				return;
+			}
+
+			config.defaultBackgroundColor = config.theme.length === 0 ? getAncestorBackgroundColor(jQuery(element)) : null;
+
+			renderApplication(jQuery(element)[0], config);
+		}
+	}
 
 	jQuery(".wcContainer[data-wc-config]").each(function() {
-		let config = jQuery(this).data('wc-config');
-
-		if (typeof config !== 'object') {
-			jQuery(this).html('<strong style="color:#f00;">Error: invalid Wise Chat configuration</strong>');
-			return;
-		}
-
-		installXhrProgressEvent();
-		config.defaultBackgroundColor = config.theme.length === 0 ? getAncestorBackgroundColor(jQuery(this)) : null;
-
-		renderApplication(jQuery(this)[0], config);
+		window._wiseChat.init(this);
 	});
 });

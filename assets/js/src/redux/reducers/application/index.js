@@ -1,4 +1,5 @@
 const defaultState = {
+	domPresent: true,
 	channels: [], // this is global channels storage (both those online and past / offline)
 	publicChannels: [],
 	directChannels: [],
@@ -73,6 +74,11 @@ export default function application(state = defaultState, action) {
 			});
 		case 'application.heartbeat':
 			return createState(state, { heartbeat: action.data });
+		case 'application.dom.present':
+			if (state.domPresent !== action.data) {
+				return createState(state, { domPresent: action.data });
+			}
+			return state;
 		default:
 			return state
 	}

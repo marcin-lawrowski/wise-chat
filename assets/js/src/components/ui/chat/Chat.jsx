@@ -20,11 +20,15 @@ class Chat extends React.Component {
 
 	componentDidUpdate(prevProps) {
 		const userLoaded = this.props.user !== prevProps.user && this.props.user;
+		const domDestroyed = this.props.domPresent !== prevProps.domPresent && this.props.domPresent === false;
 
 		// restore saved channels
 		if (userLoaded && (!prevProps.user || prevProps.user.id !== this.props.user.id)) {
 			this.autoOpenChannels();
 			this.props.completeInit();
+		}
+		if (domDestroyed) {
+			this.props.engine.stop();
 		}
 	}
 
@@ -58,6 +62,7 @@ export default connect(
 		user: state.application.user,
 		publicChannels: state.application.publicChannels,
 		openedChannels: state.ui.openedChannels,
+		domPresent: state.application.domPresent
 	}),
 	{ focusChannel, openChannel, completeInit }
 )(Chat);
