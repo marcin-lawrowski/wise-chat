@@ -357,6 +357,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 3.1 =
 * Elementor integration
+* Fixed: removed "Channel" text from the title in mobile mode
 
 = 3.0 =
 * Plugin re-implemented to new code

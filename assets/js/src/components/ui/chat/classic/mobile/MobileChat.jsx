@@ -54,9 +54,9 @@ class MobileChat extends React.Component {
 		}
 		return(
 			<React.Fragment>
-				{ this.props.titleVisible && (this.props.titleOverride || this.props.configuration.interface.chat.title) &&
+				{ this.props.titleVisible && this.props.configuration.interface.chat.title &&
 					<div className="wcTitle">
-						{ [this.props.configuration.interface.chat.title, this.props.titleOverride].filter( title => title && title.length ).join(' - ') }
+						{ this.props.configuration.interface.chat.title }
 					</div>
 				}
 				<div className={ "wcTabs" + (topTabs.filter( tab => tab.header ).length > 3 ? ' wcTabsCompact' : '') }>

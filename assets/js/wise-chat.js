@@ -765,11 +765,9 @@ var MobileChat = /*#__PURE__*/function (_React$Component) {
         });
       }
 
-      return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, this.props.titleVisible && (this.props.titleOverride || this.props.configuration["interface"].chat.title) && /*#__PURE__*/_react["default"].createElement("div", {
+      return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, this.props.titleVisible && this.props.configuration["interface"].chat.title && /*#__PURE__*/_react["default"].createElement("div", {
         className: "wcTitle"
-      }, [this.props.configuration["interface"].chat.title, this.props.titleOverride].filter(function (title) {
-        return title && title.length;
-      }).join(' - ')), /*#__PURE__*/_react["default"].createElement("div", {
+      }, this.props.configuration["interface"].chat.title), /*#__PURE__*/_react["default"].createElement("div", {
         className: "wcTabs" + (topTabs.filter(function (tab) {
           return tab.header;
         }).length > 3 ? ' wcTabsCompact' : '')
