@@ -228,6 +228,9 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		if ($settings['show_image_upload_button'] === '1') {
 			$config['allow_post_images'] = '1';
 			$config['enable_images_uploader'] = '1';
+		} else {
+			$config['allow_post_images'] = '';
+			$config['enable_images_uploader'] = '';
 		}
 
 		$html = wise_chat_shortcode($config);
