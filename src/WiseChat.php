@@ -130,6 +130,7 @@ class WiseChat {
 					'mobile' => array(
 						'tabs' => array(
 							'chats' => $this->options->isOptionEnabled('mobile_mode_tab_chats_enabled', true),
+							'hideAll' => $this->options->isOptionEnabled('mobile_mode_tabs_disable', false),
 						)
 					)
 				),

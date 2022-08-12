@@ -767,7 +767,7 @@ var MobileChat = /*#__PURE__*/function (_React$Component) {
 
       return /*#__PURE__*/_react["default"].createElement(_react["default"].Fragment, null, this.props.titleVisible && this.props.configuration["interface"].chat.title && /*#__PURE__*/_react["default"].createElement("div", {
         className: "wcTitle"
-      }, this.props.configuration["interface"].chat.title), /*#__PURE__*/_react["default"].createElement("div", {
+      }, this.props.configuration["interface"].chat.title), !this.props.configuration["interface"].chat.mobile.tabs.hideAll && /*#__PURE__*/_react["default"].createElement("div", {
         className: "wcTabs" + (topTabs.filter(function (tab) {
           return tab.header;
         }).length > 3 ? ' wcTabsCompact' : '')

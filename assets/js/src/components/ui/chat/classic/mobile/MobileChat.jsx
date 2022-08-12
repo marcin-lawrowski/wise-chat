@@ -59,17 +59,19 @@ class MobileChat extends React.Component {
 						{ this.props.configuration.interface.chat.title }
 					</div>
 				}
-				<div className={ "wcTabs" + (topTabs.filter( tab => tab.header ).length > 3 ? ' wcTabsCompact' : '') }>
-					{ topTabs.filter( tab => tab.header ).map( (tab, index) =>
-						<div
-							key={ index }
-							className={ "wcTab wcTab" + capitalizeFirstLetter(tab.slug) + (this.props.topTab === tab.slug ? ' wcCurrent' : '') }
-							onClick={ e => this.handleTabClick(tab) }
-						>
-							<span className="wcName">{ tab.name }</span>
-						</div>
-					)}
-				</div>
+				{!this.props.configuration.interface.chat.mobile.tabs.hideAll &&
+					<div className={"wcTabs" + (topTabs.filter(tab => tab.header).length > 3 ? ' wcTabsCompact' : '')}>
+						{topTabs.filter(tab => tab.header).map((tab, index) =>
+							<div
+								key={index}
+								className={"wcTab wcTab" + capitalizeFirstLetter(tab.slug) + (this.props.topTab === tab.slug ? ' wcCurrent' : '')}
+								onClick={e => this.handleTabClick(tab)}
+							>
+								<span className="wcName">{tab.name}</span>
+							</div>
+						)}
+					</div>
+				}
 				{ topTabs.map( (tab, index) =>
 					<div key={ index } className={ "wcTabContent wcTabContent" + capitalizeFirstLetter(tab.slug) + (this.props.topTab !== tab.slug ? ' wcInvisible' : '') }>
 						{ tab.component }

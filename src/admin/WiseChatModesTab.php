@@ -48,8 +48,8 @@ class WiseChatModesTab extends WiseChatAbstractTab {
 			),
 			array('fb_z_index', 'Z-index Value', 'stringFieldCallback', 'integer', 'Try to increase the value if the chat is covered by other elements of the theme.'),
 			array('_section', 'Mobile Mode Settings', 'These settings apply to the mobile version either in FB-like or classic mode. The mobile version of the chat is displayed automatically on narrow screens.'),
-			array('mobile_mode_tab_chats_enabled', '"Chats" Tab Enabled', 'booleanFieldCallback', 'boolean', 'Enables "Chats" tab in the mobile version.'
-			),
+			array('mobile_mode_tabs_disable', 'Hide all tabs', 'booleanFieldCallback', 'boolean', 'Hides all tabs in the mobile version. <br /><strong>Notice:</strong> This will make the users list and the configuration tab inaccessible to users.'),
+			array('mobile_mode_tab_chats_enabled', '"Chats" Tab Enabled', 'booleanFieldCallback', 'boolean', 'Enables "Chats" tab in the mobile version.'),
 		);
 	}
 
@@ -79,7 +79,8 @@ class WiseChatModesTab extends WiseChatAbstractTab {
 			'fb_browser_width' => 300,
 			'fb_channel_height' => '',
 			'fb_channel_width' => '',
-			'mobile_mode_tab_chats_enabled' => 1
+			'mobile_mode_tab_chats_enabled' => 1,
+			'mobile_mode_tabs_disable' => 0
 		);
 	}
 
