@@ -32,7 +32,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section(
-			'section_title',
+			'chat_settings',
 			[
 				'label' => esc_html__( 'Settings', 'wise-chat' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
@@ -41,7 +41,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$this->addText('channel', esc_html__( 'Channel', 'wise-chat' ), 'global');
 		$this->addCheckbox('access_mode', esc_html__( 'Disable Anonymous Users', 'wise-chat' ), '');
 		$this->addCheckbox('force_user_name_selection', esc_html__( 'Force Username Selection', 'wise-chat' ), '');
-		$this->addSettingsLink('general');
+		$this->addSettingsLink('chat_settings_advanced', 'general');
 		$this->end_controls_section();
 
 		$this->startSection('section_style_chat', esc_html__( 'Chat', 'wise-chat' ));
@@ -60,12 +60,10 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		), '');
 
 
-		$this->addSettingsLink('appearance');
+		$this->addSettingsLink('section_style_chat_advanced', 'appearance');
 		$this->end_controls_section();
 
 		$this->startSection('section_style_messages', esc_html__( 'Messages', 'wise-chat' ));
-
-
 		$this->addSelect('messages_time_mode', esc_html__('Message Time Mode', 'wise-chat'), array(
 			'hidden' => esc_html__('Hidden', 'wise-chat'),
 			'' => esc_html__('Full', 'wise-chat'),
@@ -74,7 +72,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$this->addColorSelector('background_color', esc_html__('Background Color', 'wise-chat'), array('.wcChannel .wcMessages', '.wcChannel .wcMessages .wcMessage', '.wcChannel .wcMessages .wcMessage .wcContent'), 'background-color');
 		$this->addColorSelector('text_color', esc_html__('Font Color', 'wise-chat'), array('.wcMessages *'), 'color');
 
-		$this->addSettingsLink('appearance');
+		$this->addSettingsLink('section_style_messages_advanced', 'appearance');
 		$this->end_controls_section();
 
 		$this->startSection('section_style_input', esc_html__( 'Input', 'wise-chat' ));
@@ -92,7 +90,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$this->addColorSelector('background_color_input', esc_html__('Background Color', 'wise-chat'), array('.wcChannelInput', '.wcDesktop .wcBody .wcMessagesArea .wcCustomizations'), 'background-color');
 		$this->addColorSelector('text_color_input_field', esc_html__('Font Color', 'wise-chat'), array('.wcChannelInput *', '.wcDesktop .wcBody .wcMessagesArea .wcCustomizations *'), 'color');
 
-		$this->addSettingsLink('appearance');
+		$this->addSettingsLink('section_style_input_advanced', 'appearance');
 		$this->end_controls_section();
 
 		$this->startSection('section_browser', esc_html__( 'Browser', 'wise-chat' ));
@@ -109,7 +107,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$this->addCheckbox('show_users_counter', esc_html__( 'Show Online Users Counter', 'wise-chat' ), '');
 		$this->addColorSelector('background_color_users_list', esc_html__('Background Color', 'wise-chat'), array('.wcBody .wcBrowserArea', '.wcDesktop .wcBrowser'), 'background-color');
 		$this->addColorSelector('text_color_users_list', esc_html__('Font Color', 'wise-chat'), '.wcDesktop .wcBrowser *', 'color');
-		$this->addSettingsLink('appearance');
+		$this->addSettingsLink('section_browser_advanced', 'appearance');
 		$this->end_controls_section();
 	}
 
@@ -244,16 +242,29 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		}
 	}
 
-	private function addSettingsLink($tag = 'general') {
+	private function addSettingsLink($id, $tag = 'general') {
 		$url = site_url().'/wp-admin/options-general.php?page=wise-chat-admin#tab='.$tag;
 
 		$this->add_control(
-			'settings_link',
+			$id,
 			[
 				'type' => Controls_Manager::RAW_HTML,
 				'raw' => sprintf(
 					'<a href="%s" class="elementor-button elementor-button-default" target="_blank">%s</a>',
 					$url, esc_html__( 'Advanced Settings', 'wise-chat' )
+				)
+			]
+		);
+
+		$url = site_url().'/wp-admin/options-general.php?page=wise-chat-admin#tab=pro';
+
+		$this->add_control(
+			$id.'_pro_link',
+			[
+				'type' => Controls_Manager::RAW_HTML,
+				'raw' => sprintf(
+					'<a href="%s" class="elementor-button elementor-button-default" style="background-color: #4f3b5e; color: #fff;" target="_blank">%s</a>',
+					$url, 'Check Wise Chat Pro'
 				)
 			]
 		);
