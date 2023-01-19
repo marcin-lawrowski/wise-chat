@@ -258,6 +258,44 @@ class WiseChatMessagesService {
 	}
 
 	/**
+	 * @param $clientChannelId Client-side channel ID
+	 * @param $beforeClientMessageId Client-side message ID
+	 * @return WiseChatMessage[]
+	 * @throws Exception
+	 */
+	public function getMessagesOfChannel($clientChannelId, $beforeClientMessageId = null) {
+		$channelTypeAndId = WiseChatCrypt::decryptFromString($clientChannelId);
+		if ($channelTypeAndId === null) {
+			throw new Exception('Invalid channel');
+		}
+
+		if (strpos($channelTypeAndId, 'c|') !== false) {
+			$publicChannelId = intval(str_replace('c|', '', $channelTypeAndId));
+			$channel = $this->channelsDAO->get($publicChannelId);
+			if (!$channel) {
+				throw new Exception('Unknown channel '.$clientChannelId);
+			}
+
+			$criteria = new WiseChatMessagesCriteria();
+			$criteria->setChannelNames(array($channel->getName()));
+			$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
+			$criteria->setIncludeOnlyPrivateMessages(false);
+			$criteria->setLimit($this->options->getIntegerOption('messages_preload_limit', 20));
+			$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+
+			if ($beforeClientMessageId) {
+				$message = $this->clientSide->getMessageOrThrowException($beforeClientMessageId);
+				$criteria->setMaximumMessageId($message->getId());
+			}
+
+			return $this->messagesDAO->getAllByCriteria($criteria);
+		} else {
+			throw new Exception('Unknown channel');
+		}
+
+	}
+
+	/**
 	 * Returns all messages from the given channel and (optionally) beginning from the given offset.
 	 * Limit and admin messages inclusion are taken from the plugin's options.
 	 *

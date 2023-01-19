@@ -240,6 +240,9 @@ class WiseChatMessagesDAO {
 		if (!$criteria->isIncludeAdminMessages()) {
 			$conditions[] = "admin = 0";
 		}
+		if ($criteria->getMaximumMessageId() !== null) {
+			$conditions[] = "id < ".intval($criteria->getMaximumMessageId());
+		}
 		if ($criteria->getMaximumTime() !== null) {
 			$conditions[] = "time < ".intval($criteria->getMaximumTime());
 		}

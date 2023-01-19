@@ -36,8 +36,25 @@ export default function messages(state = defaultState, action) {
 				receivedPast: { ...state.receivedPast, [action.channelId]: Object.assign({}, state.receivedPast[action.channelId], action.data) }
 			});
 		case 'message.receive.past.done':
+			const mergedMessages = state.received[action.channelId] ? [ ...state.received[action.channelId], ...action.data ] : action.data;
+
+			// remove duplicates:
+			const uniqueMessages = [...mergedMessages.reduce((p, c) => p.set(c.id, c), new Map())].map(([key, value]) => value);
+
+			// sort:
+			const sortedMessages = uniqueMessages.sort((a, b) => {
+				if (a.sortKey < b.sortKey) {
+					return -1;
+				}
+				if (a.sortKey > b.sortKey) {
+					return 1;
+				}
+
+				return 0;
+			});
+
 			return createState(state, {
-				received: { ...state.received, [action.channelId]: action.beforeMessage ? [ ...action.data, ...state.received[action.channelId] ] : action.data },
+				received: { ...state.received, [action.channelId]: sortedMessages }
 			});
 		case 'message.image':
 			return createState(state, { image: { ...state.image, [action.id]: Object.assign({}, state.image[action.id], action.data) } });

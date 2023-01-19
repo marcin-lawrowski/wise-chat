@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 3.1
+	Version: 3.1.1
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Kainex
@@ -9,7 +9,7 @@
 	Text Domain: wise-chat
 */
 
-define('WISE_CHAT_VERSION', '3.1');
+define('WISE_CHAT_VERSION', '3.1.1');
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
@@ -99,6 +99,14 @@ function wise_chat_endpoint_messages() {
 }
 add_action("wp_ajax_nopriv_wise_chat_messages_endpoint", 'wise_chat_endpoint_messages');
 add_action("wp_ajax_wise_chat_messages_endpoint", 'wise_chat_endpoint_messages');
+
+function wise_chat_endpoint_past_messages() {
+	/** @var WiseChatMessagesEndpoint $wiseChatEndpoints */
+	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatMessagesEndpoint');
+	$wiseChatEndpoints->pastMessagesEndpoint();
+}
+add_action("wp_ajax_nopriv_wise_chat_past_messages_endpoint", 'wise_chat_endpoint_past_messages');
+add_action("wp_ajax_wise_chat_past_messages_endpoint", 'wise_chat_endpoint_past_messages');
 
 function wise_chat_endpoint_message() {
 	/** @var WiseChatMessageEndpoint $wiseChatEndpoints */

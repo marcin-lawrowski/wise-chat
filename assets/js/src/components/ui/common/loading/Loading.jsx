@@ -13,7 +13,7 @@ class Loading extends React.Component {
 					</div>
 				}
 				<div className="wcLoading">
-					<div className="wcLoadingMessage">{ this.props.configuration.i18n.loading }</div>
+					<div className="wcLoadingMessage">{ this.props.configuration.i18n.loadingChat }</div>
 				</div>
 			</div>
 		)

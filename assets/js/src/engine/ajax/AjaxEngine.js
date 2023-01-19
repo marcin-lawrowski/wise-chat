@@ -409,16 +409,7 @@ export default class AjaxEngine extends Engine {
 					if (response && response.error) {
 						errorListener(response.error);
 					} else {
-						let messagesFiltered = [];
-						for (let x = 0; x < response.result.length; x++) {
-							let msg = response.result[x];
-							let messageId = msg['id'];
-							if (!that.idsCache[messageId]) {
-								messagesFiltered.push(msg);
-								that.idsCache[messageId] = true;
-							}
-						}
-						successListener(messagesFiltered);
+						successListener(response.result);
 					}
 				} catch (e) {
 					that.logDebug('[loadPastMessages] [result]', result);

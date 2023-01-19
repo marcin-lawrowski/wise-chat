@@ -52,6 +52,11 @@ class WiseChatMessagesCriteria {
     /**
      * @var integer
      */
+    private $maximumMessageId;
+
+    /**
+     * @var integer
+     */
     private $minimumTime;
 
     /**
@@ -185,6 +190,23 @@ class WiseChatMessagesCriteria {
      */
     public function setMaximumTime($maximumTime) {
         $this->maximumTime = $maximumTime;
+        return $this;
+    }
+
+     /**
+     * @return integer
+     */
+    public function getMaximumMessageId() {
+        return $this->maximumMessageId;
+    }
+
+    /**
+     * @param integer $maximumMessageId
+     *
+     * @return WiseChatMessagesCriteria
+     */
+    public function setMaximumMessageId($maximumMessageId) {
+        $this->maximumMessageId = $maximumMessageId;
         return $this;
     }
 

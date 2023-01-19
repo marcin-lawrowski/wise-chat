@@ -5,7 +5,9 @@ class Loader extends React.Component {
 
 	render() {
 		return(
-			<div className="wcLoaderContainer">
+			<div className={ "wcLoaderContainer" + (this.props.center ? ' wcLoaderContainerCenter' : '') }
+			     style={ { marginTop: this.props.marginTop ? this.props.marginTop : undefined, marginBottom: this.props.marginBottom ? this.props.marginBottom : undefined } }
+			>
 				<div className={ "wcLoader" + (' ' + this.props.className)}>
 					<div/>
 					<div/>
@@ -24,7 +26,10 @@ class Loader extends React.Component {
 
 Loader.propTypes = {
 	className: PropTypes.string,
-	message: PropTypes.string
+	message: PropTypes.string,
+	center: PropTypes.bool,
+	marginTop: PropTypes.number,
+	marginBottom: PropTypes.number
 };
 
 export default Loader;

@@ -146,7 +146,7 @@ class WiseChatEndpoint {
 	 * @param array $attributes
 	 * @return array
 	 */
-	protected function toPlainMessage($message, $channelId, $channelName, $attributes = array()) {
+	protected function toPlainMessage($message, $channelId, $attributes = array()) {
 		$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
 		$classes = '';
 		$wpUser = $this->usersDAO->getWpUserByID($message->getWordPressUserId());
@@ -160,13 +160,14 @@ class WiseChatEndpoint {
 			'text' => $message->getText(),
 			'channel' => array(
 				'id' => $channelId,
-				'name' => $channelName,
+				'name' => $message->getChannelName(),
 				'type' => 'public',
 				'readOnly' => false
 			),
 			'color' => in_array('message', $textColorAffectedParts) ? $this->userService->getUserTextColor($message->getUser()) : null,
 			'cssClasses' => $classes,
 			'timeUTC' => gmdate('c', $message->getTime()),
+			'sortKey' => $message->getTime().$message->getId(),
 			'sender' => $this->getMessageSender($message, $wpUser)
 		);
 

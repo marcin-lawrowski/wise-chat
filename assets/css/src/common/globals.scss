@@ -194,6 +194,10 @@
     flex-direction: row;
     align-items: center;
 
+    &.wcLoaderContainerCenter {
+      justify-content: center;
+    }
+
     .wcLoader {
       display: inline-block;
       position: relative;

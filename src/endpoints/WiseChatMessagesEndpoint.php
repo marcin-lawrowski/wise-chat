@@ -73,11 +73,49 @@ class WiseChatMessagesEndpoint extends WiseChatEndpoint {
 					'live' => !$initRequest
 				);
 
-				$channelName = $message->getChannelName();
 				$channelId = $channelEncryptedIds[$message->getChannelName()];
 
-				$response['result'][] = $this->toPlainMessage($message, $channelId, $channelName, $attributes);
+				$response['result'][] = $this->toPlainMessage($message, $channelId, $attributes);
 			}
+
+		} catch (WiseChatUnauthorizedAccessException $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendUnauthorizedStatus();
+		} catch (Exception $exception) {
+			$response['error'] = $exception->getMessage();
+			$this->sendBadRequestStatus();
+		}
+
+		echo json_encode($response);
+		die();
+	}
+
+	/**
+	 * Loads past messages in the given channel. Without beforeMessage parameter it loads last messages.
+	 */
+	public function pastMessagesEndpoint() {
+		$this->jsonContentType();
+		$this->verifyXhrRequest();
+		$this->confirmUserAuthenticationOrEndRequest();
+		$this->verifyCheckSum();
+
+		$response = array();
+		try {
+			$this->checkGetParams(array('channelId'));
+			$encryptedBeforeMessage = $this->getGetParam('beforeMessage', '');
+			$channelId = $this->getGetParam('channelId');
+
+			$this->checkIpNotKicked();
+			$this->checkUserAuthorization();
+			$this->checkChatOpen();
+
+			$response['result'] = array();
+			$messages = $this->messagesService->getMessagesOfChannel($channelId, $encryptedBeforeMessage);
+			foreach ($messages as $message) {
+				$response['result'][] = $this->toPlainMessage($message, $channelId, array( 'live' => false ));
+			}
+
+			shuffle($response['result']);
 
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();

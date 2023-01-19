@@ -120,15 +120,8 @@ class WiseChatMessageEndpoint extends WiseChatEndpoint {
 				}
 
 				$channelId = $channelEncryptedIds[$message->getChannelName()];
-				$channelName = $message->getChannelName();
-				if ($message->getRecipientId() > 0) {
-					$directUserId = $this->authentication->getUserIdOrNull() === $message->getRecipientId() ? $message->getUserId() : $message->getRecipientId();
-					$channelId = WiseChatCrypt::encryptToString('d|'.$directUserId);
 
-					$channelName = $this->authentication->getUserIdOrNull() === $message->getRecipientId() ? $message->getUser()->getName() : $message->getRecipient()->getName();
-				}
-
-				$response['result'][] = $this->toPlainMessage($message, $channelId, $channelName);
+				$response['result'][] = $this->toPlainMessage($message, $channelId);
 			}
 		} catch (WiseChatUnauthorizedAccessException $exception) {
 			$response['error'] = $exception->getMessage();

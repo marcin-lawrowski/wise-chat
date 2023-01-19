@@ -217,7 +217,8 @@ class WiseChat {
 			),
 
 			'i18n' => array(
-				'loading' => $this->options->getOption('message_loading_chat', __('Loading the chat ...', 'wise-chat')),
+				'loadingChat' => $this->options->getOption('message_loading_chat', __('Loading the chat ...', 'wise-chat')),
+				'loading' => $this->options->getOption('message_loading', __('Loading ...', 'wise-chat')),
 				'sending' => $this->options->getOption('message_sending', __('Sending ...', 'wise-chat')),
 				'send' => $this->options->getOption('message_submit_button_caption', __('Send', 'wise-chat')),
 				'hint' => $this->options->getOption('hint_message'),

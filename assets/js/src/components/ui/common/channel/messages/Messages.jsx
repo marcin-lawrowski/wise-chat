@@ -5,6 +5,8 @@ import { Scrollbar } from "react-scrollbars-custom";
 import Message from "./message/Message";
 import { notify } from "actions/ui";
 import { logInfo } from "actions/log";
+import { loadPastMessages } from "actions/messages";
+import Loader from "ui/common/Loader";
 
 class Messages extends React.Component {
 
@@ -13,7 +15,9 @@ class Messages extends React.Component {
 
 		this.state = {
 			autoScrollDisabled: this.props.configuration.messagesOrder !== 'ascending',
-			autoScrollTemporaryDisabled: false
+			autoScrollTemporaryDisabled: false,
+			noPastMessages: false,
+			messages: this.messagesToState(props.messages)
 		}
 
 		this.notificationsEnabled = false;
@@ -26,16 +30,21 @@ class Messages extends React.Component {
 
 	componentDidUpdate(prevProps) {
 		const messagesChange = this.props.messages !== prevProps.messages && this.props.messages.length > 0;
+		const messagesPastLoaded = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length > 0;
+		const messagesPastLoadedEmpty = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length === 0;
 
-		if (messagesChange && this.notificationsEnabled) {
+		if (messagesChange) {
+			const mode = this.props.configuration.notifications.newMessage.mode;
 			const prevIds = Array.isArray(prevProps.messages) ? prevProps.messages.map( message => message.id ) : [];
-			const diff = this.props.messages.filter( message => !prevIds.includes(message.id) );
-			if (diff.length > 0) {
+			const diff = this.props.messages.filter(
+				message => !prevIds.includes(message.id) && !message.locked && !message.own &&
+					(mode === '' || (mode === 'direct' && this.props.channel.type === 'direct') || (mode === 'public' && this.props.channel.type === 'public'))
+			);
+			if (diff.length > 0 && this.notificationsEnabled) {
 				let wasNotified = false;
 
-				// scan for current user's name:
 				let regexp = new RegExp("@" + this.props.user.name, "g");
-				if (diff.filter( message => message.text.match(regexp)).length > 0) {
+				if (diff.filter(message => message.text.match(regexp)).length > 0) {
 					this.props.notify('mentioned');
 					wasNotified = true;
 				}
@@ -44,12 +53,38 @@ class Messages extends React.Component {
 					this.props.notify('newMessage');
 				}
 			}
+
+			this.setState( state => ({ messages: this.messagesToState(this.props.messages) }) );
 		}
+
+		if (messagesPastLoaded) {
+			if (this.props.configuration.messagesOrder === 'ascending') {
+				this.scrollRef.current.scrollTo(0, 200);
+			}
+		}
+		if (messagesPastLoadedEmpty) {
+			this.setState({ noPastMessages: true });
+		}
+	}
+
+	messagesToState(messages) {
+		return messages
+			? (this.props.configuration.messagesOrder !== 'ascending' ? [].concat(messages).reverse() : messages)
+			: [];
 	}
 
 	handleStopScroll(scrollValues, prevScrollValues) {
 		let diff = scrollValues.scrollHeight - (scrollValues.clientHeight + scrollValues.scrollTop);
 		let result = diff > 0;
+
+		if (!this.state.noPastMessages && this.state.messages.length > 0) {
+			if (scrollValues.scrollTop === 0 && this.props.configuration.messagesOrder === 'ascending') {
+				this.props.loadPastMessages(this.props.channel.id, this.state.messages[0].id);
+			}
+			if (this.props.configuration.messagesOrder !== 'ascending' && scrollValues.scrollHeight - scrollValues.scrollTop === scrollValues.clientHeight) {
+				this.props.loadPastMessages(this.props.channel.id, this.state.messages[this.state.messages.length - 1].id);
+			}
+		}
 
 		if (result !== this.state.autoScrollTemporaryDisabled) {
 			this.setState({ autoScrollTemporaryDisabled: result });
@@ -71,18 +106,20 @@ class Messages extends React.Component {
 	}
 
 	render() {
-		let messages = [];
-
-		if (this.props.messages) {
-			messages = this.props.configuration.messagesOrder !== 'ascending' ? [].concat(this.props.messages).reverse() : this.props.messages;
-		}
-
 		return(
 			<Scrollbar ref={ this.scrollRef } className="wcMessages" onUpdate={ this.handleScrollUpdate }
 				onScrollStop={ this.handleStopScroll } noScrollX={ true }>
-				{ messages.map( (message, index) =>
+				{ this.props.configuration.messagesOrder === 'ascending' && this.props.messagesPast && this.props.messagesPast.inProgress &&
+					<Loader message={ this.props.configuration.i18n.loading } center={ true } marginTop={ 10 } marginBottom={ 10 } />
+				}
+
+				{ this.state.messages.map( (message, index) =>
 					<Message key={ message.id } channel={ this.props.channel } message={ message } />
 				)}
+
+				{ this.props.configuration.messagesOrder !== 'ascending' && this.props.messagesPast && this.props.messagesPast.inProgress &&
+					<Loader message={ this.props.configuration.i18n.loading } center={ true } marginTop={ 10 } marginBottom={ 10 } />
+				}
 			</Scrollbar>
 		)
 	}
@@ -100,7 +137,8 @@ export default connect(
 		configuration: state.configuration,
 		user: state.application.user,
 		focusedChannel: state.ui.focusedChannel,
-		messages: state.messages.received[ownProps.channel.id]
+		messages: state.messages.received[ownProps.channel.id],
+		messagesPast: state.messages.receivedPast[ownProps.channel.id]
 	}),
-	{ notify, logInfo }
+	{ notify, logInfo, loadPastMessages }
 )(Messages);
