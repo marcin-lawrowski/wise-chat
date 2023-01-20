@@ -190,7 +190,7 @@ abstract class WiseChatAbstractTab {
 	}
 
 	protected function printProFeatureNotice() {
-		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=pro-field" title="Check Wise Chat Pro">
+		$button = '<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=pro_feature" title="Check Wise Chat Pro">
 						Check Wise Chat <strong>Pro</strong>
 					</a>';
 		printf('<p class="description wcProDescription">%s</p>', 'Notice: This feature is available after upgrading to Wise Chat Pro. '.$button);

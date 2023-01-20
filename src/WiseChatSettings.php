@@ -149,7 +149,7 @@ class WiseChatSettings {
 					.wcAdminDonation span { padding-top: 5px; display: inline-block; font-size: 1.1em; }
 					.wcAdminDonation a.wcAdminButton { border-color: #11f; color: #005; font-size: 1.1em; }
 					.wp-admin a.wcAdminButtonPro, .wp-admin a.wcAdminButtonPro:hover, .wp-admin a.wcAdminButtonPro:focus, #wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
-						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px top;
+						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px 4px;
 						border: 1px solid #4f3b5e; color: #fff; font-size: 1.2em; padding-left: 61px; padding-right: 35px;
 					}
 					.wp-admin p.wcProDescription {
@@ -157,6 +157,9 @@ class WiseChatSettings {
 					}
 					.wp-admin p.description a.wcAdminButtonPro {
 						vertical-align: middle; padding-right: 6px; padding-left: 40px; font-style: normal;
+					}
+					.wp-admin p.description a.wcAdminButtonProSize {
+						width: 150px;
 					}
 					#wise-chat-proContainer a.wcAdminButtonPro, #wise-chat-proContainer a.wcAdminButtonPro:hover {
 						padding-top: 10px; padding-bottom: 10px; background-position: 10px center;
@@ -187,6 +190,25 @@ class WiseChatSettings {
 						foreach ($this->tabs as $pageId => $tabCaption) {
 							$hideContainer = $isFirstContainer ? '' : 'display:none';
 							echo "<div id='{$pageId}Container' class='wcAdminTabContainer' style='{$hideContainer}'>";
+							?>
+								<div class='postbox' style="border: 1px solid #4f3b5e;">
+									<h3 class='hndle'><span>Check our Products</span></h3>
+									<div class='inside'>
+										<p class='description'>
+											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
+												Wise Chat <strong>Pro</strong>
+											</a>
+											<span style='display: inline-block; font-size: 1.2em'>Voice messages, 1-on-1 chats, Pro themes, sidebar mode, message reactions and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a></span>
+										</p>
+										<p class='description'>
+											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" style="background-color: #5f463f" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
+												Wise Chat <strong>Live</strong>
+											</a>
+											<span style='display: inline-block; font-size: 1.2em'>Extended version of Wise Chat Pro + <strong>live chat features:</strong> customizable live chat widget, incoming chats management page, multiple operators and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a> </span>
+										</p>
+									</div>
+								</div>
+							<?php
 							
 							$sections = $this->sections[$pageId];
 							foreach ($sections as $sectionKey => $section) {
