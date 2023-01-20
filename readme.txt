@@ -1,6 +1,6 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
-Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate
+Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
@@ -15,7 +15,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 **Wise Chat** is a leading chat plugin that helps to build social networks and this way it increases user's engagement on your website. The plugin provides a platform to send real time messages in chat rooms. The chat is easy to setup and configure. Its every single feature is extremely adjustable. Our development team is constantly working on new features and supporting the existing ones.
 
-**[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**:
+**[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**:
 * Private one-to-one chats
 * Facebook/Twitter/G+ login
 * Voice messages
@@ -30,12 +30,20 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 * BuddyPress integration (friends and groups)
 * Edit and reply to messages
 * Hooks
-* Premium support and free updates for 6/12/18 months (depending on option)
+* Premium support and free updates for 6/12/18 months (depending on the option)
+
+**[Check Wise Chat LIVE](https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**:
+* Customizable live chat widget
+* Incoming chats management page
+* Multiple operators
+* All features of Wise Chat Pro
+* Premium support and free updates for 6/12/18 months (depending on the option)
+
 **Buy once, use forever, no subscription, no recurring payments!**
 
-Scroll down to find out more about Wise Chat Pro benefits, for more product details go to **[Wise Chat Pro site](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)**
+Scroll down to find out more about Wise Chat Pro benefits, for more product details go to **[Wise Chat Pro site](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
-Wise Chat: **[Try DEMO here](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation)** | **[Full features list](https://kainex.pl/projects/wp-plugins/wise-chat/features)**
+Wise Chat: **[Try DEMO here](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Full features list](https://kainex.pl/projects/wp-plugins/wise-chat/features?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
 = Wise Chat features: =
 
@@ -88,6 +96,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Private messages to offline users**: Send private messages to offline users.
 * **Voice chats**: Publish voice messages.
+* **Messages reactions**: Liking messages.
 * **Facebook-like mode**: Display the chat attached to the right side of the browser.
 * **Avatars**: Display avatars both in the chat window and in the users list.
 * **BuddyPress integration**: Integrate Wise Chat Pro with BuddyPress friends and groups. Give moderator rights to delete messages or ban users.
@@ -103,7 +112,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * **One-time payment**: Pay once and use it forever.
 * **6 / 12 / 18 - month upgrade**: Update your Wise Chat Pro to the new version for free during 6 / 12 / 18 - month period after the purchase.
 
-**[Check Wise Chat Pro !](https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=wordpress-plugin-site)** Move customer engagement to the higher level!
+**[Check Wise Chat Pro !](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** Move customer engagement to the higher level!
 
 **See screenshots for detailed features.**
 
@@ -139,7 +148,7 @@ You can install Wise Chat using dedicated widget. Go to `Appearance -> Widgets` 
 
 For the full documentation of the shortcode attributes visit the website:
 
-**[Shortcode documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
+**[Shortcode documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation/shortcode?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
 = Shortcode installation: =
 
@@ -152,7 +161,7 @@ The shortcode can be configured with the list of attributes, for example – in 
 
 Almost all settings available on plugin's settings page are also available in shortcode. For full documentation of the shortcode visit the website:
 
-**[Shortcode documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation/shortcode)**
+**[Shortcode documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation/shortcode?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
 == Frequently Asked Questions ==
 
