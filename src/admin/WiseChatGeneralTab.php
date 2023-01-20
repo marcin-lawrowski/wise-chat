@@ -8,6 +8,9 @@
 class WiseChatGeneralTab extends WiseChatAbstractTab {
 
 	public function getFields() {
+		$timezone = function_exists('wp_timezone') ? wp_timezone() : new DateTimeZone( 'UTC' );
+		$nowDate = new DateTime('now', $timezone);
+
 		return array(
 			array('_section', 'General Settings'),
 			array(
@@ -35,7 +38,7 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			array('force_user_name_selection', 'Force Username Selection', 'booleanFieldCallback', 'boolean', 'Forces anonymous user to provide its name.'),
 			array('read_only_for_anonymous', 'Read-only For Anonymous', 'booleanFieldCallback', 'boolean', 'Makes the chat read-only to anonymous users. Only logged in WordPress users are allowed to send messages. You can choose read-only roles below.'),
 			array('read_only_for_roles', 'Read-only For Roles', 'checkboxesCallback', 'multivalues', 'Selected roles have read-only access to the chat.', self::getRoles()),
-			array('_section', 'Chat Opening Hours and Days', 'Server UTC date and time is taken into account. It is currently: '.date('Y-m-d H:i:s')),
+			array('_section', 'Chat Opening Hours and Days', 'Current time: '.$nowDate->format('Y-m-d H:i:s')),
 			array('enable_opening_control', 'Enable Opening Control', 'booleanFieldCallback', 'boolean', 'Allows to specify when the chat is available for users.'),
 			array('opening_days', 'Opening Days', 'checkboxesCallback', 'multivalues', 'Select chat opening days.', self::getOpeningDaysValues()),
 			array('opening_hours', 'Opening Hours', 'openingHoursCallback', 'multivalues', 'Specify chat opening hours (HH:MM format)'),

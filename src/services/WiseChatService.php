@@ -175,28 +175,30 @@ class WiseChatService {
 			if (is_array($chatOpeningDays) && !in_array(date('l'), $chatOpeningDays)) {
 				return false;
 			}
+
+			$timezone = function_exists('wp_timezone') ? wp_timezone() : new DateTimeZone( 'UTC' );
 			
 			$chatOpeningHours = $this->options->getOption('opening_hours');
 			$openingHour = $chatOpeningHours['opening'];
 			$openingMode = $chatOpeningHours['openingMode'];
 			$startHourDate = null;
 			if ($openingMode != '24h') {
-				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode);
+				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode, $timezone);
 			} else {
-				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour);
+				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour, $timezone);
 			}
 			
 			$closingHour = $chatOpeningHours['closing'];
 			$closingMode = $chatOpeningHours['closingMode'];
 			$endHourDate = null;
 			if ($closingMode != '24h') {
-				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode);
+				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode, $timezone);
 			} else {
-				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour);
+				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour, $timezone);
 			}
 			
 			if ($startHourDate != null && $endHourDate != null) {
-				$nowDate = new DateTime();
+				$nowDate = new DateTime('now', $timezone);
 				
 				$nowU = $nowDate->format('U');
 				$startHourDateU = $startHourDate->format('U');

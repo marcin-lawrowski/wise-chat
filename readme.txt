@@ -366,6 +366,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 
 = 3.1.1 =
 * Loading past messages when scrolled to the end
+* Chat opening hours - switched to WordPress timezone
 
 = 3.1 =
 * Elementor integration
