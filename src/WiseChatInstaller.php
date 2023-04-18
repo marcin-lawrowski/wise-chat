@@ -175,7 +175,7 @@ class WiseChatInstaller {
 				$charsetCollate .= " COLLATE ".$wpdb->collate;
 			}
 
-			if (strlen($charsetCollate) > 0) {
+			if ($charsetCollate) {
 				$wpdb->query(sprintf('ALTER TABLE %s CONVERT TO %s;', self::getMessagesTable(), $charsetCollate));
 			}
 		}

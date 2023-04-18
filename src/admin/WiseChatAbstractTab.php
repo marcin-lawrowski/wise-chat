@@ -216,7 +216,7 @@ abstract class WiseChatAbstractTab {
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {
@@ -253,7 +253,7 @@ abstract class WiseChatAbstractTab {
 			$parentId != null ? $parentId : '',
 			$this->fixImunify360Rule($id, $this->options->getEncodedOption($id, $defaultValue))
 		);
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {
@@ -301,7 +301,7 @@ abstract class WiseChatAbstractTab {
 			$parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 	}
@@ -328,7 +328,7 @@ abstract class WiseChatAbstractTab {
 			$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 			$parentId != null ? $parentId : ''
 		);
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {
@@ -364,7 +364,7 @@ abstract class WiseChatAbstractTab {
 			$parentId != null ? $parentId : '',
 			$optionsHtml
 		);
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {
@@ -411,7 +411,7 @@ abstract class WiseChatAbstractTab {
 
 		print(implode('', $optionHints));
 
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {
@@ -450,7 +450,7 @@ abstract class WiseChatAbstractTab {
 		
 		printf($html);
 		
-		if (strlen($hint) > 0) {
+		if ($hint) {
 			printf('<p class="description">%s</p>', $hint);
 		}
 		if ($isProFeature) {

@@ -33,7 +33,7 @@ class WiseChatAuthorization {
 	 * @throws Exception
 	 */
     public function isUserAuthorizedForChannel($channel) {
-    	if (strlen($channel->getPassword()) === 0) {
+    	if (!$channel->getPassword()) {
     		return true;
 	    }
 

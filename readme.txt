@@ -4,8 +4,8 @@ Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?ut
 Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 6.1.1
-Stable tag: 3.1.1
+Tested up to: 6.2
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -363,6 +363,12 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 08. Cold Dark theme: responsive design
 
 == Changelog ==
+
+= 3.1.2
+* Fixed: PHP 8.1 errors and warnings
+* Fixed: Warning: Undefined array key "show_avatars"
+* Fixed: DOMDocument::loadHTML(): Argument #1 ($source) must not be empty
+* Fixed: PHP Warning:  Undefined array key "channel" 
 
 = 3.1.1 =
 * Loading past messages when scrolled to the end

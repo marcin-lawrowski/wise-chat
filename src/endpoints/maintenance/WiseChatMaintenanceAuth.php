@@ -98,7 +98,7 @@ class WiseChatMaintenanceAuth {
 			'textColor' => array_key_exists('textColor', $userData) ? $userData['textColor'] : null,
 			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color', true),
 			'allowControlUserNotifications' => $this->options->isOptionEnabled('allow_control_user_notifications') && $this->options->isOptionEnabled('enable_private_messages', false) && $user->getWordPressId() > 0,
-			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && strlen($this->options->getEncodedOption('sound_notification')) > 0,
+			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && $this->options->getEncodedOption('sound_notification'),
 			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name', true) && !($user->getWordPressId() > 0),
 		);
 

@@ -394,7 +394,7 @@ class WiseChatUserService {
 				$commonRoles = array_intersect($wpUser->roles, array_keys($userRoleToColorMap));
 				if (count($commonRoles) > 0 && array_key_exists(0, $commonRoles) && array_key_exists($commonRoles[0], $userRoleToColorMap)) {
 					$userRoleColor = trim($userRoleToColorMap[$commonRoles[0]]);
-					if (strlen($userRoleColor) > 0) {
+					if ($userRoleColor) {
 						$textColor = $userRoleColor;
 					}
 				}
@@ -414,7 +414,9 @@ class WiseChatUserService {
 		$imageSrc = null;
 		if ($priorityWordPressId > 0 || ($user !== null && $user->getWordPressId() !== null)) {
 			$imageTag = $priorityWordPressId > 0 ? get_avatar($priorityWordPressId) : get_avatar($user->getWordPressId());
-
+			if (!$imageTag) {
+				return null;
+			}
 			$doc = new DOMDocument();
 			@$doc->loadHTML($imageTag);
 			$imageTags = $doc->getElementsByTagName('img');
@@ -469,7 +471,7 @@ class WiseChatUserService {
 		$textColor = $this->getTextColorDefinedByUserRole($user);
 
 		// get custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && strlen($user->getDataProperty('textColor')) > 0) {
+		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && $user->getDataProperty('textColor')) {
 			$textColor = $user->getDataProperty('textColor');
 		}
 
@@ -531,7 +533,7 @@ class WiseChatUserService {
 	 * @return string|null
 	 */
 	public function getUserAvatarFromMessage($message) {
-		if (strlen($message->getAvatarUrl()) > 0) {
+		if ($message->getAvatarUrl()) {
 			return $message->getAvatarUrl();
 		} else {
 			return $this->getUserAvatar($message->getUser(), $message->getWordPressUserId());

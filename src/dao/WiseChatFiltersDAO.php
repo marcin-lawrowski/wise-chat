@@ -48,7 +48,7 @@ class WiseChatFiltersDAO {
 	* @throws Exception If regular expression is invalid
 	*/
 	public function addFilter($type, $replace, $replaceWith) {
-		if ($type === 'regexp' && strlen($replace) > 0 && preg_match("/$replace/", null) === false) {
+		if ($type === 'regexp' && $replace && preg_match("/$replace/", null) === false) {
 			throw new Exception('Error while adding the filter - invalid regular expression was detected');
 		}
 	

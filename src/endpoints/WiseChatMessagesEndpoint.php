@@ -48,7 +48,7 @@ class WiseChatMessagesEndpoint extends WiseChatEndpoint {
 
 				// sort by ID:
 				usort($messages, function($a, $b) {
-					return $a->getId() > $b->getId();
+					return $a->getId() > $b->getId() ? 1 : 0;
 				});
 			} else {
 				// read current messages:

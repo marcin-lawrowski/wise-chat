@@ -139,7 +139,7 @@ class WiseChatHttpRequestService {
             }
 
             $passedParamsQuery = http_build_query($passedParams);
-            if (strlen($passedParamsQuery) > 0) {
+            if ($passedParamsQuery) {
                 $resultUrl .= '?'.$passedParamsQuery;
             }
         }
@@ -161,7 +161,7 @@ class WiseChatHttpRequestService {
             $passedParams = array();
             $queryString = parse_url($url, PHP_URL_QUERY);
             $params = array();
-            if (strlen($queryString) > 0) {
+            if ($queryString) {
 	            parse_str($queryString, $params);
             }
             foreach ($params as $key => $value) {
@@ -171,7 +171,7 @@ class WiseChatHttpRequestService {
             }
 
             $passedParamsQuery = http_build_query($passedParams);
-            if (strlen($passedParamsQuery) > 0) {
+            if ($passedParamsQuery) {
                 $resultUrl .= '?'.$passedParamsQuery;
             }
         }

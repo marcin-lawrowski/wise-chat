@@ -108,7 +108,7 @@ class WiseChatMaintenanceChannels {
 			// custom text color:
 			if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
 				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
-				if (strlen($textColorProposal) > 0) {
+				if ($textColorProposal) {
 					$textColor = $textColorProposal;
 				}
 			}
@@ -119,7 +119,7 @@ class WiseChatMaintenanceChannels {
 			$isCurrentUser =  $userId === $channelUser->getUserId();
 
 			// add roles as css classes:
-			$roleClasses = $this->options->isOptionEnabled('css_classes_for_user_roles', false) ? $this->userService->getCssClassesForUserRoles($channelUser->getUser(), $wpUser) : null;
+			$roleClasses = $this->options->isOptionEnabled('css_classes_for_user_roles', false) ? $this->userService->getCssClassesForUserRoles($channelUser->getUser()) : null;
 
 			$countryFlagSrc = null;
 			$countryCode = null;
@@ -129,7 +129,7 @@ class WiseChatMaintenanceChannels {
 			if ($this->options->isOptionEnabled('collect_user_stats', false) && $this->options->isOptionEnabled('show_users_flags', false)) {
 				$countryCode = $channelUser->getUser()->getDataProperty('countryCode');
 				$country = $channelUser->getUser()->getDataProperty('country');
-				if (strlen($countryCode) > 0) {
+				if ($countryCode) {
 					$countryFlagSrc = $this->options->getFlagURL(strtolower($countryCode));
 				}
 			}
@@ -189,6 +189,6 @@ class WiseChatMaintenanceChannels {
 	 * @return bool
 	 */
 	private function isProtectedChannel($channel) {
-		return $channel !== null && strlen($channel->getPassword()) > 0;
+		return $channel !== null && $channel->getPassword();
 	}
 }

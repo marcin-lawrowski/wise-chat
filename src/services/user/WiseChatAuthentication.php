@@ -224,7 +224,7 @@ class WiseChatAuthentication {
         $userName = trim($userName);
 
         // check for valid characters:
-        if (strlen($userName) == 0 || !preg_match('/^[\p{L}a-zA-Z0-9\-_ ’]+$/u', $userName)) {
+        if (!$userName || !preg_match('/^[\p{L}a-zA-Z0-9\-_ ’]+$/u', $userName)) {
             throw new Exception($this->options->getOption('message_error_1', __('Only letters, number, spaces, hyphens and underscores are allowed', 'wise-chat')));
         }
 
@@ -312,7 +312,7 @@ class WiseChatAuthentication {
      * @return WiseChatUser|null
      */
     private function validateAuthenticationCookie() {
-        if (!is_array($_COOKIE) || !array_key_exists(self::COOKIE_NAME, $_COOKIE) || strlen($_COOKIE[self::COOKIE_NAME]) === 0) {
+        if (!is_array($_COOKIE) || !array_key_exists(self::COOKIE_NAME, $_COOKIE) || !$_COOKIE[self::COOKIE_NAME]) {
             return null;
         }
 

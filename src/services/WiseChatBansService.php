@@ -113,7 +113,7 @@ class WiseChatBansService {
 	public function getDurationFromString($durationString, $defaultValue = 3600) {
 		$duration = $defaultValue;
 
-		if (strlen($durationString) > 0) {
+		if ($durationString) {
 			if (preg_match('/\d+m/', $durationString)) {
 				$duration = intval($durationString) * 60;
 			}

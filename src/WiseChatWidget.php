@@ -48,8 +48,8 @@ class WiseChatWidget extends WP_Widget {
 
 		/** @var WiseChat $wiseChat */
 		$wiseChat = WiseChatContainer::get('WiseChat');
-		$channel = $instance['channel'];
-		$options = $instance['options'];
+		$channel = isset($instance['channel']) ? $instance['channel'] : 'global';
+		$options = isset($instance['options']) ? $instance['options'] : '';
 
 		$parsedOptions = shortcode_parse_atts($options);
 		if (!is_array($parsedOptions)) {

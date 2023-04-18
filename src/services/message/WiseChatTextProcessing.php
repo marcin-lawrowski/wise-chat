@@ -36,7 +36,7 @@ class WiseChatTextProcessing {
 			$position = mb_strlen(substr($text, 0, $match[1])); // get multibyte-safe position
 
 			// add individual characters:
-			$parts = array_merge($parts, preg_split('//u', mb_substr($text, $pointer, $position - $pointer), null, PREG_SPLIT_NO_EMPTY));
+			$parts = array_merge($parts, preg_split('//u', mb_substr($text, $pointer, $position - $pointer), -1, PREG_SPLIT_NO_EMPTY));
 
 			// add the full shortcode if detected:
 			if (preg_match('/\['.implode('|', $shortcodes).'[^\]]*\]/', $shortcode)) {
@@ -49,7 +49,7 @@ class WiseChatTextProcessing {
 			$pointer = $position + mb_strlen($shortcode);
 		}
 
-		$parts = array_merge($parts, preg_split('//u', mb_substr($text, $pointer, strlen($text) - $pointer), null, PREG_SPLIT_NO_EMPTY));
+		$parts = array_merge($parts, preg_split('//u', mb_substr($text, $pointer, strlen($text) - $pointer), -1, PREG_SPLIT_NO_EMPTY));
 
 		// do not count new lines:
 		$limit = 0;

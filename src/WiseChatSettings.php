@@ -216,7 +216,7 @@ class WiseChatSettings {
 								echo "<h3 class='hndle'><span>".$section['name']."</span></h3>";
 								echo "<div class='inside'>";
 								echo '<table class="form-table">';
-								if (strlen($section['hint']) > 0) {
+								if ($section['hint']) {
 									echo '<tr><td colspan="2" style="padding:0"><p class="description">'.$section['hint'].'</p></td></tr>';
 								}
 								do_settings_fields($pageId, $section['id']);

@@ -37,7 +37,7 @@ class WiseChatActions {
      */
     public function publishAction($name, $commandData, $user = null) {
         $name = trim($name);
-        if (strlen($name) === 0) {
+        if (!$name) {
             throw new Exception('Action name cannot be empty');
         }
 

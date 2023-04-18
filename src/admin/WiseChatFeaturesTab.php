@@ -58,14 +58,14 @@ class WiseChatFeaturesTab extends WiseChatAbstractTab {
 
 		for ($i = 1; $i <= 7; $i++) {
 			$classes = $i % 2 == 0 ? 'alternate' : '';
+			$key = $i - 1;
 
-			if (!array_key_exists($i, $custom)) {
-				$custom[$i] = array(
+			if (!array_key_exists($key, $custom)) {
+				$custom[$key] = array(
 					'action' => '', 'active' => '', 'image' => '', 'imageSm' => '',
 				);
 			}
 
-			$key = $i - 1;
 			$idInput = sprintf(
 				'<input type="hidden" name="%s[reactions_custom][%d][id]" value="%d">',
 				WiseChatOptions::OPTIONS_NAME, $key, $i

@@ -82,7 +82,7 @@ class WiseChatCommandsResolver {
 	* @return boolean
 	*/
 	private function isPotentialCommand($text) {
-		return strlen($text) > 0 && strpos($text, '/') === 0;
+		return $text && strpos($text, '/') === 0;
 	}
 	
 	private function getTokenizedCommand($command) {

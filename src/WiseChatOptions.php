@@ -125,7 +125,7 @@ class WiseChatOptions {
 	* @return boolean
 	*/
 	public function isOptionNotEmpty($property) {
-		return is_array($this->options) && array_key_exists($property, $this->options) && strlen($this->options[$property]) > 0;
+		return is_array($this->options) && array_key_exists($property, $this->options) && $this->options[$property];
 	}
 	
 	/**

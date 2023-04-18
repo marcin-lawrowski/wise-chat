@@ -69,6 +69,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 			'' => esc_html__('Full', 'wise-chat'),
 			'elapsed' => esc_html__('Elapsed', 'wise-chat'),
 		), 'elapsed');
+		$this->addCheckbox('show_avatars', esc_html__( 'Show Avatars', 'wise-chat' ), '1');
 		$this->addColorSelector('background_color', esc_html__('Background Color', 'wise-chat'), array('.wcChannel .wcMessages', '.wcChannel .wcMessages .wcMessage', '.wcChannel .wcMessages .wcMessage .wcContent'), 'background-color');
 		$this->addColorSelector('text_color', esc_html__('Font Color', 'wise-chat'), array('.wcMessages *'), 'color');
 

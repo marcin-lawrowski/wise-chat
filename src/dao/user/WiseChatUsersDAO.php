@@ -285,7 +285,7 @@ class WiseChatUsersDAO {
 		$userNameSource = $this->options->getOption('username_source', 'display_name');
 		$fieldValue = trim($wpUser->$userNameSource);
 
-		if (strlen($fieldValue) > 0) {
+		if ($fieldValue) {
 			return $fieldValue;
 		}
 
@@ -303,10 +303,10 @@ class WiseChatUsersDAO {
 	 */
 	private function populateUserData($rawUserData) {
 		$user = new WiseChatUser();
-		if (strlen($rawUserData->id) > 0) {
+		if ($rawUserData->id) {
 			$user->setId(intval($rawUserData->id));
 		}
-        if (strlen($rawUserData->wp_id) > 0) {
+        if ($rawUserData->wp_id) {
             $user->setWordPressId(intval($rawUserData->wp_id));
         }
 		$user->setName($rawUserData->name);

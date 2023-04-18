@@ -269,22 +269,22 @@ class WiseChatMessagesDAO {
 	 */
 	public static function populateData($messageRawData) {
 		$message = new WiseChatMessage();
-		if (strlen($messageRawData->id) > 0) {
+		if ($messageRawData->id) {
 			$message->setId(intval($messageRawData->id));
 		}
 		$message->setAdmin($messageRawData->admin == '1');
 		$message->setUserName($messageRawData->user);
 		$message->setChannelName($messageRawData->channel);
-		if (strlen($messageRawData->chat_user_id) > 0) {
+		if ($messageRawData->chat_user_id) {
 			$message->setUserId(intval($messageRawData->chat_user_id));
 		}
 		$message->setText($messageRawData->text);
 		$message->setAvatarUrl($messageRawData->avatar_url);
 		$message->setIp($messageRawData->ip);
-		if (strlen($messageRawData->time) > 0) {
+		if ($messageRawData->time) {
 			$message->setTime(intval($messageRawData->time));
 		}
-		if (strlen($messageRawData->user_id) > 0) {
+		if ($messageRawData->user_id) {
 			$message->setWordPressUserId(intval($messageRawData->user_id));
 		}
 
@@ -362,7 +362,7 @@ class WiseChatMessagesDAO {
 		foreach ($channels as $channel) {
 			if (array_key_exists($channel->getName(), $mainSummaryMap)) {
 				$channelPrepared = $mainSummaryMap[$channel->getName()];
-				$channelPrepared->secured = strlen($channel->getPassword()) > 0;
+				$channelPrepared->secured = $channel->getPassword() && strlen($channel->getPassword()) > 0;
 				$fullSummary[] = $channelPrepared;
 			} else {
 				$fullSummary[] = (object) array(
@@ -370,7 +370,7 @@ class WiseChatMessagesDAO {
 					'messages' => 0,
 					'users' => 0,
 					'last_message' => null,
-					'secured' => strlen($channel->getPassword()) > 0
+					'secured' => $channel->getPassword() ? true : false
 				);
 			}
 		}

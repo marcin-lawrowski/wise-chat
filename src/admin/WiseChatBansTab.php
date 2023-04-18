@@ -70,7 +70,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 			return;
 		}
 		
-		if (strlen($newBanIP) > 0) {
+		if ($newBanIP) {
 			$duration = $this->bansService->getDurationFromString($newBanDuration);
 			
 			$this->bansService->banIpAddress($newBanIP, $duration);

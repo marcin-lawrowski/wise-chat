@@ -379,7 +379,7 @@ class WiseChatImagesService {
 	* Removes the temporary file which was created by the $this->createTempFile() method.
 	*/
 	private function deleteTempFile() {
-		if (strlen($this->tempFileName) > 0 && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
+		if ($this->tempFileName && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
 			unlink($this->tempFileName);
 		}
 	}
