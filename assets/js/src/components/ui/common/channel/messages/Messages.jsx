@@ -34,11 +34,9 @@ class Messages extends React.Component {
 		const messagesPastLoadedEmpty = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length === 0;
 
 		if (messagesChange) {
-			const mode = this.props.configuration.notifications.newMessage.mode;
 			const prevIds = Array.isArray(prevProps.messages) ? prevProps.messages.map( message => message.id ) : [];
 			const diff = this.props.messages.filter(
-				message => !prevIds.includes(message.id) && !message.locked && !message.own &&
-					(mode === '' || (mode === 'direct' && this.props.channel.type === 'direct') || (mode === 'public' && this.props.channel.type === 'public'))
+				message => !prevIds.includes(message.id) && !message.locked && !message.own
 			);
 			if (diff.length > 0 && this.notificationsEnabled) {
 				let wasNotified = false;

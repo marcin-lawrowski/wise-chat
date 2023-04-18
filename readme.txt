@@ -368,7 +368,8 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 * Fixed: PHP 8.1 errors and warnings
 * Fixed: Warning: Undefined array key "show_avatars"
 * Fixed: DOMDocument::loadHTML(): Argument #1 ($source) must not be empty
-* Fixed: PHP Warning:  Undefined array key "channel" 
+* Fixed: PHP Warning:  Undefined array key "channel"
+* Fixed: no new message sound
 
 = 3.1.1 =
 * Loading past messages when scrolled to the end

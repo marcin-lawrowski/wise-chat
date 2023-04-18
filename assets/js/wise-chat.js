@@ -3325,12 +3325,11 @@ var Messages = /*#__PURE__*/function (_React$Component) {
       var messagesPastLoadedEmpty = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length === 0;
 
       if (messagesChange) {
-        var mode = this.props.configuration.notifications.newMessage.mode;
         var prevIds = Array.isArray(prevProps.messages) ? prevProps.messages.map(function (message) {
           return message.id;
         }) : [];
         var diff = this.props.messages.filter(function (message) {
-          return !prevIds.includes(message.id) && !message.locked && !message.own && (mode === '' || mode === 'direct' && _this2.props.channel.type === 'direct' || mode === 'public' && _this2.props.channel.type === 'public');
+          return !prevIds.includes(message.id) && !message.locked && !message.own;
         });
 
         if (diff.length > 0 && this.notificationsEnabled) {
