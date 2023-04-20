@@ -1,5 +1,6 @@
 import React from "react";
 import ImageViewer from "utils/image-viewer";
+import { Base64 } from 'js-base64';
 
 /**
  * Renders plain text with shortcodes to HTML.
@@ -21,7 +22,7 @@ export default class HtmlRenderer {
 							url = match[3];
 						}
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ url }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ url }</a>;
 					} else {
 						return url;
 					}
@@ -32,7 +33,7 @@ export default class HtmlRenderer {
 					let attachmentSrc = match[2];
 
 					if (soundsConfig.enabled) {
-						return <audio key={ this.currentKey++ } controls>
+						return <audio key={ this.currentKey++ } controls data-org={ Base64.encode(match[0]) } controlsList="nodownload noplaybackrate">
 							<source src={ attachmentSrc } type="audio/mpeg" />
 							Your browser does not support the audio element.
 						</audio>;
@@ -47,11 +48,11 @@ export default class HtmlRenderer {
 					let linkBody = match[3];
 
 					if (this.configuration.interface.message.attachments) {
-						return <a key={ this.currentKey++ } href={ attachmentSrc } target="_blank" rel="noopener noreferrer nofollow">{ linkBody }</a>;
+						return <a key={ this.currentKey++ } href={ attachmentSrc } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ linkBody }</a>;
 					} else if (this.configuration.interface.message.links) {
 						let finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ linkBody }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ linkBody }</a>;
 					} else {
 						return linkBody;
 					}
@@ -71,6 +72,7 @@ export default class HtmlRenderer {
 							data-lightbox="wise_chat"
 							className="wcFunctional"
 							rel="lightbox[wise_chat]"
+							data-org={ Base64.encode(match[0]) }
 						    onClick={ e => this.handleImagePreview(e, imageSrc) }
 						>
 							<img src={ imageThumbnailSrc } className="wcImage wcFunctional" alt="Chat image"/>
@@ -81,10 +83,31 @@ export default class HtmlRenderer {
 						}
 						let finalUrl = (!imageOrgSrc.match(/^https|http|ftp:/) ? "http://" : '') + imageOrgSrc;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ imageOrgSrc }</a>;
+						return <a key={this.currentKey++} href={finalUrl} target="_blank"
+						          rel="noopener noreferrer nofollow" data-org={Base64.encode(match[0])}>{imageOrgSrc}</a>;
 					} else {
 						return imageOrgSrc !== '_' ? imageOrgSrc : imageSrc;
 					}
+				}
+			}, {
+				regExp: /\[img src="(.+?)"(\s+className="(.+?)")?]/g,
+				callback: (match, i, parserIndex) => {
+					let imageSrc = match[1];
+					let className = match[2] ? match[3] : '';
+
+					if (this.configuration.interface.message.images) {
+						return <img key={ this.currentKey++ } src={ imageSrc } className={ `wcImage wcFunctional ${className}` } alt="Chat image" data-org={ Base64.encode(match[0]) } />;
+					} else {
+						return imageSrc;
+					}
+				}
+			}, {
+				regExp: /\[span className="(.+?)" content="(.*?)"]/g,
+				callback: (match, i, parserIndex) => {
+					let className = match[1];
+					let content = match[2];
+
+					return <span key={ this.currentKey++ } className={ className } data-org={ Base64.encode(match[0]) }>{ content }</span>;
 				}
 			}, {
 				regExp: /\[youtube movie-id="(.+?)" src-org="(.+?)"]/g,
@@ -100,11 +123,12 @@ export default class HtmlRenderer {
 									className="wcVideoPlayer"
 									src={ "https://www.youtube.com/embed/" + movieId }
 									frameBorder="0" allowFullScreen
+									data-org={ Base64.encode(match[0]) }
 								/>;
 					} else if (this.configuration.interface.message.links && srcOrg.length > 0) {
 						let finalUrl = (!srcOrg.match(/^https|http|ftp:/) ? "http://" : '') + srcOrg;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ srcOrg }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ srcOrg }</a>;
 					} else if (srcOrg.length > 0) {
 						return srcOrg;
 					}
@@ -115,7 +139,7 @@ export default class HtmlRenderer {
 					let tag = match[1];
 
 					if (this.configuration.interface.message.tt) {
-						return <React.Fragment key={ this.currentKey++ }><a href={ 'https://twitter.com/hashtag/' + tag + '?src=hash' } target="_blank" rel="noopener noreferrer nofollow">#{ tag }</a></React.Fragment>;
+						return <React.Fragment key={ this.currentKey++ }><a href={ 'https://twitter.com/hashtag/' + tag + '?src=hash' } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>#{ tag }</a></React.Fragment>;
 					} else {
 						return match[0];
 					}
@@ -131,7 +155,7 @@ export default class HtmlRenderer {
 						return <img key={ this.currentKey++ }
 						            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 						            alt={'Emoticon set #' + setId + ' ' + size + 'px #' + index }
-						            className={'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index } />;
+						            className={'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index }  data-org={ Base64.encode(match[0]) } />;
 					} else {
 						return <span key={ this.currentKey++ } />;
 					}
@@ -147,7 +171,7 @@ export default class HtmlRenderer {
 							return <img key={ this.currentKey++ }
 						            src={ customEmoticon.url }
 						            alt={'Emoticon ' + emoticonId }
-						            className={'wcFunctional wcEmoticon' } />;
+						            className={'wcFunctional wcEmoticon' }  data-org={ Base64.encode(match[0]) } />;
 						} else {
 							return <span key={ this.currentKey++ } />;
 						}

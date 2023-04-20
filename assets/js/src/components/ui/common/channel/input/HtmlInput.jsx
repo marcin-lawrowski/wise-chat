@@ -29,18 +29,19 @@ class HtmlInput extends React.Component {
 			}
 
 			// convert input request into HTML string:
-			let node = $.parseHTML(this.convertMessageToHTML(this.props.inputRequest))[0];
+			let nodes = $.parseHTML(this.convertMessageToHTML(this.props.inputRequest));
 
 			if (this.range) {
 				// append the HTML at the previous caret position:
 				this.range.deleteContents();
-				this.range.insertNode(node);
+				nodes.reverse().map( node => this.range.insertNode(node) );
 				this.range.collapse(false);
 				this.selection.removeAllRanges();
 				this.selection.addRange(this.range);
 			} else {
 				this.props.logError('Range is not available, fallback to jQuery append');
-				$(this.editableRef.current).append(node);
+				$(this.editableRef.current).append(nodes);
+				this.focusAndPlaceCaretAtEnd(this.editableRef.current);
 			}
 
 			this.triggerChange();
@@ -49,6 +50,24 @@ class HtmlInput extends React.Component {
 		if (resetRequestChange) {
 			$(this.editableRef.current).html('');
 		}
+	}
+
+	focusAndPlaceCaretAtEnd(el) {
+	    el.focus();
+
+	    if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
+	        let range = document.createRange();
+	        range.selectNodeContents(el);
+	        range.collapse(false);
+	        let sel = window.getSelection();
+	        sel.removeAllRanges();
+	        sel.addRange(range);
+	    } else if (typeof document.body.createTextRange !== "undefined") {
+	        let textRange = document.body.createTextRange();
+	        textRange.moveToElementText(el);
+	        textRange.collapse(false);
+	        textRange.select();
+	    }
 	}
 
 	convertMessageToHTML(message) {
@@ -205,7 +224,7 @@ class HtmlInput extends React.Component {
     render () {
         return <div
 	        ref={ this.editableRef }
-	        className="wcInput"
+	        className="wcInput wp-exclude-emoji"
 			onKeyUp={ this.handleChange }
 			onKeyDown={ this.handleKeyDown }
 	        onClick={ this.handleClick }
