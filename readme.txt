@@ -365,6 +365,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 == Changelog ==
 
 = 3.1.3
+* Option to mute the sounds by default
 * Fixed: auto-scroll issues
 
 = 3.1.2

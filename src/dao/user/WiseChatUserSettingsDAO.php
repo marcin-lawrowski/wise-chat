@@ -6,6 +6,11 @@
  */
 class WiseChatUserSettingsDAO {
 	const USER_SETTINGS_COOKIE_NAME = 'wcUserSettings';
+
+	/**
+	 * @var WiseChatOptions
+	 */
+	protected $options;
 	
 	/**
 	* @var array Array of default values
@@ -20,6 +25,18 @@ class WiseChatUserSettingsDAO {
 	private $settingsTypes = array(
 		'muteSounds' => 'boolean'
 	);
+
+	public function __construct() {
+		$this->options = WiseChatOptions::getInstance();
+	}
+
+	public function getDefaultSetting() {
+		return array_merge(
+			$this->defaultSettings, array(
+				'muteSounds' => $this->options->isOptionEnabled('sounds_default_muted', false)
+			)
+		);
+	}
 	
 	/**
 	* Sets a key-value setting.
@@ -31,7 +48,7 @@ class WiseChatUserSettingsDAO {
 	* @throws Exception If an error occurs
 	*/
 	public function setSetting($settingName, $settingValue, $user) {
-		if (!in_array($settingName, array_keys($this->defaultSettings))) {
+		if (!in_array($settingName, array_keys($this->getDefaultSetting()))) {
 			throw new Exception('Unsupported property');
 		}
 
@@ -53,9 +70,9 @@ class WiseChatUserSettingsDAO {
 	*/
 	public function getAll() {
 		if ($this->isUserCookieAvailable()) {
-			return array_merge($this->defaultSettings, $this->getUserCookieSettings());
+			return array_merge($this->getDefaultSetting(), $this->getUserCookieSettings());
 		} else {
-			return $this->defaultSettings;
+			return $this->getDefaultSetting();
 		}
 	}
 	
