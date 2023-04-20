@@ -73,7 +73,7 @@ class Messages extends React.Component {
 
 	handleStopScroll(scrollValues, prevScrollValues) {
 		let diff = scrollValues.scrollHeight - (scrollValues.clientHeight + scrollValues.scrollTop);
-		let result = diff > 0;
+		let result = diff > (0.6 * scrollValues.clientHeight);
 
 		if (!this.state.noPastMessages && this.state.messages.length > 0) {
 			if (scrollValues.scrollTop === 0 && this.props.configuration.messagesOrder === 'ascending') {

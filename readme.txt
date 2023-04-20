@@ -5,8 +5,8 @@ Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, cha
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.2
-Stable tag: 3.1.2
-License: GPLv2 or later
+Stable tag: 3.1.3
+License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Advanced chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, appearance settings, moderation, bans and more.
@@ -363,6 +363,9 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 08. Cold Dark theme: responsive design
 
 == Changelog ==
+
+= 3.1.3
+* Fixed: auto-scroll issues
 
 = 3.1.2
 * Fixed: PHP 8.1 errors and warnings

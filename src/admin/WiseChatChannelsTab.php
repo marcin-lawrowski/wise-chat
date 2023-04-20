@@ -10,6 +10,7 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	public function getFields() {
 		return array(
 			array('_section', 'Channels Settings'),
+			array('create_channels', 'Create Channel', 'createChannelsCallback', 'void'),
 			array('channels', 'Channels', 'channelsCallback', 'void'),
 			array('admin_actions', 'Group Actions', 'adminActionsCallback', 'void'),
 			array('auto_clean_after', 'Auto-remove Messages', 'stringFieldCallback', 'integer', 'The chat will delete messages older than the given amount of minutes. Empty field means no messages will be auto-deleted.'),
@@ -163,12 +164,16 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 			$this->addErrorMessage('The channel does not exist');
 		}
 	}
+
+	public function createChannelsCallback() {
+		print("<p class='description'>Add <i>[wise-chat channel=\"My chat room\"]</i> shortcode to your page or post.</p>");
+	}
 	
 	public function channelsCallback() {
 		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG);
 		
 		$summary = $this->messagesDAO->getChannelsSummary();
-		
+
 		$html = "<table class='wp-list-table widefat'>";
 		if (count($summary) == 0) {
 			$html .= '<tr><td>No channels created yet</td></tr>';

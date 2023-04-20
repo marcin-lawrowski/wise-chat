@@ -3376,7 +3376,7 @@ var Messages = /*#__PURE__*/function (_React$Component) {
     key: "handleStopScroll",
     value: function handleStopScroll(scrollValues, prevScrollValues) {
       var diff = scrollValues.scrollHeight - (scrollValues.clientHeight + scrollValues.scrollTop);
-      var result = diff > 0;
+      var result = diff > 0.6 * scrollValues.clientHeight;
 
       if (!this.state.noPastMessages && this.state.messages.length > 0) {
         if (scrollValues.scrollTop === 0 && this.props.configuration.messagesOrder === 'ascending') {

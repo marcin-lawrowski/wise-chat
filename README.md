@@ -16,7 +16,7 @@
   - Appearance adjustments
   - Chat moderation features
   - Messages filtering
-  - Bans and kicks
+  - Muting and banning users
   - Emoticons
   - [See the full list of features](https://wordpress.org/plugins/wise-chat/#description)
 
@@ -25,14 +25,26 @@
 * [PHP](http://www.php.net/)
 * [WordPress](https://wordpress.org/)
 * [jQuery](https://jquery.com/)
+* [React JS](https://react.dev/)
+* [Redux](https://redux.js.org/)
+* [Gulp](https://gulpjs.com/)
+* [Browserify](https://browserify.org/)
+* [Moment.js](https://momentjs.com/)
 
+### Authors
+
+By [Kainex.pl](https://kainex.pl/)
+
+### Support
+
+Please check our forum on [wordpress.org](https://wordpress.org/support/plugin/wise-chat/) or drop us a line [here](https://kainex.pl/contact/)
 
 ### Installation
 
 #### Requirements:
 
- - WordPress instance
- - Admin access to the WordPress instance
+ - WordPress site
+ - Admin access to the WordPress site
 
 
 #### Steps:
@@ -55,12 +67,12 @@ $ git clone https://github.com/marcin-lawrowski/wise-chat.git
    Firefox 31+, Chrome 31+, Safari 7+, Opera 27+, iOS Safari 7.1+, Android Browser 4.1+, Chrome For Android 41+.
 
 #### Documentation:
-Check the full documentation [here](https://kaine.pl/projects/wp-plugins/wise-chat/documentation/).
+Check the full documentation [here](https://kainex.pl/projects/wp-plugins/wise-chat/documentation/).
 
 License
 ----
 
-GPL-2.0
+LGPL-2.0
 
 
 **Free Software, Hell Yeah!**
