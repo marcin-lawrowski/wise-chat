@@ -1,9 +1,27 @@
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,700&subset=latin-ext");
+/* maven-pro-regular - latin_latin-ext */
+@font-face {
+  font-display: swap;
+  /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Maven Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/maven-pro-v32-latin_latin-ext-regular.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/maven-pro-v32-latin_latin-ext-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/maven-pro-v32-latin_latin-ext-regular.woff2") format("woff2"), url("../fonts/maven-pro-v32-latin_latin-ext-regular.woff") format("woff"), url("../fonts/maven-pro-v32-latin_latin-ext-regular.ttf") format("truetype"), url("../fonts/maven-pro-v32-latin_latin-ext-regular.svg#MavenPro") format("svg");
+  /* Legacy iOS */ }
+
+/* maven-pro-700 - latin_latin-ext */
+@font-face {
+  font-display: swap;
+  /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Maven Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: url("../fonts/maven-pro-v32-latin_latin-ext-700.eot");
+  /* IE9 Compat Modes */
+  src: url("../fonts/maven-pro-v32-latin_latin-ext-700.eot?#iefix") format("embedded-opentype"), url("../fonts/maven-pro-v32-latin_latin-ext-700.woff2") format("woff2"), url("../fonts/maven-pro-v32-latin_latin-ext-700.woff") format("woff"), url("../fonts/maven-pro-v32-latin_latin-ext-700.ttf") format("truetype"), url("../fonts/maven-pro-v32-latin_latin-ext-700.svg#MavenPro") format("svg");
+  /* Legacy iOS */ }
+
 .wcContainer {
   position: relative;
   display: -webkit-box;
