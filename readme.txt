@@ -368,6 +368,7 @@ Just use `Wise Chat Channel Users` widget. It displays a block containing list o
 * Moved Google fonts to local assets
 * Option to mute the sounds by default
 * Fixed: auto-scroll issues
+* Fixed: the chat disappears when posting utf8 characters in links
 
 = 3.1.2
 * Fixed: PHP 8.1 errors and warnings

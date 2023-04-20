@@ -21,7 +21,7 @@ export default class HtmlRenderer {
 							url = match[3];
 						}
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>{ url }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ url }</a>;
 					} else {
 						return url;
 					}
@@ -32,7 +32,7 @@ export default class HtmlRenderer {
 					let attachmentSrc = match[2];
 
 					if (soundsConfig.enabled) {
-						return <audio key={ this.currentKey++ } controls data-org={ btoa(match[0]) }>
+						return <audio key={ this.currentKey++ } controls>
 							<source src={ attachmentSrc } type="audio/mpeg" />
 							Your browser does not support the audio element.
 						</audio>;
@@ -47,11 +47,11 @@ export default class HtmlRenderer {
 					let linkBody = match[3];
 
 					if (this.configuration.interface.message.attachments) {
-						return <a key={ this.currentKey++ } href={ attachmentSrc } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>{ linkBody }</a>;
+						return <a key={ this.currentKey++ } href={ attachmentSrc } target="_blank" rel="noopener noreferrer nofollow">{ linkBody }</a>;
 					} else if (this.configuration.interface.message.links) {
 						let finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>{ linkBody }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ linkBody }</a>;
 					} else {
 						return linkBody;
 					}
@@ -71,7 +71,6 @@ export default class HtmlRenderer {
 							data-lightbox="wise_chat"
 							className="wcFunctional"
 							rel="lightbox[wise_chat]"
-							data-org={ btoa(match[0]) }
 						    onClick={ e => this.handleImagePreview(e, imageSrc) }
 						>
 							<img src={ imageThumbnailSrc } className="wcImage wcFunctional" alt="Chat image"/>
@@ -82,7 +81,7 @@ export default class HtmlRenderer {
 						}
 						let finalUrl = (!imageOrgSrc.match(/^https|http|ftp:/) ? "http://" : '') + imageOrgSrc;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>{ imageOrgSrc }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ imageOrgSrc }</a>;
 					} else {
 						return imageOrgSrc !== '_' ? imageOrgSrc : imageSrc;
 					}
@@ -101,12 +100,11 @@ export default class HtmlRenderer {
 									className="wcVideoPlayer"
 									src={ "https://www.youtube.com/embed/" + movieId }
 									frameBorder="0" allowFullScreen
-									data-org={ btoa(match[0]) }
 								/>;
 					} else if (this.configuration.interface.message.links && srcOrg.length > 0) {
 						let finalUrl = (!srcOrg.match(/^https|http|ftp:/) ? "http://" : '') + srcOrg;
 
-						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>{ srcOrg }</a>;
+						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow">{ srcOrg }</a>;
 					} else if (srcOrg.length > 0) {
 						return srcOrg;
 					}
@@ -117,7 +115,7 @@ export default class HtmlRenderer {
 					let tag = match[1];
 
 					if (this.configuration.interface.message.tt) {
-						return <React.Fragment key={ this.currentKey++ }><a href={ 'https://twitter.com/hashtag/' + tag + '?src=hash' } target="_blank" rel="noopener noreferrer nofollow" data-org={ btoa(match[0]) }>#{ tag }</a></React.Fragment>;
+						return <React.Fragment key={ this.currentKey++ }><a href={ 'https://twitter.com/hashtag/' + tag + '?src=hash' } target="_blank" rel="noopener noreferrer nofollow">#{ tag }</a></React.Fragment>;
 					} else {
 						return match[0];
 					}
@@ -133,7 +131,7 @@ export default class HtmlRenderer {
 						return <img key={ this.currentKey++ }
 						            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
 						            alt={'Emoticon set #' + setId + ' ' + size + 'px #' + index }
-						            className={'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index }  data-org={ btoa(match[0]) } />;
+						            className={'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index } />;
 					} else {
 						return <span key={ this.currentKey++ } />;
 					}
@@ -149,7 +147,7 @@ export default class HtmlRenderer {
 							return <img key={ this.currentKey++ }
 						            src={ customEmoticon.url }
 						            alt={'Emoticon ' + emoticonId }
-						            className={'wcFunctional wcEmoticon' }  data-org={ btoa(match[0]) } />;
+						            className={'wcFunctional wcEmoticon' } />;
 						} else {
 							return <span key={ this.currentKey++ } />;
 						}

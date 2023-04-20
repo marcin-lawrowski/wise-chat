@@ -8230,8 +8230,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               href: finalUrl,
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, url);
           } else {
             return url;
@@ -8245,8 +8244,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
           if (soundsConfig.enabled) {
             return /*#__PURE__*/_react["default"].createElement("audio", {
               key: _this.currentKey++,
-              controls: true,
-              "data-org": btoa(match[0])
+              controls: true
             }, /*#__PURE__*/_react["default"].createElement("source", {
               src: attachmentSrc,
               type: "audio/mpeg"
@@ -8266,8 +8264,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               href: attachmentSrc,
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, linkBody);
           } else if (_this.configuration["interface"].message.links) {
             var finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
@@ -8275,8 +8272,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               href: finalUrl,
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, linkBody);
           } else {
             return linkBody;
@@ -8297,7 +8293,6 @@ var HtmlRenderer = /*#__PURE__*/function () {
               "data-lightbox": "wise_chat",
               className: "wcFunctional",
               rel: "lightbox[wise_chat]",
-              "data-org": btoa(match[0]),
               onClick: function onClick(e) {
                 return _this.handleImagePreview(e, imageSrc);
               }
@@ -8316,8 +8311,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               href: finalUrl,
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, imageOrgSrc);
           } else {
             return imageOrgSrc !== '_' ? imageOrgSrc : imageSrc;
@@ -8337,8 +8331,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               className: "wcVideoPlayer",
               src: "https://www.youtube.com/embed/" + movieId,
               frameBorder: "0",
-              allowFullScreen: true,
-              "data-org": btoa(match[0])
+              allowFullScreen: true
             });
           } else if (_this.configuration["interface"].message.links && srcOrg.length > 0) {
             var finalUrl = (!srcOrg.match(/^https|http|ftp:/) ? "http://" : '') + srcOrg;
@@ -8346,8 +8339,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               href: finalUrl,
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, srcOrg);
           } else if (srcOrg.length > 0) {
             return srcOrg;
@@ -8364,8 +8356,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
             }, /*#__PURE__*/_react["default"].createElement("a", {
               href: 'https://twitter.com/hashtag/' + tag + '?src=hash',
               target: "_blank",
-              rel: "noopener noreferrer nofollow",
-              "data-org": btoa(match[0])
+              rel: "noopener noreferrer nofollow"
             }, "#", tag));
           } else {
             return match[0];
@@ -8383,8 +8374,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               key: _this.currentKey++,
               src: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
               alt: 'Emoticon set #' + setId + ' ' + size + 'px #' + index,
-              className: 'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index,
-              "data-org": btoa(match[0])
+              className: 'wcFunctional wcEmoticon bg-emot_' + setId + '_' + size + '_' + index
             });
           } else {
             return /*#__PURE__*/_react["default"].createElement("span", {
@@ -8407,8 +8397,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
                 key: _this.currentKey++,
                 src: customEmoticon.url,
                 alt: 'Emoticon ' + emoticonId,
-                className: 'wcFunctional wcEmoticon',
-                "data-org": btoa(match[0])
+                className: 'wcFunctional wcEmoticon'
               });
             } else {
               return /*#__PURE__*/_react["default"].createElement("span", {
@@ -30040,7 +30029,6 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],193:[function(require,module,exports){
-(function (process){(function (){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30052,7 +30040,7 @@ process.umask = function() { return 0; };
 
 var printWarning = function() {};
 
-if (process.env.NODE_ENV !== 'production') {
+if ("production" !== 'production') {
   var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
   var loggedTypeFailures = {};
   var has = Function.call.bind(Object.prototype.hasOwnProperty);
@@ -30083,7 +30071,7 @@ if (process.env.NODE_ENV !== 'production') {
  * @private
  */
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     for (var typeSpecName in typeSpecs) {
       if (has(typeSpecs, typeSpecName)) {
         var error;
@@ -30137,16 +30125,14 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
  * @private
  */
 checkPropTypes.resetWarningCache = function() {
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     loggedTypeFailures = {};
   }
 }
 
 module.exports = checkPropTypes;
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./lib/ReactPropTypesSecret":197,"_process":192}],194:[function(require,module,exports){
+},{"./lib/ReactPropTypesSecret":197}],194:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30213,7 +30199,6 @@ module.exports = function() {
 };
 
 },{"./lib/ReactPropTypesSecret":197}],195:[function(require,module,exports){
-(function (process){(function (){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30232,7 +30217,7 @@ var checkPropTypes = require('./checkPropTypes');
 var has = Function.call.bind(Object.prototype.hasOwnProperty);
 var printWarning = function() {};
 
-if (process.env.NODE_ENV !== 'production') {
+if ("production" !== 'production') {
   printWarning = function(text) {
     var message = 'Warning: ' + text;
     if (typeof console !== 'undefined') {
@@ -30383,7 +30368,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   PropTypeError.prototype = Error.prototype;
 
   function createChainableTypeChecker(validate) {
-    if (process.env.NODE_ENV !== 'production') {
+    if ("production" !== 'production') {
       var manualPropTypeCallCache = {};
       var manualPropTypeWarningCount = 0;
     }
@@ -30401,7 +30386,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
           );
           err.name = 'Invariant Violation';
           throw err;
-        } else if (process.env.NODE_ENV !== 'production' && typeof console !== 'undefined') {
+        } else if ("production" !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
           if (
@@ -30520,7 +30505,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createEnumTypeChecker(expectedValues) {
     if (!Array.isArray(expectedValues)) {
-      if (process.env.NODE_ENV !== 'production') {
+      if ("production" !== 'production') {
         if (arguments.length > 1) {
           printWarning(
             'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
@@ -30578,7 +30563,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createUnionTypeChecker(arrayOfTypeCheckers) {
     if (!Array.isArray(arrayOfTypeCheckers)) {
-      process.env.NODE_ENV !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      "production" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
       return emptyFunctionThatReturnsNull;
     }
 
@@ -30806,10 +30791,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./checkPropTypes":193,"./lib/ReactPropTypesSecret":197,"_process":192,"object-assign":187,"react-is":220}],196:[function(require,module,exports){
-(function (process){(function (){
+},{"./checkPropTypes":193,"./lib/ReactPropTypesSecret":197,"object-assign":187,"react-is":220}],196:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -30817,7 +30799,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
  * LICENSE file in the root directory of this source tree.
  */
 
-if (process.env.NODE_ENV !== 'production') {
+if ("production" !== 'production') {
   var ReactIs = require('react-is');
 
   // By explicitly using `prop-types` you are opting into new development behavior.
@@ -30830,9 +30812,7 @@ if (process.env.NODE_ENV !== 'production') {
   module.exports = require('./factoryWithThrowingShims')();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./factoryWithThrowingShims":194,"./factoryWithTypeCheckers":195,"_process":192,"react-is":220}],197:[function(require,module,exports){
+},{"./factoryWithThrowingShims":194,"./factoryWithTypeCheckers":195,"react-is":220}],197:[function(require,module,exports){
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -31229,7 +31209,6 @@ function withCookies(WrappedComponent) {
 
 module.exports = exports.default;
 },{"./CookiesContext":199,"hoist-non-react-statics":171,"react":247}],204:[function(require,module,exports){
-(function (process){(function (){
 /** @license React v17.0.1
  * react-dom-server.browser.development.js
  *
@@ -31241,7 +31220,7 @@ module.exports = exports.default;
 
 'use strict';
 
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -35573,9 +35552,7 @@ exports.version = ReactVersion;
   })();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192,"object-assign":187,"react":247}],205:[function(require,module,exports){
+},{"object-assign":187,"react":247}],205:[function(require,module,exports){
 /** @license React v17.0.1
  * react-dom-server.browser.production.min.js
  *
@@ -35629,7 +35606,6 @@ f&&"foreignObject"===a?"http://www.w3.org/1999/xhtml":f;this.stack.push({domName
 exports.version="17.0.1";
 
 },{"object-assign":187,"react":247}],206:[function(require,module,exports){
-(function (process){(function (){
 /** @license React v17.0.1
  * react-dom.development.js
  *
@@ -35641,7 +35617,7 @@ exports.version="17.0.1";
 
 'use strict';
 
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -61893,9 +61869,7 @@ exports.version = ReactVersion;
   })();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192,"object-assign":187,"react":247,"scheduler":263,"scheduler/tracing":264}],207:[function(require,module,exports){
+},{"object-assign":187,"react":247,"scheduler":263,"scheduler/tracing":264}],207:[function(require,module,exports){
 /** @license React v17.0.1
  * react-dom.production.min.js
  *
@@ -62195,7 +62169,6 @@ exports.render=function(a,b,c){if(!rk(b))throw Error(y(200));return tk(null,a,b,
 exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!rk(c))throw Error(y(200));if(null==a||void 0===a._reactInternals)throw Error(y(38));return tk(a,b,c,!1,d)};exports.version="17.0.1";
 
 },{"object-assign":187,"react":247,"scheduler":263}],208:[function(require,module,exports){
-(function (process){(function (){
 'use strict';
 
 function checkDCE() {
@@ -62206,7 +62179,7 @@ function checkDCE() {
   ) {
     return;
   }
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     // This branch is unreachable because this function is only called
     // in production, but the condition is true only in development.
     // Therefore if the branch is still here, dead code elimination wasn't
@@ -62226,7 +62199,7 @@ function checkDCE() {
   }
 }
 
-if (process.env.NODE_ENV === 'production') {
+if ("production" === 'production') {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
@@ -62235,21 +62208,16 @@ if (process.env.NODE_ENV === 'production') {
   module.exports = require('./cjs/react-dom.development.js');
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./cjs/react-dom.development.js":206,"./cjs/react-dom.production.min.js":207,"_process":192}],209:[function(require,module,exports){
-(function (process){(function (){
+},{"./cjs/react-dom.development.js":206,"./cjs/react-dom.production.min.js":207}],209:[function(require,module,exports){
 'use strict';
 
-if (process.env.NODE_ENV === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/react-dom-server.browser.production.min.js');
 } else {
   module.exports = require('./cjs/react-dom-server.browser.development.js');
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./cjs/react-dom-server.browser.development.js":204,"./cjs/react-dom-server.browser.production.min.js":205,"_process":192}],210:[function(require,module,exports){
+},{"./cjs/react-dom-server.browser.development.js":204,"./cjs/react-dom-server.browser.production.min.js":205}],210:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64195,7 +64163,6 @@ if (process.env.NODE_ENV === 'production') {
 }).call(this)}).call(this,require('_process'))
 
 },{"./cjs/react-is.development.js":218,"./cjs/react-is.production.min.js":219,"_process":192}],221:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -64209,16 +64176,13 @@ var ReactReduxContext = /*#__PURE__*/_react["default"].createContext(null);
 
 exports.ReactReduxContext = ReactReduxContext;
 
-if (process.env.NODE_ENV !== 'production') {
+if ("production" !== 'production') {
   ReactReduxContext.displayName = 'ReactRedux';
 }
 
 var _default = ReactReduxContext;
 exports["default"] = _default;
-}).call(this)}).call(this,require('_process'))
-
-},{"@babel/runtime/helpers/interopRequireDefault":81,"_process":192,"react":247}],222:[function(require,module,exports){
-(function (process){(function (){
+},{"@babel/runtime/helpers/interopRequireDefault":81,"react":247}],222:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -64270,7 +64234,7 @@ function Provider(_ref) {
   }, children);
 }
 
-if (process.env.NODE_ENV !== 'production') {
+if ("production" !== 'production') {
   Provider.propTypes = {
     store: _propTypes["default"].shape({
       subscribe: _propTypes["default"].func.isRequired,
@@ -64284,10 +64248,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 var _default = Provider;
 exports["default"] = _default;
-}).call(this)}).call(this,require('_process'))
-
-},{"../utils/Subscription":236,"./Context":221,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/interopRequireWildcard":82,"_process":192,"prop-types":196,"react":247}],223:[function(require,module,exports){
-(function (process){(function (){
+},{"../utils/Subscription":236,"./Context":221,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/interopRequireWildcard":82,"prop-types":196,"react":247}],223:[function(require,module,exports){
 "use strict";
 
 var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
@@ -64472,7 +64433,7 @@ _ref) {
       context = _ref2$context === void 0 ? _Context.ReactReduxContext : _ref2$context,
       connectOptions = (0, _objectWithoutPropertiesLoose2["default"])(_ref2, ["getDisplayName", "methodName", "renderCountProp", "shouldHandleStateChanges", "storeKey", "withRef", "forwardRef", "context"]);
 
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     if (renderCountProp !== undefined) {
       throw new Error("renderCountProp is removed. render counting is built into the latest React Dev Tools profiling extension");
     }
@@ -64490,7 +64451,7 @@ _ref) {
 
   var Context = context;
   return function wrapWithConnect(WrappedComponent) {
-    if (process.env.NODE_ENV !== 'production' && !(0, _reactIs.isValidElementType)(WrappedComponent)) {
+    if ("production" !== 'production' && !(0, _reactIs.isValidElementType)(WrappedComponent)) {
       throw new Error("You must pass a component to the function returned by " + (methodName + ". Instead received " + stringifyComponent(WrappedComponent)));
     }
 
@@ -64545,7 +64506,7 @@ _ref) {
       var didStoreComeFromProps = Boolean(props.store) && Boolean(props.store.getState) && Boolean(props.store.dispatch);
       var didStoreComeFromContext = Boolean(contextValue) && Boolean(contextValue.store);
 
-      if (process.env.NODE_ENV !== 'production' && !didStoreComeFromProps && !didStoreComeFromContext) {
+      if ("production" !== 'production' && !didStoreComeFromProps && !didStoreComeFromContext) {
         throw new Error("Could not find \"store\" in the context of " + ("\"" + displayName + "\". Either wrap the root component in a <Provider>, ") + "or pass a custom React context provider to <Provider> and the corresponding " + ("React context consumer to " + displayName + " in connect options."));
       } // Based on the previous check, one of these must be true
 
@@ -64672,9 +64633,7 @@ _ref) {
     return (0, _hoistNonReactStatics["default"])(Connect, WrappedComponent);
   };
 }
-}).call(this)}).call(this,require('_process'))
-
-},{"../utils/Subscription":236,"../utils/useIsomorphicLayoutEffect":241,"./Context":221,"@babel/runtime/helpers/extends":78,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/interopRequireWildcard":82,"@babel/runtime/helpers/objectWithoutPropertiesLoose":88,"_process":192,"hoist-non-react-statics":171,"react":247,"react-is":220}],224:[function(require,module,exports){
+},{"../utils/Subscription":236,"../utils/useIsomorphicLayoutEffect":241,"./Context":221,"@babel/runtime/helpers/extends":78,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/interopRequireWildcard":82,"@babel/runtime/helpers/objectWithoutPropertiesLoose":88,"hoist-non-react-statics":171,"react":247,"react-is":220}],224:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -64846,7 +64805,6 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 var _default = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
 exports["default"] = _default;
 },{"./wrapMapToProps":230}],227:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -64881,7 +64839,7 @@ function wrapMergePropsFunc(mergeProps) {
       } else {
         hasRunOnce = true;
         mergedProps = nextMergedProps;
-        if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject["default"])(mergedProps, displayName, 'mergeProps');
+        if ("production" !== 'production') (0, _verifyPlainObject["default"])(mergedProps, displayName, 'mergeProps');
       }
 
       return mergedProps;
@@ -64901,10 +64859,7 @@ function whenMergePropsIsOmitted(mergeProps) {
 
 var _default = [whenMergePropsIsFunction, whenMergePropsIsOmitted];
 exports["default"] = _default;
-}).call(this)}).call(this,require('_process'))
-
-},{"../utils/verifyPlainObject":242,"@babel/runtime/helpers/extends":78,"@babel/runtime/helpers/interopRequireDefault":81,"_process":192}],228:[function(require,module,exports){
-(function (process){(function (){
+},{"../utils/verifyPlainObject":242,"@babel/runtime/helpers/extends":78,"@babel/runtime/helpers/interopRequireDefault":81}],228:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -64997,16 +64952,14 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
   var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
   var mergeProps = initMergeProps(dispatch, options);
 
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     (0, _verifySubselectors["default"])(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName);
   }
 
   var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
   return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
 }
-}).call(this)}).call(this,require('_process'))
-
-},{"./verifySubselectors":229,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/objectWithoutPropertiesLoose":88,"_process":192}],229:[function(require,module,exports){
+},{"./verifySubselectors":229,"@babel/runtime/helpers/interopRequireDefault":81,"@babel/runtime/helpers/objectWithoutPropertiesLoose":88}],229:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -65032,7 +64985,6 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
   verify(mergeProps, 'mergeProps', displayName);
 }
 },{"../utils/warning":243,"@babel/runtime/helpers/interopRequireDefault":81}],230:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -65102,16 +65054,14 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
         props = proxy(stateOrDispatch, ownProps);
       }
 
-      if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject["default"])(props, displayName, methodName);
+      if ("production" !== 'production') (0, _verifyPlainObject["default"])(props, displayName, methodName);
       return props;
     };
 
     return proxy;
   };
 }
-}).call(this)}).call(this,require('_process'))
-
-},{"../utils/verifyPlainObject":242,"@babel/runtime/helpers/interopRequireDefault":81,"_process":192}],231:[function(require,module,exports){
+},{"../utils/verifyPlainObject":242,"@babel/runtime/helpers/interopRequireDefault":81}],231:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -65165,7 +65115,6 @@ function createDispatchHook(context) {
 var useDispatch = /*#__PURE__*/createDispatchHook();
 exports.useDispatch = useDispatch;
 },{"../components/Context":221,"./useStore":234}],232:[function(require,module,exports){
-(function (process){(function (){
 "use strict";
 
 exports.__esModule = true;
@@ -65194,16 +65143,13 @@ var _Context = require("../components/Context");
 function useReduxContext() {
   var contextValue = (0, _react.useContext)(_Context.ReactReduxContext);
 
-  if (process.env.NODE_ENV !== 'production' && !contextValue) {
+  if ("production" !== 'production' && !contextValue) {
     throw new Error('could not find react-redux context value; please ensure the component is wrapped in a <Provider>');
   }
 
   return contextValue;
 }
-}).call(this)}).call(this,require('_process'))
-
-},{"../components/Context":221,"_process":192,"react":247}],233:[function(require,module,exports){
-(function (process){(function (){
+},{"../components/Context":221,"react":247}],233:[function(require,module,exports){
 "use strict";
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
@@ -65313,7 +65259,7 @@ function createSelectorHook(context) {
       equalityFn = refEquality;
     }
 
-    if (process.env.NODE_ENV !== 'production' && !selector) {
+    if ("production" !== 'production' && !selector) {
       throw new Error("You must pass a selector to useSelector");
     }
 
@@ -65353,9 +65299,7 @@ function createSelectorHook(context) {
 
 var useSelector = /*#__PURE__*/createSelectorHook();
 exports.useSelector = useSelector;
-}).call(this)}).call(this,require('_process'))
-
-},{"../components/Context":221,"../utils/Subscription":236,"../utils/useIsomorphicLayoutEffect":241,"./useReduxContext":232,"@babel/runtime/helpers/interopRequireDefault":81,"_process":192,"react":247}],234:[function(require,module,exports){
+},{"../components/Context":221,"../utils/Subscription":236,"../utils/useIsomorphicLayoutEffect":241,"./useReduxContext":232,"@babel/runtime/helpers/interopRequireDefault":81,"react":247}],234:[function(require,module,exports){
 "use strict";
 
 exports.__esModule = true;
@@ -67686,7 +67630,6 @@ exports.default = Scrollbar;
 }).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{"cnbuilder":99,"prop-types":196,"react":247,"react-draggable":212,"zoom-level":284}],245:[function(require,module,exports){
-(function (process){(function (){
 /** @license React v17.0.1
  * react.development.js
  *
@@ -67698,7 +67641,7 @@ exports.default = Scrollbar;
 
 'use strict';
 
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -70021,9 +69964,7 @@ exports.version = ReactVersion;
   })();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192,"object-assign":187}],246:[function(require,module,exports){
+},{"object-assign":187}],246:[function(require,module,exports){
 /** @license React v17.0.1
  * react.production.min.js
  *
@@ -70049,18 +69990,15 @@ exports.lazy=function(a){return{$$typeof:v,_payload:{_status:-1,_result:a},_init
 exports.useLayoutEffect=function(a,b){return S().useLayoutEffect(a,b)};exports.useMemo=function(a,b){return S().useMemo(a,b)};exports.useReducer=function(a,b,c){return S().useReducer(a,b,c)};exports.useRef=function(a){return S().useRef(a)};exports.useState=function(a){return S().useState(a)};exports.version="17.0.1";
 
 },{"object-assign":187}],247:[function(require,module,exports){
-(function (process){(function (){
 'use strict';
 
-if (process.env.NODE_ENV === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/react.production.min.js');
 } else {
   module.exports = require('./cjs/react.development.js');
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./cjs/react.development.js":245,"./cjs/react.production.min.js":246,"_process":192}],248:[function(require,module,exports){
+},{"./cjs/react.development.js":245,"./cjs/react.production.min.js":246}],248:[function(require,module,exports){
 (function (process){(function (){
 
 'use strict'
@@ -70731,7 +70669,6 @@ thunk.withExtraArgument = createThunkMiddleware;
 
 exports['default'] = thunk;
 },{}],252:[function(require,module,exports){
-(function (process){(function (){
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -71144,7 +71081,7 @@ function combineReducers(reducers) {
   for (var i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i];
 
-    if (process.env.NODE_ENV !== 'production') {
+    if ("production" !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning("No reducer provided for key \"" + key + "\"");
       }
@@ -71160,7 +71097,7 @@ function combineReducers(reducers) {
 
   var unexpectedKeyCache;
 
-  if (process.env.NODE_ENV !== 'production') {
+  if ("production" !== 'production') {
     unexpectedKeyCache = {};
   }
 
@@ -71181,7 +71118,7 @@ function combineReducers(reducers) {
       throw shapeAssertionError;
     }
 
-    if (process.env.NODE_ENV !== 'production') {
+    if ("production" !== 'production') {
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
 
       if (warningMessage) {
@@ -71396,7 +71333,7 @@ function applyMiddleware() {
 
 function isCrushed() {}
 
-if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+if ("production" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
   warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
 }
 
@@ -71407,9 +71344,7 @@ exports.combineReducers = combineReducers;
 exports.compose = compose;
 exports.createStore = createStore;
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192,"symbol-observable":279}],253:[function(require,module,exports){
+},{"symbol-observable":279}],253:[function(require,module,exports){
 'use strict';
 
 var $Object = Object;
@@ -71516,7 +71451,6 @@ module.exports = function shimFlags() {
 };
 
 },{"./polyfill":257,"define-properties":101}],259:[function(require,module,exports){
-(function (process){(function (){
 /** @license React v0.20.1
  * scheduler-tracing.development.js
  *
@@ -71528,7 +71462,7 @@ module.exports = function shimFlags() {
 
 'use strict';
 
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -71865,9 +71799,7 @@ exports.unstable_wrap = unstable_wrap;
   })();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192}],260:[function(require,module,exports){
+},{}],260:[function(require,module,exports){
 /** @license React v0.20.1
  * scheduler-tracing.production.min.js
  *
@@ -71879,7 +71811,6 @@ exports.unstable_wrap = unstable_wrap;
 'use strict';var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unstable_clear=function(a){return a()};exports.unstable_getCurrent=function(){return null};exports.unstable_getThreadID=function(){return++b};exports.unstable_subscribe=function(){};exports.unstable_trace=function(a,d,c){return c()};exports.unstable_unsubscribe=function(){};exports.unstable_wrap=function(a){return a};
 
 },{}],261:[function(require,module,exports){
-(function (process){(function (){
 /** @license React v0.20.1
  * scheduler.development.js
  *
@@ -71891,7 +71822,7 @@ exports.unstable_wrap = unstable_wrap;
 
 'use strict';
 
-if (process.env.NODE_ENV !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -72725,9 +72656,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
   })();
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"_process":192}],262:[function(require,module,exports){
+},{}],262:[function(require,module,exports){
 /** @license React v0.20.1
  * scheduler.production.min.js
  *
@@ -72750,30 +72679,24 @@ exports.unstable_scheduleCallback=function(a,b,c){var d=exports.unstable_now();"
 exports.unstable_wrapCallback=function(a){var b=P;return function(){var c=P;P=b;try{return a.apply(this,arguments)}finally{P=c}}};
 
 },{}],263:[function(require,module,exports){
-(function (process){(function (){
 'use strict';
 
-if (process.env.NODE_ENV === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/scheduler.production.min.js');
 } else {
   module.exports = require('./cjs/scheduler.development.js');
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./cjs/scheduler.development.js":261,"./cjs/scheduler.production.min.js":262,"_process":192}],264:[function(require,module,exports){
-(function (process){(function (){
+},{"./cjs/scheduler.development.js":261,"./cjs/scheduler.production.min.js":262}],264:[function(require,module,exports){
 'use strict';
 
-if (process.env.NODE_ENV === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/scheduler-tracing.production.min.js');
 } else {
   module.exports = require('./cjs/scheduler-tracing.development.js');
 }
 
-}).call(this)}).call(this,require('_process'))
-
-},{"./cjs/scheduler-tracing.development.js":259,"./cjs/scheduler-tracing.production.min.js":260,"_process":192}],265:[function(require,module,exports){
+},{"./cjs/scheduler-tracing.development.js":259,"./cjs/scheduler-tracing.production.min.js":260}],265:[function(require,module,exports){
 'use strict';
 
 var GetIntrinsic = require('get-intrinsic');
