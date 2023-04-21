@@ -168,12 +168,34 @@ Almost all settings available on plugin's settings page are also available in sh
 = How to create a channel and open it? =
 
 Place the following short code in your page or post:
-`[wise-chat channel="my-channel-name"]`
-or add this PHP snippet in the theme's source file:
-`<?php if (function_exists('wise_chat')) { wise_chat('my-channel-name'); } ?>`
+`[wise-chat channel="My Chat Room"]`
+or add this PHP snippet in a template file:
+`<?php if (function_exists('wise_chat')) { wise_chat('My Chat Room'); } ?>`
 or put "Wise Chat Window" widget on the desired sidebar and set the desired channel name in Channel field.
 
 The channel will be created during the first usage and it will be added to the list of channels on Wise Chat Settings page in the Channels tab.
+
+= I see "Loading the chat ..." and the chat does not show up. What is wrong? =
+
+It means that the chat cannot start due to some errors. First, please try to check JS Console (in Chrome of Firefox) in search for any error message. Then please try to fix them. If an error comes from Wise Chat then please [let us know it](https://kainex.pl/contact/). We will do our best to help you.
+Otherwise please contact the support of other plugins / themes that you suspect are causing issues. After fixing all errors in the JS Console the chat should start properly.
+
+If you do not see any errors in the console then please try to disable any security plugin you use. They may be blocking the connection between the chat and your server.
+After finding a plugin that is blocking the chat try to add an exception to it. Basically, security plugins should avoid this particular URL:
+
+https://yourdomain/wp-content/plugins/wise-chat/src/endpoints
+
+You may also [read this doc](https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/troubleshooting/messages-not-being-posted/).
+
+= My messages are not visible until I refresh the page. What is going on? =
+
+In order to get new messages the chat is requesting the following URL:
+
+https://yourdomain/wp-content/plugins/wise-chat/src/endpoints
+
+It is very likely the URL is is forbidden in your setup (403 error). It may be caused by a security plugin or theme. A specific configuration of HTTP server (.htaccess file or server settings) may be the reason too. Please ask your server administrator to make the URL accessible.
+
+You may also [read this doc](https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/troubleshooting/messages-not-being-posted/).
 
 = How to create a password-protected private channel? =
 
@@ -203,41 +225,35 @@ You can enable a form that appears every time a new user tries to enter the chat
 
 The plugin has its own implementation of bad words filtering mechanism. Currently it supports three languages: English, Polish and German. It is turned on by default. It detects not only simple words but also variations of words like: "H.a.c_ki.n_g" (assuming that "hacking" is a bad word).
 
-= How to ban an user? =
+= How to mute user? It prevents users from posting messages =
 
-Log in as an administrator and go to Settings -> Wise Chat Settings page, select Moderation tab. Enable "Enable Admin Actions" option and go to a page containing the chat. Next to each message there should be a button that allows to ban an user for 1 day.
+Log in as an administrator and go to Settings -> Wise Chat Settings page, select Moderation tab. Enable "Mute Action" option next to the user role you want to add a permission to mute users to. Go to the chat page.
+When you move the cursor over a message you will see mute button. This will mute the user who posted the message for 1 day.
 
-Alternatively log in as an administrator and type the command:
-`/ban [UserName] [Duration]`
-where "UserName" is the chosen user's name and "Duration" is constructed as follows: 1m (a ban for 1 minute), 7m (a ban for 7 minutes), 1h (a ban for one hour), 2d (a ban for 2 days), etc. Notice: IP addresses are actually blocked.
+Alternatively, you can go to Settings -> Wise Chat Settings page, select Muted Users tab. In "Mute IP" row specify: IP address, duration and finally click "Mute IP" button.
 
-Alternatively you can go to Settings -> Wise Chat Settings page, select Bans tab. In "New Ban" row specify: IP address, duration and finally click "Add Ban" button.
+= How to get the list of muted users? =
+
+Go to Settings -> Wise Chat Settings page and select Muted Users tab.
+
+= How to stop muting user? =
+
+Go to Settings -> Wise Chat Settings page, select Muted Users tab and then delete the desired user from the list.
+
+= How to ban users? It prevents users from accessing the chat =
+
+Log in as an administrator and go to Settings -> Wise Chat Settings page, select Moderation tab. Enable "Ban Action" option next to the user role you want to add a permission to ban users to. Go to the chat page.
+When you move the cursor over a message you will see ban button. This will ban the user who posted the message.
+
+Alternatively, you can go to Settings -> Wise Chat Settings page and select Banned Users tab. In "Ban IP" row specify the IP address and click "Ban IP" button.
 
 = How to get the list of banned users? =
 
-Log in as an administrator and type the command:
-`/bans`
-or go to Settings -> Wise Chat Settings page and select Bans tab.
+Log in as an administrator, go to Settings -> Wise Chat Settings page and select Banned Users tab.
 
-= How to remove a ban of an user? =
+= How to remove a banned IP address? =
 
-Log in as an administrator and type the command:
-`/unban [IP address]`
-or go to Settings -> Wise Chat Settings page, select Bans tab and then delete the desired ban from the list.
-
-= How to kick users? =
-
-Log in as an administrator and go to Settings -> Wise Chat Settings page, select Moderation tab. Enable "Enable Admin Actions" option and go to chat page. Next to each message there should be a button for kicking the user who sent the message.
-
-Alternatively, you can go to Settings -> Wise Chat Settings page and select Kicks tab. In "Add Kick" section specify IP address and click "Add Kick" button.
-
-= How to get the list of kicked users? =
-
-Log in as an administrator, go to Settings -> Wise Chat Settings page and select Kicks tab.
-
-= How to remove kicked IP address? =
-
-Log in as an administrator, go to Settings -> Wise Chat Settings page, select Kicks tab and then delete the desired IP address from the list.
+Log in as an administrator, go to Settings -> Wise Chat Settings page, select Banned Users tab and then delete the desired IP address from the list.
 
 = How to get some information (e.g. IP address) about an user? =
 
@@ -245,25 +261,18 @@ Log in as an administrator and type the command:
 `/whois [UserName]`
 where "UserName" is the chosen user's name.
 
-= How to use messages history feature? =
-
-Click on the message input field and use arrow keys (up and down) to scroll through the history of recently sent messages.
-
 = How to prevent from accessing the chat by anonymous users? =
 
-Go to Settings -> Wise Chat Settings page, select General tab and select "Only regular WP users" in "Access Mode" combo box. From now an user has to be logged in as a regular WordPress user in order to gain access to the chat.
+Go to Settings -> Wise Chat Settings page, select General tab and check "Disable Anonymous Users" option. From now a visitor has to be logged in as a regular WordPress user in order to access the chat.
 
-= How does auto-ban feature work? =
+= How does auto-mute feature work? =
 
-There is a counter for each user. Every time an user types a bad word in a message the counter is increased. If it reaches the threshold (by default set to 3) the user is banned for 1 day (the duration is configurable).
+There is a counter for each user. Every time an user types a bad word in a message the counter is increased. If it reaches the threshold (by default set to 3) the user is muted for 1 day (the duration is configurable).
 
 = How to delete a single message from the channel? =
 
-Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderation tab and enable "Enable Admin Actions" option. From now every message in every channel has its own delete button ("X" icon). The button appears only for logged in administrators (or other choosen role). Use the button to delete desired messages.
-
-= How to give message deletion permission to certain user roles? =
-
-Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderation tab and enable "Enable Admin Actions" option. Next, in "Delete Message Permission" field select a role that is allowed to delete messages. From now users belonging to the selected role have permission to delete messages.
+Log in as an administrator. Go to Settings -> Wise Chat Settings, select Moderation tab and enable "Delete Action" option next to the user role you want to add a permission to delete messages to. Go to the chat page.
+When you move the cursor over a message you will see delete button. This will delete the message.
 
 Alternatively: add "wise_chat_delete_message" capability to a role you want to have that permission. It could be either standard WordPress role or a custom role.
 
@@ -291,13 +300,9 @@ Uploading of images is supported in the following Web browsers: IE 10+, Firefox 
 
 You can use filters feature. Go to Settings -> Wise Chat Settings, select Filters tab and add new filter. From now each occurrence of the phrase will be replaced by the defined text in every message that is posted to any chat channel.
 
-= Chat window is showing up but it does not work. I cannot receive or send messages. What is wrong? =
+= Wise Chat plugin is making a lot of HTTP requests. How to improve the performance? =
 
-Ensure that jQuery library is installed in your theme. Wise Chat cannot operate without jQuery.
-
-= Wise Chat plugin is making a lot of long-running HTTP requests. How to improve the performance? =
-
-Every 3 seconds the plugin checks for new messages using AJAX request. By default admin-ajax.php is used as a backend script and this script has poor performance. However, it is the most compatible solution. If you want to reduce server load try to change "AJAX Engine" property to "Lightweight AJAX". It can be set on Settings -> Wise Chat Settings page, select Advanced tab and then select "Lightweight AJAX" from the dropdown list. This option enables dedicated backend script that has a lot better performance.
+Every few seconds the plugin checks for new messages using AJAX requests. Please check [this article](https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/troubleshooting/performance/) for details.
 
 = How to customize CSS styles using "Custom CSS Styles" setting? =
 
@@ -315,19 +320,15 @@ By default - no, however, you can enable auto-cleaning messages feature. Go to S
 
 Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Users Limit" type number of users that allow to participate in a channel.
 
-= How to limit the amount of channels that an user can participate simultaneously? =
-
-Go to Settings -> Wise Chat Settings, select Channels tab. In the field "Channels Limit" type number of channels that an user is allowed to participate simultaneously.
-
 = How to reset username prefix (a number that is added to anonymous users name) anonymous users? =
 
-Go to Settings -> Wise Chat Settings, select General tab and click "Reset Username Prefix" button.
+Go to Settings -> Wise Chat Settings, select Advanced tab and click "Reset Username Prefix" button.
 
 = When I upload an animated GIF the thumbnail is not animated. What is wrong? =
 
 WordPress has no support for resizing animated GIFs.
 
-= Why I can change background color of the chat window but I cannot change background color of the input field, buttons or borders? =
+= Why I can change the background color of the chat window, but I cannot change the background color of the input field, buttons or borders? =
 
 It is impossible to provide options to customize every aspect of user interface. Please use CSS styles to adjust styles to your needs.
 
@@ -342,14 +343,6 @@ Make sure that openssl extension for your PHP installation is loaded and works c
 = How to send messages using just keyboard in multiline mode? =
 
 After you type a message use the key combination: Shift + ENTER
-
-= How to display a list of online users in the sidebar?
-
-Just use `Wise Chat Channel Users` widget. It displays a block containing list of online users for given channel. Go to `Appearance -> Widgets` and add `Wise Chat Channel Users` widget to the sidebar. You can additionally set:
-
-* title - a title for the block (it may be empty)
-* channel - a name of the channel (empty value means the default channel is used)
-* options - use here the syntax and list of attributes of `[wise-chat]` shortcode
 
 == Screenshots ==
 
