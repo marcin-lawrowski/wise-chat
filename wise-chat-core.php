@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 3.1.3
+	Version: 3.1.4
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Kainex
@@ -9,11 +9,14 @@
 	Text Domain: wise-chat
 */
 
-define('WISE_CHAT_VERSION', '3.1.3');
+define('WISE_CHAT_VERSION', '3.1.4');
+define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
 WiseChatContainer::load('WiseChatOptions');
+WiseChatContainer::load('WiseChat');
+WiseChat::registerResources();
 
 if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
 	error_reporting(E_ALL);
@@ -33,6 +36,10 @@ if (is_admin()) {
 
 	add_action('admin_enqueue_scripts', function() {
 		wp_enqueue_media();
+		wp_enqueue_script('wisechat');
+		wp_enqueue_style('wise_chat_libs');
+		wp_enqueue_style('wise_chat_core');
+		wp_localize_script('wisechat', '_wiseChatData', array('siteUrl' => get_site_url()));
 	});
 }
 
@@ -46,9 +53,8 @@ add_action('after_setup_theme', 'wise_chat_after_setup_theme_action');
 
 // register CSS file in HEAD section:
 function wise_chat_register_common_css() {
-	$pluginBaseURL = plugin_dir_url(__FILE__);
-	wp_enqueue_style('wise_chat_libs', $pluginBaseURL.'assets/css/wise-chat-libs.min.css?v='.WISE_CHAT_VERSION);
-	wp_enqueue_style('wise_chat_core', $pluginBaseURL.'assets/css/wise-chat.min.css?v='.WISE_CHAT_VERSION);
+	wp_enqueue_style('wise_chat_libs');
+	wp_enqueue_style('wise_chat_core');
 }
 add_action('wp_enqueue_scripts', 'wise_chat_register_common_css');
 
@@ -57,7 +63,7 @@ function wise_chat_shortcode($atts) {
 	/** @var WiseChat $wiseChat */
 	$wiseChat = WiseChatContainer::get('WiseChat');
 	$html = $wiseChat->getRenderedShortcode($atts);
-	$wiseChat->registerResources();
+	$wiseChat->enqueueResources();
     return $html;
 }
 add_shortcode('wise-chat', 'wise_chat_shortcode');
@@ -73,7 +79,7 @@ add_shortcode('wise-chat-channel-stats', 'wise_chat_channel_stats_shortcode');
 function wise_chat($channel = null) {
 	$wiseChat = WiseChatContainer::get('WiseChat');
 	echo $wiseChat->getRenderedChat(!is_array($channel) ? array($channel) : $channel);
-	$wiseChat->registerResources();
+	$wiseChat->enqueueResources();
 }
 
 // register chat widget:
@@ -82,6 +88,8 @@ function wise_chat_widget() {
 	register_widget("WiseChatWidget");
 }
 add_action('widgets_init', 'wise_chat_widget');
+
+add_action('init', array(WiseChatContainer::get('integrations/wordpress/WiseChatBlocks'), 'register'));
 
 // register action that auto-removes images generate by the chat (the additional thumbnail):
 function wise_chat_action_delete_attachment($attachmentId) {

@@ -59,6 +59,6 @@ class WiseChatWidget extends WP_Widget {
 		}
 
 		echo $wiseChat->getRenderedShortcode($parsedOptions);
-		$wiseChat->registerResources();
+		$wiseChat->enqueueResources();
 	}
 }

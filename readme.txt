@@ -1,11 +1,11 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
 Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme
-Tags: chat, plugin, ajax, javascript, shortcode, social, widget, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
+Tags: chat, plugin, gutenberg, ajax, javascript, shortcode, social, widget, elementor, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.2
-Stable tag: 3.1.3
+Stable tag: 3.1.4
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,11 +15,28 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 **Wise Chat** is a leading chat plugin that helps to build social networks and this way it increases user's engagement on your website. The plugin provides a platform to send real time messages in chat rooms. The chat is easy to setup and configure. Its every single feature is extremely adjustable. Our development team is constantly working on new features and supporting the existing ones.
 
+**[DEMO](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Features](https://kainex.pl/projects/wp-plugins/wise-chat/features?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
+
+* Easy setup and configuration
+* Themes, appearance adjustments, mobile friendly
+* No external server required
+* Elementor and Gutenberg integration
+* Unlimited number of channels and users, password-protected channels
+* WordPress users, anonymous users, single sign-on
+* Read-only mode, access control, moderation, opening hours
+* Banning and muting users
+* Flood Control, bad words filter, spam reporting
+* Posting links, images, camera pictures, files, emoticons, YT videos
+* Localization and backups
+
+See below for the full list of features.
+
 **[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**:
 * Private one-to-one chats
 * Facebook/Twitter/G+ login
 * Voice messages
 * Avatars
+* Tenor GIFs
 * Reactions (liking chat messages)
 * Facebook-like sidebar mode
 * 3 Pro themes
@@ -43,9 +60,7 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 Scroll down to find out more about Wise Chat Pro benefits, for more product details go to **[Wise Chat Pro site](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
-Wise Chat: **[Try DEMO here](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Full features list](https://kainex.pl/projects/wp-plugins/wise-chat/features?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
-
-= Wise Chat features: =
+= Wise Chat full features list: =
 
 * **Easy installation**: Install the chat using a shortcode, widget or PHP function.
 * **Mobile ready**: Fully responsive design.
@@ -119,8 +134,9 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 == Installation ==
 
 = Requirements: =
-* PHP 5 >= 5.3.0 (it will run on 5.2.0 but opening hours feature will not work)
+* PHP >= 5.3.0
 * openssl module for PHP (in most cases it is already installed)
+* dom module for PHP (in most cases it is already installed)
 * jQuery JS library (available in most themes)
 
 = Optional requirements: =
@@ -128,7 +144,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 * mbstring PHP extension (in order to use all features of the bad words filter)
 * Lightbox 2 library (for showing images in the nice looking popup)
 
-= Installation: =
+= Plugin installation: =
 1. Upload the entire wise-chat folder to the plugins directory (usually `/wp-content/plugins/`) of WordPress instance.
 1. Activate the plugin through the 'Plugins' menu in WordPress.
 1. Place a shortcode `[wise-chat]` in your posts or pages. See below for details.
@@ -136,8 +152,12 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 1. Alternatively install it using dedicated widget in `Appearance -> Widgets`, it's called `Wise Chat Window`. See below for details.
 
 = Post Installation Notices: =
-* After installation go to Settings -> Wise Chat Settings page, select Localization tab and translate all the messages into your own language.
+* After installation go to Settings -> Wise Chat Settings page, select Localization tab and translate all the messages into your language.
 * Posting pictures from camera / local storage is limited to the specific range of Web browsers. See FAQ for details.
+
+= Gutenberg Block installation: =
+
+Edit a page or post and click the button for adding new blocks to the content. Search for "wise chat" block and add it to the page. Adjust the settings in the sidebar.
 
 = Widget installation: =
 
@@ -354,8 +374,12 @@ After you type a message use the key combination: Shift + ENTER
 06. Light Gray theme: admin mode
 07. Light Gray theme: responsive design
 08. Cold Dark theme: responsive design
+09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.1.4
+* Added "Wise Chat" block to easy add chats to pages using WordPress Gutenberg editor
 
 = 3.1.3
 * Moved Google fonts to local assets

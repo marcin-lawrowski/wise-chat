@@ -1,0 +1,143 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "kainex/wise-chat",
+	"version": "1.0.0",
+	"title": "Wise Chat",
+	"category": "widgets",
+	"icon": "format-chat",
+	"description": "Chat window",
+	"supports": {
+		"html": false
+	},
+	"textdomain": "wise-chat",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"attributes": {
+	  "channel": {
+	  	"type": "string",
+		"default": "global"
+	  },
+	  "access_mode": {
+		"type": "boolean",
+		"default": false
+	  },
+	  "force_user_name_selection": {
+		"type": "boolean",
+		"default": false
+	  },
+	  "window_title": {
+		"type": "string",
+		"default": "Chat"
+	  },
+	  "theme": {
+		"type": "string",
+		"default": "lightgray"
+	  },
+	  "chat_width": {
+		"type": "string",
+		"default": "100%"
+	  },
+	  "chat_height": {
+		"type": "string",
+		"default": "500px"
+	  },
+	  "messages_order": {
+		"type": "string",
+		"default": ""
+	  },
+	  "messages_time_mode": {
+		"type": "string",
+		"default": "elapsed"
+	  },
+	  "show_avatars": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "background_color": {
+		"type": "string",
+		"default": ""
+	  },
+	  "text_color": {
+		"type": "string",
+		"default": ""
+	  },
+	  "show_emoticon_insert_button": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_image_upload_button": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_file_upload_button": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_message_submit_button": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "multiline_support": {
+		"type": "boolean",
+		"default": false
+	  },
+	  "show_user_name": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "input_controls_location": {
+		"type": "string",
+		"default": ""
+	  },
+	  "background_color_input": {
+		"type": "string",
+		"default": ""
+	  },
+	  "text_color_input_field": {
+		"type": "string",
+		"default": ""
+	  },
+	  "show_users": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "browser_location": {
+		"type": "string",
+		"default": ""
+	  },
+	  "show_users_list_search_box": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_users_list_avatars": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_users_flags": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_users_city_and_country": {
+		"type": "boolean",
+		"default": true
+	  },
+	  "show_users_online_offline_mark": {
+		"type": "boolean",
+		"default": false
+	  },
+	  "show_users_counter": {
+		"type": "boolean",
+		"default": false
+	  },
+	  "background_color_users_list": {
+		"type": "string",
+		"default": ""
+	  },
+	  "text_color_users_list": {
+		"type": "string",
+		"default": ""
+	  }
+	}
+}

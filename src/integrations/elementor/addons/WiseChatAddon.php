@@ -180,15 +180,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 	}
 
 	public function get_script_depends() {
-		if (getenv('WC_ENV') === 'DEV') {
-			wp_register_script('wisechat', plugins_url('wise-chat/assets/js/wise-chat.js?tmp='.time().'&v='.WISE_CHAT_VERSION), __FILE__);
-		} else {
-			wp_register_script('wisechat', plugins_url('wise-chat/assets/js/wise-chat.min.js?v='.WISE_CHAT_VERSION), __FILE__);
-		}
-
-		return [
-			'wisechat',
-		];
+		return ['wisechat'];
 	}
 
 	protected function render() {
