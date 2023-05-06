@@ -52,6 +52,9 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 	}
 	
 	public function deleteBanAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'deleteBan')) {
+			return;
+		}
 		$ip = $_GET['ip'];
 		$ban = $this->bansDAO->getByIp($ip);
 		if ($ban !== null) {
@@ -61,6 +64,9 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 	}
 	
 	public function addBanAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'addBan')) {
+			return;
+		}
 		$newBanIP = $_GET['newBanIP'];
 		$newBanDuration = $_GET['newBanDuration'];
 		
@@ -87,7 +93,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 			$html .= '<small>No muted IP addresses added yet</small>';
 		}
 		foreach ($bans as $ban) {
-			$deleteURL = $url.'&wc_action=deleteBan&ip='.urlencode($ban->getIp());
+			$deleteURL = $url.'&wc_action=deleteBan&ip='.urlencode($ban->getIp()).'&nonce='.wp_create_nonce('deleteBan');
 			$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure?\")'>Delete</a><br />";
 			$html .= sprintf("[%s] %s left | %s", $ban->getIp(), $this->getTimeSummary($ban->getTime() - time()), $deleteLink);
 		}
@@ -96,7 +102,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 	}
 	
 	public function banAddCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addBan");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addBan&nonce=".wp_create_nonce('addBan'));
 		
 		printf(
 			'<input type="text" value="" placeholder="IP address to mute" id="newBanIP" name="newBanIP" />'.

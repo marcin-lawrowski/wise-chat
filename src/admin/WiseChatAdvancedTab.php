@@ -82,20 +82,20 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 	}
 
 	public function adminActionsCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter&nonce=".wp_create_nonce('resetAnonymousCounter'));
 
 		printf(
 			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings&nonce=".wp_create_nonce('resetSettings'));
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Resets Wise Chat settings" onclick="return confirm(\'WARNING: All settings will be permanently deleted. \\n\\nAre you sure you want to reset the settings?\')">Reset All Settings</a><p class="description">Resets all settings to default values.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages&nonce=".wp_create_nonce('deleteAllUsersAndMessages'));
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Deletes all messages and users" onclick="return confirm(\'WARNING: All messages and users will be permanently deleted. \\n\\nAre you sure you want to proceed?\')">Delete All Messages and Users</a><p class="description">Deletes all messages and users.</p>',
 			wp_nonce_url($url)
@@ -103,24 +103,30 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 	}
 
 	public function resetAnonymousCounterAction() {
-		$this->options->resetUserNameSuffix();
-		$this->addMessage('The prefix has been reset.');
+		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'resetAnonymousCounter')) {
+			$this->options->resetUserNameSuffix();
+			$this->addMessage('The prefix has been reset.');
+		}
 	}
 
 	public function resetSettingsAction() {
-		$this->options->dropAllOptions();
+		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'resetSettings')) {
+			$this->options->dropAllOptions();
 
-		// set the default options:
-		$settings = WiseChatContainer::get('WiseChatSettings');
-		$settings->setDefaultSettings();
+			// set the default options:
+			$settings = WiseChatContainer::get('WiseChatSettings');
+			$settings->setDefaultSettings();
 
-		$this->addMessage('All settings have been reset to defaults.');
+			$this->addMessage('All settings have been reset to defaults.');
+		}
 	}
 
 	public function deleteAllUsersAndMessagesAction() {
-		$this->messagesService->deleteAll();
-		$this->usersDAO->deleteAll();
-		$this->actions->publishAction('deleteAllMessages', array());
-		$this->addMessage('All messages and users have been deleted.');
+		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'deleteAllUsersAndMessages')) {
+			$this->messagesService->deleteAll();
+			$this->usersDAO->deleteAll();
+			$this->actions->publishAction('deleteAllMessages', array());
+			$this->addMessage('All messages and users have been deleted.');
+		}
 	}
 }

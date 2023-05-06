@@ -28,6 +28,9 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	}
 	
 	public function clearChannelAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'clearChannel')) {
+			return;
+		}
 		$channelName = stripslashes($_GET['channel']);
 		
 		$this->messagesService->deleteByChannel($channelName);
@@ -37,6 +40,9 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	}
 
     public function deleteChannelAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'deleteChannel')) {
+			return;
+		}
 	    $channelName = stripslashes($_GET['channel']);
 
         $this->messagesService->deleteByChannel($channelName);
@@ -49,6 +55,10 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
     }
 	
 	public function backupChannelAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'backupChannel')) {
+			return;
+		}
+
 		$channel = stripslashes($_GET['channel']);
 		$channelStripped = preg_replace("/[^[:alnum:][:space:]]/ui", '', $channel);
 		$filename = "WiseChatChannelBackup-{$channelStripped}.csv";
@@ -81,45 +91,6 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 		die();
 	}
 
-	public function backupPrivateChannelAction() {
-		$channel = stripslashes($_GET['channel']);
-		$channelStripped = preg_replace("/[^[:alnum:][:space:]]/ui", '', $channel);
-		$filename = "WiseChatChannelBackupPrivate-{$channelStripped}.csv";
-
-		$now = gmdate("D, d M Y H:i:s");
-		header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
-		header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
-		header("Last-Modified: {$now} GMT");
-		header("Content-Type: application/force-download");
-		header("Content-Type: application/octet-stream");
-		header("Content-Type: application/download");
-		header("Content-Disposition: attachment;filename={$filename}");
-		header("Content-Transfer-Encoding: binary");
-
-		$messages = $this->messagesService->getAllPrivateByChannelName($channel);
-
-		ob_start();
-		$df = fopen("php://output", 'w');
-		fputcsv($df, array('Message ID', 'Time', 'From User', 'To User', 'Message', 'IP'));
-		$usersMap = array();
-		foreach ($messages as $message) {
-			if (!array_key_exists($message->getRecipientId(), $usersMap)) {
-				$recipient = $this->usersDAO->get($message->getRecipientId());
-				$usersMap[$message->getRecipientId()] = $recipient !== null ? $recipient->getName() : 'Unknown';
-			}
-
-			$messageArray = array(
-				$message->getId(), date("Y-m-d H:i:s", $message->getTime()), $message->getUserName(), $usersMap[$message->getRecipientId()], $message->getText(), $message->getIp()
-			);
-			fputcsv($df, $this->cleanCSVRow($messageArray));
-		}
-		fclose($df);
-
-		echo ob_get_clean();
-
-		die();
-	}
-
 	private function cleanCSVRow($row) {
 		$specialCharacters = array('+', '-', '=', '@');
 		foreach ($row as $key => $value) {
@@ -133,12 +104,20 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	}
 	
 	public function clearAllChannelsAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'clearAllChannels')) {
+			return;
+		}
+
 		$this->messagesService->deleteAll();
 		$this->actions->publishAction('deleteAllMessages', array());
 		$this->addMessage('All messages have been deleted');
 	}
 	
 	public function setChannelPasswordAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'setChannelPassword')) {
+			return;
+		}
+
 		$password = $_GET['p'];
 		$channelName = stripslashes($_GET['channel']);
 		
@@ -153,6 +132,10 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	}
 	
 	public function deleteChannelPasswordAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'deleteChannelPassword')) {
+			return;
+		}
+
 		$channelName = stripslashes($_GET['channel']);
 		
 		$channel = $this->channelsDAO->getByName($channelName);
@@ -182,21 +165,20 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 		}
 		
 		foreach ($summary as $key => $channel) {
-			$isDirect = $channel->channel === WiseChatChannelsService::PRIVATE_MESSAGES_CHANNEL;
 			$channelId = 'channel'.$key;
 			$channelBackupId = 'channelBackup'.$key;
 			$passwordLink = sprintf(
 				'<a href="javascript://" title="Sets or replaces password for the channel" onclick="jQuery(\'#%s\').toggle()">Password</a>', $channelId
 			);
 		
-			$clearURL = $url.'&wc_action=clearChannel&tab=channels&channel='.urlencode($channel->channel);
+			$clearURL = $url.'&wc_action=clearChannel&tab=channels&channel='.urlencode($channel->channel)."&nonce=".wp_create_nonce('clearChannel');
 			$clearLink = "<a href='{$clearURL}' title='Deletes all messages from the channel' onclick='return confirm(\"Are you sure?\")'>Clear</a>";
 
 			$backupLink = sprintf(
 				'<a href="javascript://" title="Options to backup the channel" onclick="jQuery(\'#%s\').toggle()">Backup</a>', $channelBackupId
 			);
 
-            $deleteURL = $url.'&wc_action=deleteChannel&tab=channels&channel='.urlencode($channel->channel);
+            $deleteURL = $url.'&wc_action=deleteChannel&tab=channels&channel='.urlencode($channel->channel)."&nonce=".wp_create_nonce('deleteChannel');
             $deleteLink = "<a href='{$deleteURL}' title='Delete channel and all messages' onclick='return confirm(\"Are you sure you want to delete the channel?\")'>Delete</a>";
 			
 			$securedChannel = '';
@@ -204,11 +186,11 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 				$securedChannel = sprintf('<img src="%s/gfx/icons/lock.png" alt="Secured channel" title="Secured channel" />', $this->options->getBaseDir());
 			}
 			
-			$actions = $isDirect ? array($clearLink, $backupLink, $deleteLink) : array($passwordLink, $clearLink, $backupLink, $deleteLink);
+			$actions = array($passwordLink, $clearLink, $backupLink, $deleteLink);
 			
 			$classes = $key % 2 == 0 ? 'alternate' : '';
 
-			$channelName = $isDirect ? 'Private Messages' : $channel->channel;
+			$channelName = $channel->channel;
 			$html .= sprintf(
 				'<tr class="%s"><td>%s %s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>', 
 				$classes, $securedChannel, $channelName, $channel->messages, $channel->users,
@@ -216,8 +198,8 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 			);
 			
 			$passwordInputId = 'passwordInput'.$key;
-			$setPasswordURL = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=setChannelPassword&tab=channels&channel=".urlencode($channel->channel));
-			$deletePasswordURL = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteChannelPassword&tab=channels&channel=".urlencode($channel->channel));
+			$setPasswordURL = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=setChannelPassword&tab=channels&channel=".urlencode($channel->channel)."&nonce=".wp_create_nonce('setChannelPassword'));
+			$deletePasswordURL = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteChannelPassword&tab=channels&channel=".urlencode($channel->channel)."&nonce=".wp_create_nonce('deleteChannelPassword'));
 			$setPasswordAction = sprintf("this.href += '&p=' + jQuery('#%s').val();", $passwordInputId);
 			$html .= sprintf(
 				'<tr id="%s" class="%s" style="display: none;">
@@ -230,9 +212,7 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 				$channelId, $classes, $passwordInputId, wp_nonce_url($setPasswordURL), $setPasswordAction, wp_nonce_url($deletePasswordURL)
 			);
 
-			$backupURL = $isDirect
-				? $url.'&wc_action=backupPrivateChannel&tab=channels&channel='.urlencode($channel->channel)
-				: $url.'&wc_action=backupChannel&tab=channels&channel='.urlencode($channel->channel);
+			$backupURL = $url.'&wc_action=backupChannel&tab=channels&channel='.urlencode($channel->channel)."&nonce=".wp_create_nonce('backupChannel');
 			$html .= sprintf(
 				'<tr id="%s" class="%s" style="display: none;">
 					<td colspan="5">
@@ -249,7 +229,7 @@ class WiseChatChannelsTab extends WiseChatAbstractTab {
 	}
 	
 	public function adminActionsCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=clearAllChannels");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=clearAllChannels"."&nonce=".wp_create_nonce('clearAllChannels'));
 		
 		printf(
 			'<a class="button-secondary" href="%s" title="Deletes all messages sent to any channel" onclick="return confirm(\'Are you sure? All messages will be lost.\')">Clear All Messages</a>',

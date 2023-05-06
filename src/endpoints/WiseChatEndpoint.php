@@ -379,9 +379,6 @@ class WiseChatEndpoint {
 
 		if (strpos($channelTypeAndId, 'c|') !== false) {
 			$channel = $this->channelsDAO->get(intval(str_replace('c|', '', $channelTypeAndId)));
-			if ($channel && $channel->getName() === WiseChatChannelsService::PRIVATE_MESSAGES_CHANNEL) {
-				throw new Exception('Unknown channel ID');
-			}
 		} else {
 			throw new Exception('Unknown channel');
 		}

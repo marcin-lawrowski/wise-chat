@@ -34,6 +34,10 @@ class WiseChatFiltersTab extends WiseChatAbstractTab {
 	}
 	
 	public function addFilterAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'addFilter')) {
+			return;
+		}
+
 		$type = $_GET['type'];
 		$replace = stripslashes($_GET['replace']);
 		$replaceWith = stripslashes($_GET['replaceWith']);
@@ -47,6 +51,10 @@ class WiseChatFiltersTab extends WiseChatAbstractTab {
 	}
 	
 	public function deleteFilterAction() {
+		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'deleteFilter')) {
+			return;
+		}
+
 		$id = intval($_GET['id']);
 		
 		$this->filtersDAO->deleteById($id);
@@ -66,7 +74,7 @@ class WiseChatFiltersTab extends WiseChatAbstractTab {
 		}
 		
 		foreach ($summary as $key => $filter) {
-			$deleteURL = $url.'&wc_action=deleteFilter&id='.intval($filter['id']);
+			$deleteURL = $url.'&wc_action=deleteFilter&id='.intval($filter['id'])."&nonce=".wp_create_nonce('deleteFilter');
 			$deleteLink = "<a href='{$deleteURL}' title='Removes the filter' onclick='return confirm(\"Are you sure?\")'>Delete</a><br />";
 			
 			$html .= sprintf(
@@ -82,7 +90,7 @@ class WiseChatFiltersTab extends WiseChatAbstractTab {
 	}
 	
 	public function filterAddCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addFilter");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addFilter&nonce=".wp_create_nonce('addFilter'));
 		
 		$replaceOptions = array_merge(array('' => '-- what to replace --'), $this->filtersDAO->getAllTypes());
 		$replaceOptionsHtml = '';

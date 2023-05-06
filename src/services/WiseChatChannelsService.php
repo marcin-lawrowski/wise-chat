@@ -7,8 +7,6 @@
  */
 class WiseChatChannelsService {
 
-	const PRIVATE_MESSAGES_CHANNEL = '__private';
-
 	/**
 	 * @var WiseChatChannelsDAO
 	 */

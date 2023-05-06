@@ -29,6 +29,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; Private one-to-one messages</li>'.
 				'<li>&#8226; Avatars</li>'.
 				'<li>&#8226; Voice messages</li>'.
+				'<li>&#8226; Tenor GIFs library</li>'.
 				'<li>&#8226; Messages reactions (liking)</li>'.
 				'<li>&#8226; Facebook-like chat mode</li>'.
 				'<li>&#8226; BuddyPress integration: friends and groups</li>'.

@@ -380,6 +380,7 @@ After you type a message use the key combination: Shift + ENTER
 
 = 3.1.4
 * Added "Wise Chat" block to easy add chats to pages using WordPress Gutenberg editor
+* Fixed: CSRF on the settings page
 
 = 3.1.3
 * Moved Google fonts to local assets
