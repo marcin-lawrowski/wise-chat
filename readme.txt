@@ -378,18 +378,21 @@ After you type a message use the key combination: Shift + ENTER
 
 == Changelog ==
 
-= 3.1.4
+= 3.1.5 =
+* JS files cleanup
+
+= 3.1.4 =
 * Added "Wise Chat" block to easy add chats to pages using WordPress Gutenberg editor
 * Fixed: CSRF on the settings page
 
-= 3.1.3
+= 3.1.3 =
 * Moved Google fonts to local assets
 * Option to mute the sounds by default
 * Fixed: auto-scroll issues
 * Fixed: the chat disappears when posting utf8 characters in links
 * Fixed: 'Missing required fields' error when inserting an emoji
 
-= 3.1.2
+= 3.1.2 =
 * Fixed: PHP 8.1 errors and warnings
 * Fixed: Warning: Undefined array key "show_avatars"
 * Fixed: DOMDocument::loadHTML(): Argument #1 ($source) must not be empty
