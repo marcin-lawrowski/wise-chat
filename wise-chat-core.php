@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 3.1.4
+	Version: 3.1.5
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
 	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
 	Author: Kainex
@@ -9,14 +9,14 @@
 	Text Domain: wise-chat
 */
 
-define('WISE_CHAT_VERSION', '3.1.4');
+define('WISE_CHAT_VERSION', '3.1.5');
 define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
 WiseChatContainer::load('WiseChatOptions');
 WiseChatContainer::load('WiseChat');
-WiseChat::registerResources();
+add_action('wp_enqueue_scripts', array(WiseChatContainer::get('WiseChat'), 'enqueueResources'));
 
 if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
 	error_reporting(E_ALL);
@@ -36,9 +36,9 @@ if (is_admin()) {
 
 	add_action('admin_enqueue_scripts', function() {
 		wp_enqueue_media();
-		wp_enqueue_script('wisechat');
-		wp_enqueue_style('wise_chat_libs');
-		wp_enqueue_style('wise_chat_core');
+		/** @var WiseChat $wiseChat */
+		$wiseChat = WiseChatContainer::get('WiseChat');
+		$wiseChat->enqueueResources();
 		wp_localize_script('wisechat', '_wiseChatData', array('siteUrl' => get_site_url()));
 	});
 }
@@ -51,20 +51,11 @@ function wise_chat_after_setup_theme_action() {
 }
 add_action('after_setup_theme', 'wise_chat_after_setup_theme_action');
 
-// register CSS file in HEAD section:
-function wise_chat_register_common_css() {
-	wp_enqueue_style('wise_chat_libs');
-	wp_enqueue_style('wise_chat_core');
-}
-add_action('wp_enqueue_scripts', 'wise_chat_register_common_css');
-
 // register chat shortcode:
 function wise_chat_shortcode($atts) {
 	/** @var WiseChat $wiseChat */
 	$wiseChat = WiseChatContainer::get('WiseChat');
-	$html = $wiseChat->getRenderedShortcode($atts);
-	$wiseChat->enqueueResources();
-    return $html;
+	return $wiseChat->getRenderedShortcode($atts);
 }
 add_shortcode('wise-chat', 'wise_chat_shortcode');
 
@@ -79,7 +70,6 @@ add_shortcode('wise-chat-channel-stats', 'wise_chat_channel_stats_shortcode');
 function wise_chat($channel = null) {
 	$wiseChat = WiseChatContainer::get('WiseChat');
 	echo $wiseChat->getRenderedChat(!is_array($channel) ? array($channel) : $channel);
-	$wiseChat->enqueueResources();
 }
 
 // register chat widget:

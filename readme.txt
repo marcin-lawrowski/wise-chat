@@ -5,7 +5,7 @@ Tags: chat, plugin, gutenberg, ajax, javascript, shortcode, social, widget, elem
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.2
-Stable tag: 3.1.4
+Stable tag: 3.1.5
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

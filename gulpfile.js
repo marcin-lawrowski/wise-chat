@@ -76,6 +76,7 @@ gulp.task('eslint', function() {
 });
 
 gulp.task("build-sources-dev", function() {
+	process.env.NODE_ENV = 'development';
 	var args = watchify.args;
 	args.extensions = ['.js', '.jsx'];
 

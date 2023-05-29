@@ -64,21 +64,14 @@ class WiseChat {
 	/*
 	* Registers all necessary resources (scripts or styles).
 	*/
-	public static function registerResources() {
+	public static function enqueueResources() {
 		if (getenv('WC_ENV') === 'DEV') {
-			wp_register_script('wisechat', plugins_url('wise-chat/assets/js/wise-chat.js?tmp='.time().'&v='.WISE_CHAT_VERSION), __FILE__);
+			wp_enqueue_script('wisechat', plugins_url('assets/js/wise-chat.js', dirname(__FILE__)), array('jquery'), WISE_CHAT_VERSION.'.'.time(), true);
 		} else {
-			wp_register_script('wisechat', plugins_url('wise-chat/assets/js/wise-chat.min.js?v='.WISE_CHAT_VERSION), __FILE__);
+			wp_enqueue_script('wisechat', plugins_url('assets/js/wise-chat.min.js', dirname(__FILE__)), array('jquery'), WISE_CHAT_VERSION, true);
 		}
-		wp_register_style('wise_chat_libs', plugins_url('wise-chat/assets/css/wise-chat-libs.min.css?v='.WISE_CHAT_VERSION));
-		wp_register_style('wise_chat_core', plugins_url('wise-chat/assets/css/wise-chat.min.css?v='.WISE_CHAT_VERSION));
-	}
-	
-	/*
-	* Enqueues all necessary resources (scripts or styles).
-	*/
-	public function enqueueResources() {
-		wp_enqueue_script('wisechat');
+		wp_enqueue_style('wise-chat-libs', plugins_url('assets/css/wise-chat-libs.min.css', dirname(__FILE__)), array(), WISE_CHAT_VERSION);
+		wp_enqueue_style('wise-chat-core', plugins_url('assets/css/wise-chat.min.css', dirname(__FILE__)), array(), WISE_CHAT_VERSION);
 	}
 
 	/**
