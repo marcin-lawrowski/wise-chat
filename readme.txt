@@ -207,6 +207,19 @@ https://yourdomain/wp-content/plugins/wise-chat/src/endpoints
 
 You may also [read this doc](https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/troubleshooting/messages-not-being-posted/).
 
+= I have iThemes Security plugin and Wise Chat does not work. How to fix it?
+
+**Short answer:** WP Dashboard > Security > Settings > Advanced > System Tweaks and uncheck "Disable PHP in Plugins". Then click Save button.
+
+**Advanced answer:** Edit .htaccess file and locate "#Disable PHP in Plugins - Security > Settings > System Tweaks > PHP in Plugins" line. Then add a line of code:
+
+**RewriteCond %{REQUEST_URI} !/wp\-content/plugins/wise-chat/.*$ [NC]**
+RewriteRule ^wp\-content/plugins/.*\.(?:php[1-7]?|pht|phtml?|phps)\.?$ - [NC,F,L]
+
+**Less recommended approach:** WP Dashboard -> Settings -> Wise Chat Settings -> AJAX Engine and set to Default. This solution is less efficient.
+
+**Explanation:** Wise Chat executes PHP files directly in /wp-content/plugins/wise-chat/src/endpoints/ultra directory. It is done strictly for performance because the standard admin-ajax.php endpoint is too slow.
+
 = My messages are not visible until I refresh the page. What is going on? =
 
 In order to get new messages the chat is requesting the following URL:
