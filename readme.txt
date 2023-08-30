@@ -392,6 +392,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 3.1.6 =
+* Added option to choose images viewer
 * Added option to output video attachments (mp4 and webm) as video players and sound attachments (mp3 and wav) as sound players
 
 = 3.1.5 =

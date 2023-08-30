@@ -34,6 +34,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('images_height_limit', 'Maximum Height', 'stringFieldCallback', 'integer', 'Resize images to the declared height'),
 			array('images_thumbnail_width_limit', 'Thumbnails Maximum Width', 'stringFieldCallback', 'integer', 'Maximum width of the generated thumbnail'),
 			array('images_thumbnail_height_limit', 'Thumbnails Maximum Height', 'stringFieldCallback', 'integer', 'Maximum height of the generated thumbnail'),
+			array('images_viewer', 'Images viewer', 'radioCallback', 'string', '', self::getImageViewers()),
 			
 			array('_section', 'Voice Messages Settings', 'Option to record and post voice messages. It requires HTTPS. All sounds are compressed to Mp3 files and stored in Media Library.'),
 			array('enable_voice_messages', 'Enable', 'booleanFieldCallback', 'boolean', 'Enables voice messages.'),
@@ -84,6 +85,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'images_height_limit' => 1000,
 			'images_thumbnail_width_limit' => 60,
 			'images_thumbnail_height_limit' => 60,
+			'images_viewer' => 'internal',
 			
 			'enable_youtube' => 1,
 			'youtube_width' => 186,
@@ -138,4 +140,14 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'wise-chat-20' => 'Wise Chat 20',
 		);
 	}
+
+	public static function getImageViewers() {
+		return array(
+			'browser' => array('Browser', 'Opens an image in the browser'),
+			'browser_window' => array('Browser in new tab', 'Opens an image in the browser in the new tab'),
+			'internal' => array('Internal', 'Opens an image in the chat\'s internal viewer'),
+			'lightbox' => array('Lightbox', 'Opens an image in the Lightbox. <strong>Notice:</strong> please install Lightbox library in your theme first.')
+		);
+	}
+
 }

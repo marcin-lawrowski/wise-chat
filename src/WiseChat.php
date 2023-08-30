@@ -147,6 +147,7 @@ class WiseChat {
 					'attachmentsVideoPlayer' => $this->options->isOptionEnabled('attachments_video_player', true),
 					'attachmentsSoundPlayer' => $this->options->isOptionEnabled('attachments_sound_player', true),
 					'images' => $this->options->isOptionEnabled('allow_post_images', true),
+					'imagesViewer' => $this->options->getEncodedOption('images_viewer', 'internal'),
 					'yt' => $this->options->isOptionEnabled('enable_youtube', true),
 					'ytWidth' => $this->options->getIntegerOption('youtube_width', 186),
 					'ytHeight' => $this->options->getIntegerOption('youtube_height', 105),

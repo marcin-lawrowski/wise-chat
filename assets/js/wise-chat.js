@@ -8361,16 +8361,17 @@ var HtmlRenderer = /*#__PURE__*/function () {
           var imageOrgSrc = match[4];
 
           if (_this.configuration["interface"].message.images) {
+            var viewer = _this.configuration["interface"].message.imagesViewer;
             return /*#__PURE__*/_react["default"].createElement("a", {
               key: _this.currentKey++,
               href: imageSrc,
-              target: "_blank",
-              "data-lightbox": "wise_chat",
+              target: viewer === 'browser_window' ? "_blank" : undefined,
+              "data-lightbox": viewer === 'lightbox' ? "wise_chat" : undefined,
               className: "wcFunctional",
-              rel: "lightbox[wise_chat]",
+              rel: viewer === 'lightbox' ? "lightbox[wise_chat]" : undefined,
               "data-org": _jsBase.Base64.encode(match[0]),
               onClick: function onClick(e) {
-                return _this.handleImagePreview(e, imageSrc);
+                return viewer === 'internal' ? _this.handleImagePreview(e, imageSrc) : undefined;
               }
             }, /*#__PURE__*/_react["default"].createElement("img", {
               src: imageThumbnailSrc,

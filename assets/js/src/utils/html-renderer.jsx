@@ -91,15 +91,17 @@ export default class HtmlRenderer {
 					let imageOrgSrc = match[4];
 
 					if (this.configuration.interface.message.images) {
+						const viewer = this.configuration.interface.message.imagesViewer;
+
 						return <a
 							key={ this.currentKey++ }
 							href={ imageSrc }
-							target="_blank"
-							data-lightbox="wise_chat"
+							target={ viewer === 'browser_window' ? "_blank" : undefined }
+							data-lightbox={ viewer === 'lightbox' ? "wise_chat" : undefined }
 							className="wcFunctional"
-							rel="lightbox[wise_chat]"
+							rel={ viewer === 'lightbox' ? "lightbox[wise_chat]" : undefined }
 							data-org={ Base64.encode(match[0]) }
-						    onClick={ e => this.handleImagePreview(e, imageSrc) }
+						    onClick={ e => viewer === 'internal' ? this.handleImagePreview(e, imageSrc) : undefined }
 						>
 							<img src={ imageThumbnailSrc } className="wcImage wcFunctional" alt="Chat image"/>
 						</a>;
