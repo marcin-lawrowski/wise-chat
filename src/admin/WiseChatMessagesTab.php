@@ -44,6 +44,9 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('enable_attachments_uploader', 'Enable Uploader', 'booleanFieldCallback', 'boolean', 'Enables the uploader for sending file attachments from local storage. You can specify allowed file formats below'),
 			array('attachments_file_formats', 'Allowed File Extensions', 'stringFieldCallback', 'string', 'Comma-separated list of allowed extensions'),
 			array('attachments_size_limit', 'Size Limit', 'stringFieldCallback', 'integer', 'Size limit (in bytes) of attachments that are posted by users'),
+
+			array('attachments_video_player', 'Video Player', 'booleanFieldCallback', 'boolean', 'Outputs a video file as a video player. Supported formats: MP4 and WebM. Notice: you have to allow for mp4 and webm extensions in Allowed File Extensions option above.'),
+			array('attachments_sound_player', 'Sound Player', 'booleanFieldCallback', 'boolean', 'Outputs a sound file as a sound player. Supported formats: Mp3 and Wav. Notice: you have to allow for mp3 and wav extensions in Allowed File Extensions option above.'),
 			
 			array('_section', 'YouTube Videos Settings'),
 			array('enable_youtube', 'Enable YouTube Videos', 'booleanFieldCallback', 'boolean', 'Detects YouTube links and converts them to video players'),
@@ -67,8 +70,10 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'enable_images_uploader' => 1,
 			'enable_twitter_hashtags' => 1,
 			'enable_attachments_uploader' => 1,
-			'attachments_file_formats' => 'pdf,doc,docx',
+			'attachments_file_formats' => 'pdf,doc,docx,mp4,webm,wav',
 			'attachments_size_limit' => 3145728,
+			'attachments_video_player' => 1,
+			'attachments_sound_player' => 1,
 
 			'enable_voice_messages' => false,
 			'voice_message_max_length' => 60,

@@ -144,6 +144,8 @@ class WiseChat {
 					'senderMode' => $this->options->getIntegerOption('link_wp_user_name', 0),
 					'links' => $this->options->isOptionEnabled('allow_post_links', true),
 					'attachments' => $this->options->isOptionEnabled('enable_attachments_uploader', true),
+					'attachmentsVideoPlayer' => $this->options->isOptionEnabled('attachments_video_player', true),
+					'attachmentsSoundPlayer' => $this->options->isOptionEnabled('attachments_sound_player', true),
 					'images' => $this->options->isOptionEnabled('allow_post_images', true),
 					'yt' => $this->options->isOptionEnabled('enable_youtube', true),
 					'ytWidth' => $this->options->getIntegerOption('youtube_width', 186),

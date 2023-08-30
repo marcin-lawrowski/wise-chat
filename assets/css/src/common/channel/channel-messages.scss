@@ -128,6 +128,9 @@
             max-height: initial;
             max-width: initial;
           }
+          video {
+            max-width: 100%;
+          }
         }
       }
     }

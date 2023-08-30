@@ -46,9 +46,35 @@ export default class HtmlRenderer {
 				callback: (match, i, parserIndex) => {
 					let attachmentSrc = match[2];
 					let linkBody = match[3];
+					const videoPlayer = this.configuration.interface.message.attachmentsVideoPlayer;
+					const soundPlayer = this.configuration.interface.message.attachmentsSoundPlayer;
 
 					if (this.configuration.interface.message.attachments) {
-						return <a key={ this.currentKey++ } href={ attachmentSrc } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ linkBody }</a>;
+						if (videoPlayer && this.isFile(attachmentSrc, 'mp4')) {
+							return <video key={ this.currentKey++ } controls data-org={ Base64.encode(match[0]) } controlsList="nodownload noplaybackrate">
+								<source src={attachmentSrc} type="video/mp4"/>
+								Your browser does not support the video tag.
+							</video>
+						} else if (videoPlayer && this.isFile(attachmentSrc, 'webm')) {
+							return <video key={ this.currentKey++ } controls data-org={ Base64.encode(match[0]) } controlsList="nodownload noplaybackrate">
+								<source src={ attachmentSrc } type="video/webm" />
+								Your browser does not support the video tag.
+							</video>
+						} else if (soundPlayer && this.isFile(attachmentSrc, 'mp3')) {
+							return <audio key={ this.currentKey++ } controls data-org={ Base64.encode(match[0]) } controlsList="nodownload noplaybackrate">
+								<source src={ attachmentSrc } type="audio/mpeg" />
+								Your browser does not support the audio element.
+							</audio>;
+						} else if (soundPlayer && this.isFile(attachmentSrc, 'wav')) {
+							return <audio key={ this.currentKey++ } controls data-org={ Base64.encode(match[0]) } controlsList="nodownload noplaybackrate">
+								<source src={ attachmentSrc } type="audio/wav" />
+								Your browser does not support the audio element.
+							</audio>;
+						} else {
+							return <a key={this.currentKey++} href={attachmentSrc} target="_blank"
+							          rel="noopener noreferrer nofollow"
+							          data-org={Base64.encode(match[0])}>{linkBody}</a>;
+						}
 					} else if (this.configuration.interface.message.links) {
 						let finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
 
@@ -211,6 +237,16 @@ export default class HtmlRenderer {
 		e.preventDefault();
 
 		this.imageViewer.show(data);
+	}
+
+	/**
+	 *
+	 * @param {String} src Path or URL to file
+	 * @param {String} type File's extension
+	 * @returns {Boolean}
+	 */
+	isFile(src, type) {
+		return src.toLowerCase().match(new RegExp('\.' + type + '$')) !== null;
 	}
 
 	/**

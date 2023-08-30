@@ -734,6 +734,8 @@
             .wcContainer .wcChannel .wcMessages .wcMessage .wcRowBody .wcContent .wcEmoticon {
               max-height: initial;
               max-width: initial; }
+            .wcContainer .wcChannel .wcMessages .wcMessage .wcRowBody .wcContent video {
+              max-width: 100%; }
     .wcContainer .wcChannel .wcChannelInput {
       /* Attachments section */ }
       .wcContainer .wcChannel .wcChannelInput button {

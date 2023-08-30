@@ -69,7 +69,7 @@ class WiseChatAttachmentsService {
 		$validFormats = array('mp3');
 		
 		if ($this->options->isOptionEnabled('enable_attachments_uploader', true)) {
-			$formats = $this->options->getEncodedOption('attachments_file_formats');
+			$formats = $this->options->getEncodedOption('attachments_file_formats', 'pdf,doc,docx,mp4,webm,wav');
 			$formatsSplited = preg_split('/,/', $formats);
 			
 			if (is_array($formatsSplited)) {
