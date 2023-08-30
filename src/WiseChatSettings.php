@@ -25,6 +25,7 @@ class WiseChatSettings {
 		'wise-chat-permissions' => 'Permissions',
 		'wise-chat-modes' => 'Chat Modes',
 		'wise-chat-features' => 'Features',
+		'wise-chat-videoStreams' => 'Video Streams',
 		'wise-chat-appearance' => 'Appearance',
 		'wise-chat-emoticons' => 'Emoticons',
 		'wise-chat-channels' => 'Channels',
@@ -198,7 +199,7 @@ class WiseChatSettings {
 											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
 												Wise Chat <strong>Pro</strong>
 											</a>
-											<span style='display: inline-block; font-size: 1.2em'>Voice messages, 1-on-1 chats, Pro themes, sidebar mode, message reactions and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a></span>
+											<span style='display: inline-block; font-size: 1.2em'>Video calls, Voice messages, 1-on-1 chats, Pro themes, sidebar mode, notifications, GIFs library, message reactions and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a></span>
 										</p>
 										<p class='description'>
 											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" style="background-color: #5f463f" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">

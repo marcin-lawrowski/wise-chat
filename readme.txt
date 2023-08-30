@@ -110,6 +110,7 @@ All settings are available on `Settings -> Wise Chat Settings` page.
 = List of PRO features: =
 * **Private one-to-one messages**: Let your users talk to each other in private conversations. Each user has also an option to ignore messages from unwanted users.
 * **Private messages to offline users**: Send private messages to offline users.
+* **Video calls**: Video one-to-one calls.
 * **Voice chats**: Publish voice messages.
 * **Messages reactions**: Liking messages.
 * **Facebook-like mode**: Display the chat attached to the right side of the browser.

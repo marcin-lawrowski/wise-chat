@@ -28,6 +28,7 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'<li>&#8226; All the features of Wise Chat free edition</li>'.
 				'<li>&#8226; Private one-to-one messages</li>'.
 				'<li>&#8226; Avatars</li>'.
+				'<li>&#8226; Video calls</li>'.
 				'<li>&#8226; Voice messages</li>'.
 				'<li>&#8226; Tenor GIFs library</li>'.
 				'<li>&#8226; Messages reactions (liking)</li>'.
@@ -50,6 +51,14 @@ class WiseChatProTab extends WiseChatAbstractTab {
 				'</ul>'.
 				'<a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
 					<img src="'.$this->options->getBaseDir().'/gfx/pro/wise-chat-pro-lead.png" />
+				</a>'.
+				'<h3>Video calls</h3>'.
+				'<a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
+					<img src="'.$this->options->getBaseDir().'/gfx/pro/wise-chat-pro-video-calls.png" />
+				</a>'.
+				'<h3>Voice messages</h3>'.
+				'<a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
+					<img src="'.$this->options->getBaseDir().'/gfx/pro/voice-messages.png" />
 				</a>'.
 				'<br />'.
 				'<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?source=settings-page" title="Check Wise Chat Pro">
