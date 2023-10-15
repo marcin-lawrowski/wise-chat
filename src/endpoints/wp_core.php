@@ -20,6 +20,7 @@ if (file_exists(ABSPATH.WPINC.'/class-wp-session-tokens.php')) {
 }
 
 // features enabled:
+requireIfExists('blocks.php');
 require_once(ABSPATH.WPINC.'/formatting.php');
 require_once(ABSPATH.WPINC.'/query.php');
 require_once(ABSPATH.WPINC.'/comment.php');

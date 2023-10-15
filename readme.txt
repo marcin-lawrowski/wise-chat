@@ -4,8 +4,8 @@ Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?ut
 Tags: chat, plugin, gutenberg, ajax, javascript, shortcode, social, widget, elementor, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 6.3.1
-Stable tag: 3.1.6
+Tested up to: 6.3.2
+Stable tag: 3.1.7
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -391,6 +391,9 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.1.7 =
+* Fixed: chat stopped working after WordPress 6.3.2 upgrade
 
 = 3.1.6 =
 * Added option to choose images viewer
