@@ -8434,7 +8434,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
             return /*#__PURE__*/_react["default"].createElement("iframe", {
               key: _this.currentKey++,
               width: _this.configuration["interface"].message.ytWidth,
-              height: _this.configuration["interface"].message.ytWidth,
+              height: _this.configuration["interface"].message.ytHeight,
               className: "wcVideoPlayer",
               src: "https://www.youtube.com/embed/" + movieId,
               frameBorder: "0",

@@ -3,7 +3,7 @@
 /**
  * Wise Chat video streams.
  *
- * @author Kainex <contact@kaine.pl>
+ * @author Kainex <contact@kainex.pl>
  */
 class WiseChatVideoStreamsTab extends WiseChatAbstractTab {
 

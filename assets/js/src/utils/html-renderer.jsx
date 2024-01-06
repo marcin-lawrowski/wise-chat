@@ -147,7 +147,7 @@ export default class HtmlRenderer {
 						return <iframe
 									key={ this.currentKey++ }
 									width={ this.configuration.interface.message.ytWidth }
-									height={ this.configuration.interface.message.ytWidth }
+									height={ this.configuration.interface.message.ytHeight }
 									className="wcVideoPlayer"
 									src={ "https://www.youtube.com/embed/" + movieId }
 									frameBorder="0" allowFullScreen
