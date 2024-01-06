@@ -393,7 +393,8 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 3.2 =
-
+* Fixed: issue with setting height to YT videos
+* Fixed: issues with inserting Chinese characters on mobile devices (like iPhone)
 
 = 3.1.7 =
 * Fixed: chat stopped working after WordPress 6.3.2 upgrade

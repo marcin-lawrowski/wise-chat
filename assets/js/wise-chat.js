@@ -2938,7 +2938,10 @@ var HtmlInput = /*#__PURE__*/function (_React$Component) {
         var maxLength = this.props.configuration["interface"].input.maxLength - this.getCharactersCount((0, _jquery["default"])(this.editableRef.current).html());
 
         if (maxLength > 0) {
-          document.execCommand('insertText', false, text.substring(0, maxLength));
+          document.execCommand('insertText', false, text.substring(0, maxLength)); // paste actions triggered by a mouse button are omitted because of lack of onKeyUp events, we need to trigger the change manually:
+
+          this.triggerChange();
+          this.storeSelectedRange();
         }
       } else {
         // Browsers: IE 11
@@ -2962,7 +2965,10 @@ var HtmlInput = /*#__PURE__*/function (_React$Component) {
         range.collapse(false);
         selection = window.getSelection();
         selection.removeAllRanges();
-        selection.addRange(range);
+        selection.addRange(range); // paste actions triggered by a mouse button are omitted because of lack of onKeyUp events, we need to trigger the change manually:
+
+        this.triggerChange();
+        this.storeSelectedRange();
       }
     }
     /**
@@ -3004,6 +3010,8 @@ var HtmlInput = /*#__PURE__*/function (_React$Component) {
         ref: this.editableRef,
         className: "wcInput wp-exclude-emoji",
         onKeyUp: this.handleChange,
+        onInput: this.handleChange // some inputs were not recognized by onKeyUp or onPaste
+        ,
         onKeyDown: this.handleKeyDown,
         onClick: this.handleClick,
         onTouchEnd: this.handleClick,
