@@ -221,6 +221,11 @@ RewriteRule ^wp\-content/plugins/.*\.(?:php[1-7]?|pht|phtml?|phps)\.?$ - [NC,F,L
 
 **Explanation:** Wise Chat executes PHP files directly in /wp-content/plugins/wise-chat/src/endpoints/ultra directory. It is done strictly for performance because the standard admin-ajax.php endpoint is too slow.
 
+= How to give access to Wise Chat Settings page to other user roles? =
+
+Please add 'manage_wise_chat_option' capability to any user role you wish to grant access to Wise Chat Settings page to.
+By default only administrators have access to this page.
+
 = My messages are not visible until I refresh the page. What is going on? =
 
 In order to get new messages the chat is requesting the following URL:
@@ -393,6 +398,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 3.2 =
+* Managing the chat's settings by any user role with 'manage_wise_chat_option' capability, admins have this capability by default
 * Fixed: issue with setting height to YT videos
 * Fixed: issues with inserting Chinese characters on mobile devices (like iPhone)
 

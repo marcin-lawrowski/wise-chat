@@ -13,6 +13,8 @@ class WiseChatSettings {
 	const MENU_TITLE = 'Wise Chat Settings';
 	
 	const SECTION_FIELD_KEY = '_section';
+
+	const CAPABILITY = 'manage_'.WISE_CHAT_SLUG.'_options';
 	
 	/**
 	* @var array Tabs definition
@@ -60,7 +62,12 @@ class WiseChatSettings {
 	}
 	
 	public function addAdminMenu() {
-		add_options_page(self::PAGE_TITLE, self::MENU_TITLE, 'manage_options', self::MENU_SLUG, array($this, 'renderAdminPage'));
+		if (!current_user_can(self::CAPABILITY) && current_user_can('administrator')) {
+			$role = get_role('administrator');
+			$role->add_cap(self::CAPABILITY, true);
+		}
+
+		add_options_page(self::PAGE_TITLE, self::MENU_TITLE, self::CAPABILITY, self::MENU_SLUG, array($this, 'renderAdminPage'));
 		$this->handleActions();
 	}
 	

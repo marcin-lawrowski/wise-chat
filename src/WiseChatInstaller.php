@@ -56,6 +56,9 @@ class WiseChatInstaller {
 			return;
 		}
 
+		$role = get_role('administrator');
+		$role->add_cap(WiseChatSettings::CAPABILITY, true);
+
 		$charsetCollate = $wpdb->get_charset_collate();
 
 		$tableName = self::getUsersTable();
@@ -183,6 +186,9 @@ class WiseChatInstaller {
 	
 	public static function deactivate() {
 		global $wpdb, $user_level, $sac_admin_user_level;
+
+		$role = get_role('administrator');
+		$role->remove_cap(WiseChatSettings::CAPABILITY);
 		
 		if ($user_level < $sac_admin_user_level) {
 			return;

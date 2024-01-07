@@ -11,6 +11,8 @@
 
 define('WISE_CHAT_VERSION', '3.2');
 define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
+define('WISE_CHAT_NAME', 'Wise Chat');
+define('WISE_CHAT_SLUG', strtolower(str_replace(' ', '_', WISE_CHAT_NAME)));
 
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
