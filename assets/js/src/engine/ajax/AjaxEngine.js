@@ -16,7 +16,7 @@ export default class AjaxEngine extends Engine {
 		this.maintenance = new AjaxEngineMaintenance(configuration);
 		this.sender = new AjaxEngineSender(configuration);
 		this.MESSAGES_REFRESH_TIMEOUT = configuration.engines.ajax.refresh;
-		this.messagesEndpoint = configuration.engines.ajax.apiMessagesEndpointBase + '?action=wise_chat_messages_endpoint';
+		this.messagesEndpoint = configuration.engines.ajax.apiMessagesEndpointBase + (configuration.engines.ajax.apiMessagesEndpointBase.match(/\?/) ? '&' : '?') + 'action=wise_chat_messages_endpoint';
 		this.pastMessagesEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_past_messages_endpoint';
 		this.userCommandEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_user_command_endpoint';
 		this.authEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_auth_endpoint';
