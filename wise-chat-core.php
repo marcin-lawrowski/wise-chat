@@ -25,6 +25,9 @@ if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
 	ini_set("display_errors", 1);
 }
 
+// store path for usage in engines:
+WiseChatOptions::storeEngineConfig();
+
 if (is_admin()) {
 	// installer:
 	register_activation_hook(__FILE__, array('WiseChatInstaller', 'activate'));

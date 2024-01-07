@@ -3,8 +3,8 @@
 	define('SHORTINIT', true);
 	
 	if (!isset($_REQUEST['action'])) {
-		header('HTTP/1.0 404 Not Found');
-		die('');
+		http_response_code(400);
+        die(json_encode(['error' => 'No action specified']));
 	}
 	header('Content-Type: text/html');
 	header('Cache-Control: no-cache');
@@ -39,5 +39,6 @@
 		$endpoint = WiseChatContainer::get('endpoints/WiseChatUserCommandEndpoint');
 		$endpoint->prepareImageEndpoint();
 	} else {
-		header('HTTP/1.0 400 Bad Request');
+		http_response_code(400);
+        die(json_encode(['error' => 'Invalid action']));
 	}

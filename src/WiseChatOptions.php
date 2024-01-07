@@ -11,6 +11,7 @@ class WiseChatOptions {
     const EMOTICONS_BASE_DIR = "gfx/emoticons";
     const FLAGS_BASE_DIR = "gfx/flags";
     const ICONS_BASE_DIR = "gfx/icons";
+    const ENGINE_CONFIG_FRESH_FLAG_TRANSIENT_KEY = 'wise_chat_engine_config_fresh';
 
 	/**
 	* @var WiseChatOptions
@@ -50,6 +51,22 @@ class WiseChatOptions {
 		}
 		
 		return self::$instance;
+	}
+
+	/**
+	 * Stores engines configuration file.
+	 */
+	public static function storeEngineConfig() {
+		if (getenv('WC_ENV') === 'DEV') {
+			return;
+		}
+		if (false === ($value = get_transient(self::ENGINE_CONFIG_FRESH_FLAG_TRANSIENT_KEY))) {
+			$filePath = dirname(__FILE__).DIRECTORY_SEPARATOR.'endpoints'.DIRECTORY_SEPARATOR.'engines.json';
+			if (file_exists($filePath) && is_writable($filePath)) {
+				file_put_contents($filePath, json_encode([ 'abspath' => ABSPATH ]));
+			}
+			set_transient(self::ENGINE_CONFIG_FRESH_FLAG_TRANSIENT_KEY, '1', 24 * HOUR_IN_SECONDS);
+		}
 	}
 	
 	public function getBaseDir() {

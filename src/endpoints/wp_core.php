@@ -6,8 +6,14 @@ function requireIfExists($file) {
     }
 }
 
+$config = json_decode(file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'engines.json'), true);
+
 // core of WordPress:
-require_once(dirname(__DIR__).'/../../../../wp-load.php');
+if (is_array($config) && isset($config['abspath']) && $config['abspath'] && file_exists($config['abspath'].'wp-load.php')) {
+	require_once($config['abspath'].'wp-load.php');
+} else {
+	require_once(dirname(__DIR__) . '/../../../../wp-load.php');
+}
 
 require_once(ABSPATH.WPINC.'/default-filters.php');
 require_once(ABSPATH.WPINC.'/l10n.php');

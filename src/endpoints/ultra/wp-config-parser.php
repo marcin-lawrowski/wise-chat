@@ -1,6 +1,13 @@
 <?php
 
 $tokens = array();
+$lastError = '';
+
+function getLastError() {
+	global $lastError;
+
+	return $lastError;
+}
 
 /**
  * Tokenize standard WP config file:
@@ -8,11 +15,36 @@ $tokens = array();
  * @return bool
  */
 function loadConfigFile() {
-    global $tokens;
+    global $tokens, $lastError;
 
-    $filePath = '../../../../../../wp-config.php';
-    if (!file_exists($filePath) || !is_readable($filePath)) {
-        return false;
+    $config = json_decode(file_get_contents(dirname(__DIR__).'/engines.json'), true);
+    if (is_array($config) && isset($config['abspath']) && $config['abspath']) {
+    	if (@file_exists($config['abspath'].'wp-config.php')) {
+    		$filePath = $config['abspath'].'wp-config.php';
+	    } else if (@file_exists(dirname($config['abspath']).DIRECTORY_SEPARATOR.'wp-config.php')) {
+    		$filePath = dirname($config['abspath']).DIRECTORY_SEPARATOR.'wp-config.php';
+	    }
+    } else {
+        $filePath = '../../../../../../wp-config.php';
+    }
+
+    if (!@file_exists($filePath)) {
+    	// try level-up:
+    	$filePath = '../../../../../../../wp-config.php';
+
+    	if (!@file_exists($filePath)) {
+    		$lastError = 'Up-level config file does not exist: '.$filePath;
+    	    return false;
+	    }
+    	if (!@is_readable($filePath)) {
+	        $lastError = 'Up-level config file is not readable: '.$filePath;
+	        return false;
+	    }
+    } else {
+	    if (!@is_readable($filePath)) {
+		    $lastError = 'Config file is not readable: ' . $filePath;
+		    return false;
+	    }
     }
 
     $tokens = token_get_all(file_get_contents($filePath));

@@ -1,20 +1,20 @@
 <?php
 
 if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
-    header('HTTP/1.0 404 Not Found');
-    die('');
+    http_response_code(400);
+    die(json_encode(['error' => 'Only AJAX requests allowed']));
 }
 
 // make sure it is used only for "wise_chat_messages_endpoint" action:
-if (!isset($_REQUEST['action']) || $_REQUEST['action'] !== 'wise_chat_messages_endpoint') {
-    header('HTTP/1.0 404 Not Found');
-    die('');
+if (!isset($_REQUEST['action']) || !in_array($_REQUEST['action'], array('wise_chat_messages_endpoint', 'check'))) {
+    http_response_code(400);
+    die(json_encode(['error' => 'Invalid action requested']));
 }
 
 // check required parameters
 if (!isset($_REQUEST['channelIds']) || !isset($_REQUEST['lastId'])) {
-    header('HTTP/1.0 404 Not Found');
-    die('');
+    http_response_code(400);
+    die(json_encode(['error' => 'Missing required parameters']));
 }
 $channelIds = array_map('intval', array_filter($_REQUEST['channelIds']));
 $lastTimeGmt = $_REQUEST['lastCheckTime'];
@@ -24,11 +24,8 @@ $lastTime = $lastTime === false ? 0 : $lastTime - 5;
 // read wp-config.php file and parse its constants and variables:
 require_once('wp-config-parser.php');
 if (!loadConfigFile()) {
-    header('HTTP/1.0 400 Bad Request', true, 400);
-    $data = array(
-        'error' => 'Could not load standard WordPress config file: wp-config.php'
-    );
-    die(json_encode($data));
+	http_response_code(400);
+    die(json_encode(['error' => 'Could not load standard WordPress config file: wp-config.php: '.getLastError()]));
 }
 $constants = getConfigConstants();
 $variables = getConfigVariables();
@@ -40,6 +37,10 @@ if (isset($_REQUEST['blogId'])) {
     if ($blogId > 1) {
         $variables['table_prefix'] .= $blogId.'_';
     }
+}
+if (!isset($variables['table_prefix'])) {
+	http_response_code(400);
+    die(json_encode(['error' => 'Missing config variable: table_prefix']));
 }
 
 // set headers:
@@ -53,40 +54,48 @@ if (isset($constants['WP_DEBUG']) && $constants['WP_DEBUG'] === 'true') {
     ini_set("display_errors", 1);
 }
 
-// connect to db:
-$dbWC = new mysqli($constants['DB_HOST'], $constants['DB_USER'], $constants['DB_PASSWORD'], $constants['DB_NAME']);
-if ($dbWC->connect_errno) {
-    header('HTTP/1.0 400 Bad Request', true, 400);
-    $data = array(
-        'error' => $dbWC->connect_error.', Error = '.$dbWC->connect_errno
-    );
-    die(json_encode($data));
+// check constants:
+$checkConstants = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+foreach ($checkConstants as $checkConstant) {
+	if (!isset($constants[$checkConstant])) {
+		http_response_code(400);
+        die(json_encode(['error' => 'Missing config constant: '.$checkConstant]));
+	}
 }
 
-// get a message:
-$channelsTable = $variables['table_prefix'].'wise_chat_channels';
-$messagesTable = $variables['table_prefix'].'wise_chat_messages';
-$sql = sprintf("SELECT id FROM %s WHERE (`channel` IN (SELECT `name` FROM %s WHERE `id` IN (%s)) OR `channel` = '__private') AND `time` > %d LIMIT 1;", $messagesTable, $channelsTable, implode(', ', $channelIds), $lastTime);
-if (!$result = $dbWC->query($sql)) {
-    header('HTTP/1.0 400 Bad Request', true, 400);
-    $data = array(
-        'error' => $dbWC->error.', Error = '.$dbWC->errno
-    );
+// connect to db:
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+try {
+	$dbWC = new mysqli($constants['DB_HOST'], $constants['DB_USER'], $constants['DB_PASSWORD'], $constants['DB_NAME']);
+
+	// get a message:
+	$channelsTable = $variables['table_prefix'].'wise_chat_channels';
+	$messagesTable = $variables['table_prefix'].'wise_chat_messages';
+	$sql = sprintf("SELECT id FROM %s WHERE (`channel` IN (SELECT `name` FROM %s WHERE `id` IN (%s)) OR `channel` = '__private') AND `time` > %d LIMIT 1;", $messagesTable, $channelsTable, implode(', ', $channelIds), $lastTime);
+	$result = $dbWC->query($sql);
+	$rowsNum = $result->num_rows;
+	$result->free();
+
+	$dbWC->close();
+} catch (mysqli_sql_exception $e) {
+	http_response_code(400);
+    $data = [
+        'error' => 'Database connection error: '.$e->getMessage()
+    ];
     die(json_encode($data));
 }
-$rowsNum = $result->num_rows;
-$result->free();
-$dbWC->close();
 
 if ($rowsNum === 0) {
-    // return empty content:
+	if ($_REQUEST['action'] === 'check') {
+		die('OK');
+	}
+
     $response = array(
         'ultra' => $lastTime,
         'nowTime' => gmdate('c', time()),
         'result' => array()
     );
-    echo json_encode($response);
-    die('');
+    die(json_encode($response));
 } else {
     // forward the request:
     require_once('../index.php');
