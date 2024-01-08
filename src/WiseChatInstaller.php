@@ -7,6 +7,9 @@
  */
 class WiseChatInstaller {
 
+	const GOLD_ENGINE_MU_PLUGIN = '0-wise-chat-engine.php';
+	private static $forceDefaultOptions = [];
+
 	public static function getUsersTable() {
 		global $wpdb;
 
@@ -54,6 +57,10 @@ class WiseChatInstaller {
 		
 		if ($user_level < $sac_admin_user_level) {
 			return;
+		}
+
+		if (self::registerEngine()) {
+			self::$forceDefaultOptions = ['ajax_engine' => 'gold'];
 		}
 
 		$role = get_role('administrator');
@@ -149,7 +156,7 @@ class WiseChatInstaller {
 		
 		// set default options after installation:
 		$settings = WiseChatContainer::get('WiseChatSettings');
-		$settings->setDefaultSettings();
+		$settings->setDefaultSettings(self::$forceDefaultOptions);
 
 		self::upgradeMessagesTableCharset();
 	}
@@ -236,5 +243,65 @@ class WiseChatInstaller {
 		$wpdb->query($sql);
 		
 		WiseChatOptions::getInstance()->dropAllOptions();
+
+		self::unregisterEngine();
 	}
+
+	/**
+	 * Registers MU plugin to support Gold engine.
+	 *
+	 * @return bool
+	 */
+	public static function registerEngine() {
+		$engineContent = file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR.'setup'.DIRECTORY_SEPARATOR.self::GOLD_ENGINE_MU_PLUGIN);
+		$engineContent = str_replace(['{{PLUGIN_DIR}}', '{{PLUGIN_NAME}}'], [WISE_CHAT_ROOT, WISE_CHAT_NAME], $engineContent);
+		$mustUsePluginDir = rtrim(WPMU_PLUGIN_DIR, '/');
+		$mustUsePluginPath = $mustUsePluginDir.'/'.self::GOLD_ENGINE_MU_PLUGIN;
+		try {
+			if (file_exists($mustUsePluginPath) && md5($engineContent) === md5_file($mustUsePluginPath)) {
+				return true;
+			}
+			if (!is_dir($mustUsePluginDir)) {
+				$dirMade = @mkdir($mustUsePluginDir);
+				if (!$dirMade) {
+					$error = error_get_last();
+					error_log(sprintf('Unable to create engine directory: %s', $error['message']));
+					return false;
+				}
+			}
+			if (!is_writable($mustUsePluginDir)) {
+				error_log('MU-plugin directory is not writable.');
+				return false;
+			}
+			$loaderWritten = @file_put_contents($mustUsePluginPath, $engineContent);
+			if (!$loaderWritten) {
+				$error = error_get_last();
+				error_log(sprintf('Unable to install the engine: %s', $error['message']));
+				return false;
+			}
+		} catch (Exception $e) {
+			error_log('Unable to install the engine: '.$e->getMessage());
+		}
+		return true;
+    }
+	/**
+	 * Removes the engine.
+	 */
+    public static function unregisterEngine() {
+		try {
+			$mustUsePluginDir = rtrim(WPMU_PLUGIN_DIR, '/');
+			$mustUsePluginPath = $mustUsePluginDir.'/'.self::GOLD_ENGINE_MU_PLUGIN;
+			if (!file_exists($mustUsePluginPath)) {
+				return;
+			}
+			$removed = @unlink($mustUsePluginPath);
+			if (!$removed) {
+				$error = error_get_last();
+				error_log(sprintf('Unable to remove the engine: %s', $error['message']));
+			}
+		} catch (Exception $e) {
+			error_log('Unable to delete the engine: '.$e->getMessage());
+		}
+	}
+
 }

@@ -10,7 +10,7 @@ export default class AjaxEngineSender  {
 		this.emitter = new EventEmitter();
 		this.configuration = configuration;
 		this.messageEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_message_endpoint';
-		this.prepareImageEndpoint = configuration.engines.ajax.apiEndpointBase + '?action=wise_chat_prepare_image_endpoint';
+		this.prepareImageEndpoint = configuration.engines.ajax.apiEndpointBase + (configuration.engines.ajax.apiEndpointBase.match(/\?/) ? '&' : '?') + 'action=wise_chat_prepare_image_endpoint';
 	}
 
 	/**

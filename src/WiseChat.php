@@ -274,7 +274,9 @@ class WiseChat {
      */
 	private function getEndpointBase() {
 		$endpointBase = get_site_url().'/wp-admin/admin-ajax.php';
-		if (in_array($this->options->getEncodedOption('ajax_engine', null), array('lightweight', 'ultralightweight'))) {
+		if ($this->options->getEncodedOption('ajax_engine', null) === 'gold') {
+			$endpointBase = get_site_url().'/?wc-gold-engine';
+		} else if (in_array($this->options->getEncodedOption('ajax_engine', null), array('lightweight', 'ultralightweight'))) {
 			$endpointBase = plugin_dir_url(__FILE__).'endpoints/';
 		}
 		
@@ -285,7 +287,9 @@ class WiseChat {
 	 * @return string
 	 */
 	private function getMessagesEndpointBase() {
-		if ($this->options->getEncodedOption('ajax_engine', null) === 'ultralightweight') {
+		if ($this->options->getEncodedOption('ajax_engine', null) === 'gold') {
+			$endpointBase = get_site_url().'/?wc-gold-engine';
+		} else if ($this->options->getEncodedOption('ajax_engine', null) === 'ultralightweight') {
 			$endpointBase = plugin_dir_url(__FILE__).'endpoints/ultra/index.php';
 		} else {
 			$endpointBase = $this->getEndpointBase();

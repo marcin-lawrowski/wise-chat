@@ -112,19 +112,23 @@ class WiseChatSettings {
 	}
 
 	/**
-	* Sets the default values of all configuration fields.
-	* It should be used right after the activation of the plugin.
-	*
-	* @return null
-	*/
-	public function setDefaultSettings() {
+	 * Sets the default values of all configuration fields.
+	 * It should be used right after the activation of the plugin.
+	 *
+	 * @param array $priorityDefaultOptions Force these options only if they are not present in the current configuration
+	 */
+	public function setDefaultSettings($priorityDefaultOptions = []) {
 		$options = get_option(WiseChatOptions::OPTIONS_NAME, array());
 		
 		foreach ($this->tabs as $key => $caption) {
 			$tabObject = $this->getTabObject($key);
-			foreach ($tabObject->getDefaultValues() as $key => $value) {
-				if (!array_key_exists($key, $options)) {
-					$options[$key] = $value;
+			foreach ($tabObject->getDefaultValues() as $subKey => $value) {
+				if (!array_key_exists($subKey, $options)) {
+					if (isset($priorityDefaultOptions[$subKey])) {
+						$options[$subKey] = $priorityDefaultOptions[$subKey];
+					} else {
+						$options[$subKey] = $value;
+					}
 				}
 			}
 		}

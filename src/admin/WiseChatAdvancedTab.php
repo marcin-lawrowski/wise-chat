@@ -7,6 +7,20 @@
  */
 class WiseChatAdvancedTab extends WiseChatAbstractTab {
 
+	public function __construct() {
+		parent::__construct();
+		add_filter('pre_update_option_'.WiseChatOptions::OPTIONS_NAME, [$this, 'onUpdate'], 10, 2);
+	}
+	public function onUpdate($newValue, $oldValue) {
+		if (isset($newValue['ajax_engine']) && isset($oldValue['ajax_engine']) && $oldValue['ajax_engine'] && $newValue['ajax_engine'] !== $oldValue['ajax_engine'] && $newValue['ajax_engine'] === 'gold') {
+			if (!WiseChatInstaller::registerEngine()) {
+				$this->addErrorMessage('Could not switch to Gold engine because it cannot be installed. It is very likely that wp-content directory is not writable. Please make wp-content writable and try again switching to Gold engine. Please check PHP log for details.');
+				$newValue['ajax_engine'] = $oldValue['ajax_engine'];
+			}
+		}
+		return $newValue;
+	}
+
 	public function getFields() {
 		return array(
 			array('_section', 'User Authentication'),
@@ -63,7 +77,8 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 		return array(
 			'' => 'Default',
 			'lightweight' => 'Lightweight AJAX',
-			'ultralightweight' => 'Ultra Lightweight AJAX'
+			'ultralightweight' => 'Ultra Lightweight AJAX',
+			'gold' => 'Gold AJAX'
 		);
 	}
 	

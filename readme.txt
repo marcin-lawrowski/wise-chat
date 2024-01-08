@@ -398,6 +398,7 @@ After you type a message use the key combination: Shift + ENTER
 == Changelog ==
 
 = 3.2 =
+* Added Gold engine (auto-activated on new setups)
 * Improvements to engines
 * Managing the chat's settings by any user role with 'manage_wise_chat_option' capability, admins have this capability by default
 * Fixed: issue with setting height to YT videos
