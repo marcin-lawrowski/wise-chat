@@ -15,7 +15,7 @@ class WiseChatModesTab extends WiseChatAbstractTab {
 				<strong>Notice:</strong> This option will take effect only if <a href="https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/features/private-messages/">private messages</a> are enabled.'
 			),
 			array('chat_width', 'Width', 'stringFieldCallback', 'string', 'Allowed values: a number with or without an unit (px or %), default: 100%.'),
-			array('chat_height', 'Height', 'stringFieldCallback', 'string', 'Allowed values: a number with or without an unit (px or %), default: 500px'),
+			array('chat_height', 'Height', 'stringFieldCallback', 'string', 'Any value accepted by "height" property of CSS, default: 500px'),
 			array('browser_location', 'Browser Location', 'selectCallback', 'string', 'The location of <a href="https://kainex.pl/projects/wp-plugins/wise-chat-pro/faq/what-exactly-is-a-browser-i-found-this-in-the-chats-configuration/" target="_blank">the browser</a>.', self::getUsersListLocation()),
 			array('users_list_width', 'Browser Width', 'stringFieldCallback', 'integer',
 				'Percentage width of <a href="https://kainex.pl/projects/wp-plugins/wise-chat-pro/faq/what-exactly-is-a-browser-i-found-this-in-the-chats-configuration/" target="_blank">the browser</a> area (a column containing the users list). Empty field sets default value of 30%.'

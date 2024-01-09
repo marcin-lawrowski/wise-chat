@@ -87,7 +87,7 @@ class WiseChatCssRenderer {
 		}
 
 		$this->addLengthDefinition('', 'chat_width', 'width');
-		$this->addLengthDefinition('', 'chat_height', 'height');
+		$this->addRawDefinition('', 'height', $this->options->getOption('chat_height', '500px'));
 		$this->addUsersListWidthDefinition();
 		
 		return $this->getDefinitions();
