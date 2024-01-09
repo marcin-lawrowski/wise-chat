@@ -73,7 +73,8 @@ class WiseChatSettings {
 	
 	public function enqueueScripts() {
 		wp_enqueue_style('wp-color-picker');
-		wp_enqueue_script('wp-color-picker-script', plugins_url('../js/wise_chat_admin.js', __FILE__), array('wp-color-picker'), false, true);
+		wp_enqueue_script('wc-admin-script', plugins_url('../js/wise_chat_admin.js', __FILE__), array('wp-color-picker'), false, true);
+		wp_localize_script('wc-admin-script', 'wcAdminConfig', array('siteurl' => rtrim(get_site_url(), '/').'/', 'pluginurl' => plugin_dir_url(__FILE__), 'ajaxurl' => admin_url('admin-ajax.php')));
 	}
 	
 	public function pageInit() {

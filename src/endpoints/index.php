@@ -38,6 +38,8 @@
 		/** @var WiseChatUserCommandEndpoint $endpoint */
 		$endpoint = WiseChatContainer::get('endpoints/WiseChatUserCommandEndpoint');
 		$endpoint->prepareImageEndpoint();
+	} else if ($action === 'check') {
+		die('OK');
 	} else {
 		http_response_code(400);
         die(json_encode(['error' => 'Invalid action']));
