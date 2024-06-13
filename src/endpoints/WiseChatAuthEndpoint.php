@@ -81,13 +81,41 @@ class WiseChatAuthEndpoint extends WiseChatEndpoint {
         }
 
 		$user = null;
-		if (!$this->authentication->isAuthenticated() && $this->options->isOptionEnabled('force_user_name_selection', false)) {
+		if (!$this->authentication->isAuthenticated() && $this->options->getOption('auth_mode', 'auto') === 'username') {
             $user = $this->authentication->authenticate($name);
         }
 
         if ($user === null) {
             throw new Exception('Authentication error');
         }
+
+        if (array_key_exists('fields', $parameters)) {
+        	$fieldsInput = $parameters['fields'];
+	        $fields = array_filter(json_decode($this->options->getOption('auth_username_fields', '[]')), function ($field) {
+		        return $field->name ? true : false;
+	        });
+
+	        if (count($fields) > 0) {
+		        $fieldsToSave = array();
+		        foreach ($fields as $field) {
+			        $id = $field->id;
+			        if (array_key_exists($id, $fieldsInput)) {
+				        $fieldsToSave[$id] = strip_tags($fieldsInput[$id]);
+			        }
+		        }
+		        $user->setDataProperty('fields', $fieldsToSave);
+		        $this->usersDAO->save($user);
+	        }
+        }
+
+        /**
+         * Fires once user has started its session in the chat.
+         *
+         * @since 2.3.2
+         *
+         * @param WiseChatUser $user The user object
+         */
+        do_action("wc_user_session_started", $user);
 
         return $user;
 	}
@@ -115,6 +143,15 @@ class WiseChatAuthEndpoint extends WiseChatEndpoint {
             throw new Exception('Authentication error');
         }
 
+        /**
+         * Fires once user has started its session in the chat.
+         *
+         * @since 2.3.2
+         *
+         * @param WiseChatUser $user The user object
+         */
+        do_action("wc_user_session_started", $user);
+
         return $user;
 	}
 
@@ -138,7 +175,7 @@ class WiseChatAuthEndpoint extends WiseChatEndpoint {
 		if ($channel->getPassword() === md5($password)) {
             $this->authorization->markAuthorizedForChannel($channel);
         } else {
-            throw new Exception($this->options->getOption('message_error_9', 'Invalid password.'));
+            throw new Exception($this->options->getOption('message_error_9', __('Invalid password.', 'wise-chat')));
         }
 	}
 

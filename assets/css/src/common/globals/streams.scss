@@ -1,0 +1,41 @@
+@mixin global-streams {
+
+  button.wcStreamStartButton {
+    display: inline-block;
+    overflow: hidden;
+    transition: all .2s ease-in;
+    opacity: 0.7;
+
+    &, &:hover, &:active, &:focus {
+      background-position: 50%;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: transparent;
+    }
+
+    &.wcStreamVideo, &.wcStreamVideo:hover {
+      background-image: url(../../gfx/icons/video-calls/video.svg);
+      width: 24px;
+      height: 20px;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .wcStreamStatus {
+    display: inline-block;
+    overflow: hidden;
+    transition: all .2s ease-in;
+    opacity: 0.7;
+    background-position: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-image: url(../../gfx/icons/video-calls/video-red.svg);
+    width: 24px;
+    height: 20px;
+  }
+
+}

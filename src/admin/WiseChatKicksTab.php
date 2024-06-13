@@ -19,7 +19,7 @@ class WiseChatKicksTab extends WiseChatAbstractTab {
 		);
 	}
 	public function deleteKickAction() {
-		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'deleteKick')) {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deleteKick')) {
 			return;
 		}
 
@@ -33,7 +33,7 @@ class WiseChatKicksTab extends WiseChatAbstractTab {
 		}
 	}
 	public function addKickAction() {
-		if (!current_user_can('manage_options') || !wp_verify_nonce($_GET['nonce'], 'addKick')) {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'addKick')) {
 			return;
 		}
 
@@ -57,7 +57,7 @@ class WiseChatKicksTab extends WiseChatAbstractTab {
 			$html .= '<small>No bans added yet</small>';
 		}
 		foreach ($kicks as $kick) {
-			$deleteURL = $url.'&wc_action=deleteKick&id='.urlencode($kick->getId()).'&tab=kicks'."&nonce=".wp_create_nonce('deleteKick');
+			$deleteURL = $url.'&wc_action=deleteKick&id='.urlencode($kick->getId()).'&tab=kicks'.'&nonce='.wp_create_nonce('deleteKick');
 			$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure you want to delete this IP?\")'>Delete</a><br />";
 			$html .= sprintf("[%s] %s | <i>%s</i> | %s", $kick->getIp(), date('Y-m-d H:i:s', $kick->getCreated()), $kick->getLastUserName(), $deleteLink);
 		}
@@ -65,7 +65,7 @@ class WiseChatKicksTab extends WiseChatAbstractTab {
 		print($html);
 	}
 	public function kickAddCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addKick&tab=kicks&nonce=".wp_create_nonce('addKick'));
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addKick&tab=kicks".'&nonce='.wp_create_nonce('addKick'));
 		printf(
 			'<input type="text" value="" placeholder="IP address" id="newKickIP" name="newKickIP" />'.
 			'<a class="button-secondary" href="%s" onclick="%s">Ban IP</a>',

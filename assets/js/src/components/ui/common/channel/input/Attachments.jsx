@@ -25,6 +25,7 @@ class Attachments extends React.Component {
 		const preparedImageFailure = this.props.preparedImage !== prevProps.preparedImage && this.props.preparedImage && this.props.preparedImage.success === false
 		const imageSourceChanged = this.props.imageSource !== prevProps.imageSource && this.props.imageSource;
 		const fileSourceChanged = this.props.fileSource !== prevProps.fileSource && this.props.fileSource;
+		const soundSourceChanged = this.props.soundSource !== prevProps.soundSource && this.props.soundSource;
 
 		if (preparedImageSuccess) {
 			this.onImagePrepared(this.props.preparedImage.result);
@@ -40,6 +41,9 @@ class Attachments extends React.Component {
 
 		if (fileSourceChanged) {
 			this.onFileUploadFileChange(this.props.fileSource);
+		}
+		if (soundSourceChanged) {
+			this.onSoundSourceChange(this.props.soundSource);
 		}
 	}
 
@@ -128,6 +132,23 @@ class Attachments extends React.Component {
 		}
 	}
 
+	onSoundSourceChange(soundSource) {
+		if (typeof FileReader === 'undefined') {
+			this.props.alertError('FileReader is not supported in this browser');
+			return;
+		}
+
+		const fileReader = new FileReader();
+		fileReader.onload = event => {
+			this.addAttachment(soundSource.type, event.target.result, 'Wise Chat Pro voice message', URL.createObjectURL(soundSource.data));
+		};
+		fileReader.onerror = (event => {
+			this.props.alertError('Could not process sound data using FileReader');
+			this.props.logError('Could not process sound data using FileReader', event);
+		});
+		fileReader.readAsDataURL(soundSource.data);
+	}
+
 	getExtension(fileDetails) {
 		if (typeof fileDetails.name !== 'undefined') {
 			const split = fileDetails.name.split('.');
@@ -158,6 +179,11 @@ class Attachments extends React.Component {
 							<a href="#" className="wcFunctional" onClick={ e => this.handleImagePreview(e, attachment.data) }>
 								<img src={ attachment.data } className="wcImagePreview wcFunctional" alt="Image preview" />
 							</a>
+						}
+						{attachment.type === 'mp3' &&
+							<audio controls src={ attachment.url } controlsList="nodownload noplaybackrate">
+
+							</audio>
 						}
 						<a href="#" className="wcDelete wcFunctional" onClick={ e => this.handleDelete(e, index) } />
 					</div>

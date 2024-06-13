@@ -40,19 +40,21 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 				'Format of time displayed next to each message. Empty value means web browser\'s local time format is used.<br />'.
 				'For detailed format options check <a href="https://momentjs.com/docs/#/displaying/" target="_blank">the docs</a>.'
 			),
-			array('link_wp_user_name', 'Username Display Mode', 'selectCallback', 'string', '
-			    Controls how username is displayed in each message:<br />
-			    <strong>- Plain text:</strong> username is displayed as a plain text.<br />
-                <strong>- Link to the page:</strong> username is displayed as a link. The link is displayed only if the message was sent either by WordPress user or externally logged user (through Facebook, Twitter or Google).
-                In case of WordPress user the link direct to the auhtor\'s page. In case of externally logged user the link direct to the profile of that user.
-                If you would like to link every user name (including anonymous users) provide a template for the link (see the option below).<br />
-                <strong>- Link for @mentioning the user:</strong> username is displayed as a link that inserts <strong>"@UserName: "</strong> text into the message input field. Useful when an user wants to mention someone.
+			array('link_wp_user_name', 'Sender Display Mode', 'selectCallback', 'string', '
+			    Controls the sender\'s name appearance in each message:<br />
+			    <strong>- Plain text:</strong> The sender is displayed without any additional behaviour.<br />
+                <strong>- Link:</strong> The sender is displayed as a link pointed to: <br />
+               	- Author\'s page - in case of WordPress authenticated user<br />
+                - Profile page - in case of externally authenticated user (via Facebook, Twitter or Google)<br />
+                If you would like to link every sender (including anonymous users) provide a template for the link (see the option below).<br />
+                <strong>- @mention the sender:</strong> The sender is displayed as a link that inserts <strong>"@UserName: "</strong> text into the message input field. It is useful to mention someone.<br />
+                <strong>- Start private chat:</strong> After clicking the sender a private chat window appears.
 			    ', WiseChatAppearanceTab::getUserNameLinkModes()),
-			array('link_user_name_template', 'Username Link Template', 'stringFieldCallback', 'string', '
-                A template of the URL used to construct a link from username in each message (see the option above). While creating the template you can use the following dynamic variables: id, username, displayname. <br />
-                <strong>Example 1:</strong> http://my.website.com/users/{username}/profile<br />
-                <strong>Example 2:</strong> http://my.website.com/{id}/about<br />
-                <strong>Example 3:</strong> http://my.website.com/search?user={displayname}
+			array('link_user_name_template', 'Sender Link Template', 'stringFieldCallback', 'string', '
+                A template of the URL used to construct a link of a sender in each message (see the option above). While creating the template you can use the following dynamic variables: id, username, displayname. <br />
+                <strong>Example 1:</strong> https://my.website.com/users/{username}/profile<br />
+                <strong>Example 2:</strong> https://my.website.com/{id}/about<br />
+                <strong>Example 3:</strong> https://my.website.com/search?user={displayname}
                 '),
 			array('show_avatars', 'Show Avatar', 'booleanFieldCallback', 'boolean', 'Shows user avatar next to each message'),
 
@@ -111,28 +113,58 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 				<strong>Notice:</strong> This option will work only if private messages are disabled.
 			'),
 
-			array('_section', 'Users List Info Window Appearance', 'Information windows are displayed when mouse pointer enters username on the users list'),
-			array('show_users_list_info_windows', 'Show Info Windows', 'booleanFieldCallback', 'boolean'),
+			array('_section', 'Users List Info Window Appearance', 'Information windows are displayed when mouse pointer enters username on the users list. Below you can find templates depending on authentication method.'),
+			array('show_users_list_info_windows', 'Enable', 'booleanFieldCallback', 'boolean'),
 			array(
-				'users_list_info_window_template', 'Info Window Template', 'multilineFieldCallback', 'multilinestring',
-				'A template of info windows. Dynamic variables: {role}, {roles}, {id}, {username}, {displayname}, {email}'),
+				'users_list_info_window_template', 'WordPress users', 'multilineFieldCallback', 'multilinestring',
+				'Dynamic variables: {role}, {roles}, {id}, {username}, {displayname}, {email}, {firstname}, {lastname}, {nickname}, {description}, {website}, {website-linked}, {avatar}, {avatar-src}, {name}, {name-linked}, {status}, {video-call}, {<i>*user meta field key*</i>}<br />'.
+				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat/documentation/templates/" target="_blank">Read about templates</a>'
+			),
+			array(
+				'users_list_info_window_template_ext_auth', 'FB/Twitter/Google users', 'multilineFieldCallback', 'multilinestring',
+				'Dynamic variables: {role}, {id}, {avatar}, {avatar-src}, {name}, {name-linked}, {status}, {video-call}<br />'.
+				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat/documentation/templates/" target="_blank">Read about templates</a>'
+			),
+			array(
+				'users_list_info_window_template_name_auth', 'Other users', 'multilineFieldCallback', 'multilinestring',
+				'Dynamic variables: {username}, {video-call}, {field1}, {field2}, {field3}, {field4}, {field5}, {field6}, {field7}<br />'.
+				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat/documentation/templates/" target="_blank">Read about templates</a>'
+			),
+
+			array('_section', 'Direct Channel Intro', 'Displayed at the top of each private chat channel'),
+			array('intro_direct_channel_enabled', 'Enable', 'booleanFieldCallback', 'boolean'),
+			array(
+				'intro_direct_channel_template_wordpress_auth', 'WordPress authenticated user', 'multilineFieldCallback', 'multilinestring',
+				'Dynamic variables: {role}, {roles}, {id}, {username}, {displayname}, {email}, {firstname}, {lastname}, {nickname}, {description}, {website}, {website-linked}, {avatar}, {avatar-src}, {name}, {name-linked}, {status}, {video-call}, {<i>*user meta field key*</i>}<br />'.
+				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat/documentation/templates/" target="_blank">Read about templates</a>'
+			),
+			array(
+				'intro_direct_channel_template', 'User authenticated by name', 'multilineFieldCallback', 'multilinestring',
+				'Dynamic variables: {username}, {status}, {video-call}, {field1}, {field2}, {field3}, {field4}, {field5}, {field6}, {field7}<br />'.
+				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat/documentation/templates/" target="_blank">Read about templates</a>'
+			),
 
 			array('_section', 'Users List Sources', 'Settings to configure which users are visible on the users list'),
-			array('users_list_offline_enable', 'Enable Offline Users', 'booleanFieldCallback', 'boolean', 'Lists all users (including offline).'),
+			array('users_list_offline_enable', 'Enable Offline Users', 'booleanFieldCallback', 'boolean', 'Lists users that are not currently online.'),
 			array(
 				'users_list_bp_users_only', 'BuddyPress Friends Only', 'booleanFieldCallback', 'boolean',
-				'Displays BuddyPress friends only.<br />'.
+				'Restricts the users list to BuddyPress friends.<br />'.
 				'<strong>Notice:</strong> Please remember to enable BuddyPress integration in General settings and friends component in BuddyPress configuration.'
 			),
 			array('users_list_hide_anonymous', 'Hide Anonymous Users', 'booleanFieldCallback', 'boolean', 'Hides anonymous users on the users list'),
+			array('users_list_hide_users', 'Hide Users', 'hiddenUsersCallback', 'void'),
+			array('users_list_hide_users_add', ' ', 'hiddenUserAddCallback', 'void'),
 			array('users_list_hide_roles', 'Hide User Roles', 'checkboxesCallback', 'multivalues', 'Hides users belonging to these roles on the users list', self::getRoles()),
 
 			array('_section', 'BuddyPress Customization', 'BuddyPress integration adjustments'),
 			array(
 				'bp_member_profile_chat_button', 'Show Chat Button On Member Profile', 'booleanFieldCallback', 'boolean',
 				"Displays chat button on member profiles. Clicking the button opens a private chat window if and only if the chat is currently visible on the member profile page. <br />".
-				'<a href="https://kainex.pl/projects/wp-plugins/wise-chat-pro/documentation/features/private-chat-button/">Read more</a>'
+				'<a href="https://kaine.pl/projects/wp-plugins/wise-chat/documentation/features/private-chat-button/" target="_blank">Read more</a>'
 			),
+
+			array('_section', 'Admin Bar Appearance', 'Chat appearance in the admin bar'),
+			array('admin_bar_chat_menu_enabled', 'Chat Menu Enabled', 'booleanFieldCallback', 'boolean'),
 
 			array('_section', 'Advanced Customization'),
 			array('custom_styles', 'Custom CSS Styles', 'multilineFieldCallback', 'multilinestring', 'Custom CSS styles for the chat, valid CSS syntax is required.'),
@@ -159,10 +191,10 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'text_color_logged_user' => '',
 			'text_color_input_field' => '',
 			'show_user_name' => 0,
-			'link_wp_user_name' => 0,
+			'link_wp_user_name' => 3,
 			'link_user_name_template' => '',
 			'show_message_submit_button' => 1,
-			'allow_change_user_name' => 1,
+			'allow_change_user_name' => 0,
 			'allow_control_user_notifications' => 0,
 			'disable_user_name_duplication_check' => 1,
 			'user_name_length_limit' => 25,
@@ -178,31 +210,40 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'css_classes_for_user_roles' => 0,
 			'allow_mute_sound' => '',
 			'sounds_default_muted' => '',
-			'messages_time_mode' => 'elapsed',
+			'messages_time_mode' => '',
 			'messages_date_format' => '',
 			'messages_time_format' => '',
 			'background_color_users_list' => '',
 			'text_color_users_list' => '',
 			'text_size' => '',
 			'text_size_users_list' => '',
-			'allow_change_text_color' => 1,
+			'allow_change_text_color' => 0,
 			'text_color_parts' => array('message', 'messageUserName'),
             'show_emoticon_insert_button' => 1,
             'show_users_flags' => 0,
             'show_users_city_and_country' => 0,
             'show_users_online_offline_mark' => 1,
-			'enable_private_messages' => 0,
+			'enable_private_messages' => 1,
 			'private_message_confirmation' => 1,
 			'show_avatars' => 1,
 			'show_users_list_avatars' => 1,
 			'users_list_hide_anonymous' => 0,
+			'users_list_hide_users' => array(),
 			'users_list_hide_roles' => array(),
 			'users_list_linking' => 0,
 			'users_list_offline_enable' => 1,
 			'users_list_bp_users_only' => 0,
 			'bp_member_profile_chat_button' => 0,
 			'show_users_list_info_windows' => 1,
-			'users_list_info_window_template' => "{role}"
+			'users_list_info_window_template' => "{role}",
+			'users_list_info_window_template_ext_auth' => "{role}",
+			'users_list_info_window_template_name_auth' => "{username}",
+			'intro_direct_channel_enabled' => 1,
+			'intro_direct_channel_template_wordpress_auth' => "[span className=\"wcName\" content=\"{name}\"] {status} {video-call}
+{role}
+{description}",
+			'intro_direct_channel_template' => '{username} {status} {video-call}',
+			'admin_bar_chat_menu_enabled' => 1
 		);
 	}
 
@@ -217,6 +258,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 			'text_color_parts' => 'allow_change_text_color',
 			'disable_user_name_duplication_check' => 'allow_change_user_name',
 			'users_list_info_window_template' => 'show_users_list_info_windows',
+			'users_list_info_window_template_name_auth' => 'show_users_list_info_windows',
+			'intro_direct_channel_template_wordpress_auth' => 'intro_direct_channel_enabled',
+			'intro_direct_channel_template' => 'intro_direct_channel_enabled',
         );
     }
 
@@ -230,8 +274,9 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
     public static function getUserNameLinkModes() {
         return array(
             0 => 'Plain text',
-            1 => 'Link to the page',
-            2 => 'Link for @mentioning the user'
+            1 => 'Link',
+            2 => '@mention the sender',
+            3 => 'Start private chat'
         );
     }
 	
@@ -271,9 +316,11 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 
 	public function getProFields() {
         return array(
-        	'allow_control_user_notifications', 'auto_open_first_public_channel', 'enable_private_messages',
-	        'private_message_confirmation', 'show_users_list_info_windows', 'users_list_info_window_template',
-	        'users_list_bp_users_only', 'bp_member_profile_chat_button', 'recent_chats_limit'
+        	'allow_control_user_notifications', 
+	        'show_users_list_info_windows', 'users_list_info_window_template',
+	        'users_list_bp_users_only', 'bp_member_profile_chat_button', 'recent_chats_limit', 'users_list_info_window_template_ext_auth',
+	        'users_list_info_window_template_name_auth', 'intro_direct_channel_enabled', 'intro_direct_channel_template_wordpress_auth', 'intro_direct_channel_template',
+	        'admin_bar_chat_menu_enabled'
         );
 	}
 
@@ -335,4 +382,16 @@ class WiseChatAppearanceTab extends WiseChatAbstractTab {
 		}
 		print('</table>');
 	}
+
+	public function hiddenUsersCallback() {
+		$this->usersCallback(
+			'users_list_hide_users',
+			'A list of users hidden on the users list.'
+		);
+	}
+
+	public function hiddenUserAddCallback() {
+		$this->userAddCallback('users_list_hide_users', true);
+	}
+
 }

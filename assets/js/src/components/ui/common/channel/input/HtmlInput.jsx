@@ -234,7 +234,7 @@ class HtmlInput extends React.Component {
 	        ref={ this.editableRef }
 	        className="wcInput wp-exclude-emoji"
 			onKeyUp={ this.handleChange }
-	        onInput={ this.handleChange } // some inputs were not recognized by onKeyUp or onPaste
+			onInput={ this.handleChange } // some inputs were not recognized by onKeyUp or onPaste
 			onKeyDown={ this.handleKeyDown }
 	        onClick={ this.handleClick }
 	        onTouchEnd={ this.handleClick }

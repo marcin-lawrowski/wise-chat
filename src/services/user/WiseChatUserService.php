@@ -79,7 +79,7 @@ class WiseChatUserService {
 	}
 
 	/**
-	 * Auto-authenticate user if no additional steps need to be taken (no username forcing, etc.)
+	 * Auto-authenticate user if no additional steps need to be taken (no external auth, no username forcing, etc.)
 	 *
 	 * @throws Exception
 	 */
@@ -104,6 +104,15 @@ class WiseChatUserService {
 			$this->actions->publishAction(
 				'refreshPlainUserName', array('name' => $user->getName()), $user
 			);
+
+			/**
+			 * Fires once user has started its session in the chat.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param WiseChatUser $user The user object
+			 */
+			do_action("wc_user_session_started", $user);
 
 			$this->setCurrentUserOnlineStatus();
 		}
@@ -163,9 +172,23 @@ class WiseChatUserService {
 
 		if (!$this->authentication->isAuthenticated()) {
 			if ($currentWPUser !== null) {
-				$this->authentication->authenticateWithWpUser($currentWPUser);
+				$user = $this->authentication->authenticateWithWpUser($currentWPUser);
+
+				/**
+				 * Fires once user has started its session in the chat.
+				 *
+				 * @since 2.3.2
+				 *
+				 * @param WiseChatUser $user The user object
+				 */
+				do_action("wc_user_session_started", $user);
 			}
 		} else {
+			if ($this->authentication->isAuthenticatedExternally()) {
+				return;
+			}
+
+			$wasAuthenticated = false;
 			$user = $this->authentication->getUser();
 
 			// anonymous switched to WP:
@@ -174,12 +197,25 @@ class WiseChatUserService {
 				$this->authentication->dropAuthentication();
 
 				$user = $this->authentication->authenticateWithWpUser($currentWPUser);
+				$wasAuthenticated = true;
 			}
 
 			// WP switched to anonymous:
 			if ($user->getWordPressId() !== null && $currentWPUser === null) {
 				$this->authentication->dropAuthentication();
-				$this->authentication->authenticateAnonymously();
+				$user = $this->authentication->authenticateAnonymously();
+				$wasAuthenticated = true;
+			}
+
+			if ($wasAuthenticated) {
+				/**
+				 * Fires once user has started its session in the chat.
+				 *
+				 * @since 2.3.2
+				 *
+				 * @param WiseChatUser $user The user object
+				 */
+				do_action("wc_user_session_started", $user);
 			}
 		}
 	}
@@ -194,8 +230,9 @@ class WiseChatUserService {
 	*/
 	public function changeUserName($userName) {
 		if (
-			!$this->options->isOptionEnabled('allow_change_user_name', true) ||
+			!$this->options->isOptionEnabled('allow_change_user_name') ||
 			$this->usersDAO->getCurrentWpUser() !== null ||
+			$this->authentication->isAuthenticatedExternally() ||
 			!$this->authentication->isAuthenticated()
 		) {
 			throw new Exception('Unsupported operation');
@@ -203,11 +240,23 @@ class WiseChatUserService {
 
 		$userName = $this->authentication->validateUserName($userName);
 		$user = $this->authentication->getUser();
+		$oldName = $user->getName();
 
 		// set new username and refresh it:
 		$user->setName($userName);
 		$this->usersDAO->save($user);
 		$this->refreshUserName($user);
+
+		/**
+		 * Fires once user has changed its name. It applies to anonymous users only.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param string $oldName The old name
+		 * @param string $userName The new name
+		 * @param WiseChatUser $user The user object
+		 */
+		do_action("wc_username_changed", $oldName, $userName, $user);
 
 		return $userName;
 	}
@@ -238,6 +287,16 @@ class WiseChatUserService {
 				'propertyValue' => $color
 			)
 		);
+
+		/**
+		 * Fires once user has set its color.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param string $color The color code
+		 * @param WiseChatUser $user The user object
+		 */
+		do_action("wc_usercolor_set", $color, $user);
 	}
 
 	/**
@@ -253,7 +312,17 @@ class WiseChatUserService {
 			throw new Exception('Could not get a property on unauthenticated user');
 		}
 
-		return $this->authentication->getUser()->getDataProperty($property);
+		$value = $this->authentication->getUser()->getDataProperty($property);
+
+		/**
+		 * Filters user property
+		 *
+		 * @since 2.4
+		 *
+		 * @param string $value Property value
+		 * @param string $property Property name
+		 */
+		return apply_filters('wc_userproperty_get', $value, $property);
 	}
 
 	/**
@@ -272,6 +341,17 @@ class WiseChatUserService {
 		$user = $this->authentication->getUser();
 		$user->setDataProperty($property, $value);
 		$this->usersDAO->save($user);
+
+		/**
+		 * Fires once user property has been set.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param string $property Property name
+		 * @param mixed $value Property value
+		 * @param WiseChatUser $user The user object
+		 */
+		do_action("wc_userproperty_set", $property, $value, $user);
 	}
 
 	/**
@@ -297,6 +377,40 @@ class WiseChatUserService {
 			$user->setData($allProperties);
 			$this->usersDAO->save($user);
 		}
+	}
+
+	/**
+	 * Checks if the first given user can communicate with the second user.
+	 *
+	 * @param WiseChatUser $user
+	 * @param WiseChatUser $associatedUser
+	 * @return bool
+	 */
+	public function isUsersConnectionAvailable($user, $associatedUser) {
+		if (!$this->options->isOptionEnabled('enable_buddypress', false)) {
+			return true;
+		}
+		if (!$this->options->isOptionEnabled('users_list_bp_users_only', false)) {
+			return true;
+		}
+
+		if ($user === null || $associatedUser === null) {
+			return false;
+		}
+
+		if (!($user->getWordPressId() > 0) || !($associatedUser->getWordPressId() > 0)) {
+			return false;
+		}
+
+		if ($user->getWordPressId() == $associatedUser->getWordPressId()) {
+			return true;
+		}
+
+		if (function_exists('friends_check_friendship')) {
+			return friends_check_friendship($user->getWordPressId(), $associatedUser->getWordPressId());
+		}
+
+		return false;
 	}
 
 	/**
@@ -471,7 +585,7 @@ class WiseChatUserService {
 		$textColor = $this->getTextColorDefinedByUserRole($user);
 
 		// get custom color (higher priority):
-		if ($this->options->isOptionEnabled('allow_change_text_color', true) && $user !== null && $user->getDataProperty('textColor')) {
+		if ($this->options->isOptionEnabled('allow_change_text_color') && $user !== null && $user->getDataProperty('textColor')) {
 			$textColor = $user->getDataProperty('textColor');
 		}
 
@@ -504,7 +618,7 @@ class WiseChatUserService {
 		}
 
 		$profileLink = null;
-		if ($linkUserNameTemplate != null) {
+		if ($linkUserNameTemplate != null && $wpUser) {
 			$variables = array(
 				'id' => $variableId,
 				'username' => $variableUserName,
@@ -537,6 +651,33 @@ class WiseChatUserService {
 			return $message->getAvatarUrl();
 		} else {
 			return $this->getUserAvatar($message->getUser(), $message->getWordPressUserId());
+		}
+	}
+
+	/**
+	 * Checks if the current user can get the message content.
+	 *
+	 * @param WiseChatMessage $message
+	 *
+	 * @return boolean
+	 */
+	public function isUserAllowedToSeeTheContentOfMessage($message) {
+		if ($this->options->isOptionEnabled('new_messages_hidden', false) === false) {
+			return true;
+		}
+
+		if (!$message->isHidden()) {
+			return true;
+		}
+
+		$wpUser = $this->usersDAO->getCurrentWpUser();
+		if ($wpUser !== null) {
+			$targetRoles = (array) $this->options->getOption("show_hidden_messages_roles", 'administrator');
+			if ((is_array($wpUser->roles) && count(array_intersect($targetRoles, $wpUser->roles)) > 0)) {
+				return true;
+			}
+		} else {
+			return false;
 		}
 	}
 

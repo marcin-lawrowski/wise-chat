@@ -39,6 +39,7 @@ class WiseChatCssRenderer {
 	* @return string HTML source
 	*/
 	public function getCssDefinition($containerId) {
+		$sidebarMode = $this->options->getIntegerOption('mode', 0) === 1;
 		$this->containerId = $containerId;
 		$this->definitions = array();
 		$this->mediaDefinitions = array();
@@ -47,6 +48,7 @@ class WiseChatCssRenderer {
 		$this->addDefinition('.wcBody .wcBrowserArea', 'background_color_chat', 'background-color');
 		$this->addDefinition('.wcDesktop .wcBrowser', 'background_color_chat', 'background-color');
 		$this->addDefinition('.wcMobile .wcTabs', 'background_color_chat', 'background-color');
+		$this->addDefinition('.wcSidebar .wcColumn .wcContent.wcBrowserContent .wcCustomizations', 'background_color_chat', 'background-color');
 
 		$this->addDefinition('.wcBody .wcMessagesArea .wcTabsContainer .wcTabs .wcTab .wcName', 'text_color_chat', 'color');
 		$this->addDefinition('.wcDesktop .wcBrowser *', 'text_color_chat', 'color');
@@ -60,6 +62,8 @@ class WiseChatCssRenderer {
 		$this->addDefinition('.wcChannel .wcMessages', 'background_color', 'background-color');
 		$this->addDefinition('.wcChannel .wcMessages .wcMessage', 'background_color', 'background-color');
 		$this->addDefinition('.wcChannel .wcMessages .wcMessage .wcContent', 'background_color', 'background-color');
+		$this->addLengthDefinition('.wcChannel .wcMessages .wcMessage .wcRowBody .wcContent .wcImage.wcTenorGIF', 'gifs_size', 'max-width');
+		$this->addLengthDefinition('.wcChannel .wcMessages .wcMessage .wcRowBody .wcContent .wcImage.wcTenorGIF', 'gifs_size', 'max-height');
 		$this->addDefinition('.wcMessages *', 'text_color', 'color');
 
 		$this->addDefinition('.wcMessage .wcUser', 'text_color_user', 'color');
@@ -86,11 +90,54 @@ class WiseChatCssRenderer {
 			$this->addRawDefinition('.wcChannel .wcMessages *', 'font-size', 'inherit');
 		}
 
-		$this->addLengthDefinition('', 'chat_width', 'width');
-		$this->addRawDefinition('', 'height', $this->options->getOption('chat_height', '500px'));
-		$this->addUsersListWidthDefinition();
+		if ($sidebarMode) {
+			$this->addRawDefinition('', '--wc-z-index', $this->options->getIntegerOption('fb_z_index', 200000));
+			$this->addRawDefinition('.popup-overlay.wcPopup-overlay', 'z-index', ($this->options->getIntegerOption('fb_z_index', 200000) + 10).' !important', '#popup-root');
+			$this->addRawDefinition('.popup-content.wcPopup-content', 'z-index', ($this->options->getIntegerOption('fb_z_index', 200000) + 10).' !important', '#popup-root');
+
+			if ($this->options->isOptionNotEmpty('fb_users_list_top_offset')) {
+				$this->addLengthDefinition('.wcSidebar', 'fb_users_list_top_offset', 'top');
+			}
+			if ($this->options->isOptionNotEmpty('fb_bottom_offset')) {
+				if ($this->options->isOptionNotEmpty('fb_bottom_offset_threshold')) {
+					$this->addMediaDefinition('only screen and (max-width: '.$this->options->getIntegerOption('fb_bottom_offset_threshold').'px)', '.wcSidebar', 'bottom', $this->options->getIntegerOption('fb_bottom_offset').'px');
+				} else {
+					$this->addLengthDefinition('.wcSidebar', 'fb_bottom_offset', 'bottom');
+				}
+			}
+			if ($this->options->isOptionNotEmpty('fb_browser_width')) {
+				$this->addLengthDefinition('.wcSidebar.wcDesktop .wcColumn.wcBrowserColumn', 'fb_browser_width', 'width');
+			}
+			if ($this->options->isOptionNotEmpty('fb_channel_height')) {
+				$this->addLengthDefinition('.wcSidebar.wcDesktop .wcColumn .wcContent.wcChannelContent', 'fb_channel_height', 'max-height');
+				$this->addLengthDefinition('.wcSidebar.wcMobile .wcColumn .wcMobileContainer', 'fb_channel_height', 'max-height');
+			}
+			if ($this->options->isOptionNotEmpty('fb_channel_width')) {
+				$this->addLengthDefinition('.wcSidebar.wcDesktop .wcColumn .wcContent.wcChannelContent', 'fb_channel_width', 'width');
+				$this->addLengthDefinition('.wcSidebar.wcDesktop .wcColumn .wcContent.wcAuthContent', 'fb_channel_width', 'width');
+			}
+		} else {
+			$this->addLengthDefinition('', 'chat_width', 'width');
+			$this->addRawDefinition('', 'height', $this->options->getOption('chat_height', '500px'));
+			$this->addLengthDefinition('.wcClassic.wcDesktop .wcBody .wcMessagesArea .wcGrid .wcGridChannel', 'classic_grid_height', 'height');
+			$this->addUsersListWidthDefinition();
+		}
 		
 		return $this->getDefinitions();
+	}
+
+	/**
+	 * @param string $mediaQuery
+	 * @param string $selector
+	 * @param string $property
+	 * @param string|integer $value
+	 * @param string|null $rootSelector
+	 */
+	private function addMediaDefinition($mediaQuery, $selector, $property, $value, $rootSelector = null) {
+		if ($rootSelector === null) {
+			$rootSelector = '#'.$this->containerId;
+		}
+		$this->mediaDefinitions[$mediaQuery][trim($rootSelector.' '.$selector)][] = sprintf("%s: %s;", $property, $value);
 	}
 
 	/**

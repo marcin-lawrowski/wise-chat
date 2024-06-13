@@ -3,7 +3,7 @@
 	define('SHORTINIT', true);
 	
 	if (!isset($_REQUEST['action'])) {
-		http_response_code(400);
+	    http_response_code(400);
         die(json_encode(['error' => 'No action specified']));
 	}
 	header('Content-Type: text/html');

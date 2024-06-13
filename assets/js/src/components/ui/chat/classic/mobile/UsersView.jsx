@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import {Scrollbar} from "react-scrollbars-custom";
 import DirectChannel from "components/ui/common/browser/components/DirectChannel";
+import { setMobileTitle, setMobileTopTab } from "actions/ui";
 
 class UsersView extends React.Component {
 
@@ -14,12 +15,18 @@ class UsersView extends React.Component {
 		}
 
 		this.handleSearchClear = this.handleSearchClear.bind(this);
+		this.handleChannelClick = this.handleChannelClick.bind(this);
 	}
 
 	handleSearchClear(e) {
 		e.preventDefault();
 
 		this.setState({ searchPhrase: '' });
+	}
+
+	handleChannelClick(channel) {
+		this.props.setMobileTopTab('channel');
+		this.props.setMobileTitle(channel.name);
 	}
 
 	render() {
@@ -29,7 +36,7 @@ class UsersView extends React.Component {
 				<div className="wcChannels wcDirectChannels">
 					<Scrollbar>
 						{ this.props.directChannels.filter( channel => !this.state.searchPhrase || channel.name.match(new RegExp(this.state.searchPhrase, 'i'))).map( (channel, index) =>
-							<DirectChannel key={ channel.id } channel={ channel } />
+							<DirectChannel key={ channel.id } channel={ channel } onClick={ this.handleChannelClick } />
 						) }
 					</Scrollbar>
 				</div>
@@ -65,5 +72,6 @@ export default connect(
 		directChannels: state.application.directChannels,
 		i18n: state.application.i18n,
 		focusedChannel: state.ui.focusedChannel
-	})
+	}),
+	{ setMobileTitle, setMobileTopTab }
 )(UsersView);

@@ -6,6 +6,7 @@
 @import "./common/image-viewer";
 @import "./common/popups";
 @import "./common/toasts";
+@import "./common/recent";
 @import "./common/auth";
 @import "./common/anims";
 @import "./themes/default";
@@ -40,6 +41,33 @@
        url('../fonts/maven-pro-v32-latin_latin-ext-700.svg#MavenPro') format('svg'); /* Legacy iOS */
 }
 
+/* rajdhani-regular - latin_latin-ext */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/rajdhani-v15-latin_latin-ext-regular.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/rajdhani-v15-latin_latin-ext-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/rajdhani-v15-latin_latin-ext-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/rajdhani-v15-latin_latin-ext-regular.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/rajdhani-v15-latin_latin-ext-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/rajdhani-v15-latin_latin-ext-regular.svg#Rajdhani') format('svg'); /* Legacy iOS */
+}
+/* rajdhani-700 - latin_latin-ext */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/rajdhani-v15-latin_latin-ext-700.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/rajdhani-v15-latin_latin-ext-700.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('../fonts/rajdhani-v15-latin_latin-ext-700.woff2') format('woff2'), /* Super Modern Browsers */
+       url('../fonts/rajdhani-v15-latin_latin-ext-700.woff') format('woff'), /* Modern Browsers */
+       url('../fonts/rajdhani-v15-latin_latin-ext-700.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/rajdhani-v15-latin_latin-ext-700.svg#Rajdhani') format('svg'); /* Legacy iOS */
+}
+
 .wcContainer {
   position: relative;
   display: flex;
@@ -68,6 +96,7 @@
 
   @include customize;
   @include toasts;
+  @include recent;
   @include auth;
   @include animations;
 

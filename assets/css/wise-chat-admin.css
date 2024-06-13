@@ -1,0 +1,10 @@
+#wpadminbar .wc-counter {
+    border-radius: 9px;
+    color: #fff;
+    display: inline;
+    padding: 1px 7px 1px 6px!important;
+}
+
+.block-editor-block-inspector .components-base-control.mb-0 {
+    margin-bottom: 0;
+}

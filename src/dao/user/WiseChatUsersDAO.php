@@ -25,6 +25,8 @@ class WiseChatUsersDAO {
 	 * @var string[] Legacy rights names conversion map
 	 */
 	private static $rightsConversionMap = array(
+		'approve_message' => 'approve',
+		'edit_message' => 'edit',
 		'delete_message' => 'delete',
 		'ban_user' => 'mute',
 		'kick_user' => 'ban',
@@ -359,6 +361,60 @@ class WiseChatUsersDAO {
 		
 		return false;
 	}
+
+	/**
+	 * @param integer $wpUserId
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getWpUserMeta($wpUserId, $key) {
+		return get_user_meta($wpUserId, $key, true);
+	}
+
+	/**
+	 * Determines whether current BuddyPress user has given right.
+	 *
+	 * @param string $rightName
+	 *
+	 * @return boolean
+	 */
+	public function hasCurrentBpUserRight($rightName) {
+		$wpUser = $this->getCurrentWpUser();
+		$groupId = $this->options->getIntegerOption('buddypress_group_id', null);
+
+		if ($wpUser !== null && $groupId > 0) {
+			if ($this->options->isOptionEnabled('enable_buddypress', false) && function_exists("is_buddypress")) {
+				if ($rightName == 'delete_message') {
+					if (groups_is_user_mod($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_mod_delete_messages')) {
+						return true;
+					}
+
+					if (groups_is_user_admin($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_admin_delete_messages')) {
+						return true;
+					}
+				}
+				if ($rightName == 'edit_message') {
+					if (groups_is_user_mod($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_mod_edit_messages')) {
+						return true;
+					}
+
+					if (groups_is_user_admin($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_admin_edit_messages')) {
+						return true;
+					}
+				}
+				if ($rightName == 'ban_user') {
+					if (groups_is_user_mod($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_mod_ban_users')) {
+						return true;
+					}
+					if (groups_is_user_admin($wpUser->ID, $groupId) && groups_get_groupmeta($groupId, 'bp_wisechat_permissions_admin_ban_users')) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
 	
 	/**
 	* Checks if WordPress user is logged in.
@@ -488,7 +544,7 @@ class WiseChatUsersDAO {
 	 * @param integer[] $limitToUsers
 	 * @return WP_User[]
 	 */
-	public function getWPUsers($limitToUsers = array()) {
+	public function getWPUsers($limitToUsers = array(), $excludeUsers = array()) {
 		$hideRoles = $this->options->getOption('users_list_hide_roles', array());
 		$args = array(
 			'orderby' => 'display_name',
@@ -498,9 +554,12 @@ class WiseChatUsersDAO {
 		if (count($limitToUsers) > 0) {
 			$args['include'] = $limitToUsers;
 		}
+		if (count($excludeUsers) > 0) {
+			$args['exclude'] = $excludeUsers;
+		}
 		$usersCacheTime = $this->options->getIntegerOption('users_cache_time', 1200);
 		if ($usersCacheTime > 0) {
-			$transientKey = 'wise_chat_wp_users_cache';
+			$transientKey = 'wise_chat_wp_users_cache_'.sha1(implode(',', $limitToUsers));
 			if (false === ($wpUsers = get_transient($transientKey))) {
 				$wpUsers = get_users($args);
 				set_transient($transientKey, $wpUsers, $usersCacheTime);

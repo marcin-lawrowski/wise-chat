@@ -6,9 +6,10 @@ import messages from './messages';
 import commands from './commands';
 import ui from './ui';
 import auth from './auth';
+import integrations from './integrations';
 
 const mainReducers = combineReducers({
-	log, configuration, application, messages, ui, commands, auth
+	log, configuration, application, messages, ui, commands, auth, integrations
 })
 
 export default mainReducers

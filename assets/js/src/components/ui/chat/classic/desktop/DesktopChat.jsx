@@ -6,6 +6,7 @@ import Logger from "ui/common/logger/Logger";
 import TabbedController from "./TabbedController";
 import Customize from "ui/common/customize/Customize";
 import Toasts from "ui/common/toasts/Toasts";
+import Recent from "ui/common/recent/Recent";
 
 class DesktopChat extends React.Component {
 
@@ -17,6 +18,7 @@ class DesktopChat extends React.Component {
 				{ this.props.configuration.interface.chat.title.length > 0 &&
 					<div className="wcTitle">
 						{ this.props.configuration.interface.chat.title }
+						<Recent keepInside={ '#' + this.props.configuration.chatId } />
 					</div>
 				}
 				<div className={ "wcBody " + (browserLocation === 'left' ? 'wcBrowserAreaLeft' : 'wcBrowserAreaRight')}>
@@ -26,7 +28,7 @@ class DesktopChat extends React.Component {
 					</div>
 					{this.props.configuration.interface.browser.enabled &&
 						<div className="wcBrowserArea">
-							<Browser />
+							<Browser infoWindowPosition={ browserLocation === 'left' ? 'right center' : 'left center' }/>
 						</div>
 					}
 				</div>
@@ -37,6 +39,7 @@ class DesktopChat extends React.Component {
 				}
 			</React.Fragment>
 		)
+
 	}
 
 }

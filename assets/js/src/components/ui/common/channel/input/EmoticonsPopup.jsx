@@ -10,6 +10,10 @@ class EmoticonsPopup extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			tab: 'emoticons'
+		}
+
 		this.handleClick = this.handleClick.bind(this);
 
 		const emoticonsBuilder = new EmoticonsBuilder(this.props.configuration.interface.input.emoticons);
@@ -27,31 +31,34 @@ class EmoticonsPopup extends React.Component {
 	}
 
 	render() {
-		const custom = this.props.configuration.interface.input.emoticons.custom;
+		const layerHeight = this.layerHeight;
+		let layerWidth = this.props.windowSizeClass !== 'XXs' ? this.layerWidth : '80%';
 
 		return (
 			<React.Fragment>
 				<Popup
 					trigger={<button className="wcInputButton wcEmoticon wcFunctional" title={ this.props.i18n.insertEmoticon } />}
 					position="top center"
+					lockScroll
 					closeOnDocumentClick
+					modal={ this.props.windowSizeClass === 'XXs' }
 					className={ "wcPopup wcEmoticonsPopup " + this.props.configuration.themeClassName }
-					contentStyle={ { width: this.layerWidth, height: this.layerHeight } }
-					keepTooltipInside={ this.props.keepInside }
+					contentStyle={ { width: layerWidth, height: layerHeight } }
+					keepTooltipInside={ true }
 				>
 					{close => (
-						<Scrollbar noScrollX={ true }>
-							{ custom && this.emoticons.map( (emoticon, index) =>
-								<a href="#" key={ index } onClick={ e => { this.handleClick(e, emoticon); close(); } }>
-									<img src={ emoticon.urlFull } style={ emoticon.maxWidth ? { maxWidth: emoticon.maxWidth } : undefined } />
-								</a>
-							)}
-							{ !custom && this.emoticons.map( (emoticon, index) =>
-								<a href="#" key={ index } onClick={ e => { this.handleClick(e, emoticon); close(); } }>
-									<span className={ 'wcEmoticon ' + emoticon.class } />
-								</a>
-							)}
-						</Scrollbar>
+						<div className="wcAddonsLibrary">
+
+							<div className={ 'wcCategory wcCategoryEmoticons ' + (this.state.tab !== 'emoticons' ? 'wcInvisible' : '') }>
+								<Scrollbar noScrollX={ true }>
+									{ this.emoticons.map( (emoticon, index) =>
+										<a href="#" key={ index } onClick={ e => { this.handleClick(e, emoticon); close(); } }>
+											<span className={ 'wcEmoticon ' + emoticon.class } />
+										</a>
+									)}
+								</Scrollbar>
+							</div>
+						</div>
 					)}
 				</Popup>
 			</React.Fragment>
@@ -61,13 +68,14 @@ class EmoticonsPopup extends React.Component {
 
 EmoticonsPopup.propTypes = {
 	configuration: PropTypes.object.isRequired,
-	onSelect: PropTypes.func.isRequired,
-	keepInside: PropTypes.string
+	onSelect: PropTypes.func.isRequired
 };
 
 export default connect(
 	(state) => ({
 		configuration: state.configuration,
-		i18n: state.application.i18n
+		i18n: state.application.i18n,
+		windowWidth: state.ui.properties.windowWidth,
+		windowSizeClass: state.ui.properties.windowSizeClass
 	})
 )(EmoticonsPopup);

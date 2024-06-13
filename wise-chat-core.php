@@ -1,15 +1,15 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 3.2
+	Version: 3.3
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
-	Description: Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more.
+	Description: Fully-featured chat plugin for WordPress. Supports multiple channels, private messages, multisite installation, bad words filtering, themes, appearance settings, avatars, filters, bans and more.
 	Author: Kainex
 	Author URI: https://kainex.pl
 	Text Domain: wise-chat
 */
 
-define('WISE_CHAT_VERSION', '3.2');
+define('WISE_CHAT_VERSION', '3.3');
 define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
 define('WISE_CHAT_NAME', 'Wise Chat');
 define('WISE_CHAT_SLUG', strtolower(str_replace(' ', '_', WISE_CHAT_NAME)));
@@ -17,8 +17,13 @@ define('WISE_CHAT_SLUG', strtolower(str_replace(' ', '_', WISE_CHAT_NAME)));
 require_once(dirname(__FILE__).'/src/WiseChatContainer.php');
 WiseChatContainer::load('WiseChatInstaller');
 WiseChatContainer::load('WiseChatOptions');
-WiseChatContainer::load('WiseChat');
+WiseChatContainer::load('integrations/WiseChatHelper');
 add_action('wp_enqueue_scripts', array(WiseChatContainer::get('WiseChat'), 'enqueueResources'));
+
+function wise_chat_load_plugin_textdomain() {
+	load_plugin_textdomain('wise-chat', false, basename(dirname(__FILE__)).'/languages/');
+}
+add_action('plugins_loaded', 'wise_chat_load_plugin_textdomain');
 
 if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
 	error_reporting(E_ALL);
@@ -33,6 +38,8 @@ if (is_admin()) {
 	register_activation_hook(__FILE__, array('WiseChatInstaller', 'activate'));
 	register_deactivation_hook(__FILE__, array('WiseChatInstaller', 'deactivate'));
 	register_uninstall_hook(__FILE__, array('WiseChatInstaller', 'uninstall'));
+	add_action('wpmu_new_blog', array('WiseChatInstaller', 'newBlog'), 10, 6);
+	add_action('delete_blog', array('WiseChatInstaller', 'deleteBlog'), 10, 6);
 
     /** @var WiseChatSettings $settings */
 	$settings = WiseChatContainer::get('WiseChatSettings');
@@ -44,7 +51,7 @@ if (is_admin()) {
 		/** @var WiseChat $wiseChat */
 		$wiseChat = WiseChatContainer::get('WiseChat');
 		$wiseChat->enqueueResources();
-		wp_localize_script('wisechat', '_wiseChatData', array('siteUrl' => get_site_url()));
+		wp_localize_script('wise-chat', '_wiseChatData', array('siteUrl' => get_site_url()));
 	});
 }
 
@@ -73,6 +80,7 @@ add_shortcode('wise-chat-channel-stats', 'wise_chat_channel_stats_shortcode');
 
 // chat function:
 function wise_chat($channel = null) {
+	/** @var WiseChat $wiseChat */
 	$wiseChat = WiseChatContainer::get('WiseChat');
 	echo $wiseChat->getRenderedChat(!is_array($channel) ? array($channel) : $channel);
 }
@@ -119,6 +127,14 @@ function wise_chat_endpoint_message() {
 add_action("wp_ajax_nopriv_wise_chat_message_endpoint", 'wise_chat_endpoint_message');
 add_action("wp_ajax_wise_chat_message_endpoint", 'wise_chat_endpoint_message');
 
+function wise_chat_endpoint_get_message() {
+	/** @var WiseChatMessageEndpoint $wiseChatEndpoints */
+	$wiseChatEndpoints = WiseChatContainer::get('endpoints/WiseChatMessageEndpoint');
+	$wiseChatEndpoints->getMessageEndpoint();
+}
+add_action("wp_ajax_nopriv_wise_chat_get_message_endpoint", 'wise_chat_endpoint_get_message');
+add_action("wp_ajax_wise_chat_get_message_endpoint", 'wise_chat_endpoint_get_message');
+
 function wise_chat_endpoint_maintenance() {
 	/** @var WiseChatMaintenanceEndpoint $endpoint */
 	$endpoint = WiseChatContainer::get('endpoints/WiseChatMaintenanceEndpoint');
@@ -158,17 +174,19 @@ function wise_chat_endpoint_auth() {
 add_action("wp_ajax_nopriv_wise_chat_auth_endpoint", 'wise_chat_endpoint_auth');
 add_action("wp_ajax_wise_chat_auth_endpoint", 'wise_chat_endpoint_auth');
 
+function wise_chat_admin_user_search() {
+	/** @var WiseChatSettings $wiseChatSettings */
+	$wiseChatSettings = WiseChatContainer::get('WiseChatSettings');
+	$wiseChatSettings->userSearchEndpoint();
+}
+add_action("wp_ajax_wise_chat_admin_user_search", 'wise_chat_admin_user_search');
+
 function wise_chat_profile_update($userId, $oldUserData) {
 	/** @var WiseChatUserService $wiseChatUserService */
 	$wiseChatUserService = WiseChatContainer::get('services/user/WiseChatUserService');
 	$wiseChatUserService->onWpUserProfileUpdate($userId, $oldUserData);
 }
 add_action("profile_update", 'wise_chat_profile_update', 10, 2);
-
-function wise_chat_load_plugin_textdomain() {
-	load_plugin_textdomain('wise-chat', false, basename(dirname(__FILE__)).'/languages/');
-}
-add_action('plugins_loaded', 'wise_chat_load_plugin_textdomain');
 
 function wise_chat_elementor($widgetsManager) {
 	/** @var WiseChatElementor $wiseChatElementor */

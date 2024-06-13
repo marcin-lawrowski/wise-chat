@@ -1,12 +1,14 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 WiseChatContainer::load('rendering/filters/pre/WiseChatLinksPreFilter');
 WiseChatContainer::load('rendering/filters/WiseChatShortcodeConstructor');
 WiseChatContainer::load('services/WiseChatImagesService');
 WiseChatContainer::load('services/user/WiseChatActions');
 WiseChatContainer::load('services/user/WiseChatAuthentication');
 
-class WiseChatLinksPreFilterTest extends PHPUnit_Framework_TestCase {
+class WiseChatLinksPreFilterTest extends TestCase {
 	
 	/**
 	 * @dataProvider dataNoImages

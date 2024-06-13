@@ -27,9 +27,36 @@ class WiseChatNotificationsTab extends WiseChatAbstractTab {
 			'user_notification_add' => null,
 		);
 	}
+
+	public function addNotificationAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'addNotification')) {
+			return;
+		}
+	}
+
+	public function editNotificationAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'editNotification')) {
+			return;
+		}
+	}
+
+	public function deleteNotificationAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deleteNotification')) {
+			return;
+		}
+	}
+
 	public function notificationsListCallback() {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG);
+
+		$notifications = [];
+
 		$html = "<table class='wp-list-table widefat'>";
-		$html .= '<tr><td>No notifications created yet</td></tr>';
+		if (count($notifications) == 0) {
+			$html .= '<tr><td>No notifications created yet</td></tr>';
+		} else {
+			$html .= '<thead><tr><th>&nbsp;Send when</th><th>No more than</th><th>E-mail</th><th>Subject</th><th></th></tr></thead>';
+		}
 		$html .= '</table>';
 
 		print($html);
@@ -50,8 +77,8 @@ class WiseChatNotificationsTab extends WiseChatAbstractTab {
 		$details = $notification !== null ? $notification->getDetails() : array();
 		$currentUser = wp_get_current_user();
 		$url = $notification !== null
-				? admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=editNotification&notificationId=".$notification->getId())
-				: admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addNotification");
+				? admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=editNotification&notificationId=".$notification->getId().'&nonce='.wp_create_nonce('editNotification'))
+				: admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addNotification&nonce=".wp_create_nonce('addNotification'));
 
 		// actions:
 		$actionsHtmlOptions = '<option value="message">a message is posted</option>';
@@ -78,33 +105,33 @@ class WiseChatNotificationsTab extends WiseChatAbstractTab {
 				'<tr>'.
 					'<td class="th-full" width="150">Send when:</td>'.
 					'<td>
-						<select id="notificationAction" disabled>%s</select>
+						<select id="notificationAction">%s</select>
 						<p class="description" style="display: inline;"></p>
 					</td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">No more than:</td>'.
 					'<td>
-						<label><select id="notificationFrequency" disabled>%s</select></label>
+						<label><select id="notificationFrequency">%s</select></label>
 					</td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">E-mail:</td>'.
-					'<td><input type="email" value="%s" disabled placeholder="E-mail" id="notificationRecipientEmail" style="width: 100%%;" /></td>'.
+					'<td><input type="email" value="%s" placeholder="E-mail" id="notificationRecipientEmail" style="width: 100%%;" /></td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">Subject:</td>'.
-					'<td><input type="text" value="%s" disabled placeholder="Subject" id="notificationSubject" style="width: 100%%;" /></td>'.
+					'<td><input type="text" value="%s" placeholder="Subject" id="notificationSubject" style="width: 100%%;" /></td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">Content:</td>'.
 					'<td>
-						<textarea placeholder="Content" disabled id="notificationContent" rows="10" style="width: 100%%;">%s</textarea>
+						<textarea placeholder="Content" id="notificationContent" rows="10" style="width: 100%%;">%s</textarea>
 						<p class="description">Available variables: {user}, {message}, {channel}</p>
 					</td>'.
 				'</tr>'.
 				'<tr>'.
-					'<td colspan="2"><a class="button-secondary wc-save-notification-button" disabled href="%s">%s</a></td>'.
+					'<td colspan="2"><a class="button-secondary wc-save-notification-button" disabled href="">%s</a></td>'.
 				'</tr>'.
 			'</table>',
 
@@ -113,9 +140,20 @@ class WiseChatNotificationsTab extends WiseChatAbstractTab {
 			$recipient,
 			$this->fixImunify360RuleText($subject),
 			$this->fixImunify360RuleText($content),
-			wp_nonce_url($url),
 			$buttonLabel
 		);
+	}
+
+	public function addUserNotificationAction() {
+
+	}
+
+	public function editUserNotificationAction() {
+
+	}
+
+	public function deleteUserNotificationAction() {
+
 	}
 
 	/**
@@ -146,36 +184,43 @@ class WiseChatNotificationsTab extends WiseChatAbstractTab {
 				'<tr>'.
 					'<td class="th-full">No more than:</td>'.
 					'<td>
-						<label><select id="userNotificationFrequency" disabled>%s</select></label> from each user separately
+						<label><select id="userNotificationFrequency">%s</select></label> from each user separately
 					</td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">Subject:</td>'.
-					'<td><input type="text" value="%s" placeholder="Subject" disabled id="userNotificationSubject" style="width: 100%%;" /></td>'.
+					'<td><input type="text" value="%s" placeholder="Subject" id="userNotificationSubject" style="width: 100%%;" /></td>'.
 				'</tr>'.
 				'<tr>'.
 					'<td class="th-full">Content:</td>'.
 					'<td>
-						<textarea placeholder="Content" id="userNotificationContent" disabled rows="10" style="width: 100%%;">%s</textarea>
+						<textarea placeholder="Content" id="userNotificationContent" rows="10" style="width: 100%%;">%s</textarea>
 						<p class="description">Available variables: {recipient}, {recipient-email}, {sender}, {link}, {message}, {channel}</p>
 					</td>'.
 				'</tr>'.
 				'<tr>'.
-					'<td colspan="2"><a class="button-secondary wc-save-user-notification-button" disabled="" href="%s">%s</a></td>'.
+					'<td colspan="2"><a class="button-secondary wc-save-user-notification-button" disabled href="">%s</a></td>'.
 				'</tr>'.
 			'</table>',
 
 			$frequenciesHtmlOptions,
 			$this->fixImunify360RuleText($subject),
 			$this->fixImunify360RuleText($content),
-			wp_nonce_url($url),
 			$buttonLabel
 		);
 	}
 
 	public function userNotificationsListCallback() {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG);
+
+		$notifications = [];
+
 		$html = "<table class='wp-list-table widefat'>";
-		$html .= '<tr><td>No user notifications created yet</td></tr>';
+		if (count($notifications) == 0) {
+			$html .= '<tr><td>No user notifications created yet</td></tr>';
+		} else {
+			$html .= '<thead><tr><th>No more than</th><th>Subject</th><th></th></tr></thead>';
+		}
 		$html .= '</table>';
 
 		print($html);

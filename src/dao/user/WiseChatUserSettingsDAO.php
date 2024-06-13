@@ -60,6 +60,17 @@ class WiseChatUserSettingsDAO {
 			}
 			$settings[$settingName] = $settingValue;
 			$this->setUserCookie(json_encode($settings));
+
+			/**
+			 * Fires once user setting has been set. User settings are stored in cookie only.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param string $settingName Setting name
+			 * @param mixed $settingValue Setting value
+			 * @param WiseChatUser $user The user object
+			 */
+			do_action("wc_usersetting_set", $settingName, $settingValue, $user);
 		}
 	}
 	

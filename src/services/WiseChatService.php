@@ -87,6 +87,28 @@ class WiseChatService {
 
 		return $channel;
 	}
+
+	/**
+	 * @param string[] $channelNames
+	 * @return WiseChatChannel[]
+	 * @throws Exception
+	 */
+	public function createAndGetChannels($channelNames) {
+		$channels = array();
+
+		foreach ($channelNames as $channelName) {
+			$channel = $this->channelsDAO->getByName($channelName);
+			if ($channel === null) {
+				$channel = new WiseChatChannel();
+				$channel->setName($channelName);
+				$this->channelsDAO->save($channel);
+			}
+
+			$channels[] = $channel;
+		}
+
+		return $channels;
+	}
 	
 	/**
 	* Returns unique ID for the plugin.
@@ -163,6 +185,15 @@ class WiseChatService {
 	public function isChatAllowedForWPUsersOnly() {
 		return $this->options->getOption('access_mode') == 1;
 	}
+
+	/**
+	 * Determines whether Facebook, Twitter or Google login is enabled.
+	 *
+	 * @return bool
+	 */
+	public function isExternalLoginEnabled() {
+		return $this->options->getOption('auth_mode', 'auto') === 'external';
+	}
 	
 	/**
 	* Determines whether the chat is open according to the settings.
@@ -175,30 +206,28 @@ class WiseChatService {
 			if (is_array($chatOpeningDays) && !in_array(date('l'), $chatOpeningDays)) {
 				return false;
 			}
-
-			$timezone = function_exists('wp_timezone') ? wp_timezone() : new DateTimeZone( 'UTC' );
 			
 			$chatOpeningHours = $this->options->getOption('opening_hours');
 			$openingHour = $chatOpeningHours['opening'];
 			$openingMode = $chatOpeningHours['openingMode'];
 			$startHourDate = null;
 			if ($openingMode != '24h') {
-				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode, $timezone);
+				$startHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$openingHour.' '.$openingMode);
 			} else {
-				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour, $timezone);
+				$startHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$openingHour);
 			}
 			
 			$closingHour = $chatOpeningHours['closing'];
 			$closingMode = $chatOpeningHours['closingMode'];
 			$endHourDate = null;
 			if ($closingMode != '24h') {
-				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode, $timezone);
+				$endHourDate = DateTime::createFromFormat('Y-m-d h:i a', date('Y-m-d').' '.$closingHour.' '.$closingMode);
 			} else {
-				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour, $timezone);
+				$endHourDate = DateTime::createFromFormat('Y-m-d H:i', date('Y-m-d').' '.$closingHour);
 			}
 			
 			if ($startHourDate != null && $endHourDate != null) {
-				$nowDate = new DateTime('now', $timezone);
+				$nowDate = new DateTime();
 				
 				$nowU = $nowDate->format('U');
 				$startHourDateU = $startHourDate->format('U');
@@ -251,6 +280,16 @@ class WiseChatService {
 	 * @return bool
 	 */
 	public function hasUserToBeForcedToEnterName() {
-		return $this->options->isOptionEnabled('force_user_name_selection') && !$this->authentication->isAuthenticated();
+		return $this->options->getOption('auth_mode', 'auto') === 'username' && !$this->authentication->isAuthenticated();
 	}
+
+	/**
+	 * Determines if the current user has to be authorized externally.
+	 *
+	 * @return bool
+	 */
+	public function hasUserToBeAuthenticatedExternally() {
+		return $this->isExternalLoginEnabled() && !$this->authentication->isAuthenticated();
+	}
+
 }

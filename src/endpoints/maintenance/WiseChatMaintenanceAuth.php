@@ -44,6 +44,11 @@ class WiseChatMaintenanceAuth {
 	 */
 	protected $usersDAO;
 
+	/**
+	 * @var WiseChatExternalAuthentication
+	 */
+	private $externalAuthentication;
+
 	public function __construct() {
 		$this->clientSide = WiseChatContainer::getLazy('services/client-side/WiseChatClientSide');
 		$this->options = WiseChatOptions::getInstance();
@@ -51,6 +56,7 @@ class WiseChatMaintenanceAuth {
 		$this->userSettingsDAO = WiseChatContainer::getLazy('dao/user/WiseChatUserSettingsDAO');
 		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
+		$this->externalAuthentication = WiseChatContainer::getLazy('services/user/WiseChatExternalAuthentication');
 		$this->usersDAO = WiseChatContainer::getLazy('dao/user/WiseChatUsersDAO');
 	}
 
@@ -96,10 +102,10 @@ class WiseChatMaintenanceAuth {
 		$userSettings = array(
 			'enableNotifications' => !array_key_exists('disableNotifications', $userData) ? true : !$userData['disableNotifications'],
 			'textColor' => array_key_exists('textColor', $userData) ? $userData['textColor'] : null,
-			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color', true),
+			'allowChangeTextColor' => $this->options->isOptionEnabled('allow_change_text_color'),
 			'allowControlUserNotifications' => $this->options->isOptionEnabled('allow_control_user_notifications') && $this->options->isOptionEnabled('enable_private_messages', false) && $user->getWordPressId() > 0,
 			'allowMuteSound' => $this->options->isOptionEnabled('allow_mute_sound') && $this->options->getEncodedOption('sound_notification'),
-			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name', true) && !($user->getWordPressId() > 0),
+			'allowChangeUserName' => $this->options->isOptionEnabled('allow_change_user_name') && !($user->getWordPressId() > 0) && !$this->authentication->isAuthenticatedExternally(),
 		);
 
 		$userSettings['allowCustomize'] = $userSettings['allowChangeTextColor'] || $userSettings['allowControlUserNotifications'] || $userSettings['allowMuteSound'] || $userSettings['allowChangeUserName'];
@@ -144,6 +150,32 @@ class WiseChatMaintenanceAuth {
 			);
 		}
 
+		if ($this->service->hasUserToBeAuthenticatedExternally()) {
+			$auth = array(
+				'mode' => 'auth-external'
+			);
+			if ($this->options->isOptionEnabled('anonymous_login_enabled', true)) {
+				$auth['anonymous'] = array(
+					'nonce' => wp_create_nonce('an'.$this->httpRequestService->getRemoteAddress())
+				);
+			}
+			if ($this->options->isOptionEnabled('facebook_login_enabled', false)) {
+				$auth['facebook'] = array(
+					'url' => $this->externalAuthentication->getFacebookActionLoginURL()
+				);
+			}
+			if ($this->options->isOptionEnabled('twitter_login_enabled', false)) {
+				$auth['twitter'] = array(
+					'url' => $this->externalAuthentication->getTwitterActionLoginURL()
+				);
+			}
+			if ($this->options->isOptionEnabled('google_login_enabled', false)) {
+				$auth['google'] = array(
+					'url' => $this->externalAuthentication->getGoogleActionLoginURL()
+				);
+			}
+		}
+
 		return $auth;
 	}
 
@@ -156,11 +188,15 @@ class WiseChatMaintenanceAuth {
 
 	private function getUserRights() {
 		return array(
-			'deleteMessages' => $this->usersDAO->hasCurrentWpUserRight('delete_message'),
+			'approveMessages' => $this->usersDAO->hasCurrentWpUserRight('approve_message') && $this->options->isOptionEnabled('new_messages_hidden', false),
+			'deleteMessages' => $this->usersDAO->hasCurrentWpUserRight('delete_message') || $this->usersDAO->hasCurrentBpUserRight('delete_message'),
 			'deleteOwnMessages' => $this->options->isOptionEnabled('enable_delete_own_messages', false),
-			'muteUsers' => $this->usersDAO->hasCurrentWpUserRight('ban_user'),
-			'banUsers' => $this->usersDAO->hasCurrentWpUserRight('kick_user'),
-			'spamReport' => $this->options->isOptionEnabled('spam_report_enable_all', true) || $this->usersDAO->hasCurrentWpUserRight('spam_report'),
+			'editMessages' => $this->usersDAO->hasCurrentWpUserRight('edit_message') || $this->usersDAO->hasCurrentBpUserRight('edit_message'),
+			'editOwnMessages' => $this->options->isOptionEnabled('enable_edit_own_messages', false),
+			'muteUsers' => $this->usersDAO->hasCurrentWpUserRight('ban_user') || $this->usersDAO->hasCurrentBpUserRight('ban_user'),
+			'banUsers' => $this->usersDAO->hasCurrentWpUserRight('kick_user') || $this->usersDAO->hasCurrentBpUserRight('kick_user'),
+			'spamReport' => $this->options->isOptionEnabled('spam_report_enable_all', true) || $this->usersDAO->hasCurrentWpUserRight('spam_report') || $this->usersDAO->hasCurrentBpUserRight('spam_report'),
+			'replyToMessages' => $this->options->isOptionEnabled('enable_reply_to_messages', true)
 		);
 	}
 }

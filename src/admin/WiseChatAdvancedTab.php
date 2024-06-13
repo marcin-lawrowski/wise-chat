@@ -9,8 +9,10 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 
 	public function __construct() {
 		parent::__construct();
+
 		add_filter('pre_update_option_'.WiseChatOptions::OPTIONS_NAME, [$this, 'onUpdate'], 10, 2);
 	}
+
 	public function onUpdate($newValue, $oldValue) {
 		if (isset($newValue['ajax_engine']) && isset($oldValue['ajax_engine']) && $oldValue['ajax_engine'] && $newValue['ajax_engine'] !== $oldValue['ajax_engine'] && $newValue['ajax_engine'] === 'gold') {
 			if (!WiseChatInstaller::registerEngine()) {
@@ -18,6 +20,7 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				$newValue['ajax_engine'] = $oldValue['ajax_engine'];
 			}
 		}
+
 		return $newValue;
 	}
 
@@ -35,13 +38,12 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 				WiseChatAdvancedTab::getAllEngines()
 			),
 			array(
-				'messages_refresh_time', 'Refresh Time', 'selectCallback', 'string',
-				"Determines how often the chat should check for new messages. Lower value means higher CPU usage and more HTTP requests.",
+				'messages_refresh_time', 'Refresh Time', 'selectCallback', 'string', 
+				"Determines how often the chat should check for new messages. Lower value means higher CPU usage and more HTTP requests.", 
 				WiseChatAdvancedTab::getRefreshTimes()
 			),
 			array('_section', 'Engines Diagnostics', 'Please run the diagnostics to investigate possible problems with messages delivery.'),
 			array('engines_diagnostics', 'Diagnostics', 'diagnosticsCallback', 'void'),
-
 			array('_section', 'User Authentication'),
 			array(
 				'user_auth_expiration_days', 'Expiration Time (in days)', 'stringFieldCallback', 'integer',
@@ -106,20 +108,20 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 	}
 
 	public function adminActionsCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter&nonce=".wp_create_nonce('resetAnonymousCounter'));
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetAnonymousCounter");
 
 		printf(
 			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings&nonce=".wp_create_nonce('resetSettings'));
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=resetSettings");
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Resets Wise Chat settings" onclick="return confirm(\'WARNING: All settings will be permanently deleted. \\n\\nAre you sure you want to reset the settings?\')">Reset All Settings</a><p class="description">Resets all settings to default values.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages&nonce=".wp_create_nonce('deleteAllUsersAndMessages'));
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages");
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Deletes all messages and users" onclick="return confirm(\'WARNING: All messages and users will be permanently deleted. \\n\\nAre you sure you want to proceed?\')">Delete All Messages and Users</a><p class="description">Deletes all messages and users.</p>',
 			wp_nonce_url($url)
@@ -127,36 +129,29 @@ class WiseChatAdvancedTab extends WiseChatAbstractTab {
 	}
 
 	public function resetAnonymousCounterAction() {
-		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'resetAnonymousCounter')) {
-			$this->options->resetUserNameSuffix();
-			$this->addMessage('The prefix has been reset.');
-		}
+		$this->options->resetUserNameSuffix();
+		$this->addMessage('The prefix has been reset.');
 	}
 
 	public function resetSettingsAction() {
-		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'resetSettings')) {
-			$this->options->dropAllOptions();
+		$this->options->dropAllOptions();
 
-			// set the default options:
-			$settings = WiseChatContainer::get('WiseChatSettings');
-			$settings->setDefaultSettings();
+		// set the default options:
+		$settings = WiseChatContainer::get('WiseChatSettings');
+		$settings->setDefaultSettings();
 
-			$this->addMessage('All settings have been reset to defaults.');
-		}
+		$this->addMessage('All settings have been reset to defaults.');
 	}
 
 	public function deleteAllUsersAndMessagesAction() {
-		if (current_user_can('manage_options') && wp_verify_nonce($_GET['nonce'], 'deleteAllUsersAndMessages')) {
-			$this->messagesService->deleteAll();
-			$this->usersDAO->deleteAll();
-			$this->actions->publishAction('deleteAllMessages', array());
-			$this->addMessage('All messages and users have been deleted.');
-		}
+		$this->messagesService->deleteAll();
+		$this->usersDAO->deleteAll();
+		$this->actions->publishAction('deleteAllMessages', array());
+		$this->addMessage('All messages and users have been deleted.');
 	}
 
 	public function diagnosticsCallback() {
 		echo '<div class="wc-advanced-diagnostics-result"><i>Please run the diagnostics</i></div><br />';
 		echo '<button type="button" class="button-secondary wc-advanced-diagnostics-run">Run</button>';
 	}
-
 }

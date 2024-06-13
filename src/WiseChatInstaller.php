@@ -24,13 +24,12 @@ class WiseChatInstaller {
 	
 	public static function getBansTable() {
 		global $wpdb;
-
+		
 		return $wpdb->prefix.'wise_chat_bans';
 	}
 
 	public static function getKicksTable() {
 		global $wpdb;
-
 		return $wpdb->prefix.'wise_chat_kicks';
 	}
 	
@@ -52,12 +51,20 @@ class WiseChatInstaller {
 		return $wpdb->prefix.'wise_chat_channels';
 	}
 
-	public static function activate() {
-		global $wpdb, $user_level, $sac_admin_user_level;
-		
-		if ($user_level < $sac_admin_user_level) {
-			return;
-		}
+	public static function getPendingChatsTable() {
+		global $wpdb;
+
+		return $wpdb->prefix.'wise_chat_pending_chats';
+	}
+
+	/**
+	 * Plugin's activation action. Creates database structure (if does not exist), upgrades database structure and
+	 * initializes options. Supports WordPress multisite.
+	 *
+	 * @param boolean $networkWide True if it is a network activation - if so, run the activation function for each blog id
+	 */
+	public static function activate($networkWide) {
+		global $wpdb;
 
 		if (self::registerEngine()) {
 			self::$forceDefaultOptions = ['ajax_engine' => 'gold'];
@@ -65,6 +72,64 @@ class WiseChatInstaller {
 
 		$role = get_role('administrator');
 		$role->add_cap(WiseChatSettings::CAPABILITY, true);
+
+		if (function_exists('is_multisite') && is_multisite()) {
+			if ($networkWide) {
+				$oldBlogID = $wpdb->blogid;
+				$blogIDs = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+				foreach ($blogIDs as $blogID) {
+					switch_to_blog($blogID);
+					self::doActivation();
+				}
+				switch_to_blog($oldBlogID);
+				return;
+			}
+		}
+		self::doActivation();
+	}
+
+	/**
+	 * Executed when admin creates a site in mutisite installation.
+	 *
+	 * @param integer $blogID
+	 * @param integer $userID
+	 * @param string $domain
+	 * @param string $path
+	 * @param string $siteID
+	 * @param mixed $meta
+	 */
+	public static function newBlog($blogID, $userID, $domain, $path, $siteID, $meta) {
+		global $wpdb;
+
+		if (is_plugin_active_for_network(WISE_CHAT_SLUG.'/wise-chat-core.php')) {
+			$oldBlogID = $wpdb->blogid;
+			switch_to_blog($blogID);
+			self::doActivation();
+			switch_to_blog($oldBlogID);
+		}
+	}
+
+	/**
+	 * Executed when admin deletes a site in mutisite installation.
+	 *
+	 * @param int $blogID Blog ID
+	 * @param bool $drop True if blog's table should be dropped. Default is false.
+	 */
+	public static function deleteBlog($blogID, $drop) {
+		global $wpdb;
+
+		$oldBlogID = $wpdb->blogid;
+		switch_to_blog($blogID);
+		self::doUninstall('deleteblog_'.$blogID);
+		switch_to_blog($oldBlogID);
+	}
+
+	private static function doActivation() {
+		global $wpdb, $user_level, $sac_admin_user_level;
+		
+		if ($user_level < $sac_admin_user_level) {
+			return;
+		}
 
 		$charsetCollate = $wpdb->get_charset_collate();
 
@@ -84,13 +149,14 @@ class WiseChatInstaller {
 		
 		$tableName = self::getMessagesTable();
 		$sql = "CREATE TABLE ".$tableName." (
-				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				time bigint(11) DEFAULT '0' NOT NULL, 
 				admin boolean not null default 0,
 				user tinytext NOT NULL,
 				user_id bigint(11),
 				chat_user_id bigint(11),
 				avatar_url text,
+				chat_recipient_id bigint(11),
 				channel text NOT NULL,
 				text text NOT NULL, 
 				ip text NOT NULL
@@ -153,8 +219,22 @@ class WiseChatInstaller {
 		) $charsetCollate;";
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
+
+		$tableName = self::getPendingChatsTable();
+		$sql = "CREATE TABLE " . $tableName . " (
+				id mediumint(7) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				channel_id bigint(11),
+				user_id bigint(11),
+				recipient_id bigint(11),
+				message_id bigint(11),
+				time bigint(11) DEFAULT '0' NOT NULL,
+				checked boolean not null default 0
+		) $charsetCollate;";
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
 		
 		// set default options after installation:
+		/** @var WiseChatSettings $settings */
 		$settings = WiseChatContainer::get('WiseChatSettings');
 		$settings->setDefaultSettings(self::$forceDefaultOptions);
 
@@ -190,7 +270,10 @@ class WiseChatInstaller {
 			}
 		}
 	}
-	
+
+	/**
+	 * Plugin's deactivation action.
+	 */
 	public static function deactivate() {
 		global $wpdb, $user_level, $sac_admin_user_level;
 
@@ -201,10 +284,33 @@ class WiseChatInstaller {
 			return;
 		}
 	}
-	
+
+	/**
+	 * Plugin's uninstall action. Deletes all database tables and plugin's options.
+	 * Supports WordPress multisite.
+	 */
 	public static function uninstall() {
+		global $wpdb;
+
+		if (function_exists('is_multisite') && is_multisite()) {
+			$oldBlogID = $wpdb->blogid;
+			$blogIDs = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
+			foreach ($blogIDs as $blogID) {
+				switch_to_blog($blogID);
+				self::doUninstall();
+			}
+			switch_to_blog($oldBlogID);
+			return;
+		}
+		self::doUninstall();
+	}
+
+	private static function doUninstall($refererCheck = null) {
 		if (!current_user_can('activate_plugins')) {
 			return;
+		}
+		if ($refererCheck !== null) {
+			check_admin_referer($refererCheck);
 		}
         
         global $wpdb;
@@ -261,6 +367,7 @@ class WiseChatInstaller {
 			if (file_exists($mustUsePluginPath) && md5($engineContent) === md5_file($mustUsePluginPath)) {
 				return true;
 			}
+
 			if (!is_dir($mustUsePluginDir)) {
 				$dirMade = @mkdir($mustUsePluginDir);
 				if (!$dirMade) {
@@ -269,10 +376,12 @@ class WiseChatInstaller {
 					return false;
 				}
 			}
+
 			if (!is_writable($mustUsePluginDir)) {
 				error_log('MU-plugin directory is not writable.');
 				return false;
 			}
+
 			$loaderWritten = @file_put_contents($mustUsePluginPath, $engineContent);
 			if (!$loaderWritten) {
 				$error = error_get_last();
@@ -282,8 +391,10 @@ class WiseChatInstaller {
 		} catch (Exception $e) {
 			error_log('Unable to install the engine: '.$e->getMessage());
 		}
+
 		return true;
     }
+
 	/**
 	 * Removes the engine.
 	 */
@@ -291,10 +402,13 @@ class WiseChatInstaller {
 		try {
 			$mustUsePluginDir = rtrim(WPMU_PLUGIN_DIR, '/');
 			$mustUsePluginPath = $mustUsePluginDir.'/'.self::GOLD_ENGINE_MU_PLUGIN;
+
 			if (!file_exists($mustUsePluginPath)) {
 				return;
 			}
+
 			$removed = @unlink($mustUsePluginPath);
+
 			if (!$removed) {
 				$error = error_get_last();
 				error_log(sprintf('Unable to remove the engine: %s', $error['message']));
@@ -303,5 +417,4 @@ class WiseChatInstaller {
 			error_log('Unable to delete the engine: '.$e->getMessage());
 		}
 	}
-
 }

@@ -141,10 +141,10 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
         return array(
             'enable_edit_own_messages', 'enable_reply_to_messages', 'enable_approval_confirmation', 'permission_approve_message_role',
 	        'permission_edit_message_role', 'approving_messages_mode', 'show_hidden_messages_roles', 'no_hidden_messages_roles',
-	        'new_messages_hidden'
+	        'new_messages_hidden', 'enable_delete_own_messages'
         );
     }
-	
+
 	public function getRoles() {
 		$editableRoles = array_reverse(get_editable_roles());
 		$rolesOptions = array();
@@ -164,9 +164,81 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 		);
 	}
 
+	public function deleteModeratorAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deleteModerator')) {
+			return;
+		}
+		if (!isset($_GET['index'])) {
+			return;
+		}
+
+		$index = intval($_GET['index']);
+		$accessUsers = (array) $this->options->getOption('moderators', array());
+		if ($index < count($accessUsers)) {
+			unset($accessUsers[$index]);
+			$this->options->setOption('moderators', array_values($accessUsers));
+			$this->options->saveOptions();
+			$this->addMessage('The moderator has been removed from the access list');
+		}
+	}
+
+	public function addModeratorAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'addModerator')) {
+			return;
+		}
+
+		$addModeratorUserLogin = trim($_GET['addModeratorUserLogin']);
+		$addModeratorRights = array_filter(explode(',', trim($_GET['addModeratorRights'])));
+		if (!$addModeratorUserLogin) {
+			$this->addErrorMessage('Please specify the user login');
+		} else if (count($addModeratorRights) === 0) {
+			$this->addErrorMessage('Please specify the user login');
+		} else {
+			$wpUser = $this->usersDAO->getWpUserByLogin($addModeratorUserLogin);
+			if ($wpUser === null) {
+				$this->addErrorMessage('The user login is not correct');
+			} else {
+				$accessUsers = (array) $this->options->getOption('moderators', array());
+				$accessUsers[] = array('userId' => $wpUser->ID, 'rights' => $addModeratorRights);
+				$this->options->setOption('moderators', $accessUsers);
+				$this->options->saveOptions();
+
+				$this->addMessage("The moderator has been added");
+			}
+		}
+	}
+
 	public function moderatorsCallback() {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG);
+		$users = (array) $this->options->getOption('moderators', array());
+
 		$html = "<div style='height: 150px; overflow-y: auto; border: 1px solid #aaa; padding: 5px;'>";
-		$html .= '<small>No moderators were added yet</small>';
+		if (count($users) == 0) {
+			$html .= '<small>No moderators were added yet</small>';
+		} else {
+			$html .= '<table class="wp-list-table widefat fixed striped users wcCondensedTable">';
+			$html .= '<tr><th>User Login</th><th>Display Name</th><th>User Can</th><th style="width:90px"></th></tr>';
+			foreach ($users as $userKey => $userDetails) {
+				$userID = $userDetails['userId'];
+				$rights = $userDetails['rights'];
+				$rightsMapped = array();
+				foreach ($this->rights as $slug => $name) {
+					if (in_array($slug, $rights)) {
+						$rightsMapped[] = $name;
+					}
+				}
+				$rightsMappedJoined = implode(', ', $rightsMapped);
+				$deleteURL = $url . '&wc_action=deleteModerator&tab=moderation&index=' . $userKey.'&nonce='.wp_create_nonce('deleteModerator');
+				$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure you want to delete the moderator?\")'>Delete</a><br />";
+				$user = $this->usersDAO->getWpUserByID(intval($userID));
+				if ($user !== null) {
+					$html .= sprintf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>", $user->user_login, $user->display_name, $rightsMappedJoined, $deleteLink);
+				} else {
+					$html .= sprintf("<tr><td colspan='2'>Unknown user</td><td>%s</td></td><td>%s</td></tr>", $rightsMappedJoined, $deleteLink);
+				}
+			}
+			$html .= '</table>';
+		}
 		$html .= "</div>";
 		print($html);
 
@@ -174,18 +246,16 @@ class WiseChatModerationTab extends WiseChatAbstractTab {
 	}
 
 	public function moderatorAddCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addModerator");
 
 		$checkboxes = array();
 		foreach ($this->rights as $slug => $name) {
-			$checkboxes[] = sprintf('<label><input type="checkbox" value="%s" id="addModerator-%s" disabled name="addModerator-%s" class="wc-add-moderator-right" />%s</label>', $slug, $slug, $slug, $name);
+			$checkboxes[] = sprintf('<label><input type="checkbox" disabled value="%s" id="addModerator-%s" name="addModerator-%s" class="wc-add-moderator-right" />%s</label>', $slug, $slug, $slug, $name);
 		}
 
 		printf(
-			'<input type="text" value="" placeholder="User Login" disabled class="wc-add-moderator-user-login" style="margin-bottom: 10px;" /><br />%s<br />'.
-			'<a class="button-secondary wc-add-moderator-button" href="%s" title="Adds user to the moderators list" disabled style="margin-top: 10px;">Add</a>',
-			implode('<br/>', $checkboxes),
-			wp_nonce_url($url)
+			'<input type="text" value="" placeholder="User Login" disabled class="wcUserLoginHint wc-add-moderator-user-login" style="margin-bottom: 10px;" /><br />%s<br />'.
+			'<a class="button-secondary wc-add-moderator-button" href="" disabled title="Adds user to the moderators list" style="margin-top: 10px;">Add</a>',
+			implode('<br/>', $checkboxes)
 		);
 
 		$this->printProFeatureNotice();

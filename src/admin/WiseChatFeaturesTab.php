@@ -19,10 +19,8 @@ class WiseChatFeaturesTab extends WiseChatAbstractTab {
 	}
 
 	public function getProFields() {
-        return array(
-        	'reactions_mode', 'reactions_custom', 'reactions_buttons_mode', 'reactions_buttons_group', 'reactions_actions'
-        );
-    }
+		return array('reactions_mode', 'reactions_buttons_mode', 'reactions_buttons_group');
+	}
 
 	public static function getReactionsButtonsMode() {
 		return array(
@@ -51,31 +49,32 @@ class WiseChatFeaturesTab extends WiseChatAbstractTab {
 	}
 
 	public function customReactionsCallback() {
-		$custom = array();
+		$customJson = json_decode($this->options->getOption('reactions_custom'), true);
+		$custom = is_array($customJson) ? $customJson : array();
 
 		$html = "<table class='wp-list-table widefat'>";
 		$html .= '<thead><tr><td width="30">No.</td><td>Action Name</td><td>Active Reaction</td><td>Image</td><td>Counter Image</td></tr></thead>';
 
 		for ($i = 1; $i <= 7; $i++) {
 			$classes = $i % 2 == 0 ? 'alternate' : '';
-			$key = $i - 1;
 
-			if (!array_key_exists($key, $custom)) {
-				$custom[$key] = array(
+			if (!array_key_exists($i, $custom)) {
+				$custom[$i] = array(
 					'action' => '', 'active' => '', 'image' => '', 'imageSm' => '',
 				);
 			}
 
+			$key = $i - 1;
 			$idInput = sprintf(
 				'<input type="hidden" name="%s[reactions_custom][%d][id]" value="%d">',
 				WiseChatOptions::OPTIONS_NAME, $key, $i
 			);
 			$actionInput = sprintf(
-				'<input type="text" name="%s[reactions_custom][%d][action]" disabled value="%s" maxlength="100" style="max-width: 100px;">%s',
+				'<input type="text" name="%s[reactions_custom][%d][action]" value="%s" maxlength="100" disabled style="max-width: 100px;">%s',
 				WiseChatOptions::OPTIONS_NAME, $key, htmlspecialchars($custom[$key]['action']), $i === 1 ? '<p class="description">e.g. Like</p>' : ''
 			);
 			$activeInput = sprintf(
-				'<input type="text" name="%s[reactions_custom][%d][active]" disabled value="%s" maxlength="100" style="max-width: 100px;">%s',
+				'<input type="text" name="%s[reactions_custom][%d][active]" value="%s" maxlength="100" disabled style="max-width: 100px;">%s',
 				WiseChatOptions::OPTIONS_NAME, $key, htmlspecialchars($custom[$key]['active']), $i === 1 ? '<p class="description">e.g. I like it</p>' : ''
 			);
 
@@ -119,16 +118,16 @@ class WiseChatFeaturesTab extends WiseChatAbstractTab {
 		$html .= "</table><p class=\"description\"><strong>Notice:</strong> you need to specify all columns in a row to enable a reaction</p>";
 
 		print($html);
-
 		$this->printProFeatureNotice();
 	}
 
+	public function clearAllReactionsAction() {
+	}
+
 	public function reactionsActionsCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=clearAllReactions");
 
 		printf(
-			'<a class="button-secondary" href="%s" disabled title="Deletes reactions sent to all messages" onclick="return confirm(\'Are you sure? All reactions will be lost.\')">Clear All Reactions</a>',
-			wp_nonce_url($url)
+			'<a class="button-secondary" href="" title="Deletes reactions sent to all messages" disabled onclick="return confirm(\'Are you sure? All reactions will be lost.\')">Clear All Reactions</a>',
 		);
 
 		$this->printProFeatureNotice();

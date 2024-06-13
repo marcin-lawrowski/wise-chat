@@ -81,6 +81,16 @@ class WiseChatKicksService {
 			$kick->setIp($ip);
 			$this->kicksDAO->save($kick);
 
+			/**
+			 * Fires once IP address has been kicked.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param string $ip Kicked IP address
+			 * @param integer $userName Name of the kicked user
+			 */
+			do_action("wc_ip_kicked", $ip, $userName);
+
 			return true;
 		}
 

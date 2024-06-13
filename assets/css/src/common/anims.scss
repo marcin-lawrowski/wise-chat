@@ -34,12 +34,29 @@
     }
   }
 
+  @keyframes flash60 {
+    from,
+    50%,
+    to {
+      opacity: 1;
+    }
+
+    25%,
+    75% {
+      opacity: 0.60;
+    }
+  }
+
   .wcAnimationFlash {
     -webkit-animation-duration: 3s;
     animation-duration: 3s;
     -webkit-animation-name: flash;
-    animation-name: flash;
+  }
 
+  .wcAnimationFlashSlow {
+    animation-name: flash60;
+    animation-iteration-count: infinite;
+    animation-duration: 16s;
   }
 
   @-webkit-keyframes shakeY {

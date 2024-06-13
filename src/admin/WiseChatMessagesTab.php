@@ -20,6 +20,8 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			),
 			array('enable_title_notifications', 'Window Title', 'booleanFieldCallback', 'boolean', 'Shows the asterisk symbol in the browser\'s window title when a new message arrives and the window is minimized or inactive'),
 			array('sound_notification', 'New Message Sound', 'selectCallback', 'string', 'Plays a sound when new messages arrive.', WiseChatMessagesTab::getNotificationSounds()),
+			array('sound_notification_mode', 'New Message Sound Mode', 'selectCallback', 'string', 'Choose what messages should be notified', WiseChatMessagesTab::getMessageTypes()),
+			array('chat_sound_notification', 'New Chat Sound', 'selectCallback', 'string', 'Plays a sound when new chat opens.', WiseChatMessagesTab::getNotificationSounds()),
 			array('enable_join_notification', 'User Online Highlight', 'booleanFieldCallback', 'boolean', 'When user becomes online its name is highlighted on the users list.'),
 			array('join_sound_notification', 'User Online Sound', 'selectCallback', 'string', 'Plays a sound when user becomes online.', WiseChatMessagesTab::getNotificationSounds()),
 			array('enable_leave_notification', 'User Offline Highlight', 'booleanFieldCallback', 'boolean', 'When user becomes offline its name is highlighted on the users list.'),
@@ -35,7 +37,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('images_thumbnail_width_limit', 'Thumbnails Maximum Width', 'stringFieldCallback', 'integer', 'Maximum width of the generated thumbnail'),
 			array('images_thumbnail_height_limit', 'Thumbnails Maximum Height', 'stringFieldCallback', 'integer', 'Maximum height of the generated thumbnail'),
 			array('images_viewer', 'Images viewer', 'radioCallback', 'string', '', self::getImageViewers()),
-			
+
 			array('_section', 'Voice Messages Settings', 'Option to record and post voice messages. It requires HTTPS. All sounds are compressed to Mp3 files and stored in Media Library.'),
 			array('enable_voice_messages', 'Enable', 'booleanFieldCallback', 'boolean', 'Enables voice messages.'),
 			array('voice_message_max_length', 'Maximum Length (s)', 'stringFieldCallback', 'integer', 'Maximal length of a voice message (in seconds). Allowed range: 1 - 300.'),
@@ -45,10 +47,9 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			array('enable_attachments_uploader', 'Enable Uploader', 'booleanFieldCallback', 'boolean', 'Enables the uploader for sending file attachments from local storage. You can specify allowed file formats below'),
 			array('attachments_file_formats', 'Allowed File Extensions', 'stringFieldCallback', 'string', 'Comma-separated list of allowed extensions'),
 			array('attachments_size_limit', 'Size Limit', 'stringFieldCallback', 'integer', 'Size limit (in bytes) of attachments that are posted by users'),
-
 			array('attachments_video_player', 'Video Player', 'booleanFieldCallback', 'boolean', 'Outputs a video file as a video player. Supported formats: MP4 and WebM. Notice: you have to allow for mp4 and webm extensions in Allowed File Extensions option above.'),
 			array('attachments_sound_player', 'Sound Player', 'booleanFieldCallback', 'boolean', 'Outputs a sound file as a sound player. Supported formats: Mp3 and Wav. Notice: you have to allow for mp3 and wav extensions in Allowed File Extensions option above.'),
-			
+
 			array('_section', 'YouTube Videos Settings'),
 			array('enable_youtube', 'Enable YouTube Videos', 'booleanFieldCallback', 'boolean', 'Detects YouTube links and converts them to video players'),
 			array('youtube_width', 'Player Width', 'stringFieldCallback', 'integer', 'Width of the video player'),
@@ -64,7 +65,9 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'enable_leave_notification' => 1,
 			'leave_sound_notification' => '',
 			'mention_sound_notification' => '',
+			'chat_sound_notification' => '',
 			'sound_notification' => '',
+			'sound_notification_mode' => '',
 			'message_max_length' => 400,
 			'allow_post_links' => 1,
 			'allow_post_images' => 1,
@@ -86,7 +89,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'images_thumbnail_width_limit' => 60,
 			'images_thumbnail_height_limit' => 60,
 			'images_viewer' => 'internal',
-			
+
 			'enable_youtube' => 1,
 			'youtube_width' => 186,
 			'youtube_height' => 105
@@ -98,7 +101,7 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
             'enable_voice_messages', 'voice_message_max_length', 'voice_message_mp3_bitrate'
         );
     }
-	
+
 	public function getParentFields() {
 		return array(
 			'attachments_file_formats' => 'enable_attachments_uploader',
@@ -138,6 +141,14 @@ class WiseChatMessagesTab extends WiseChatAbstractTab {
 			'wise-chat-18' => 'Wise Chat 18',
 			'wise-chat-19' => 'Wise Chat 19',
 			'wise-chat-20' => 'Wise Chat 20',
+		);
+	}
+
+	public static function getMessageTypes() {
+		return array(
+			'' => 'All messages',
+			'direct' => 'Direct message',
+			'public' => 'Public message'
 		);
 	}
 

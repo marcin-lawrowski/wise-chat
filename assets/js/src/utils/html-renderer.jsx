@@ -101,7 +101,7 @@ export default class HtmlRenderer {
 							className="wcFunctional"
 							rel={ viewer === 'lightbox' ? "lightbox[wise_chat]" : undefined }
 							data-org={ Base64.encode(match[0]) }
-						    onClick={ e => viewer === 'internal' ? this.handleImagePreview(e, imageSrc) : undefined }
+							onClick={ e => viewer === 'internal' ? this.handleImagePreview(e, imageSrc) : undefined }
 						>
 							<img src={ imageThumbnailSrc } className="wcImage wcFunctional" alt="Chat image"/>
 						</a>;
@@ -208,6 +208,17 @@ export default class HtmlRenderer {
 					}
 				}
 			}, {
+				regExp: /\[video-call channelId="([^"]+)"]/g,
+				callback: (match, i, parserIndex) => {
+					let channelId = match[1];
+
+					if (this.rendererConfiguration.onShortcodeRender) {
+						return this.rendererConfiguration.onShortcodeRender('video-call', { channelId: channelId }, this.currentKey++);
+					} else {
+						return <span key={ this.currentKey++ } />;
+					}
+				}
+			}, {
 				regExp: /\n/g,
 				callback: (match, i, parserIndex) => {
 					return <br key={ this.currentKey++ } />;
@@ -218,9 +229,11 @@ export default class HtmlRenderer {
 
 	/**
 	 * @param {Object} configuration
+	 * @param {Object} rendererConfiguration
 	 */
-	constructor(configuration) {
+	constructor(configuration, rendererConfiguration = {}) {
 		this.configuration = configuration;
+		this.rendererConfiguration = rendererConfiguration;
 		this.currentKey = 0;
 		this.imageViewer = new ImageViewer();
 		this.parse = this.parse.bind(this);
@@ -235,12 +248,6 @@ export default class HtmlRenderer {
 		return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 	}
 
-	handleImagePreview(e, data) {
-		e.preventDefault();
-
-		this.imageViewer.show(data);
-	}
-
 	/**
 	 *
 	 * @param {String} src Path or URL to file
@@ -249,6 +256,12 @@ export default class HtmlRenderer {
 	 */
 	isFile(src, type) {
 		return src.toLowerCase().match(new RegExp('\.' + type + '$')) !== null;
+	}
+
+	handleImagePreview(e, data) {
+		e.preventDefault();
+
+		this.imageViewer.show(data);
 	}
 
 	/**

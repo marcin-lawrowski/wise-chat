@@ -28,8 +28,20 @@ class WiseChatPermissionsTab extends WiseChatAbstractTab {
 		);
 	}
 
+	public function addPMRuleAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'addPMRule')) {
+			return;
+		}
+	}
+
+	public function deletePMRuleAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deletePMRule')) {
+			return;
+		}
+	}
+
 	public function ruleAddCallback() {
-		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addPMRule");
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addPMRule&nonce=".wp_create_nonce('addPMRule'));
 
 		$roles = $this->getRoles();
 		$rolesOptions = array();
@@ -45,15 +57,22 @@ class WiseChatPermissionsTab extends WiseChatAbstractTab {
 			'<a class="button-primary new-pm-rule-submit" disabled href="%s">Add Rule</a>',
 			$rolesSelectSource, $rolesSelectTarget, wp_nonce_url($url)
 		);
-
-		$this->printProFeatureNotice();
 	}
 
 	public function rulesCallback() {
+		$rules = [];
+
 		$html = "<table class='wp-list-table widefat emotstable'>";
-		$html .= '<tr><td>No rules created. There are no restrictions to private messaging.</td></tr>';
+		if (count($rules) == 0) {
+			$html .= '<tr><td>No rules created. There are no restrictions to private messaging.</td></tr>';
+		} else {
+			$html .= '<thead><tr><th>&nbsp;Rule</th><th>Actions</th></tr></thead>';
+		}
+
 		$html .= "</table>";
-		$html .= "<p class='description'><strong>Notice:</strong> A first matching rule is applied and no further rules are processed.</p>";
+		if (count($rules) > 0) {
+			$html .= "<p class='description'><strong>Notice:</strong> A first matching rule is applied and no further rules are processed.</p>";
+		}
 
 		print($html);
 

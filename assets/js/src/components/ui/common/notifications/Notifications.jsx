@@ -102,7 +102,9 @@ class Notifications extends React.Component {
 			this.showTitleNotification();
 		}
 
-		this.playSound('newMessage');
+		if (!this.isWindowFocused) {
+			this.playSound('newMessage');
+		}
 	}
 
 	playSound(event) {

@@ -8,9 +8,36 @@ export default class EmoticonsBuilder {
 				alias: '01',
 				total: 30,
 				popup: {
-					32: [260, 210],
-					64: [400, 250],
-					128: [330, 250]
+					32: [240, 210],
+					64: [240, 250],
+					128: [240, 250]
+				}
+			},
+			2: {
+				alias: '02',
+				total: 50,
+				popup: {
+					32: [240, 210],
+					64: [240, 250],
+					128: [240, 250]
+				}
+			},
+			3: {
+				alias: '03',
+				total: 48,
+				popup: {
+					32: [240, 210],
+					64: [240, 250],
+					128: [240, 250]
+				}
+			},
+			4: {
+				alias: '04',
+				total: 50,
+				popup: {
+					32: [240, 210],
+					64: [240, 250],
+					128: [240, 250]
 				}
 			}
 		}
@@ -29,30 +56,11 @@ export default class EmoticonsBuilder {
 		  return num
 		}
 
-		const custom = this.configuration.custom;
 		const set = this.SETS[this.configuration.set];
 
 		this.emoticons = [];
 
-		if ($.isArray(custom)) {
-			for (let j = 0; j < custom.length; j++) {
-				const emoticon = custom[j];
-				const id = emoticon.id;
-				this.emoticons.push({
-					shortcode: `[emoticon custom="${id}"]`,
-					url: emoticon.url,
-					urlFull: emoticon.urlFull,
-					maxWidth: this.configuration.customEmoticonMaxWidthInPopup > 0 ? this.configuration.customEmoticonMaxWidthInPopup : undefined
-				});
-			}
-
-			if (this.configuration.customPopupWidth > 0) {
-				this.LAYER_WIDTH = this.configuration.customPopupWidth;
-			}
-			if (this.configuration.customPopupHeight > 0) {
-				this.LAYER_HEIGHT = this.configuration.customPopupHeight;
-			}
-		} else if (set) {
+		if (set) {
 			for (let i = 1; i <= set.total; i++) {
 				this.emoticons.push({
 					class: 'bg-emot_' + set.alias + '_' + this.configuration.size + '_' + zeroPad(i, 3),

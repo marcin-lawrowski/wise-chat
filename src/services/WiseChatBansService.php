@@ -85,6 +85,16 @@ class WiseChatBansService {
 			$ban->setIp($ip);
 			$this->bansDAO->save($ban);
 
+			/**
+			 * Fires once IP address has been banned.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param string $ip Banned IP address
+			 * @param integer $duration Duration of the ban (in seconds)
+			 */
+			do_action("wc_ip_banned", $ip, $duration);
+
 			return true;
 		}
 

@@ -1,0 +1,129 @@
+@mixin recent {
+  .wcRecentTrigger {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    background: url(../../gfx/icons/recent-chats-inactive.svg) center center no-repeat;
+    width: 36px;
+    height: 36px;
+    transition: all .2s ease-in;
+
+    &.wcOpen {
+      background: url(../../gfx/icons/recent-chats.svg) center center no-repeat;
+    }
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
+
+    span {
+      cursor: pointer;
+      color: #ffffff;
+      background-color: #ff0000;
+      font-size: .5em;
+      line-height: 1.3em;
+      display: inline-block;
+      border-radius: 50%;
+      text-align: center;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+      min-width: 18px;
+      height: 18px;
+      padding: 1px 3px;
+      transform: translateX(50%) translateY(-50%);
+    }
+  }
+
+  .wcRecentChats {
+    height: 100%;
+    line-height: 1.1em;
+
+    .wcHeader {
+     //text-align: center;
+      padding: 10px 0 5px 0;
+      //font-size: 0.8em;
+    }
+
+    .wcRecent {
+      cursor: pointer;
+      padding: 10px 10px;
+      display: flex;
+      align-items: center;
+
+      img.wcRecentChatAvatar {
+        max-width: 2em;
+        margin: 0 10px 2px 0;
+        border-radius: 50%;
+        box-shadow: none;
+        border: none;
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+      }
+
+      .wcStatus {
+        margin-right: 7px;
+      }
+
+      .wcRight {
+        flex-grow: 1;
+
+        .wcHead {
+          display: flex;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          margin-bottom: 5px;
+
+          .wcName {
+            font-weight: bold;
+          }
+
+          .wcTime > span {
+            font-size: 0.8em;
+            color: #a6a6a6;
+          }
+
+          .wcTime > span:not(:last-child) {
+            margin-right: 3px;
+          }
+        }
+
+        .wcText {
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          -ms-word-break: break-all;
+          -ms-hyphens: auto;
+          -moz-hyphens: auto;
+          -webkit-hyphens: auto;
+          hyphens: auto;
+
+          .wcImage, .wcEmoticon {
+            max-height: 35px;
+            max-width: 35px;
+            border-radius: 5px;
+            box-shadow: none;
+            border: none;
+            display: inline-block;
+            vertical-align: middle;
+            margin-bottom: 4px;
+          }
+        }
+      }
+
+      &.wcUnread {
+        background-color: rgba(0, 193, 121, 0.05);
+      }
+      &.wcUnread:hover {
+        background-color: rgba(0, 193, 121, 0.1)
+      }
+      &.wcRead:hover {
+        background-color: #f1f1f1;
+      }
+    }
+
+    >.wcRecent:not(:last-child) {
+      border-bottom: 1px solid #dfdfdf;
+    }
+  }
+}

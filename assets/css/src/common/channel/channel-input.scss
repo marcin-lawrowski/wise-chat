@@ -26,6 +26,11 @@
           font-size: 16px;
           line-height: 24px;
         }
+
+        img {
+          max-width: 150px;
+          max-height: 150px;
+        }
       }
 
       .wcInput[contentEditable=true]:empty:not(:focus):before {
@@ -77,6 +82,16 @@
           width: 46px;
         }
 
+        .wcInputButton.wcSoundAttachmentStart {
+          background: #f7f7f7 url(../../gfx/icons/mic.svg) center center no-repeat;
+          width: 46px;
+        }
+
+        .wcInputButton.wcSoundAttachmentStop {
+          background: #f7f7f7 url(../../gfx/icons/stop-button.svg) center center no-repeat;
+          width: 46px;
+        }
+
         .wcInputButton:hover {
           cursor: pointer !important;
           background-color: #dfdfdf;
@@ -90,6 +105,58 @@
           align-items: center;
         }
 
+      }
+    }
+
+    .wcReplyTo {
+      position: relative;
+      padding: 10px 45px 10px 15px;
+      background: #f2f2f2;
+      font-size: 0.9em;
+      color: #4a4a4a;
+
+      .wcContent {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        -ms-word-break: break-all;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        line-height: 1.1;
+        font-size: 0.8em;
+
+        .wcImage, .wcEmoticon {
+          max-height: 55px;
+          max-width: 55px;
+          border-radius: 5px;
+          box-shadow: none;
+          border: none;
+          display: inline-block;
+          vertical-align: middle;
+          margin-bottom: 4px;
+        }
+        .wcEmoticon {
+          max-height: initial;
+          max-width: initial;
+        }
+      }
+
+      .wcDeleteButton {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 35px;
+        height: 35px;
+        background-image: url(../../gfx/icons/x.svg);
+        background-position: 50%;
+        background-size: contain;
+        cursor: pointer;
+        transition: all .2s ease-in;
+      }
+      .wcDeleteButton:hover {
+        background-color: #dfdfdf;
       }
     }
 

@@ -113,6 +113,16 @@ class WiseChatUser {
     }
 
     /**
+     * Checks if it has data property.
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function hasDataProperty($key) {
+        return is_array($this->data) && array_key_exists($key, $this->data);
+    }
+
+    /**
      * Returns custom data property.
      *
      * @param string $key
@@ -122,6 +132,7 @@ class WiseChatUser {
     public function getDataProperty($key) {
     	if (getenv('WC_ENV') === 'DEV') {
     		$devData = array();
+
 	        if ($this->getWordPressId() === 1) { $devData = array('countryCode' => 'PL', 'city' => 'Warsaw'); }
 	        if ($this->getWordPressId() === 2) { $devData = array('countryCode' => 'US', 'city' => 'New York'); }
 	        if ($this->getWordPressId() === 7) { $devData = array('countryCode' => 'GB', 'city' => 'London'); }
@@ -130,10 +141,8 @@ class WiseChatUser {
 	        if ($this->getWordPressId() === 5) { $devData = array('countryCode' => 'US', 'city' => 'Los Angeles'); }
 	        if ($this->getWordPressId() === 6) { $devData = array('countryCode' => 'US', 'city' => 'Boston'); }
 
-	        if (is_array($this->data)) {
-	        	$this->data = array_merge($this->data, $devData);
-	        } else {
-	        	$this->data = $devData;
+	        if (is_array($devData) && array_key_exists($key, $devData)) {
+                return $devData[$key];
 	        }
     	}
 

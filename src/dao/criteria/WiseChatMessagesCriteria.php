@@ -39,6 +39,11 @@ class WiseChatMessagesCriteria {
      */
     private $recipientOrSenderId;
 
+	/**
+	 * @var array
+	 */
+    private $directChatters;
+
     /**
      * @var boolean
      */
@@ -49,7 +54,7 @@ class WiseChatMessagesCriteria {
      */
     private $maximumTime;
 
-    /**
+     /**
      * @var integer
      */
     private $maximumMessageId;
@@ -77,6 +82,7 @@ class WiseChatMessagesCriteria {
         $this->privateMessages = false;
         $this->orderMode = self::ORDER_ASCENDING;
         $this->channelNames = array();
+        $this->directChatters = array();
     }
 
     /**
@@ -193,7 +199,7 @@ class WiseChatMessagesCriteria {
         return $this;
     }
 
-     /**
+    /**
      * @return integer
      */
     public function getMaximumMessageId() {
@@ -209,6 +215,22 @@ class WiseChatMessagesCriteria {
         $this->maximumMessageId = $maximumMessageId;
         return $this;
     }
+
+	/**
+	 * @return array
+	 */
+	public function getDirectChatters()
+	{
+		return $this->directChatters;
+	}
+
+	/**
+	 * @param array $directChatters
+	 */
+	public function setDirectChatters($directChatters)
+	{
+		$this->directChatters = $directChatters;
+	}
 
     /**
      * @return integer

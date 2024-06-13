@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import getStore from "store";
+import installExternalActions from "store/external-actions";
 import Application from "Application";
 import * as Actions from "actions/configuration";
 import { CookiesProvider } from 'react-cookie';
@@ -17,6 +18,8 @@ function renderApplication(element, configuration) {
 	store.dispatch(Actions.replace(configuration));
 
 	const engineStoreDispatcher = new EngineStoreDispatcher(engine, store);
+
+	installExternalActions(store);
 
 	ReactDOM.render(
 		<Provider store={ store }>

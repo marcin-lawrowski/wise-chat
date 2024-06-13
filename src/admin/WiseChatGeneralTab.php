@@ -8,9 +8,6 @@
 class WiseChatGeneralTab extends WiseChatAbstractTab {
 
 	public function getFields() {
-		$timezone = function_exists('wp_timezone') ? wp_timezone() : new DateTimeZone( 'UTC' );
-		$nowDate = new DateTime('now', $timezone);
-
 		return array(
 			array('_section', 'General Settings'),
 			array(
@@ -33,12 +30,12 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 			),
 			array('_section', 'Chat Access Settings'),
 			array('access_users', 'Access For Users', 'accessUsersCallback', 'void'),
+			array('access_user_add', ' ', 'accessUserAddCallback', 'void'),
 			array('access_mode', 'Disable Anonymous Users', 'booleanFieldCallback', 'boolean', 'Only regular WP users are allowed to enter the chat. You may choose user roles below. '),
 			array('access_roles', 'Access For Roles', 'checkboxesCallback', 'multivalues', 'Access only for these user roles', self::getRoles()),
-			array('force_user_name_selection', 'Force Username Selection', 'booleanFieldCallback', 'boolean', 'Forces anonymous user to provide its name.'),
 			array('read_only_for_anonymous', 'Read-only For Anonymous', 'booleanFieldCallback', 'boolean', 'Makes the chat read-only to anonymous users. Only logged in WordPress users are allowed to send messages. You can choose read-only roles below.'),
 			array('read_only_for_roles', 'Read-only For Roles', 'checkboxesCallback', 'multivalues', 'Selected roles have read-only access to the chat.', self::getRoles()),
-			array('_section', 'Chat Opening Hours and Days', 'Current time: '.$nowDate->format('Y-m-d H:i:s')),
+			array('_section', 'Chat Opening Hours and Days', 'Server UTC date and time is taken into account. It is currently: '.date('Y-m-d H:i:s')),
 			array('enable_opening_control', 'Enable Opening Control', 'booleanFieldCallback', 'boolean', 'Allows to specify when the chat is available for users.'),
 			array('opening_days', 'Opening Days', 'checkboxesCallback', 'multivalues', 'Select chat opening days.', self::getOpeningDaysValues()),
 			array('opening_hours', 'Opening Hours', 'openingHoursCallback', 'multivalues', 'Specify chat opening hours (HH:MM format)'),
@@ -46,18 +43,17 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	}
 
 	public function getProFields() {
-		return array('enable_buddypress');
+		return array('enable_buddypress', 'access_users', 'access_user_add');
 	}
-	
+
 	public function getDefaultValues() {
 		return array(
 			'mode' => 0,
 			'access_mode' => 0,
 			'access_roles' => array('administrator'),
 			'access_users' => array(),
-			'force_user_name_selection' => 0,
             'read_only_for_anonymous' => 0,
-            'collect_user_stats' => 0,
+            'collect_user_stats' => 1,
 			'enable_buddypress' => 1,
 			'username_source' => 'display_name',
 			'enable_opening_control' => 0,
@@ -77,12 +73,14 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 	}
 
 	public function accessUsersCallback() {
-		$html = "<div style='height: 150px; overflow-y: auto; border: 1px solid #aaa; padding: 5px;'>";
-		$html .= '<small>No users were added yet</small>';
-		$html .= "</div>";
-		$html .= '<p class="description">A list of users who have exclusive access to the chat. <br /><strong>Notice:</strong> Empty list means there is no limit unless any other access options are enabled.</p>';
-		print($html);
-		$this->printProFeatureNotice();
+		$this->usersCallback(
+			'access_users',
+			'A list of users who have exclusive access to the chat. <br /><strong>Notice:</strong> Empty list means there is no limit unless any other access options are enabled.'
+		);
+	}
+
+	public function accessUserAddCallback() {
+		$this->userAddCallback('access_users');
 	}
 	
 	public function openingHoursCallback($args) {
@@ -166,8 +164,8 @@ class WiseChatGeneralTab extends WiseChatAbstractTab {
 
 	public static function getAllModes() {
 		return array(
-			'' => 'Classic chat',
-			'_DISABLED_pro_fb' => 'Facebook-like chat (available in Wise Chat Pro)',
+			0 => 'Classic chat',
+			1 => 'Facebook-like chat',
 		);
 	}
 

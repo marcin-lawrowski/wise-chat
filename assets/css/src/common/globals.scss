@@ -1,7 +1,13 @@
+@import "./globals/streams";
+
 @mixin globals {
   // variables:
   //--wc-z-index: auto;
   //z-index: calc(var(--wc-z-index) - 10);
+
+
+
+
 
   * {
     -moz-box-sizing: border-box;
@@ -15,6 +21,10 @@
 
   .wcHidden {
     visibility: hidden;
+  }
+
+  .wcLeft {
+    float: left;
   }
 
   input {
@@ -57,7 +67,6 @@
 
   .wcButton {
     display: inline-block;
-    white-space: nowrap;
   }
 
   .wcCenter {
@@ -103,6 +112,14 @@
     &:hover {
       background-color: #f7f7f7;
     }
+  }
+
+  span.wcUnreadMessagesCount {
+    background-color: rgba(212, 19, 13, 1);
+    color: #fff;
+    border-radius: 3px;
+    padding: 1px 3px;
+    margin-left: 5px;
   }
 
   /* Progress bar cross-browser styling */
@@ -188,6 +205,24 @@
     height: 22px;
   }
 
+  .wcStatus {
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+
+    &.wcOnline {
+      background: rgb(9, 193, 121);
+    }
+    &.wcOffline {
+      background: rgba(244, 31, 31, 0.5);
+    }
+  }
+
+  .ScrollbarsCustom-Scroller {
+    overscroll-behavior: contain;
+  }
+
   //loader:
   .wcLoaderContainer {
     display: flex;
@@ -246,4 +281,6 @@
     }
 
   }
+
+  @include global-streams;
 }

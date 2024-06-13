@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { confirm, alertError, alertInfo } from "actions/ui";
+import { confirm, alertError, alertInfo, setMessageEditable, setMessageReplyTo } from "actions/ui";
 import { sendUserCommand, clearUserCommand } from "actions/commands";
-import { deleteMessage } from "actions/messages";
+import { deleteMessage, refreshMessage } from "actions/messages";
+import Popup from 'reactjs-popup';
 
 class Actions extends React.Component {
 
@@ -15,6 +16,7 @@ class Actions extends React.Component {
 		this.handleBanConfirmed = this.handleBanConfirmed.bind(this);
 		this.handleMuteConfirmed = this.handleMuteConfirmed.bind(this);
 		this.handleSpamReportConfirmed = this.handleSpamReportConfirmed.bind(this);
+		this.handleApprovalConfirmed = this.handleApprovalConfirmed.bind(this);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -64,6 +66,10 @@ class Actions extends React.Component {
 		}
 	}
 
+	handleApprovalConfirmed() {
+		this.props.sendUserCommand(this.props.message.id, 'approveMessage', { id: this.props.message.id, channel: this.props.message.channel });
+	}
+
 	handleDeleteConfirmed() {
 		this.props.sendUserCommand(this.props.message.id, 'deleteMessage', { id: this.props.message.id, channel: this.props.message.channel });
 	}
@@ -102,24 +108,39 @@ class Actions extends React.Component {
 	render() {
 		const rights = this.getRights();
 
+		if (rights.length === 0) {
+			return null;
+		}
+
 		return(
 			<React.Fragment>
-				{ rights.length > 0 &&
-					<div className={ "wcActions" + (this.props.visible ? ' wcActionsVisible' : '') } style={ { backgroundColor: this.props.configuration.defaultBackgroundColor } }>
-						{rights.includes('delete') &&
-							<a href="#" className="wcAction wcDelete wcFunctional" onClick={ e => this.handleAction(e, 'delete') } title={ this.props.i18n.deleteMessage} />
-						}
-						{rights.includes('mute') &&
-							<a href="#" className="wcAction wcMute wcFunctional" onClick={ e => this.handleAction(e, 'mute') } title={ this.props.i18n.muteThisUser} />
-						}
-						{rights.includes('ban') &&
-							<a href="#" className="wcAction wcBan wcFunctional" onClick={ e => this.handleAction(e, 'ban') } title={ this.props.i18n.banThisUser} />
-						}
-						{rights.includes('spam') &&
-							<a href="#" className="wcAction wcSpam wcFunctional" onClick={ e => this.handleAction(e, 'spam') } title={ this.props.i18n.reportSpam} />
-						}
-					</div>
-				}
+				<Popup
+					trigger={<button className={ "wcActionsButton wcFunctional" + (this.props.visible ? ' wcActionsButtonVisible' : '') } />}
+					position="center center"
+					closeOnDocumentClick
+					className={ "wcPopup wcActionsPopup " + this.props.configuration.themeClassName }
+					open={ this.props.visible === false ? false : undefined }
+					contentStyle={ { height: 40 } }
+					keepTooltipInside={ '.wcChannel[data-id="' + this.props.channel.id + '"]' }
+					arrow={ false }
+				>
+					{close => (
+						<div className="wcActions">
+							{rights.includes('delete') &&
+								<a href="#" className="wcAction wcDelete wcFunctional" onClick={ e => this.handleAction(e, 'delete') } title={ this.props.i18n.deleteMessage} />
+							}
+							{rights.includes('mute') &&
+								<a href="#" className="wcAction wcMute wcFunctional" onClick={ e => this.handleAction(e, 'mute') } title={ this.props.i18n.muteThisUser} />
+							}
+							{rights.includes('ban') &&
+								<a href="#" className="wcAction wcBan wcFunctional" onClick={ e => this.handleAction(e, 'ban') } title={ this.props.i18n.banThisUser} />
+							}
+							{rights.includes('spam') &&
+								<a href="#" className="wcAction wcSpam wcFunctional" onClick={ e => this.handleAction(e, 'spam') } title={ this.props.i18n.reportSpam} />
+							}
+						</div>
+					)}
+				</Popup>
 			</React.Fragment>
 		)
 	}
@@ -127,6 +148,7 @@ class Actions extends React.Component {
 }
 
 Actions.propTypes = {
+	channel: PropTypes.object.isRequired,
 	message: PropTypes.object.isRequired,
 	visible: PropTypes.bool.isRequired,
 	command: PropTypes.object
@@ -139,5 +161,5 @@ export default connect(
 		userRights: state.application.user.rights,
 		command: state.commands.sent[ownProps.message.id]
 	}),
-	{ alertError, alertInfo, confirm, sendUserCommand, clearUserCommand, deleteMessage }
+	{ alertError, alertInfo, confirm, sendUserCommand, clearUserCommand, deleteMessage, refreshMessage, setMessageEditable, setMessageReplyTo }
 )(Actions);

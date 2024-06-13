@@ -46,10 +46,19 @@ class WiseChatChannelsSourcesService {
 	}
 
 	/**
+	 * @param string $name
+	 * @return WiseChatChannel|null
+	 */
+	public function getPublicChannelByName($name) {
+		return $this->channelsDAO->getByName($name);
+	}
+
+
+	/**
 	 * @return WiseChatChannelUser[]
 	 */
 	public function getDirectChannels() {
-		$channelUsers = $this->channelUsersDAO->getAllActive();
+		$channelUsers = $this->getOnlineDirectChannels();
 
 		if ($this->options->isOptionEnabled('users_list_offline_enable', true)) {
 			$channelUsers = $this->appendOfflineUsers($channelUsers);
@@ -61,11 +70,27 @@ class WiseChatChannelsSourcesService {
 	}
 
 	/**
+	 * All active users.
+	 *
+	 * @return WiseChatChannelUser[]
+	 */
+	private function getOnlineDirectChannels() {
+		$accessUsers = $this->options->getOption('access_users', array());
+
+		return $this->channelUsersDAO->getAllActive(is_array($accessUsers) ? $accessUsers : array());
+	}
+
+	/**
 	 * @param $channelUser
 	 * @return bool
 	 */
 	private function isChannelUserVisible($channelUser) {
 		if ($channelUser->getUser() === null) {
+			return false;
+		}
+
+		// do not output non-friends if BP integration is on:
+		if (!$this->userService->isUsersConnectionAvailable($this->authentication->getUser(), $channelUser->getUser())) {
 			return false;
 		}
 
@@ -107,12 +132,23 @@ class WiseChatChannelsSourcesService {
 			}
 		}
 
+		$bpGroupID = $this->options->getOption('buddypress_group_id', null);
+		if (!$this->options->isOptionEnabled('enable_buddypress', false) || !function_exists('groups_is_user_member')) {
+			$bpGroupID = null;
+		}
+
 		// append offline users:
-		$wpUsers = $this->usersDAO->getWPUsers();
+		$accessUsers = $this->options->getOption('access_users', array());
+		$wpUsers = $this->usersDAO->getWPUsers(is_array($accessUsers) ? $accessUsers : array(), array());
 		$chatUsersMap = $this->usersDAO->getLatestChatUsersByWordPressIds($wpUsers);
 		foreach ($wpUsers as $key => $wpUser) {
 
 			if (array_key_exists($wpUser->ID, $channelWPUsersMap)) {
+				continue;
+			}
+
+			// exclude user if it does not belong to the given BP group:
+			if ($bpGroupID !== null && !groups_is_user_member($wpUser->ID, $bpGroupID)) {
 				continue;
 			}
 

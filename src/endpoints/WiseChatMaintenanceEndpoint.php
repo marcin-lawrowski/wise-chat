@@ -15,6 +15,9 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 	/** @var WiseChatMaintenanceI18n */
 	private $maintenanceI18n;
 
+	/** @var WiseChatMaintenanceRecentChats */
+	private $maintenanceRecentChats;
+
 	/** @var WiseChatMaintenanceChannels */
 	private $maintenanceChannels;
 
@@ -27,6 +30,9 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 		/** @var WiseChatMaintenanceI18n maintenanceI18n */
 		$this->maintenanceI18n = WiseChatContainer::getLazy('endpoints/maintenance/WiseChatMaintenanceI18n');
 
+		/** @var WiseChatMaintenanceRecentChats maintenanceRecentChats */
+		$this->maintenanceRecentChats = WiseChatContainer::getLazy('endpoints/maintenance/WiseChatMaintenanceRecentChats');
+
 		/** @var WiseChatMaintenanceChannels maintenanceChannels */
 		$this->maintenanceChannels = WiseChatContainer::getLazy('endpoints/maintenance/WiseChatMaintenanceChannels');
 	}
@@ -34,7 +40,6 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 	/**
 	 * Endpoint to perform periodic (every 10-20 seconds) maintenance services like:
 	 * - user auto-authentication, authentication requests
-	 * - getting the list of actions to execute on the client side
 	 * - getting the list of events to listen on the client side
 	 * - maintenance actions in messages, bans, users, etc.
 	 */
@@ -45,7 +50,7 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 
 		$response = array('events' => array());
 		try {
-			$this->checkGetParams(array('full', 'fromActionId', 'channelIds'));
+			$this->checkGetParams(array('full', 'channelIds'));
 			$isFull = $this->getGetParam('full') === 'true';
 
 			// periodic maintenance:
@@ -56,11 +61,6 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 			// send user-related content:
 			if (!$this->maintenanceAuth->needsAuth()) {
 				$this->userService->autoAuthenticateOnMaintenance();
-
-				// load actions:
-				$fromActionId = intval($this->getGetParam('fromActionId', 0));
-				$response['actions'] = $fromActionId > 0 ? $this->actions->getJSONReadyActions($fromActionId, $this->authentication->getUser()) : array();
-				$response['lastActionId'] = $this->actions->getLastActionId();
 
 				// merge user dependent events:
 				$response['events'] = $this->getUserDependentEvents($isFull);
@@ -112,19 +112,40 @@ class WiseChatMaintenanceEndpoint extends WiseChatEndpoint {
 		$events = array();
 
 		if ($isFull || $this->userEvents->shouldTriggerEvent('browser', 'full')) {
+			if ($this->options->isOptionEnabled('users_list_offline_enable', true) && $this->options->isOptionEnabled('enable_private_messages')) {
+				$events[] = array(
+					'name' => 'recentChats',
+					'data' => $this->maintenanceRecentChats->getRecentChats()
+				);
+			}
+
 			// public channels:
-			$events[] = array(
-				'name' => 'publicChannels',
-				'data' => $this->maintenanceChannels->getPublicChannels()
-			);
+			if ($this->maintenanceChannels->arePublicChannelsEnabled()) {
+				$events[] = array(
+					'name' => 'publicChannels',
+					'data' => $this->maintenanceChannels->getPublicChannels()
+				);
+			}
 
 			// direct channels:
-			if ($this->options->isOptionEnabled('show_users', true)) {
+			if ($this->options->isOptionEnabled('show_users')) {
 				$events[] = array(
 					'name' => 'directChannels',
 					'data' => $this->maintenanceChannels->getDirectChannels()
 				);
 			}
+
+			// auto open channels:
+			$events[] = array(
+				'name' => 'autoOpenChannel',
+				'data' => $this->maintenanceChannels->getAutoOpenChannel()
+			);
+
+			// global channels storage (only auto-open for now):
+			$events[] = array(
+				'name' => 'channels',
+				'data' => $this->maintenanceChannels->getChannels()
+			);
 		}
 
 		if ($isFull || $this->userEvents->shouldTriggerEvent('counter', 'full')) {

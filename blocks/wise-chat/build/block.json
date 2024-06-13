@@ -17,13 +17,9 @@
   "attributes": {
     "channel": {
       "type": "string",
-      "default": "global"
+      "default": "{global}"
     },
     "access_mode": {
-      "type": "boolean",
-      "default": false
-    },
-    "force_user_name_selection": {
       "type": "boolean",
       "default": false
     },

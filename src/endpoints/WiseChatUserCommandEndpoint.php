@@ -29,8 +29,24 @@ class WiseChatUserCommandEndpoint extends WiseChatEndpoint {
 			$command = $this->getPostParam('command');
 			$parameters = $this->getPostParam('parameters');
 			switch ($command) {
+				case 'markChannelAsRead':
+					$channel = $this->channelsDAO->getByName(WiseChatChannelsService::PRIVATE_MESSAGES_CHANNEL);
+					$chatParticipant = $this->getUserFromEncryptedId($parameters['channel']);
+					$this->pendingChatsService->setPendingChatChecked($chatParticipant->getId(), $this->authentication->getUser(), $channel->getId());
+
+					$response['value'] = 'OK';
+					break;
 				case 'setUserProperty':
 					$response['value'] = $this->handleSetUserPropertyCommands($parameters);
+					break;
+				case 'saveMessage':
+					$message = $this->saveMessage($parameters);
+					$response['result'] = 'OK';
+					$response['message'] = $this->toPlainMessage($message, $parameters['channel']);
+					break;
+				case 'approveMessage':
+					$this->approveMessage($parameters);
+					$response['result'] = 'OK';
 					break;
 				case 'deleteMessage':
 					$this->deleteMessage($parameters);
@@ -46,6 +62,22 @@ class WiseChatUserCommandEndpoint extends WiseChatEndpoint {
 					break;
 				case 'reportSpam':
 					$this->spamReport($parameters);
+					$response['result'] = 'OK';
+					break;
+				case 'reactToMessage':
+					$this->reactToMessage($parameters);
+					$response['result'] = 'OK';
+					break;
+				case 'logOff':
+					$this->logOff($parameters);
+					$response['result'] = 'OK';
+					break;
+				case 'startStream':
+					$response['stream'] = $this->videoService->startStream($parameters['channel']['id']);
+					$response['result'] = 'OK';
+					break;
+				case 'getStreamToken':
+					$response['stream'] = $this->videoService->getToken($parameters);
 					$response['result'] = 'OK';
 					break;
 				default:
@@ -64,6 +96,72 @@ class WiseChatUserCommandEndpoint extends WiseChatEndpoint {
 
 		echo json_encode($response);
 		die();
+	}
+
+	/**
+	 * @param array $parameters
+	 * @return WiseChatMessage
+	 * @throws WiseChatUnauthorizedAccessException
+	 * @throws Exception
+	 */
+	public function saveMessage($parameters) {
+		$message = $this->clientSide->getMessageOrThrowException($parameters['id']);
+		$channel = $this->channelsDAO->getByName($message->getChannelName());
+
+		$this->checkChannel($channel);
+		$this->checkChannelAuthorization($channel);
+
+		if ($message === null) {
+			throw new WiseChatUnauthorizedAccessException('Invalid message');
+		}
+
+		// check permissions:
+		$deniedEditing = true;
+		if ($message->getUserId() > 0 && $message->getUserId() == $this->authentication->getUserIdOrNull()) {
+			$deniedEditing = false;
+		}
+		if ($deniedEditing) {
+			$this->checkUserRight('edit_message');
+		}
+
+		$this->messagesService->saveRawMessageContent($message, trim($parameters['content']));
+		$this->actions->publishAction('refreshMessage', array('id' => $parameters['id'], 'channel' => $parameters['channel']));
+
+		return $message;
+	}
+
+	/**
+	 * @param array $parameters
+	 * @throws WiseChatUnauthorizedAccessException
+	 * @throws Exception
+	 */
+	public function approveMessage($parameters) {
+		$this->checkUserRight('approve_message');
+
+		$message = $this->clientSide->getMessageOrThrowException($parameters['id']);
+		$channel = $this->channelsDAO->getByName($message->getChannelName());
+
+		$this->checkChannel($channel);
+		$this->checkChannelAuthorization($channel);
+
+		$message = $this->messagesService->getById($message->getId());
+		if ($message !== null) {
+			$mode = $this->options->getIntegerOption('approving_messages_mode', 1);
+			if ($mode === 2) {
+				$this->messagesService->replicateHiddenMessage($message);
+			} else {
+				$this->messagesService->approveById($message->getId());
+				$this->actions->publishAction('refreshMessageIfLocked', array('id' => $parameters['id'], 'channel' => $parameters['channel']));
+
+				// approve all replies:
+				if ($this->options->isOptionEnabled('enable_reply_to_messages', true)) {
+					$replies = $this->messagesDAO->getAllRepliesToMessage($message);
+					foreach ($replies as $reply) {
+						$this->actions->publishAction('refreshMessageIfLocked', array('id' => $this->clientSide->encryptMessageId($reply->getId()), 'channel' => $parameters['channel']));
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -204,11 +302,37 @@ class WiseChatUserCommandEndpoint extends WiseChatEndpoint {
 			case 'textColor':
 				$this->userService->setUserTextColor($value);
 				break;
+			case 'emailNotifications':
+				$this->userService->setProperty('disableNotifications', $value === 'false');
+				$user = $this->authentication->getUser();
+				$response = $user->getData();
+				break;
 			default:
 				$this->userSettingsDAO->setSetting($property, $value, $this->authentication->getUser());
 		}
 
 		return $response;
+	}
+
+	private function reactToMessage($parameters) {
+		//$this->checkUserRight('react_to_message'); TODO
+
+		$message = $this->clientSide->getMessageOrThrowException($parameters['id']);
+		$channel = $this->channelsDAO->getByName($message->getChannelName());
+
+		$this->checkChannel($channel);
+		$this->checkChannelAuthorization($channel);
+
+		$this->messageReactionsService->toggleReaction($message, intval($parameters['reactionId']));
+		$this->actions->publishAction('refreshMessageReactionsCounters', array(
+			'id' => $parameters['id'],
+			'channel' => array('id' => $parameters['channel']['id']),
+			'reactions' => $this->messageReactionsService->getReactionsAsPlainArray($message, true, false)
+		));
+	}
+
+	private function logOff($parameters) {
+		$this->authentication->dropAuthentication();
 	}
 
 }

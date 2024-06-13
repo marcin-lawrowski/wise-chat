@@ -121,11 +121,16 @@ abstract class WiseChatAbstractTab {
 	}
 
 	/**
-	 * Returns an array of PRO fields.
-	 *
-	 * @return array
+	 * @return array Returns an array of PRO fields.
 	 */
 	public function getProFields() {
+		return array();
+	}
+
+	/**
+	* @return array
+	*/
+	public function getRadioGroups() {
 		return array();
 	}
 
@@ -144,8 +149,8 @@ abstract class WiseChatAbstractTab {
 			if ($id === WiseChatSettings::SECTION_FIELD_KEY) {
 				continue;
 			}
-			
-			$type = $field[3];
+
+			$type = isset($field[3]) ? $field[3] : '';
 			$value = array_key_exists($id, $inputValue) ? $inputValue[$id] : '';
 			
 			switch ($type) {
@@ -385,6 +390,11 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$value = $this->options->getEncodedOption($id, $defaultValue);
 		$parentId = $this->getFieldParent($id);
+		$groups = $this->getRadioGroups();
+		$groupDef = array();
+		if (array_key_exists($id, $groups)) {
+			$groupDef = $groups[$id];
+		}
 		$isProFeature = in_array($id, $this->getProFields());
 
 		$optionHints = array();
@@ -393,11 +403,12 @@ abstract class WiseChatAbstractTab {
 			$radioId = $id.'_'.$optionValue;
 
 			printf(
-				"<label><input id='%s' class='wc-radio-option' data-radio-group-id='%s' type='radio' name='%s[%s]' value='%s' %s %s data-parent-field='%s' />%s&nbsp;&nbsp;&nbsp;&nbsp;</label>",
+				"<label><input id='%s' class='wc-radio-option' data-radio-group-id='%s' type='radio' name='%s[%s]' value='%s' %s %s data-parent-field='%s' data-group-def='%s'/>%s&nbsp;&nbsp;&nbsp;&nbsp;</label>",
 				$radioId, $id, WiseChatOptions::OPTIONS_NAME, $id, $optionValue,
 				$optionValue == $value ? ' checked' : '',
 				$isProFeature || $parentId != null && !$this->options->isOptionEnabled($parentId, false) ? ' disabled="1" ' : '',
 				$parentId != null ? $parentId : '',
+				array_key_exists($optionValue, $groupDef) ? implode(',', $groupDef[$optionValue]) : '',
 				$optionLabel
 			);
 
@@ -482,4 +493,88 @@ abstract class WiseChatAbstractTab {
 		
 		return null;
 	}
+
+	public function deleteUserFromListAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deleteUserFromList')) {
+			return;
+		}
+		if (!isset($_GET['index']) || !isset($_GET['source'])) {
+			return;
+		}
+
+		$index = $_GET['index'];
+		$source = $_GET['source'];
+		$index = intval($index);
+		$accessUsers = (array) $this->options->getOption($source, array());
+		if ($index < count($accessUsers)) {
+			unset($accessUsers[$index]);
+			$this->options->setOption($source, array_values($accessUsers));
+			$this->options->saveOptions();
+			$this->addMessage('User has been removed from the list');
+		}
+	}
+
+	public function addUserToListAction() {
+		if (!current_user_can(WiseChatSettings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'addUserToList')) {
+			return;
+		}
+		if (!isset($_GET['userLogin']) || !isset($_GET['source'])) {
+			return;
+		}
+
+		$source = $_GET['source'];
+		$userLogin = trim($_GET['userLogin']);
+		$wpUser = $this->usersDAO->getWpUserByLogin($userLogin);
+		if ($wpUser === null) {
+			$this->addErrorMessage('User login is not correct');
+		} else {
+			$accessUsers = (array) $this->options->getOption($source, array());
+			$accessUsers[] = $wpUser->ID;
+			$this->options->setOption($source, $accessUsers);
+			$this->options->saveOptions();
+
+			$this->addMessage("User has been added to the list");
+		}
+	}
+
+	protected function usersCallback($optionName, $hintHtml) {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG);
+		$users = (array) $this->options->getOption($optionName, array());
+
+		$html = "<div style='height: 150px; overflow-y: auto; border: 1px solid #aaa; padding: 5px;'>";
+		if (count($users) == 0) {
+			$html .= '<small>No users were added yet</small>';
+		} else {
+			$html .= '<table class="wp-list-table widefat fixed striped users wcCondensedTable">';
+			$html .= '<tr><th style="width:100px">ID</th><th>Login</th><th>Display Name</th><th></th></tr>';
+			foreach ($users as $userKey => $userID) {
+				$deleteURL = $url . '&wc_action=deleteUserFromList&index=' . $userKey.'&source='.$optionName.'&nonce='.wp_create_nonce('deleteUserFromList');
+				$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure?\")'>Delete</a><br />";
+				$user = $this->usersDAO->getWpUserByID(intval($userID));
+				if ($user !== null) {
+					$html .= sprintf("<tr><td>%d</td><td>%s</td><td>%s</td><td>%s</td></tr>", $userID, $user->user_login, $user->display_name, $deleteLink);
+				} else {
+					$html .= sprintf("<tr><td>%d</td><td colspan='2'>Unknown user</td><td>%s</td></tr>", $userID, $deleteLink);
+				}
+			}
+			$html .= '</table>';
+		}
+		$html .= "</div>";
+		$html .= '<p class="description">'.$hintHtml.'</p>';
+		print($html);
+		$this->printProFeatureNotice();
+	}
+
+	public function userAddCallback($optionName, $disabled = true) {
+		$url = admin_url("options-general.php?page=".WiseChatSettings::MENU_SLUG."&wc_action=addUserToList&source=".$optionName.'&nonce='.wp_create_nonce('addUserToList'));
+
+		printf(
+			'<input type="text" value="" placeholder="User login" id="userSelector%s" %s class="wcUserLoginHint" />'.
+			'<a class="button-secondary" href="" disabled title="Adds user to the list" onclick="%s">Add User</a>',
+			$optionName, $disabled ? 'disabled' : '',
+			'this.href += \'&userLogin=\' + encodeURIComponent(jQuery(\'#userSelector'.$optionName.'\').val());'
+		);
+		$this->printProFeatureNotice();
+	}
+
 }

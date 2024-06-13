@@ -29,5 +29,6 @@ export default connect(
 		onlineUsersCounter: state.application.onlineUsersCounter,
 		i18nBase: state.configuration.i18n,
 		i18n: state.application.i18n
-	})
+	}),
+	{ }
 )(Counter);

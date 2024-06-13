@@ -20,6 +20,7 @@ class WiseChatMessageEndpoint extends WiseChatEndpoint {
 		$encryptedChannelId = trim($this->getPostParam('channelId'));
 		$message = trim($this->getPostParam('message'));
 		$attachments = $this->getPostParam('attachments');
+		$replyToMessageId = $this->getPostParam('replyToMessageId');
 		if (!is_array($attachments)) {
 			$attachments = array();
 		}
@@ -36,7 +37,7 @@ class WiseChatMessageEndpoint extends WiseChatEndpoint {
 			$this->checkChannel($channel);
 			$this->checkChannelAuthorization($channel);
 
-			if (strlen($message) === 0 && count($attachments) === 0) {
+			if (!$message && count($attachments) === 0) {
 				throw new Exception('Missing required fields');
 			}
 
@@ -52,12 +53,53 @@ class WiseChatMessageEndpoint extends WiseChatEndpoint {
 
 			// add a regular message:
 			if (!$isCommandResolved) {
-				$addedMessage = $this->messagesService->addMessage($user, $channel, $message, $attachments, false);
+				// detect private message request:
+				$recipient = null;
+				$channelTypeAndId = WiseChatCrypt::decryptFromString($encryptedChannelId);
+
+				if (strpos($channelTypeAndId, 'd|') === 0) {
+					if (!$this->options->isOptionEnabled('enable_private_messages')) {
+						throw new Exception('Cannot process private message requests');
+					}
+
+					$recipient = null;
+					$userId = preg_replace('/^d\|/', '' , $channelTypeAndId);
+					if (strpos($userId, 'v') === 0) {
+						$recipient = $this->usersDAO->createOrGetBasedOnWordPressUserId(str_replace('v', '', $userId));
+
+						// attach channel mapping to the response:
+						if ($recipient !== null) {
+							$response['channelMapping'] = array(
+								'from' => $encryptedChannelId,
+								'to' => WiseChatCrypt::encryptToString('d|'.$recipient->getId())
+							);
+						}
+					} else {
+						$recipient = $this->usersDAO->get(intval($userId));
+					}
+
+					if ($recipient === null || $recipient->getId() == $user->getId()) {
+						throw new Exception('Incorrect private message request parameters');
+					}
+				} else if (!$this->hasPublicChannelsAccess()) {
+					throw new Exception('Access denied to the public channel');
+				}
+
+				$replyToMessage = $replyToMessageId ? $this->clientSide->getMessageOrThrowException($replyToMessageId) : null;
+				$addedMessage = $this->messagesService->addMessage($user, $channel, $message, $attachments, false, $recipient, $replyToMessage);
+
+				// add pending chat to offline user:
+				if ($recipient !== null && $addedMessage !== null) {
+					$this->userService->setInactiveUsersOfflineStatus();
+					if (!$this->channelUsersDAO->isOnline($recipient->getId())) {
+						$this->pendingChatsService->addPendingChat($addedMessage, $channel);
+					}
+				}
 
 				if ($addedMessage !== null) {
 					$response['message'] = array(
 						'text' => $addedMessage->getText(),
-						'hidden' => false
+						'hidden' => $addedMessage->isHidden()
 					);
 				}
 			}
@@ -120,6 +162,10 @@ class WiseChatMessageEndpoint extends WiseChatEndpoint {
 				}
 
 				$channelId = $channelEncryptedIds[$message->getChannelName()];
+				if ($message->getRecipientId() > 0) {
+					$directUserId = $this->authentication->getUserIdOrNull() === $message->getRecipientId() ? $message->getUserId() : $message->getRecipientId();
+					$channelId = WiseChatCrypt::encryptToString('d|'.$directUserId);
+				}
 
 				$response['result'][] = $this->toPlainMessage($message, $channelId);
 			}

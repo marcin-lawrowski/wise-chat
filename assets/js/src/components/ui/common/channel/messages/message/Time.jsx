@@ -95,7 +95,7 @@ class Time extends React.Component {
 		} else if (localDate.isSame(localNowDate, 'day')) {
 			this.setState({ stopRender: true, time: timeFormatted });
 		} else if (localDate.isSame(yesterdayDate, 'day')) {
-			this.setState({ stopRender: true, time: this.props.i18n.yesterday + ' ' + timeFormatted });
+			this.setState({ stopRender: true, date: this.props.i18n.yesterday, time: timeFormatted });
 		} else {
 			let dateFormatted = dateFormat && dateFormat.length > 0
 				? localDate.format(dateFormat)
@@ -107,10 +107,10 @@ class Time extends React.Component {
 	render() {
 		return(
 			<span className="wcTime">
-				{this.state.date &&
+				{ this.props.dateVisible && this.state.date &&
 					<span className="wcMessageTimeDate">{this.state.date}</span>
 				}
-				{this.state.time &&
+				{ this.props.timeVisible && this.state.time &&
 					<span className="wcMessageTimeHour">{this.state.time}</span>
 				}
 			</span>
@@ -119,7 +119,14 @@ class Time extends React.Component {
 
 }
 
+Time.defaultProps = {
+	timeVisible: true,
+	dateVisible: true
+}
+
 Time.propTypes = {
+	timeVisible: PropTypes.bool.isRequired,
+	dateVisible: PropTypes.bool.isRequired,
 	configuration: PropTypes.object.isRequired,
 	timeUTC: PropTypes.string.isRequired
 };

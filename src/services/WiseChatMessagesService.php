@@ -8,6 +8,11 @@
 class WiseChatMessagesService {
 
 	/**
+	 * @var WiseChatChannelsService
+	 */
+	private $channelsService;
+
+	/**
 	 * @var WiseChatClientSide
 	 */
 	private $clientSide;
@@ -74,6 +79,7 @@ class WiseChatMessagesService {
 		$this->authentication = WiseChatContainer::getLazy('services/user/WiseChatAuthentication');
 		$this->clientSide = WiseChatContainer::getLazy('services/client-side/WiseChatClientSide');
 		$this->channelsDAO = WiseChatContainer::getLazy('dao/WiseChatChannelsDAO');
+		$this->channelsService = WiseChatContainer::getLazy('services/WiseChatChannelsService');
 	}
 	
 	/**
@@ -100,11 +106,13 @@ class WiseChatMessagesService {
 	 * @param string $text Content of the message
 	 * @param array $attachments Array of attachments (only single image is supported)
 	 * @param boolean $isAdmin Indicates whether to mark the message as admin-owned
-	 *
+	 * @param WiseChatUser|null $recipient The recipient of the message
+	 * @param WiseChatMessage|null $replyToMessage
+	 * @param array $options
 	 * @return WiseChatMessage|null
 	 * @throws Exception On validation error
 	 */
-	public function addMessage($user, $channel, $text, $attachments, $isAdmin = false) {
+	public function addMessage($user, $channel, $text, $attachments, $isAdmin = false, $recipient = null, $replyToMessage = null, $options = array()) {
 		$text = trim($text);
 		$filteredMessage = $text;
 
@@ -169,16 +177,20 @@ class WiseChatMessagesService {
 		$filteredMessage = $filterChain->filter($filteredMessage);
 
 		// cut the message:
-		$filteredMessage = WiseChatTextProcessing::cutMessageText($filteredMessage, $this->options->getIntegerOption('message_max_length', 100));
+		if (!array_key_exists('disableCrop', $options)) {
+			$filteredMessage = WiseChatTextProcessing::cutMessageText($filteredMessage, $this->options->getIntegerOption('message_max_length', 100));
+		}
 
 		// convert images and links into proper shortcodes and download images (if enabled):
 		/** @var WiseChatLinksPreFilter $linksPreFilter */
 		$linksPreFilter = WiseChatContainer::get('rendering/filters/pre/WiseChatLinksPreFilter');
-		$filteredMessage = $linksPreFilter->filter(
-			$filteredMessage,
-			$this->options->isOptionEnabled('allow_post_images', true),
-            $this->options->isOptionEnabled('enable_youtube', true)
-		);
+		if (!array_key_exists('disableFilters', $options)) {
+			$filteredMessage = $linksPreFilter->filter(
+				$filteredMessage,
+				$this->options->isOptionEnabled('allow_post_images'),
+				$this->options->isOptionEnabled('enable_youtube')
+			);
+		}
 
 		$message = new WiseChatMessage();
 		$message->setTime(time());
@@ -188,9 +200,17 @@ class WiseChatMessagesService {
 		$message->setAvatarUrl($this->getUserAvatar($user));
 		$message->setText($filteredMessage);
 		$message->setChannelName($channel->getName());
-		$message->setIp($user->getIp());
+		$message->setIp($user->getIp() ? $user->getIp() : '');
 		if ($user->getWordPressId() !== null) {
 			$message->setWordPressUserId($user->getWordPressId());
+		}
+		if ($recipient !== null) {
+			$message->setRecipientId($recipient->getId());
+		}
+		$message->setHidden($this->checkNewMessagesHidden());
+
+		if ($this->options->isOptionEnabled('enable_reply_to_messages', true) && $replyToMessage !== null) {
+			$message->setReplyToMessageId($replyToMessage->getId());
 		}
 
 		// save the attachment and include it into the message:
@@ -217,6 +237,71 @@ class WiseChatMessagesService {
 	}
 
 	/**
+	 * Saves message's content.
+	 *
+	 * @param WiseChatMessage $message
+	 * @param string $rawHTML Raw HTML received from user
+	 * @throws \Exception
+	 */
+	public function saveRawMessageContent($message, $rawHTML) {
+		$messageMaxLength = $this->options->getIntegerOption('message_max_length', 100);
+		$rawHTML = trim($rawHTML);
+		$originalText = $message->getText();
+		$newText = '';
+		try {
+			if (strlen($rawHTML) > 0) {
+				/** @var WiseChatPostReversedFilter $filterReversed */
+				$filterReversed = WiseChatContainer::get('rendering/filters/post-reversed/WiseChatPostReversedFilter');
+
+				$count = $filterReversed->getTextCharactersCount($rawHTML);
+				if ($count > $messageMaxLength) {
+					throw new \Exception('Number of characters exceeded');
+				}
+
+				$newText = $filterReversed->filtersReverse($rawHTML);
+			}
+
+			// update the message:
+			$message->setText($newText);
+			$this->messagesDAO->save($message);
+
+			/**
+			 * Fires once a message has been updated.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param WiseChatMessage $message A message object.
+			 */
+			do_action("wc_message_updated", $message);
+
+		} catch (\Exception $e) {
+			throw new \Exception("Could not save the raw message content (".$e->getMessage().").");
+		}
+	}
+
+	/**
+	 * Checks if the current user's messages have to be hidden.
+	 *
+	 * @return boolean
+	 */
+	private function checkNewMessagesHidden() {
+		if ($this->options->isOptionEnabled('new_messages_hidden', false)) {
+
+			$wpUser = $this->usersDAO->getCurrentWpUser();
+			if ($wpUser !== null) {
+				$targetRoles = (array) $this->options->getOption("no_hidden_messages_roles", 'administrator');
+				if ((is_array($wpUser->roles) && count(array_intersect($targetRoles, $wpUser->roles)) > 0)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Saves attachments in the Media Library and attaches them to the end of the message.
 	 *
 	 * @param WiseChatChannel $channel
@@ -237,7 +322,7 @@ class WiseChatMessagesService {
 
 		$attachmentShortcode = null;
 		$attachmentIds = array();
-		if ($this->options->isOptionEnabled('enable_images_uploader', true) && $firstAttachment['type'] === 'image') {
+		if ($this->options->isOptionEnabled('enable_images_uploader') && $firstAttachment['type'] === 'image') {
 			$image = $this->imagesService->saveImage($decodedData);
 			if (is_array($image)) {
 				$attachmentShortcode = ' '.WiseChatShortcodeConstructor::getImageShortcode($image['id'], $image['image'], $image['image-th'], '_');
@@ -245,11 +330,20 @@ class WiseChatMessagesService {
 			}
 		}
 
-		if ($this->options->isOptionEnabled('enable_attachments_uploader', true) && $firstAttachment['type'] === 'file') {
+		if ($this->options->isOptionEnabled('enable_attachments_uploader') && $firstAttachment['type'] === 'file') {
 			$fileName = $firstAttachment['name'];
 			$file = $this->attachmentsService->saveAttachment($fileName, $decodedData, $channel->getName());
 			if (is_array($file)) {
 				$attachmentShortcode = ' '.WiseChatShortcodeConstructor::getAttachmentShortcode($file['id'], $file['file'], $fileName);
+				$attachmentIds = array($file['id']);
+			}
+		}
+
+		if ($firstAttachment['type'] === 'mp3') {
+			$fileName = $firstAttachment['name'].'.mp3';
+			$file = $this->attachmentsService->saveAttachment($fileName, $decodedData, $channel->getName());
+			if (is_array($file)) {
+				$attachmentShortcode = ' '.WiseChatShortcodeConstructor::getSoundShortcode($file['id'], $file['file'], $fileName);
 				$attachmentIds = array($file['id']);
 			}
 		}
@@ -276,11 +370,35 @@ class WiseChatMessagesService {
 				throw new Exception('Unknown channel '.$clientChannelId);
 			}
 
+			if (!$this->channelsService->hasPublicChannelAccess($channel)) {
+				throw new Exception('Public channel access denied');
+			}
+
 			$criteria = new WiseChatMessagesCriteria();
 			$criteria->setChannelNames(array($channel->getName()));
 			$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
 			$criteria->setIncludeOnlyPrivateMessages(false);
 			$criteria->setLimit($this->options->getIntegerOption('messages_preload_limit', 20));
+			$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+
+			if ($beforeClientMessageId) {
+				$message = $this->clientSide->getMessageOrThrowException($beforeClientMessageId);
+				$criteria->setMaximumMessageId($message->getId());
+			}
+
+			return $this->messagesDAO->getAllByCriteria($criteria);
+		} else if (strpos($channelTypeAndId, 'd|') !== false) {
+			if (!$this->options->isOptionEnabled('enable_private_messages')) {
+				throw new Exception('Direct channel access denied');
+			}
+			$userId = intval(preg_replace('/^d\|/', '' , $channelTypeAndId));
+
+			$criteria = new WiseChatMessagesCriteria();
+			$criteria->setChannelNames(array(WiseChatChannelsService::PRIVATE_MESSAGES_CHANNEL));
+			$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
+			$criteria->setIncludeOnlyPrivateMessages(true);
+			$criteria->setDirectChatters(array($this->authentication->getUserIdOrNull(), $userId));
+			$criteria->setLimit($this->options->getIntegerOption('private_messages_preload_limit', 20));
 			$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
 
 			if ($beforeClientMessageId) {
@@ -301,17 +419,21 @@ class WiseChatMessagesService {
 	 *
 	 * @param array $channelNames Channels
 	 * @param integer $fromId Begin from specific message ID
+	 * @param integer|null $privateMessagesSenderOrRecipientId ID of the user that is either sender or recipient of private messages
 	 *
 	 * @return WiseChatMessage[]
 	 * @throws Exception
 	 */
-	public function getAllByChannelNamesAndOffset($channelNames, $fromId = null) {
+	public function getAllByChannelNamesAndOffset($channelNames, $fromId = null, $privateMessagesSenderOrRecipientId = null) {
 		$criteria = new WiseChatMessagesCriteria();
 		$criteria->setChannelNames($channelNames);
 		$criteria->setOffsetId($fromId);
 		$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
 		$criteria->setLimit($this->options->getIntegerOption('messages_limit', 100));
 		$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+		if ($privateMessagesSenderOrRecipientId !== null) {
+			$criteria->setRecipientOrSenderId(intval($privateMessagesSenderOrRecipientId));
+		}
 
 		return $this->messagesDAO->getAllByCriteria($criteria);
 	}
@@ -332,6 +454,30 @@ class WiseChatMessagesService {
 		$criteria->setIncludeOnlyPrivateMessages(false);
 		$criteria->setLimit($this->options->getIntegerOption('messages_limit', 100));
 		$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+
+		return $this->messagesDAO->getAllByCriteria($criteria);
+	}
+
+	/**
+	 * Returns all private messages from the given channel.
+	 * Limit and admin messages inclusion are taken from the plugin's options.
+	 *
+	 * @param string $channelName Name of the channel
+	 * @param integer $privateMessagesSenderOrRecipientId ID of the user that is either sender or recipient of private messages
+	 *
+	 * @return WiseChatMessage[]
+	 * @throws Exception
+	 */
+	public function getAllPrivateByChannelNameAndUser($channelName, $privateMessagesSenderOrRecipientId) {
+		$criteria = new WiseChatMessagesCriteria();
+		$criteria->setChannelNames(array($channelName));
+		$criteria->setIncludeAdminMessages($this->usersDAO->isWpUserAdminLogged());
+		$criteria->setIncludeOnlyPrivateMessages(true);
+		$criteria->setLimit($this->options->getIntegerOption('private_messages_limit', 200));
+		$criteria->setOrderMode(WiseChatMessagesCriteria::ORDER_ASCENDING);
+		if ($privateMessagesSenderOrRecipientId !== null) {
+			$criteria->setRecipientOrSenderId(intval($privateMessagesSenderOrRecipientId));
+		}
 
 		return $this->messagesDAO->getAllByCriteria($criteria);
 	}
@@ -406,7 +552,68 @@ class WiseChatMessagesService {
 		if ($message !== null) {
 			$this->messagesDAO->deleteById($id);
 			$this->attachmentsService->deleteAttachmentsByMessageIds(array($id));
+
+			/**
+			 * Fires once a message has been deleted.
+			 *
+			 * @since 2.3.2
+			 *
+			 * @param WiseChatMessage $message A deleted message object.
+			 */
+			do_action("wc_message_deleted", $message);
 		}
+	}
+
+	/**
+	 * Approves message by ID.
+	 *
+	 * @param integer $id
+	 */
+	public function approveById($id) {
+		$this->messagesDAO->unhideById($id);
+
+		$message = $this->messagesDAO->get($id);
+		/**
+		 * Fires once a message has been approved.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param WiseChatMessage $message A message object.
+		 */
+		do_action("wc_message_approved", $message);
+	}
+
+	/**
+	 * Replicates message and makes it visible (not hidden).
+	 *
+	 * @param WiseChatMessage $message
+	 * @throws Exception
+	 */
+	public function replicateHiddenMessage($message) {
+		$clone = $message->getClone();
+		$clone->setTime(time());
+		$clone->setHidden(false);
+		$this->messagesDAO->save($clone);
+
+		$messagesIds = array();
+		if ($this->options->isOptionEnabled('enable_reply_to_messages', true)) {
+			$replies = $this->messagesDAO->getAllRepliesToMessage($message);
+			foreach ($replies as $reply) {
+				$replyClone = $reply->getClone();
+				$replyClone->setTime(time());
+				$replyClone->setHidden(false);
+				$replyClone->setReplyToMessageId($clone->getId());
+				$this->messagesDAO->save($replyClone);
+
+				$messagesIds[] = $reply->getId();
+				$this->messagesDAO->deleteById($reply->getId());
+			}
+		}
+
+		$messagesIds[] = $message->getId();
+		$this->messagesDAO->deleteById($message->getId());
+
+		$this->actions->publishAction('deleteMessages', array('ids' => $this->clientSide->encryptMessageIds($messagesIds)));
 	}
 
 	/**
@@ -481,6 +688,16 @@ class WiseChatMessagesService {
 			$content = str_replace(array('${'.$key.'}', '{'.$key.'}'), $variable, $content);
 		}
 		wp_mail($recipient, $subject, $content);
+
+		/**
+		 * Fires once a spam message has been reported.
+		 *
+		 * @since 2.3.2
+		 *
+		 * @param WiseChatMessage $message A reported spam message
+		 * @param string $url URL of the chat page
+		 */
+		do_action("wc_spam_reported", $message, $url);
 	}
 
 	/**
@@ -491,7 +708,9 @@ class WiseChatMessagesService {
 	 */
 	private function deleteOldMessages() {
 		$minutesThreshold = $this->options->getIntegerOption('auto_clean_after', 0);
-		
+		$minutesThresholdOfDirect = $this->options->getIntegerOption('auto_clean_direct_after', 0);
+
+		$messagesIds = array();
 		if ($minutesThreshold > 0) {
 			$channels = $this->channelsDAO->getByNames((array) $this->options->getOption('channel'));
 
@@ -501,17 +720,26 @@ class WiseChatMessagesService {
 			$criteria->setMaximumTime(time() - $minutesThreshold * 60);
 			$criteria->setIncludeOnlyPrivateMessages(false);
 			$messages = $this->messagesDAO->getAllByCriteria($criteria);
-
-			$messagesIds = array();
 			foreach ($messages as $message) {
 				$messagesIds[] = $message->getId();
 			}
-
-			if (count($messagesIds) > 0) {
-				$this->attachmentsService->deleteAttachmentsByMessageIds($messagesIds);
-				$this->actions->publishAction('deleteMessages', array('ids' => $this->clientSide->encryptMessageIds($messagesIds)));
-				$this->messagesDAO->deleteAllByCriteria($criteria);
+			$this->messagesDAO->deleteAllByCriteria($criteria);
+		}
+		if ($minutesThresholdOfDirect > 0) {
+			$criteria = new WiseChatMessagesCriteria();
+			$criteria->setIncludeAdminMessages(true);
+			$criteria->setMaximumTime(time() - $minutesThresholdOfDirect * 60);
+			$criteria->setIncludeOnlyPrivateMessages(true);
+			$messages = $this->messagesDAO->getAllByCriteria($criteria);
+			foreach ($messages as $message) {
+				$messagesIds[] = $message->getId();
 			}
+			$this->messagesDAO->deleteAllByCriteria($criteria);
+		}
+
+		if (count($messagesIds) > 0) {
+			$this->attachmentsService->deleteAttachmentsByMessageIds($messagesIds);
+			$this->actions->publishAction('deleteMessages', array('ids' => $this->clientSide->encryptMessageIds($messagesIds)));
 		}
 	}
 

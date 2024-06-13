@@ -10,10 +10,9 @@ class WiseChatSettings {
 	const MENU_SLUG = 'wise-chat-admin';
 	
 	const PAGE_TITLE = 'Settings Admin';
-	const MENU_TITLE = 'Wise Chat Settings';
+	const MENU_TITLE = WISE_CHAT_NAME.' Settings';
 	
 	const SECTION_FIELD_KEY = '_section';
-
 	const CAPABILITY = 'manage_'.WISE_CHAT_SLUG.'_options';
 	
 	/**
@@ -21,7 +20,7 @@ class WiseChatSettings {
 	*/
 	private $tabs = array(
 		'wise-chat-general' => 'General',
-		'wise-chat-externalLogin' => 'External Login',
+		'wise-chat-authentication' => 'Authentication',
 		'wise-chat-messages' => 'Messages Posting',
 		'wise-chat-moderation' => 'Moderation',
 		'wise-chat-permissions' => 'Permissions',
@@ -29,7 +28,7 @@ class WiseChatSettings {
 		'wise-chat-features' => 'Features',
 		'wise-chat-videoStreams' => 'Video Streams',
 		'wise-chat-appearance' => 'Appearance',
-		'wise-chat-emoticons' => 'Emoticons',
+		'wise-chat-emoticons' => 'Emoticons and GIFs',
 		'wise-chat-channels' => 'Channels',
 		'wise-chat-notifications' => 'Notifications',
 		'wise-chat-filters' => 'Filters',
@@ -62,12 +61,12 @@ class WiseChatSettings {
 	}
 	
 	public function addAdminMenu() {
-		if (!current_user_can(self::CAPABILITY) && current_user_can('administrator')) {
-			$role = get_role('administrator');
-			$role->add_cap(self::CAPABILITY, true);
+		if (current_user_can('manage_options')) {
+			add_options_page(self::PAGE_TITLE, self::MENU_TITLE, self::CAPABILITY, self::MENU_SLUG, array($this, 'renderAdminPage'));
+		} else {
+			add_submenu_page('options-general.php', self::MENU_TITLE, self::MENU_TITLE, self::CAPABILITY, self::MENU_SLUG, array($this, 'renderAdminPage'));
 		}
-
-		add_options_page(self::PAGE_TITLE, self::MENU_TITLE, self::CAPABILITY, self::MENU_SLUG, array($this, 'renderAdminPage'));
+		
 		$this->handleActions();
 	}
 	
@@ -75,9 +74,16 @@ class WiseChatSettings {
 		wp_enqueue_style('wp-color-picker');
 		wp_enqueue_script('wc-admin-script', plugins_url('../js/wise_chat_admin.js', __FILE__), array('wp-color-picker'), false, true);
 		wp_localize_script('wc-admin-script', 'wcAdminConfig', array('siteurl' => rtrim(get_site_url(), '/').'/', 'pluginurl' => plugin_dir_url(__FILE__), 'ajaxurl' => admin_url('admin-ajax.php')));
+		wp_enqueue_style('wise_chat_admin',  plugins_url('../assets/css/wise-chat-admin.css?v='.WISE_CHAT_VERSION, __FILE__));
 	}
 	
 	public function pageInit() {
+		// modify permissions of options.php page:
+		$capability = self::CAPABILITY;
+		add_filter('option_page_capability_'.self::OPTIONS_GROUP, function() use ($capability) {
+			return $capability;
+		}, 10, 1);
+		
 		register_setting(self::OPTIONS_GROUP, WiseChatOptions::OPTIONS_NAME, array($this, 'getSanitizedFormValues'));
 
 		foreach ($this->tabs as $key => $caption) {
@@ -89,11 +95,12 @@ class WiseChatSettings {
 				$id = $field[0];
 				$name = $field[1];
 				
-				if ($id === self::SECTION_FIELD_KEY) {
+				if (strpos($id, self::SECTION_FIELD_KEY) === 0) {
 					$sectionKey = "section_{$key}_".md5($name);
 					add_settings_section($sectionKey, $name, null, $key);
 					$this->sections[$key][] = array(
 						'id' => $sectionKey,
+						'sectionId' => $id,
 						'name' => $name,
 						'hint' => array_key_exists(2, $field) ? $field[2] : '',
 						'options' => array_key_exists(3, $field) ? $field[3] : array()
@@ -155,6 +162,9 @@ class WiseChatSettings {
 					.wcAdminMenu ul li a:hover { background-color: #fafafa; color: #000; outline: 0;}
 					.wcAdminMenu ul li a:visited { color: #000; }
 					.wcAdminMenu ul li a.wcAdminMenuActive { font-weight: bold; background-color: #fafafa; }
+					.wcUserSearchLayer { border: 1px solid #ccd0d4; box-shadow: 0 1px 1px rgba(0,0,0,.04); background: #fff; position: absolute; max-width: 300px; max-height: 200px; overflow-y: auto; z-index: 2;}
+					.wcUserSearchLayer a { display: block; margin: 6px; text-decoration: none; }
+					.wcCondensedTable th, .wcCondensedTable td { padding: 4px; width: auto; }
 					.wcAdminMenu ul li a#wise-chat-pro {
 						background: #4F3B5E url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 17px center;
 						color: #fff; padding-left: 48px;
@@ -208,13 +218,13 @@ class WiseChatSettings {
 									<h3 class='hndle'><span>Check our Products</span></h3>
 									<div class='inside'>
 										<p class='description'>
-											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
+											<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
 												Wise Chat <strong>Pro</strong>
 											</a>
 											<span style='display: inline-block; font-size: 1.2em'>Video calls, Voice messages, 1-on-1 chats, Pro themes, sidebar mode, notifications, GIFs library, message reactions and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a></span>
 										</p>
 										<p class='description'>
-											<a class="button-secondary wcAdminButtonPro wcAdminButtonProSize" style="background-color: #5f463f" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
+											<a class="button-secondary wcAdminButtonPro" style="background-color: #5f463f" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
 												Wise Chat <strong>Live</strong>
 											</a>
 											<span style='display: inline-block; font-size: 1.2em'>Extended version of Wise Chat Pro + <strong>live chat features:</strong> customizable live chat widget, incoming chats management page, multiple operators and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a> </span>
@@ -225,11 +235,11 @@ class WiseChatSettings {
 							
 							$sections = $this->sections[$pageId];
 							foreach ($sections as $sectionKey => $section) {
-								echo "<div class='postbox'>";
+								echo "<div data-section-id='{$section['sectionId']}' class='postbox'>";
 								echo "<h3 class='hndle'><span>".$section['name']."</span></h3>";
 								echo "<div class='inside'>";
 								echo '<table class="form-table">';
-								if ($section['hint']) {
+								if (strlen($section['hint']) > 0) {
 									echo '<tr><td colspan="2" style="padding:0"><p class="description">'.$section['hint'].'</p></td></tr>';
 								}
 								do_settings_fields($pageId, $section['id']);
@@ -311,6 +321,7 @@ class WiseChatSettings {
 				$actionMethod = $_GET['wc_action'].'Action';
 				if (method_exists($tabObject, $actionMethod)) {
 					$tabObject->$actionMethod();
+					break;
 				}
 			}
 			
@@ -359,6 +370,7 @@ class WiseChatSettings {
 	 */
 	private function showUpdatedMessage() {
 		$message = get_transient('wc_admin_settings_message');
+		
 		if (is_string($message) && strlen($message) > 0) {
 			add_settings_error(md5($message), esc_attr('settings_updated'), strip_tags($message), 'updated');
 			delete_transient('wc_admin_settings_message');
@@ -402,7 +414,7 @@ class WiseChatSettings {
 					continue;
 				}
 
-				if ($id == '_section') {
+				if (strpos($id, '_section') === 0) {
 					$printSection = "<h4>{$caption}: $name</h4>";
 					continue;
 				} else {

@@ -99,6 +99,19 @@ class WiseChatChannelUsersDAO {
 	}
 
 	/**
+	 * @param integer $userId
+	 * @param boolean $status
+	 * @throws Exception
+	 */
+	public function setStatus($userId, $status) {
+		$userStatus = $this->getByUserId($userId);
+		if ($userStatus) {
+			$userStatus->setActive($status);
+			$this->save($userStatus);
+		}
+	}
+
+	/**
 	 * Returns all active unique users.
 	 *
 	 * @param integer[] $limitToWordPressUsersIds
@@ -134,6 +147,51 @@ class WiseChatChannelUsersDAO {
 		}
 
 		return array_values($channelUsers);
+	}
+
+	/**
+	 * Returns all active WiseChatChannelUser objects by channel IDs.
+	 *
+	 * @param integer[] $channelIds
+	 * @param integer[] $limitToUsers
+	 * @return WiseChatChannelUser[]
+	 */
+	public function getAllActiveByChannelIds($channelIds, $limitToUsers = array()) {
+		global $wpdb;
+
+		$table = WiseChatInstaller::getChannelUsersTable();
+		$usersTable = WiseChatInstaller::getUsersTable();
+		$sql = sprintf(
+			'SELECT cu.* FROM %s AS cu '.
+			'LEFT JOIN %s AS u ON (u.id = cu.user_id) '.
+			'WHERE cu.active = 1 AND cu.channel_id IN (%s) '.
+			(count($limitToUsers) > 0 ? ' AND u.wp_id IN ('.implode(', ', $limitToUsers).')' : '').
+			'ORDER BY u.name ASC '.
+			'LIMIT 1000;',
+			$table, $usersTable, implode(', ', $channelIds)
+		);
+		$channelUsersRaw = $wpdb->get_results($sql);
+
+		/** @var WiseChatChannelUser[][] $channelUsersToComplete */
+		$channelUsersToComplete = array();
+		$channelUsers = array();
+		foreach ($channelUsersRaw as $channelUserRaw) {
+			$channelUser = $this->populateData($channelUserRaw);
+			$channelUsers[] = $channelUser;
+			$channelUsersToComplete[$channelUser->getUserId()][] = $channelUser;
+		}
+
+		// load related users:
+		$users = $this->usersDAO->getAll(array_keys($channelUsersToComplete));
+		foreach ($users as $user) {
+			if (array_key_exists($user->getId(), $channelUsersToComplete)) {
+				foreach ($channelUsersToComplete[$user->getId()] as $channelUser) {
+					$channelUser->setUser($user);
+				}
+			}
+		}
+
+		return $channelUsers;
 	}
 
 	/**

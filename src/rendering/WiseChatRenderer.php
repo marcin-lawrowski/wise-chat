@@ -59,6 +59,8 @@ class WiseChatRenderer {
 		foreach ($variables as $key => $value) {
 			$template = str_replace("{".$key."}", $encodeValues ? urlencode($value) : $value, $template);
 		}
+
+		$template = preg_replace('/{[0-9a-zA-Z_-]+}/', '', $template);
 		
 		return $template;
 	}

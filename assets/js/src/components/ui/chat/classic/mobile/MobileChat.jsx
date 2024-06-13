@@ -1,9 +1,12 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { setMobileTopTab, setMobileTitle } from "actions/ui";
+import { setMobileTopTab, setMobileTitle, focusChannel, openChannel } from "actions/ui";
 import Logger from "ui/common/logger/Logger";
+import ChatsView from "./ChatsView";
+import ChannelsView from "./ChannelsView";
 import UsersView from "./UsersView";
+import RecentView from "./RecentView";
 import { capitalizeFirstLetter } from "utils/string";
 import ChannelView from "./ChannelView";
 import CustomizeView from "./CustomizeView";
@@ -17,11 +20,16 @@ class MobileChat extends React.Component {
 		this.handleTabClick = this.handleTabClick.bind(this);
 
 		this.showFocusedChannel();
+
+		if (!this.props.configuration.interface.chat.publicEnabled && this.isUsersTabVisible()) {
+			this.props.setMobileTopTab('users');
+		}
 	}
 
 	handleTabClick(tab) {
 		this.props.setMobileTopTab(tab.slug)
 		this.props.setMobileTitle(tab.name);
+		this.props.focusChannel(undefined);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -45,33 +53,37 @@ class MobileChat extends React.Component {
 
 	render() {
 		const topTabs = [
+			{ slug: 'chats', name: this.props.i18nBase.chats, component: <ChatsView />, header: this.props.configuration.interface.chat.mobile.tabs.chats },
+			{ slug: 'channels', name: this.props.i18nBase.channels, component: <ChannelsView />, header: this.props.configuration.interface.chat.publicEnabled },
 			{ slug: 'users', name: this.props.i18nBase.users, component: <UsersView />, header: this.isUsersTabVisible() },
-			{ slug: 'channel', name: this.props.i18nBase.channel, component: <ChannelView />, header: true }
+			{ slug: 'channel', name: this.props.i18nBase.channel, component: <ChannelView />, header: false }
 		];
 
+		if (this.props.configuration.interface.recent.enabled) {
+			topTabs.push({ slug: 'recent', name: this.props.i18nBase.recent, component: <RecentView />, header: true, redCounter: this.props.recentChats.filter( recentChat => recentChat.read === false).length });
+		}
 		if (this.props.user && this.props.user.settings.allowCustomize) {
 			topTabs.push({ slug: 'customize', name: '', component: <CustomizeView visible={ this.props.topTab === 'customize' } />, header: true },);
 		}
 		return(
 			<React.Fragment>
-				{ this.props.titleVisible && this.props.configuration.interface.chat.title &&
+				{ this.props.titleVisible && (this.props.titleOverride || this.props.configuration.interface.chat.title) &&
 					<div className="wcTitle">
-						{ this.props.configuration.interface.chat.title }
+						{ [this.props.configuration.interface.chat.title, this.props.titleOverride].filter( title => title && title.length ).join(' - ') }
 					</div>
 				}
-				{!this.props.configuration.interface.chat.mobile.tabs.hideAll &&
-					<div className={"wcTabs" + (topTabs.filter(tab => tab.header).length > 3 ? ' wcTabsCompact' : '')}>
-						{topTabs.filter(tab => tab.header).map((tab, index) =>
-							<div
-								key={index}
-								className={"wcTab wcTab" + capitalizeFirstLetter(tab.slug) + (this.props.topTab === tab.slug ? ' wcCurrent' : '')}
-								onClick={e => this.handleTabClick(tab)}
-							>
-								<span className="wcName">{tab.name}</span>
-							</div>
-						)}
-					</div>
-				}
+				<div className={ "wcTabs" + (topTabs.filter( tab => tab.header ).length > 3 ? ' wcTabsCompact' : '') }>
+					{ topTabs.filter( tab => tab.header ).map( (tab, index) =>
+						<div
+							key={ index }
+							className={ "wcTab wcTab" + capitalizeFirstLetter(tab.slug) + (this.props.topTab === tab.slug ? ' wcCurrent' : '') }
+							onClick={ e => this.handleTabClick(tab) }
+						>
+							<span className="wcName">{ tab.name }</span>
+							{ tab.redCounter > 0 && <span className="wcRedCounter">{ tab.redCounter }</span> }
+						</div>
+					)}
+				</div>
 				{ topTabs.map( (tab, index) =>
 					<div key={ index } className={ "wcTabContent wcTabContent" + capitalizeFirstLetter(tab.slug) + (this.props.topTab !== tab.slug ? ' wcInvisible' : '') }>
 						{ tab.component }
@@ -106,7 +118,8 @@ export default connect(
 		focusedChannel: state.ui.focusedChannel,
 		openedChannels: state.ui.openedChannels,
 		user: state.application.user,
+		recentChats: state.application.recentChats,
 		publicChannels: state.application.publicChannels
 	}),
-	{ setMobileTopTab, setMobileTitle }
+	{ setMobileTopTab, setMobileTitle, focusChannel, openChannel }
 )(MobileChat);

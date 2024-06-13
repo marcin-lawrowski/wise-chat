@@ -10,6 +10,7 @@ export default class AjaxEngineSender  {
 		this.emitter = new EventEmitter();
 		this.configuration = configuration;
 		this.messageEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_message_endpoint';
+		this.messageGetEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_get_message_endpoint';
 		this.prepareImageEndpoint = configuration.engines.ajax.apiEndpointBase + (configuration.engines.ajax.apiEndpointBase.match(/\?/) ? '&' : '?') + 'action=wise_chat_prepare_image_endpoint';
 	}
 
@@ -161,6 +162,61 @@ export default class AjaxEngineSender  {
 					that.logDebug('[onImagePrepareError] [errorThrown]', errorThrown);
 					that.logDebug('[onImagePrepareError] [exception]', e.toString());
 					that.logError('Server error: ' + errorThrown);
+					errorListener('Server error: ' + errorThrown);
+				}
+			});
+	}
+
+	/**
+	 * Gets a message using AJAX call. All the listeners must be specified.
+	 *
+	 * @param {Object} messageRequest
+	 * @param {Function} successListener
+	 * @param {Function} errorListener
+	 */
+	getMessage(messageRequest, successListener, errorListener) {
+		if (!$.isFunction(successListener) || !$.isFunction(errorListener)) {
+			throw new Error('Missing listeners');
+		}
+
+		let that = this;
+
+		$.ajax({
+				type: "GET",
+				url: this.messageGetEndpoint,
+				data: messageRequest
+			})
+			.done(function(result) {
+				try {
+					let response = result;
+					if (response.error) {
+						errorListener(response.error);
+					} else {
+						successListener(response);
+					}
+				} catch (e) {
+					that.logDebug('[onMessageGet] [result]', result);
+					that.logDebug('[onMessageGet] [exception]', e.toString());
+					errorListener('Unknown error: ' + e.toString());
+				}
+			})
+			.fail(function(jqXHR, textStatus, errorThrown) {
+				if (typeof(jqXHR.status) != 'undefined' && jqXHR.status === 0) {
+					errorListener('No network connection');
+					return;
+				}
+
+				try {
+					let response = $.parseJSON(jqXHR.responseText);
+					if (response.error) {
+						errorListener(response.error);
+					} else {
+						errorListener('Unknown server error occurred: ' + errorThrown);
+					}
+				} catch (e) {
+					that.logDebug('[onMessageGet] [responseText]', jqXHR.responseText);
+					that.logDebug('[onMessageGet] [errorThrown]', errorThrown);
+					that.logDebug('[onMessageGet] [exception]', e.toString());
 					errorListener('Server error: ' + errorThrown);
 				}
 			});

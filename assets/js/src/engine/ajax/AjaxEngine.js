@@ -22,6 +22,8 @@ export default class AjaxEngine extends Engine {
 		this.authEndpoint = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_auth_endpoint';
 		this.idsCache = {};
 		this.lastId = 0;
+		this.lastActionId = 0;
+		this.actionsIdsCache = {};
 		this.lastCheckTime = null;
 		this.isInitialized = false;
 		this.currentRequest = null;
@@ -123,6 +125,7 @@ export default class AjaxEngine extends Engine {
 			if (this.interval) {
 				clearInterval(this.interval);
 				this.interval = null;
+				this.initialDone = false;
 			}
 		}
 
@@ -145,6 +148,7 @@ export default class AjaxEngine extends Engine {
 		let data = {
 			channelIds: this.configuration.channelIds,
 			lastId: this.lastId,
+			fromActionId: this.lastActionId,
 			lastCheckTime: this.lastCheckTime,
 			checksum: this.configuration.checksum,
 			init: this.initialDone ? 0 : 1
@@ -177,6 +181,15 @@ export default class AjaxEngine extends Engine {
 
 		try {``
 			let response = result;
+
+			if (response.lastActionId) {
+				if (this.lastActionId < response.lastActionId) {
+					this.lastActionId = response.lastActionId;
+				}
+			}
+			if (response.actions && response.actions.length) {
+				this.executeActions(response.actions);
+			}
 
 			if (response.result) {
 				let messagesFiltered = [];
@@ -247,6 +260,27 @@ export default class AjaxEngine extends Engine {
 				this.emitter.emit('messages', response.result);
 			}
 		}
+
+		// recent chats are received together with messages:
+		if (response.recentChats) {
+			this.emitter.emit('recentChats', response);
+		}
+	}
+
+	executeActions(actions) {
+		let actionsFinal = [];
+
+		for (let x = 0; x < actions.length; x++) {
+			let action = actions[x];
+			let actionId = action.id;
+
+			if (!this.actionsIdsCache[actionId]) {
+				this.actionsIdsCache[actionId] = true;
+				actionsFinal.push(action);
+			}
+		}
+
+		this.emitter.emit('actions', actionsFinal);
 	}
 
 	/**
@@ -283,6 +317,21 @@ export default class AjaxEngine extends Engine {
 			return;
 		}
 		this.sender.prepareImage(imageSource, successListener, progressListener, errorListener);
+	}
+
+	/**
+	 * Loads a single message.
+	 *
+	 * @param {Object} messageRequest
+	 * @param {Function} successListener
+	 * @param {Function} errorListener
+	 */
+	getMessage(messageRequest, successListener, errorListener) {
+		if (!this.isInitialized) {
+			return;
+		}
+
+		this.sender.getMessage(messageRequest, successListener, errorListener);
 	}
 
 	/**
@@ -411,6 +460,7 @@ export default class AjaxEngine extends Engine {
 					} else {
 						successListener(response.result);
 					}
+
 				} catch (e) {
 					that.logDebug('[loadPastMessages] [result]', result);
 					that.logDebug('[loadPastMessages] [exception]', e.toString());

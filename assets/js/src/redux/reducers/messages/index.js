@@ -70,6 +70,10 @@ export default function messages(state = defaultState, action) {
 			});
 
 			return createState(state, { received: newReceived });
+		case 'message.replace':
+			return state.received[action.message.channel.id]
+				? createState(state, { received: { ...state.received, [action.message.channel.id]: state.received[action.message.channel.id].map( message => message.id !== action.message.id ? message : { ...action.message } ) } })
+				: state;
 		case 'messages.sender.replace':
 			const newSenderAlteredReceived = {};
 
@@ -82,6 +86,18 @@ export default function messages(state = defaultState, action) {
 			});
 
 			return createState(state, { received: newSenderAlteredReceived });
+		case 'message.reactions.counters.replace':
+			const newReactionsAlteredReceived = {};
+
+			Object.keys(state.received).forEach( channelId => {
+				newReactionsAlteredReceived[channelId] = state.received[channelId].map( message => {
+					return message.id === action.id ? { ...message, reactions: action.reactions } : message;
+				});
+			});
+
+			return createState(state, { received: newReactionsAlteredReceived });
+		case 'messages.clear':
+			return createState(state, defaultState);
 		default:
 			return state
 	}

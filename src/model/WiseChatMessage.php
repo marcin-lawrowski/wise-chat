@@ -40,9 +40,29 @@ class WiseChatMessage {
     private $avatarUrl;
 
     /**
+     * @var boolean
+     */
+    private $hidden;
+
+    /**
+     * @var integer Chat plugin recipient ID (in private messages)
+     */
+    private $recipientId;
+
+    /**
+     * @var integer
+     */
+    private $replyToMessageId;
+
+    /**
      * @var WiseChatUser Chat plugin user
      */
     private $user;
+
+    /**
+     * @var WiseChatUser Chat plugin recipient
+     */
+    private $recipient;
 
     /**
      * @var string
@@ -214,6 +234,62 @@ class WiseChatMessage {
     }
 
     /**
+     * @return int
+     */
+    public function getRecipientId() {
+        return $this->recipientId;
+    }
+
+    /**
+     * @param int $recipientId
+     */
+    public function setRecipientId($recipientId) {
+        $this->recipientId = $recipientId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReplyToMessageId() {
+        return $this->replyToMessageId;
+    }
+
+    /**
+     * @param int $replyToMessageId
+     */
+    public function setReplyToMessageId($replyToMessageId) {
+        $this->replyToMessageId = $replyToMessageId;
+    }
+
+    /**
+     * @return WiseChatUser
+     */
+    public function getRecipient() {
+        return $this->recipient;
+    }
+
+    /**
+     * @param WiseChatUser $recipient
+     */
+    public function setRecipient($recipient) {
+        $this->recipient = $recipient;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHidden() {
+        return $this->hidden;
+    }
+
+    /**
+     * @param boolean $hidden
+     */
+    public function setHidden($hidden) {
+        $this->hidden = $hidden;
+    }
+
+    /**
      * Returns a clone of the current message
      *
      * @returns WiseChatMessage
@@ -227,6 +303,9 @@ class WiseChatMessage {
         $clone->setWordPressUserId($this->getWordPressUserId());
         $clone->setUserId($this->getUserId());
         $clone->setAvatarUrl($this->getAvatarUrl());
+        $clone->setHidden($this->isHidden());
+        $clone->setRecipientId($this->getRecipientId());
+        $clone->setReplyToMessageId($this->getReplyToMessageId());
         $clone->setText($this->getText());
         $clone->setIp($this->getIp());
         $clone->setTime($this->getTime());

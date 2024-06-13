@@ -68,6 +68,34 @@
             padding: 0 2% 2% 2%;
             background-color: #26323e;
           }
+
+          .wcGrid .wcGridChannelContainer {
+            .wcGridChannel {
+              border-color: #1a212b;
+              border-radius: 10px 10px 0 0;
+
+              .wcHeader {
+                background-color: #1a212b;
+                border-top: none;
+                border-radius: 10px 10px 0 0;
+                line-height: 1.8;
+                font-size: 1em;
+                .wcChannelClose:hover {
+                  background-color: #1572a1;
+                }
+              }
+            }
+
+            &.wcFocused .wcGridChannel {
+              border: 1px solid rgba(36, 180, 255, 0.30);
+              box-shadow: 0 0 7px rgba(36, 180, 255, 0.30);
+              .wcChannel {
+                .wcInput {
+                  border: 1px solid rgba(36, 180, 255, 0.70);
+                }
+              }
+            }
+          }
         }
 
         // browser area:
@@ -96,7 +124,7 @@
     }
   }
 
-  .wcMobile {
+  .wcMobile, .wcSidebar.wcMobile {
     .wcContent {
       padding-left: 0;
       padding-right: 0;
@@ -141,6 +169,15 @@
     }
 
     .wcTabContent {
+      .wcChannel {
+        .wcChannelIntro {
+          background-color: transparent;
+          margin-top: 0;
+          margin-bottom: 1%;
+          padding: 0 0 2% 0;
+        }
+      }
+
       .wcChannelEntry {
         padding: 5px 10px 5px 10px;
 
@@ -168,6 +205,41 @@
         }
       }
 
+      .wcRecentChats {
+        .wcHeader {
+          font-size: 1.1em;
+          color: #fff;
+          padding-left: 10px
+        }
+
+        .wcNoRecent {
+          padding-left: 10px;
+        }
+
+        .wcRecent {
+          padding: 5px 10px 5px 10px;
+
+          .wcRight .wcHead {
+            margin-bottom: 0;
+          }
+
+          &:hover {
+            background-color: #364553;
+          }
+
+          &.wcUnread {
+            background-color: rgba(0,193,121,0.05);
+            &:hover {
+              background-color: rgba(0,193,121,0.10);
+            }
+          }
+          .wcRight .wcHead {
+            margin-bottom: 0;
+          }
+
+        }
+      }
+
       .wcCustomizations {
         padding-left: 2%;
         padding-right: 2%;
@@ -186,6 +258,40 @@
           border-radius: 5px 5px 0 0;
         }
       }
+    }
+  }
+
+  .wcSidebar .wcColumn {
+    > * {
+      border-color: #1a212b;
+    }
+
+    &.wcFocused>:first-child {
+      border-top: none;
+      > span {
+        font-weight: bold;
+      }
+    }
+
+    .wcHeader {
+      height: 2.6em;
+      background-color: #1a212b;
+      border-top: none;
+      border-radius: 10px 10px 0 0;
+      line-height: 1.8;
+	  font-size: 1em;
+    }
+
+    .wcContent {
+      background-color: #26323e;
+      &.wcBrowserContent .wcCustomizations {
+        background-color: #1a212b;
+        padding-bottom: 10px !important;
+      }
+    }
+
+    .wcRecentTrigger span {
+      top: 12px;
     }
   }
 
@@ -239,6 +345,15 @@
         }
       }
     }
+
+    &.wcBrowserRecent {
+      .wcRecentChats .wcRecent {
+        &.wcRead:hover {
+          background-color: rgba(9, 193, 121, 0.09);
+          border-radius: 5px;
+        }
+      }
+    }
   }
 
   .wcCustomizations{
@@ -252,7 +367,19 @@
   }
 
   .wcChannel {
-    .wcMessages {
+    .wcChannelIntro {
+      border: none;
+      border-bottom: 1px solid #465767;
+      padding: 10px;
+      margin-top: 0;
+      background-color: transparent;
+      .wcAvatar {
+        border-radius: 5px;
+        max-height: 60px;
+      }
+    }
+
+    .wcChannelData .wcMessages {
       color: #111;
       background: #26323e;
       margin-bottom: 2%;
@@ -273,9 +400,6 @@
           line-height: 22px;
           color: #cad6e2;
           text-decoration: none;
-          &:hover {
-            text-decoration: underline;
-          }
         }
 
         .wcTime {
@@ -286,6 +410,17 @@
 
         .wcContent {
           background-color: #465767; border-radius: 0 10px 10px 10px; box-shadow: 2px 2px 2px rgba(60,60,60,0.03);
+
+          .wcActionsButton {
+            background: #26323e url(../../gfx/themes/colddark/gfx/3dots.svg) center center no-repeat;
+            background-size: 14px;
+            border-radius: 5px;
+            border: none;
+            &:hover {
+              border: none;
+              background-color: #2a3743;
+            }
+          }
         }
 
         .wcRowBody .wcContent .wcQuote {
@@ -294,39 +429,12 @@
           border-radius: 0 10px 0 0;
         }
 
-
-        .wcActions {
-          background-color: #26323e;
-          border-color: #2e3b49;
-
-          .wcAction {
-            border-color: #B8BCC4;
-
-            &:hover {
-              background-color: #1a212b;
-            }
-          }
-
-          .wcDelete {
-            background: transparent url("../../gfx/themes/lightgray/gfx/x.svg") no-repeat 50%;
-          }
-
-          .wcMute {
-            background: transparent url("../../gfx/themes/lightgray/gfx/mute.svg") no-repeat 50%;
-          }
-
-          .wcBan {
-            background: transparent url("../../gfx/themes/lightgray/gfx/ban.svg") no-repeat 50%;
-          }
-
-          .wcSpam {
-            background: transparent url("../../gfx/themes/lightgray/gfx/spam.svg") no-repeat 50%;
-          }
-        }
-
         &.wcCurrentUser {
           .wcContent {
             background-color: #5c6d7f;
+            .wcActionsButton {
+              background-color: #7c8d9f;
+            }
           }
           .wcRowBody .wcContent .wcQuote {
             background-color: #576778;
@@ -335,11 +443,49 @@
             color: #cad6e2;
           }
         }
+
+        .wcRowBody .wcContent {
+          flex-grow: 0;
+          min-width: auto;
+          .wcInternalContent {
+            display: inline;
+          }
+          &.wcEditing {
+            .wcInternalContent, .wcTime {
+              display: none;
+            }
+          }
+          > .wcTime {
+            margin-left: 10px;
+            float: right;
+          }
+        }
+
+        &.wcBatch {
+          .wcRowHead {
+            display: none;
+          }
+          .wcRowBody {
+            > .wcAvatar {
+              visibility: hidden;
+            }
+            .wcContent {
+              border-radius: 10px;
+            }
+          }
+        }
       }
     }
 
     .wcCounter {
       padding: 0 2% 1% 2%;
+    }
+
+    &.wcChannelSizeXXs {
+      .wcChannelInput .wcInputs .wcInputButtons button.wcSubmit {
+        background: #0095e2 url(../../gfx/icons/send.svg) no-repeat center center !important;
+        background-size: 25px 25px !important;
+      }
     }
 
     .wcChannelInput {
@@ -357,6 +503,17 @@
         margin-top: 20px;
         margin-bottom: 20px;
         padding: 10px;
+      }
+
+      .wcReplyTo {
+        background-color: #576778;
+        border-radius: 0 15px 15px 15px;
+        .wcDeleteButton {
+          background-image: url("../../gfx/themes/colddark/gfx/x.svg");
+          &:hover {
+            background-color: rgba(9, 193, 121, 0.09);
+          }
+        }
       }
 
       .wcInputs {
@@ -399,6 +556,14 @@
               background: transparent url('../../gfx/themes/colddark/gfx/emoticon.svg') center center no-repeat;
             }
 
+            &.wcSoundAttachmentStart {
+              background: transparent url(../../gfx/themes/colddark/gfx/mic.svg) center center no-repeat;
+            }
+
+            &.wcSoundAttachmentStop {
+              background: transparent url(../../gfx/icons/stop-button.svg) center center no-repeat;
+            }
+
             &:focus, &:active, &:hover {
               -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
               filter: alpha(opacity=100);
@@ -439,6 +604,24 @@
           }
         }
       }
+    }
+  }
+
+  .wcRecentTrigger {
+    background: url(../../gfx/themes/colddark/gfx/recent-chats-inactive.svg) center center no-repeat;
+
+    &.wcOpen {
+      background: url(../../gfx/themes/colddark/gfx/recent-chats.svg) center center no-repeat;
+    }
+
+    &:hover {
+      background-color: rgba(9, 193, 121, 0.09);
+      border-radius: 5px;
+    }
+
+    span {
+      font-size: 11px;
+      font-weight: bold;
     }
   }
 
@@ -490,16 +673,95 @@
     }
     > .wcFooter {
       border-top: 1px solid #26323e;
+      .wcButton {
+        color: #cad6e2;
+      }
+    }
+
+    .wcRecentChats {
+      .wcHeader {
+        font-size: 1.1em;
+        color: #fff;
+      }
+
+      .wcHeader {
+        margin-left: 7px;
+      }
+
+      .wcRecent {
+        border-radius: 5px;
+
+        &:hover {
+          background-color: #364553;
+        }
+
+        &.wcUnread {
+          background-color: rgba(0,193,121,0.05);
+          &:hover {
+            background-color: rgba(0,193,121,0.10);
+          }
+        }
+        .wcRight .wcHead {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .wcActionsPopup-content.wcColddarkTheme-content {
+    border-radius: 5px;
+    .wcActions {
+      .wcAction {
+        border-color: #465767;
+
+        &:hover {
+          background-color: #1a212b;
+        }
+      }
+
+      .wcApprove {
+        background: transparent url("../../gfx/themes/colddark/gfx/approve.svg") no-repeat 50%;
+      }
+
+      .wcDelete {
+        background: transparent url("../../gfx/themes/colddark/gfx/x.svg") no-repeat 50%;
+      }
+
+      .wcEdit {
+        background: transparent url("../../gfx/themes/colddark/gfx/edit.svg") no-repeat 50%;
+      }
+
+      .wcMute {
+        background: transparent url("../../gfx/themes/colddark/gfx/mute.svg") no-repeat 50%;
+      }
+
+      .wcBan {
+        background: transparent url("../../gfx/themes/colddark/gfx/ban.svg") no-repeat 50%;
+      }
+
+      .wcSpam {
+        background: transparent url("../../gfx/themes/colddark/gfx/spam.svg") no-repeat 50%;
+      }
+
+      .wcReply {
+        background: transparent url("../../gfx/themes/colddark/gfx/reply.svg") no-repeat 50%;
+      }
     }
   }
 
   .wcEmoticonsPopup-content.wcColddarkTheme-content {
-    a {
-      border: 1px solid transparent;
+    .wcCategory.wcCategoryEmoticons {
+      a {
+        border: 1px solid transparent;
+      }
+
+      a:hover {
+        background: #465767;
+        border-color: #465767;
+      }
     }
-    a:hover {
-      background: #465767;
-      border-color: #465767;
+    .wcCategory.wcCategoryGIFs .wcTenor .wcTenorSearch {
+      border-radius: 15px;
     }
   }
 
@@ -519,6 +781,10 @@
   }
   .wcRecentEmpty-content.wcColddarkTheme-content {
     height: 50px;
+    .wcRecentChats {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 

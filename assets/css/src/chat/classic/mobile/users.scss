@@ -14,8 +14,15 @@
         flex-grow: 1; // this is to fix Safari's 100% height bug
       }
 
-      .wcChannelTrigger.wcFocusedChannel {
-        font-weight: normal;
+      .wcChannelTrigger {
+        .wcDetails {
+          .wcCity, .wcCountry {
+            color: #A6A6A6;
+          }
+        }
+        &.wcFocusedChannel {
+          font-weight: normal;
+        }
       }
     }
   }

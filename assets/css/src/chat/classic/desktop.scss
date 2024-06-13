@@ -120,6 +120,74 @@
       .wcCustomizations {
         padding: 2%;
       }
+
+      .wcGrid {
+        flex-grow: 1;
+        flex-direction: row;
+        flex-wrap: wrap;
+        display: flex;
+        padding-right: 10px;
+        padding-bottom: 10px;
+
+        .wcGridChannelContainer {
+          height: 550px;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          padding-left: 10px;
+          padding-top: 10px;
+
+          &.wcGridChannel1 {
+            width: 100%;
+          }
+          &.wcGridChannel2 {
+            width: 50%;
+          }
+          &.wcGridChannel3 {
+            width: 33.333%;
+          }
+          &.wcGridChannel4 {
+            width: 25%;
+          }
+
+          .wcGridChannel {
+            display: flex;
+            flex-grow: 1;
+            flex-direction: column;
+            border: 1px solid #dfdfdf;
+
+            > .wcHeader {
+              height: 2.6em;
+              display: flex;
+              align-items: center;
+              padding: 0 10px 0 10px;
+
+              .wcMain {
+                flex-grow: 1;
+                display: flex;
+                align-items: center;
+              }
+            }
+
+            > .wcChannel {
+              flex-grow: 1;
+              padding: 0 10px 10px 10px;
+            }
+          }
+
+          &.wcFocused {
+            .wcGridChannel {
+              border: 1px solid #bfbfbf;
+            }
+          }
+        }
+
+        .wcGridFull {
+          flex-grow: 1;
+          display: flex;
+          justify-content: center;
+        }
+      }
     }
 
     .wcBrowserArea {

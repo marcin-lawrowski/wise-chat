@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 WiseChatContainer::load('rendering/filters/pre/WiseChatFilter');
 
-class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
+class WiseChatFilterTest extends TestCase {
 	private static $mbExtension = 'mbstring';
 	
 	/**
@@ -12,9 +14,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'balls'
 		);
-		if (!extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -24,9 +24,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'balls'
 		);
-		if (!extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -36,9 +34,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'balls', 'kość'
 		);
-		if (extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -48,9 +44,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'balls', 'kość'
 		);
-		if (extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     public function data() {
@@ -162,9 +156,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'[balls]'
 		);
-		if (!extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -174,9 +166,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'[balls]'
 		);
-		if (!extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -186,9 +176,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'[balls]', '[kość]'
 		);
-		if (extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     /**
@@ -198,9 +186,7 @@ class WiseChatFilterTest extends PHPUnit_Framework_TestCase {
 		WiseChatFilter::$words = array(
 			'[balls]', '[kość]'
 		);
-		if (extension_loaded(self::$mbExtension)) {
-			$this->assertEquals($output, WiseChatFilter::filter($input));
-		}
+		$this->assertEquals($output, WiseChatFilter::filter($input));
     }
     
     public function dataFuzzyPositive() {

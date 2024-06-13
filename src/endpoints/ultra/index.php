@@ -18,6 +18,7 @@ if (!isset($_REQUEST['channelIds']) || !isset($_REQUEST['lastId'])) {
 }
 $channelIds = array_map('intval', array_filter($_REQUEST['channelIds']));
 $lastTimeGmt = $_REQUEST['lastCheckTime'];
+$fromActionId = intval($_REQUEST['fromActionId']);
 $lastTime = strtotime($lastTimeGmt);
 $lastTime = $lastTime === false ? 0 : $lastTime - 5;
 
@@ -76,6 +77,16 @@ try {
 	$rowsNum = $result->num_rows;
 	$result->free();
 
+	$actionsNum = 0;
+	if ($rowsNum === 0) {
+		// check for any new action
+		$actionsTable = $variables['table_prefix'] . 'wise_chat_actions';
+		$sql = sprintf("SELECT id FROM %s WHERE `id` > %d LIMIT 1;", $actionsTable, $fromActionId);
+		$result = $dbWC->query($sql);
+		$actionsNum = $result->num_rows;
+		$result->free();
+	}
+
 	$dbWC->close();
 } catch (mysqli_sql_exception $e) {
 	http_response_code(400);
@@ -85,7 +96,7 @@ try {
     die(json_encode($data));
 }
 
-if ($rowsNum === 0) {
+if ($rowsNum === 0 && $actionsNum === 0) {
 	if ($_REQUEST['action'] === 'check') {
 		die('OK');
 	}

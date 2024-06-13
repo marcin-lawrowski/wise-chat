@@ -57,6 +57,15 @@ class WiseChatAuthentication {
     }
 
     /**
+     * Determines whether the current user is authenticated externally.
+     *
+     * @return boolean
+     */
+    public function isAuthenticatedExternally() {
+        return false;
+    }
+
+    /**
      * Returns authenticated user or null. The method is cached.
      *
      * @return WiseChatUser|null
@@ -171,7 +180,7 @@ class WiseChatAuthentication {
 
         $user->setSessionId(wp_generate_password());
         $user->setIp($this->getRemoteAddress());
-        if ($this->options->isOptionEnabled('collect_user_stats', false)) {
+        if ($this->options->isOptionEnabled('collect_user_stats', true)) {
             $this->fillWithGeoDetails($user);
         }
 
@@ -209,6 +218,7 @@ class WiseChatAuthentication {
      * Drops the authentication.
      */
     public function dropAuthentication() {
+    	$this->channelUsersDAO->setStatus($this->getUserIdOrNull(), false);
         $this->clearAuthenticationCookie();
     }
 
@@ -236,7 +246,7 @@ class WiseChatAuthentication {
 
         // check if the new username is already occupied:
         $occupiedException = new Exception($this->options->getOption('message_error_2', __('This name is already occupied', 'wise-chat')));
-        $prefix = $this->options->getOption('user_name_prefix', 'Anonymous');
+        $prefix = $this->options->getOption('user_name_prefix', __('Anonymous', 'wise-chat'));
         $disableUserNameCheck = $this->options->isOptionEnabled('disable_user_name_duplication_check', true);
         if (
             $this->getUserNameOrEmptyString() == $userName ||
@@ -361,7 +371,7 @@ class WiseChatAuthentication {
         $half = $timeout * self::DAY_IN_SECONDS / 2;
         $lifeTime = $expiration - time();
         if ($lifeTime < $half) {
-            header("X-Wise-Chat: refreshed cookie $lifeTime < $half");
+            header("X-Wise-Chat-Pro: refreshed cookie $lifeTime < $half");
             $this->sendAuthenticationCookie($user);
         }
     }

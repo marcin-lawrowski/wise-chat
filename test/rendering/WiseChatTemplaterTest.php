@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 WiseChatContainer::load('rendering/WiseChatTemplater');
 
-class WiseChatTemplaterTest extends PHPUnit_Framework_TestCase {
+class WiseChatTemplaterTest extends TestCase {
 	
 	/**
 	 * @dataProvider data

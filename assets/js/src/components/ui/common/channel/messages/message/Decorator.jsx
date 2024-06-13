@@ -8,7 +8,15 @@ class Decorator extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.htmlRenderer = new HtmlRenderer(props.configuration);
+		this.onShortcodeRender = this.onShortcodeRender.bind(this);
+		this.htmlRenderer = new HtmlRenderer(props.configuration, {
+			onShortcodeRender: this.onShortcodeRender
+		});
+	}
+
+	onShortcodeRender(name, params, index) {
+
+		return <span key={ index }>vii</span>;
 	}
 
 	render() {
@@ -26,6 +34,7 @@ Decorator.propTypes = {
 
 export default connect(
 	state => ({
-		configuration: state.configuration
+		configuration: state.configuration,
+		channels: state.application.channels,
 	})
 )(Decorator);

@@ -100,6 +100,11 @@ class WiseChatEndpoint {
 	protected $authorization;
 
 	/**
+	 * @var WiseChatPendingChatsService
+	 */
+	protected $pendingChatsService;
+
+	/**
 	 * @var WiseChatHttpRequestService
 	 */
 	protected $httpRequestService;
@@ -129,6 +134,7 @@ class WiseChatEndpoint {
 		$this->kicksService = WiseChatContainer::getLazy('services/WiseChatKicksService');
 		$this->messagesService = WiseChatContainer::getLazy('services/WiseChatMessagesService');
 		$this->userService = WiseChatContainer::getLazy('services/user/WiseChatUserService');
+		$this->pendingChatsService = WiseChatContainer::getLazy('services/WiseChatPendingChatsService');
 		$this->service = WiseChatContainer::getLazy('services/WiseChatService');
 		$this->channelsService = WiseChatContainer::getLazy('services/WiseChatChannelsService');
 		$this->httpRequestService = WiseChatContainer::getLazy('services/WiseChatHttpRequestService');
@@ -142,11 +148,36 @@ class WiseChatEndpoint {
 	/**
 	 * @param WiseChatMessage $message
 	 * @param $channelId
-	 * @param $channelName
 	 * @param array $attributes
 	 * @return array
 	 */
 	protected function toPlainMessage($message, $channelId, $attributes = array()) {
+		// check if the message cannot be exposed to the user:
+		if (!$this->userService->isUserAllowedToSeeTheContentOfMessage($message)) {
+			return array(
+				'id' => $this->clientSide->encryptMessageId($message->getId()),
+				'locked' => true,
+				'channel' => array(
+					'id' => $channelId
+				)
+			);
+		}
+
+		$replyToMessage = $this->options->isOptionEnabled('enable_reply_to_messages', true) && $message->getReplyToMessageId() > 0
+			? $this->messagesService->getById($message->getReplyToMessageId(), true)
+			: null;
+
+		// if it is a reply to a pending message:
+		if ($replyToMessage && !$this->userService->isUserAllowedToSeeTheContentOfMessage($replyToMessage)) {
+			return array(
+				'id' => $this->clientSide->encryptMessageId($replyToMessage->getId()),
+				'locked' => true,
+				'channel' => array(
+					'id' => $channelId
+				)
+			);
+		}
+
 		$textColorAffectedParts = (array)$this->options->getOption("text_color_parts", array('message', 'messageUserName'));
 		$classes = '';
 		$wpUser = $this->usersDAO->getWpUserByID($message->getWordPressUserId());
@@ -154,21 +185,49 @@ class WiseChatEndpoint {
 			$classes = $this->userService->getCssClassesForUserRoles($message->getUser(), $wpUser);
 		}
 
+		$isAllowed = false;
+		if ($this->options->isOptionEnabled('enable_private_messages', false) || !$this->options->isOptionEnabled('users_list_linking', false)) {
+			if ($message->getRecipientId() > 0) {
+				$directUserId = $this->authentication->getUserIdOrNull() === $message->getRecipientId() ? $message->getUserId() : $message->getRecipientId();
+				$directUser = $this->usersDAO->get($directUserId);
+				if ($directUser !== null) {
+					$isAllowed = true;
+				}
+			} else {
+				$isAllowed = true;
+			}
+		}
+
+		$channelName = $message->getRecipientId() > 0
+			? ($this->authentication->getUserIdOrNull() === $message->getRecipientId()
+				? ($message->getUser() ? $message->getUser()->getName() : 'Unknown User')
+				: ($message->getRecipient() ? $message->getRecipient()->getName() : 'Unknown User')
+			)
+			: $message->getChannelName();
+
 		$messagePlain = array(
 			'id' => $this->clientSide->encryptMessageId($message->getId()),
 			'own' => $message->getUserId() === $this->authentication->getUserIdOrNull(),
 			'text' => $message->getText(),
 			'channel' => array(
 				'id' => $channelId,
-				'name' => $message->getChannelName(),
-				'type' => 'public',
-				'readOnly' => false
+				'name' => $channelName,
+				'type' => $message->getRecipientId() > 0 ? 'direct' : 'public',
+				'readOnly' => !$isAllowed,
+				'avatar' => $this->options->getIconsURL() . 'public-channel.png',
+				'online' => array_key_exists('live', $attributes) && $attributes['live'] === true
 			),
 			'color' => in_array('message', $textColorAffectedParts) ? $this->userService->getUserTextColor($message->getUser()) : null,
 			'cssClasses' => $classes,
 			'timeUTC' => gmdate('c', $message->getTime()),
 			'sortKey' => $message->getTime().$message->getId(),
-			'sender' => $this->getMessageSender($message, $wpUser)
+			'awaitingApproval' => $this->options->isOptionEnabled('new_messages_hidden', false) && $message->isHidden(),
+			'locked' => false,
+			'sender' => $this->getMessageSender($message, $wpUser),
+
+			'quoted' => $replyToMessage !== null
+				? $this->toPlainMessage($replyToMessage, $channelId)
+				: null
 		);
 
 		$messagePlain = array_merge($messagePlain, $attributes);
@@ -178,16 +237,42 @@ class WiseChatEndpoint {
 
 	private function getMessageSender($message, $wpUser) {
 		$textColorAffectedParts = (array) $this->options->getOption("text_color_parts", array('message', 'messageUserName'));
+		$isCurrent = $this->authentication->getUser()->getId() === $message->getUserId();
 
-		return array(
+		$details = array(
 			'id' => $this->clientSide->encryptUserId($message->getUserId()),
 			'name' => $message->getUserName(),
 			'source' => $wpUser !== null ? 'w' : 'a',
-			'current' => $this->authentication->getUser()->getId() == $message->getUserId(),
+			'current' => $isCurrent,
 			'color' => in_array('messageUserName', $textColorAffectedParts) ? $this->userService->getUserTextColor($message->getUser()) : null,
 			'profileUrl' => $this->options->getIntegerOption('link_wp_user_name', 0) === 1 ? $this->userService->getUserProfileLink($message->getUser(), $message->getUserName(), $message->getWordPressUserId()) : null,
-			'avatarUrl' => $this->options->isOptionEnabled('show_avatars', true) ? $this->userService->getUserAvatarFromMessage($message) : null
+			'avatarUrl' => $this->options->isOptionEnabled('show_avatars', false) ? $this->userService->getUserAvatarFromMessage($message) : null
 		);
+
+		if (!$isCurrent && $message->getUser()) {
+			$details['channel'] = $this->clientSide->getUserAsPlainDirectChannel($message->getUser());
+		}
+
+		return $details;
+	}
+
+	/**
+	 * @param string[] $encryptedArrayOfChannels
+	 * @param string $type
+	 * @return integer[]
+	 */
+	protected function getChannelIDs($encryptedArrayOfChannels, $type = 'c') {
+		$ids = array();
+
+		foreach ($encryptedArrayOfChannels as $encryptedChannel) {
+			$channelTypeAndId = WiseChatCrypt::decryptFromString($encryptedChannel);
+
+			if (strpos($channelTypeAndId, $type.'|') === 0) {
+				$ids[] = intval(preg_replace('/^'.$type.'\|/', '' , $channelTypeAndId));
+			}
+		}
+
+		return $ids;
 	}
 
 	protected function getPostParam($name, $default = null) {
@@ -282,7 +367,7 @@ class WiseChatEndpoint {
 	 * @throws WiseChatUnauthorizedAccessException
 	 */
 	protected function checkUserWriteAuthorization() {
-		if (!$this->userService->isSendingMessagesAllowed()) {
+		if (!$this->userService->isSendingMessagesAllowed() && !$this->authentication->isAuthenticatedExternally()) {
 			throw new WiseChatUnauthorizedAccessException('No write permission');
 		}
 	}
@@ -292,7 +377,7 @@ class WiseChatEndpoint {
 	 */
 	protected function checkChatOpen() {
 		if (!$this->service->isChatOpen()) {
-			throw new Exception($this->options->getEncodedOption('message_error_5', 'The chat is closed now'));
+			throw new Exception($this->options->getEncodedOption('message_error_5', __('The chat is closed now', 'wise-chat')));
 		}
 	}
 
@@ -343,6 +428,10 @@ class WiseChatEndpoint {
 					die();
 				}
 
+				if (array_key_exists('_bpg', $decoded)) {
+					$decoded['buddypress_group_id'] = intval($decoded['_bpg']);
+				}
+
 				$this->options->replaceOptions($decoded);
 			}
 		}
@@ -379,11 +468,39 @@ class WiseChatEndpoint {
 
 		if (strpos($channelTypeAndId, 'c|') !== false) {
 			$channel = $this->channelsDAO->get(intval(str_replace('c|', '', $channelTypeAndId)));
+			if ($channel && $this->channelsService->isDirect($channel)) {
+				throw new Exception('Unknown channel ID');
+			}
+		} else if (strpos($channelTypeAndId, 'd|') !== false) {
+			$channel = $this->channelsService->getDirectChannel();
 		} else {
 			throw new Exception('Unknown channel');
 		}
 
 		return $channel;
+	}
+
+	/**
+	 * @param string $encryptedChannelId
+	 * @return WiseChatUser
+	 * @throws Exception
+	 */
+	protected function getUserFromEncryptedId($encryptedChannelId) {
+		$channelTypeAndId = WiseChatCrypt::decryptFromString($encryptedChannelId);
+		if ($channelTypeAndId === null) {
+			throw new Exception('Invalid channel');
+		}
+
+		if (strpos($channelTypeAndId, 'd|') !== false) {
+			return $this->usersDAO->get(intval(str_replace('d|', '', $channelTypeAndId)));
+		} else {
+			throw new Exception('Unknown channel');
+		}
+	}
+
+	protected function hasPublicChannelsAccess() {
+		return ($this->options->getIntegerOption('mode', 0) === 0 && !($this->options->isOptionEnabled('classic_disable_channel', false)))
+			|| ($this->options->getIntegerOption('mode', 0) === 1 && !($this->options->isOptionEnabled('fb_disable_channel', false)));
 	}
 
 	protected function sendBadRequestStatus() {

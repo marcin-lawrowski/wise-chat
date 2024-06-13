@@ -1,10 +1,10 @@
 import { __ } from '@wordpress/i18n';
-import { useBlockProps, ColorPalette, InspectorControls, BlockControls } from '@wordpress/block-editor';
-import { TextControl, PanelBody, CheckboxControl, SelectControl, ExternalLink } from '@wordpress/components';
+import { useBlockProps, ColorPalette, InspectorControls } from '@wordpress/block-editor';
+import { TextControl, PanelBody, CheckboxControl, SelectControl, ExternalLink, Flex, FlexBlock, FlexItem, Button, __experimentalText as Text } from '@wordpress/components';
 import './editor.scss';
 import ServerSideRender from '@wordpress/server-side-render';
 
-import { useRef, useLayoutEffect } from '@wordpress/element';
+import { useRef, useLayoutEffect, useState } from '@wordpress/element';
 import React from "react";
 
 let chatInstances = [];
@@ -15,7 +15,6 @@ function initAccordion(mutations) {
             if (chatId && !chatInstances.includes(chatId)) {
                 chatInstances = [ ...chatInstances, chatId];
                 _wiseChat.init(jQuery('#' + chatId));
-                console.log( 'chat loaded', chatId);
             }
         }
     }
@@ -23,6 +22,7 @@ function initAccordion(mutations) {
 
 export default function Edit( { attributes, setAttributes } ) {
     const ref = useRef( null );
+    const [channelCandidate, setChannelCandidate] = useState('');
 
     useLayoutEffect( () => {
         let observer;
@@ -47,34 +47,52 @@ export default function Edit( { attributes, setAttributes } ) {
 
         return <div>
             <a href={ url } className="" target="_blank">{ __('Advanced Settings') }</a><br />
-            <ExternalLink href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=block&utm_campaign=settings" rel="noopener noreferrer" style={{ backgroundColor: '#4f3b5e', color: '#fff', textDecoration: 'none', padding: 7, display: 'inline-block', marginTop: 7 }} target="_blank">Check Wise Chat Pro</ExternalLink>
         </div>;
+    }
+
+    function getChannels() {
+        return attributes.channel.replace(/^{|}$/g, '').split(',');
+    }
+
+    function handleClick() {
+        if (channelCandidate) {
+            setAttributes( { channel: '{' + [ ...getChannels(), channelCandidate].join(',') + '}' } );
+            setChannelCandidate('');
+        }
+    }
+
+    function handleDelete(e, index) {
+        e.preventDefault();
+        setAttributes( { channel: '{' + getChannels().filter( (channel, channelIndex) => channelIndex !== index ).join(',') + '}' } );
     }
 
     return (
         <div { ...useBlockProps( { ref } ) }>
-            <BlockControls>
-                <ExternalLink href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=block&utm_campaign=settings" rel="noopener noreferrer" style={{ backgroundColor: '#4f3b5e', color: '#fff', textDecoration: 'none', padding: 7, display: 'flex', alignItems: 'center' }} target="_blank">Check Wise Chat Pro</ExternalLink>
-            </BlockControls>
             <InspectorControls key="setting">
                 <PanelBody title={ __( 'Chat Settings' ) } initialOpen={ true }>
+
+                    <label>Public channels:</label>
+                    <ul>
+                        { getChannels().filter( channel => channel ).map( (channel, index, array) =>
+                            <li>{ (index + 1) }. { channel }{ array.length > 1 && <span> | <a href="#" onClick={ e => handleDelete(e, index) }>delete</a></span> }</li>
+                        )}
+                    </ul>
+
                     <TextControl
-                        label="Channel"
-                        help="Name the channel you want to open"
-                        value={ attributes.channel }
-                        onChange={ value => setAttributes( { channel: value } ) }
+                        label="Add Channel"
+                        value={ channelCandidate }
+                        onChange={ value => setChannelCandidate(value) }
+                        className="mb-0"
                     />
+                    <Text align="right" isBlock>
+                        <Button variant="secondary" onClick={ handleClick }>Add</Button>
+                    </Text>
+
                     <CheckboxControl
                         label="Disable Anonymous Users"
                         checked={ attributes.access_mode }
                         onChange={ value => setAttributes( { access_mode: value } ) }
                         help="Only logged in WordPress users are allowed to enter the chat"
-                    />
-                    <CheckboxControl
-                        label="Require Username"
-                        checked={ attributes.force_user_name_selection }
-                        onChange={ value => setAttributes( { force_user_name_selection: value } ) }
-                        help="Forces non-logged in users to provide a name before entering the chat"
                     />
                     <TextControl
                         label="Window Title"

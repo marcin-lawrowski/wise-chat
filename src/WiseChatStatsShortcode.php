@@ -63,7 +63,16 @@ class WiseChatStatsShortcode {
 
             $this->messagesService->startUpMaintenance();
 
-            return $this->renderer->getRenderedChannelStats($channel);
+            /**
+             * Filters HTML outputted by channel stats shortcode:
+             * [wise-chat-channel-stats template="Channel: {channel} Messages: {messages} Users: {users}"]
+             *
+             * @since 2.3.2
+             *
+             * @param string $html A HTML code outputted by channel stats shortcode
+             * @param WiseChatChannel $channel The channel
+             */
+            return apply_filters('wc_chat_channel_stats_html', $this->renderer->getRenderedChannelStats($channel), $channel);
         } else {
             return 'ERROR: channel does not exist';
         }

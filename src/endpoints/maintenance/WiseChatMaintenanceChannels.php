@@ -46,14 +46,32 @@ class WiseChatMaintenanceChannels {
 	protected $usersDAO;
 
 	/**
+	 * @var WiseChatMessagesService
+	 */
+	protected $messagesService;
+
+	/**
+	 * @var WiseChatChannelsService
+	 */
+	protected $channelsService;
+
+	/**
 	 * @var WiseChatRenderer
 	 */
 	protected $renderer;
 
 	/**
+	 * @var WiseChatUITemplates
+	 */
+	protected $uiTemplates;
+
+	/**
 	 * @var WiseChatOptions
 	 */
 	protected $options;
+
+	/** @var array All required channels (both public and direct) */
+	private $channelsStorage;
 
 	public function __construct() {
 		$this->options = WiseChatOptions::getInstance();
@@ -66,6 +84,10 @@ class WiseChatMaintenanceChannels {
 		$this->renderer = WiseChatContainer::getLazy('rendering/WiseChatRenderer');
 		$this->clientSide = WiseChatContainer::getLazy('services/client-side/WiseChatClientSide');
 		$this->channelsSourcesService = WiseChatContainer::getLazy('services/channels/listing/WiseChatChannelsSourcesService');
+		$this->messagesService = WiseChatContainer::getLazy('services/WiseChatMessagesService');
+		$this->channelsService = WiseChatContainer::getLazy('services/WiseChatChannelsService');
+		$this->uiTemplates = WiseChatContainer::getLazy('rendering/WiseChatUITemplates');
+		$this->channelsStorage = array();
 	}
 
 	/**
@@ -75,22 +97,40 @@ class WiseChatMaintenanceChannels {
 	public function getPublicChannels() {
 		$result = array();
 		$channels = $this->channelsSourcesService->getPublicChannels();
-		$isChatFull = $this->service->isChatFull(); // TODO: "full" channel convert to "full" chat (including direct channels)
 
-		foreach ($channels as $channel) {
-			$result[] = array(
-				'id' => WiseChatCrypt::encryptToString('c|'.$channel->getId()),
-				'readOnly' => !$this->userService->isSendingMessagesAllowed(),
-				'type' => 'public',
-				'name' => $channel->getName(),
-				'avatar' => $this->options->getIconsURL().'public-channel.png',
-				'full' => $isChatFull,
-				'protected' => $this->isProtectedChannel($channel),
-				'authorized' => $this->authorization->isUserAuthorizedForChannel($channel)
-			);
+		foreach ($channels as $key => $channel) {
+			$result[] = $this->publicChannelToPlain($channel);
+			if ($key === 2) {
+				break;
+			}
 		}
 
 		return $result;
+	}
+
+	/**
+	 * @param WiseChatChannel $channel
+	 * @return array
+	 * @throws Exception
+	 */
+	private function publicChannelToPlain($channel) {
+		static $isChatFull = null;
+
+		// TODO: "full" channel convert to "full" chat (including direct channels)
+		if ($isChatFull === null) {
+			$isChatFull = $this->service->isChatFull();
+		}
+
+		return array(
+			'id' => $this->clientSide->encryptPublicChannelId($channel->getId()),
+			'readOnly' => !$this->userService->isSendingMessagesAllowed() && !$this->authentication->isAuthenticatedExternally(),
+			'type' => 'public',
+			'name' => $channel->getName(),
+			'avatar' => $this->options->getIconsURL() . 'public-channel.png',
+			'full' => $isChatFull,
+			'protected' => $this->isProtectedChannel($channel),
+			'authorized' => $this->authorization->isUserAuthorizedForChannel($channel)
+		);
 	}
 
 	/**
@@ -98,68 +138,10 @@ class WiseChatMaintenanceChannels {
 	 */
 	public function getDirectChannels() {
 		$plainUsers = [];
-		$userId = $this->authentication->getUserIdOrNull();
 		$channelUsers = $this->channelsSourcesService->getDirectChannels();
 
 		foreach ($channelUsers as $channelUser) {
-			// text color defined by role:
-			$textColor = $this->userService->getTextColorDefinedByUserRole($channelUser->getUser());
-
-			// custom text color:
-			if ($this->options->isOptionEnabled('allow_change_text_color', true)) {
-				$textColorProposal = $channelUser->getUser()->getDataProperty('textColor');
-				if ($textColorProposal) {
-					$textColor = $textColorProposal;
-				}
-			}
-
-			// avatar:
-			$avatarSrc = $this->options->isOptionEnabled('show_users_list_avatars', true) ? $this->userService->getUserAvatar($channelUser->getUser()) : null;
-
-			$isCurrentUser =  $userId === $channelUser->getUserId();
-
-			// add roles as css classes:
-			$roleClasses = $this->options->isOptionEnabled('css_classes_for_user_roles', false) ? $this->userService->getCssClassesForUserRoles($channelUser->getUser()) : null;
-
-			$countryFlagSrc = null;
-			$countryCode = null;
-			$country = null;
-			$city = null;
-
-			if ($this->options->isOptionEnabled('collect_user_stats', false) && $this->options->isOptionEnabled('show_users_flags', false)) {
-				$countryCode = $channelUser->getUser()->getDataProperty('countryCode');
-				$country = $channelUser->getUser()->getDataProperty('country');
-				if ($countryCode) {
-					$countryFlagSrc = $this->options->getFlagURL(strtolower($countryCode));
-				}
-			}
-			if ($this->options->isOptionEnabled('collect_user_stats', false) && $this->options->isOptionEnabled('show_users_city_and_country', false)) {
-				$city = $channelUser->getUser()->getDataProperty('city');
-				$countryCode = $channelUser->getUser()->getDataProperty('countryCode');
-			}
-
-			$isAllowed = false;
-			$url = null;
-			if ($this->options->isOptionEnabled('users_list_linking', false)) {
-				$url = $this->userService->getUserProfileLink($channelUser->getUser(), $channelUser->getUser()->getName(), $channelUser->getUser()->getWordPressId());
-			}
-
-			$plainUser = [
-				'id' => $this->clientSide->encryptDirectChannelId($channelUser->getUser()->getId()),
-				'name' => $channelUser->getUser()->getName(),
-				'type' => 'direct',
-				'readOnly' => true,
-				'url' => $url,
-				'textColor' => $textColor,
-				'avatar' => $avatarSrc,
-				'locked' => $isCurrentUser,
-				'classes' => $roleClasses,
-				'online' => $channelUser->isActive(),
-				'countryCode' => $countryCode,
-				'country' => $country,
-				'city' => $city,
-				'countryFlagSrc' => $countryFlagSrc
-			];
+			$plainUser = $this->clientSide->getChannelUserAsPlainDirectChannel($channelUser);
 
 			$plainUsers[$channelUser->getUser()->getId()] = $plainUser;
 		}
@@ -185,10 +167,123 @@ class WiseChatMaintenanceChannels {
 	}
 
 	/**
+	 * @return string|null Channel client ID
+	 */
+	public function getAutoOpenChannel() {
+		if ($this->options->isOptionNotEmpty('auto_open')) {
+			$currentUser = $this->authentication->getUser();
+			$channelUser = null;
+
+			// try to read from cache:
+			if ($currentUser->getDataProperty('auto_open_direct_channel')) {
+				$autoOpenDirectChannelCandidate = $currentUser->getDataProperty('auto_open_direct_channel');
+				$user = $this->usersDAO->get($autoOpenDirectChannelCandidate);
+				if ($user) {
+					$channelUser = $this->channelUsersDAO->getByUserId($user->getId());
+
+					if ($channelUser) {
+						$channelUser->setUser($user);
+					} else {
+						$channelUser = new WiseChatChannelUser();
+						$channelUser->setUser($user);
+						$channelUser->setActive(false);
+						$channelUser->setUserId($user->getId());
+					}
+				}
+			}
+
+			if (!$channelUser) {
+				$autoOpenChannelCandidates = (array) $this->options->getOption('auto_open', array());
+
+				// TODO: settings - auto open strategy
+				$offlineUsers = array();
+				$onlineUsers = array();
+				foreach ($autoOpenChannelCandidates as $autoOpenChannelCandidate) {
+					if (intval($autoOpenChannelCandidate) === $currentUser->getId()) {
+						continue;
+					}
+
+					$user = $this->usersDAO->createOrGetBasedOnWordPressUserId($autoOpenChannelCandidate);
+					$channelUser = $this->channelUsersDAO->getByUserId($user->getId());
+
+					if ($channelUser) {
+						$channelUser->setUser($user);
+						if ($channelUser->isActive()) {
+							$onlineUsers[] = $channelUser;
+						} else {
+							$offlineUsers[] = $channelUser;
+						}
+					} else {
+						$channelUser = new WiseChatChannelUser();
+						$channelUser->setUser($user);
+						$channelUser->setActive(false);
+						$channelUser->setUserId($user->getId());
+						$offlineUsers[] = $channelUser;
+					}
+				}
+
+				$channelUser = null;
+				if (count($onlineUsers) > 0) {
+					$channelUser = $onlineUsers[array_rand($onlineUsers)];
+				} else if (count($offlineUsers) > 0) {
+					$channelUser = $offlineUsers[array_rand($offlineUsers)];
+				}
+			}
+
+			if ($channelUser) {
+				// add a welcome message:
+				if (!$currentUser->hasDataProperty('auto_open_direct_channel')) {
+					$welcomeMessage = $this->uiTemplates->getWelcomeMessage($channelUser->getUser(), $this->authentication->getUser());
+
+					if ($welcomeMessage) {
+						$this->messagesService->addMessage(
+							$channelUser->getUser(), $this->channelsService->getDirectChannel(), $welcomeMessage, array(), false, $this->authentication->getUser(), null,
+							array('disableFilters' => true, 'disableCrop' => true)
+						);
+					}
+				}
+
+				// store the selection:
+				$currentUser->setDataProperty('auto_open_direct_channel', $channelUser->getUserId());
+				$this->usersDAO->save($currentUser);
+
+				$this->channelsStorage[] = $this->clientSide->getChannelUserAsPlainDirectChannel($channelUser);
+
+				return $this->clientSide->encryptDirectChannelId($channelUser->getUserId());
+			}
+		} else {
+			// open the 1st public channel:
+			if ($this->options->isOptionEnabled('auto_open_first_public_channel', true) && $this->arePublicChannelsEnabled()) {
+				$channels = (array) $this->options->getOption('channel');
+				if (count($channels) > 0) {
+					$channel = $this->channelsSourcesService->getPublicChannelByName($channels[0]);
+					if ($channel) {
+						$this->channelsStorage[] = $this->publicChannelToPlain($channel);
+
+						return $this->clientSide->encryptPublicChannelId($channel->getId());
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public function getChannels() {
+		return $this->channelsStorage;
+	}
+
+	public function arePublicChannelsEnabled() {
+		return $this->options->getIntegerOption('mode', 0) === 0 && !($this->options->isOptionEnabled('classic_disable_channel', false))
+					|| $this->options->getIntegerOption('mode', 0) === 1 && !($this->options->isOptionEnabled('fb_disable_channel', false));
+	}
+
+	/**
 	 * @param WiseChatChannel $channel
 	 * @return bool
 	 */
 	private function isProtectedChannel($channel) {
 		return $channel !== null && $channel->getPassword();
 	}
+
 }

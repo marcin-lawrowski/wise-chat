@@ -19,6 +19,7 @@ class AuthUserName extends React.Component {
 		};
 
 		this.handleAuth = this.handleAuth.bind(this);
+		this.renderAuthButton = this.renderAuthButton.bind(this);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -41,30 +42,38 @@ class AuthUserName extends React.Component {
 		} else {
 			this.props.sendAuth(this.AUTH_MODE, {
 				name: this.state.input,
+				fields: [],
 				nonce: this.props.auth.nonce
 			});
 		}
 	}
 
+	renderAuthButton() {
+		return <button
+			type="button"
+			className="wcButton"
+			onClick={ this.handleAuth }
+			disabled={ this.props.authResult && this.props.authResult.inProgress }
+		>{ this.props.configuration.i18n.logIn }</button>
+	}
+
 	render() {
 		return(
 			<div className="wcAuthForm wcAuthUserName">
-				<div className="wcHint">{ this.props.configuration.i18n.enterUserName }</div>
-
-				<div className="wcFormRow">
-					<input
-						type="text"
-						className="wcInputText wcUserName"
-						value={ this.state.input }
-						onChange={ e => this.setState({ input: e.currentTarget.value })}
-						disabled={ this.props.authResult && this.props.authResult.inProgress }
-					/>
-					<button
-						type="button"
-						className="wcButton"
-						onClick={ this.handleAuth }
-						disabled={ this.props.authResult && this.props.authResult.inProgress }
-					>{ this.props.configuration.i18n.logIn }</button>
+				<div className="wcAuthFieldContainer">
+					<label htmlFor="wcAuthFieldUserName">{ this.props.configuration.i18n.enterUserName }</label>
+					<div className="wcFormRow">
+						<input
+							id="wcAuthFieldUserName"
+							type="text"
+							className="wcInputText wcUserName"
+							value={ this.state.input }
+							onChange={ e => this.setState({ input: e.currentTarget.value })}
+							disabled={ this.props.authResult && this.props.authResult.inProgress }
+							maxLength={ this.props.configuration.interface.customization.userNameLengthLimit }
+						/>
+						{ this.renderAuthButton() }
+					</div>
 				</div>
 			</div>
 		)

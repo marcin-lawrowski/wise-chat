@@ -1,0 +1,109 @@
+@mixin reactions {
+
+  /* buttons */
+  .wcReactionsButtons {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-top: 2px;
+    justify-content: space-between;
+
+    .wcReactionsButtonsList {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .wcReactionButton {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        outline: none;
+        text-decoration: none;
+
+        &.wcReactionButtonActive span {
+          font-weight: bold;
+        }
+
+        img {
+          margin-right: 2px;
+        }
+
+        &:not(:last-child) {
+          margin-right: 8px;
+        }
+
+        &.wcReactionLike {
+          img {
+            padding-bottom: 2px;
+            height: 0.8rem;
+          }
+        }
+
+        &.wcReactionLove {
+          img {
+            height: 0.8rem;
+          }
+        }
+
+        &.wcReactionSad {
+          img {
+            height: 0.8rem;
+          }
+        }
+      }
+    }
+
+    .wcTime {
+      margin-left: 10px;
+    }
+  }
+
+  /* stats */
+  .wcReactionsCounters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2px;
+
+    .wcReactionCounter {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      > span {
+        padding-right: 1px;
+        font-size: 0.9em;
+      }
+
+      &:not(:last-child) {
+        margin-right: 3px;
+      }
+
+      &.wcReactionLike {
+        img {
+          padding-bottom: 4px;
+          height: 0.8rem;
+        }
+      }
+
+      &.wcReactionLove {
+        img {
+          padding-bottom: 1px;
+          height: 0.8rem;
+        }
+      }
+
+      &.wcReactionSad {
+        img {
+          padding-bottom: 1px;
+          height: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .wcReactionsCounters + .wcReactionsButtons {
+    margin-top: 0;
+  }
+
+}

@@ -17,6 +17,20 @@ class WiseChatGeoService {
 	public function getGeoDetails($ipAddress) {
         WiseChatContainer::load('model/WiseChatGeoDetails');
 
+        /**
+         * Allows to implement custom geo-coding method. Based on given IP address
+         * it should either return fully filled WiseChatGeoDetails object or null
+         * if IP address could not be geo-coded.
+         *
+         * @since 2.3.2
+         *
+         * @param string $ipAddress
+         */
+        $details = apply_filters('wc_user_geo_code', $ipAddress);
+        if ($details instanceof WiseChatGeoDetails) {
+            return $details;
+        }
+
         if (!function_exists('curl_init') || strlen($ipAddress) == 0 || $ipAddress == '127.0.0.1' || $ipAddress == '::1') {
             return null;
         }

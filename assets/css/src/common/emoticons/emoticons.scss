@@ -1,4 +1,7 @@
 @import "./set01";
+@import "./set02";
+@import "./set03";
+@import "./set04";
 
 @mixin emoticons {
   img.wcEmoticon, span.wcEmoticon {
@@ -9,5 +12,8 @@
     margin-left: 2px;
 
     @include set01;
+    @include set02;
+    @include set03;
+    @include set04;
   }
 }

@@ -11,7 +11,8 @@ class WiseChatLinksPreFilter {
     const URL_YOUTUBE_REGEXP_2 = "/((https|http)\:\/\/)?([\-_a-z0-9A-Z]+\.)*youtu\.be\/([^\&\"'<>\n\r ]+)[^\"'<>\n\r ]*/i";
 	const URL_IMAGE_REGEXP = "/((https|http|ftp)\:\/\/)?([\-_a-z0-9A-Z]+\.)+[a-zA-Z]{2,6}(\/[^ \?]*)?\.(jpg|jpeg|gif|png)(\?[^\"'<>\n\r ]+)?/i";
 	const URL_PROTOCOLS_REGEXP = "/^(https|http|ftp)\:\/\//i";
-	
+	const GENERAL_SHORTCODE_REGEXP = '/\[[a-z]+ [^]]+]/';
+
 	/**
 	* @var WiseChatImagesService
 	*/
@@ -51,14 +52,21 @@ class WiseChatLinksPreFilter {
 	* @return string
 	*/
 	public function filter($text, $detectAndDownloadImages, $detectYouTubeVideos = false) {
+		// preserve all incoming shortcodes:
+		$this->replacementOffset = 0;
+		$shortcodes = array();
+		preg_match_all(self::GENERAL_SHORTCODE_REGEXP, $text, $matchesShortcodes);
+		if (count($matchesShortcodes) > 0) {
+			foreach ($matchesShortcodes[0] as $key => $detectedShortcode) {
+				$encodedKey = sha1($key.$detectedShortcode);
+				$text = $this->strReplaceFirst($detectedShortcode, $encodedKey, $text);
+				$shortcodes[$encodedKey] = $detectedShortcode;
+			}
+		}
+
 		$this->replacementOffset = 0;
 		$this->createdAttachments = array();
-		
-		if (preg_match_all(self::URL_REGEXP, $text, $matches)) {
-			if (count($matches) == 0) {
-				return $text;
-			}
-			
+		if (preg_match_all(self::URL_REGEXP, $text, $matches) && count($matches) > 0) {
 			foreach ($matches[0] as $detectedURL) {
 				$shortCode = null;
 				$regularLink = false;
@@ -102,6 +110,12 @@ class WiseChatLinksPreFilter {
 					$text = $this->strReplaceFirst($detectedURL, $shortCode, $text);
 				}
 			}
+		}
+
+		// restore shortcodes:
+		$this->replacementOffset = 0;
+		foreach ($shortcodes as $encodedKey => $detectedShortcode) {
+			$text = $this->strReplaceFirst($encodedKey, $detectedShortcode, $text);
 		}
 		
 		return $text;

@@ -1,0 +1,25 @@
+@mixin channel-input-xxs {
+
+  .wcChannelInput .wcInputs {
+    .wcInput {
+      min-width: unset;
+      width: 100%;
+    }
+    .wcInputButtons {
+      .wcInputButton {
+        width: 28px;
+        background-size: 25px 25px !important;
+      }
+      button.wcSubmit {
+        font-size: 0;
+        background-image: url(../../gfx/icons/send.svg) !important;
+        background-position: center center !important;
+        background-size: 25px 25px !important;
+        background-repeat: no-repeat !important;
+        width: 30px;
+        height: 25px;
+      }
+    }
+  }
+
+}

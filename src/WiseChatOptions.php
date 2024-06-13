@@ -60,6 +60,7 @@ class WiseChatOptions {
 		if (getenv('WC_ENV') === 'DEV') {
 			return;
 		}
+
 		if (false === ($value = get_transient(self::ENGINE_CONFIG_FRESH_FLAG_TRANSIENT_KEY))) {
 			$filePath = dirname(__FILE__).DIRECTORY_SEPARATOR.'endpoints'.DIRECTORY_SEPARATOR.'engines.json';
 			if (file_exists($filePath) && is_writable($filePath)) {
@@ -68,7 +69,7 @@ class WiseChatOptions {
 			set_transient(self::ENGINE_CONFIG_FRESH_FLAG_TRANSIENT_KEY, '1', 24 * HOUR_IN_SECONDS);
 		}
 	}
-	
+
 	public function getBaseDir() {
 		return $this->baseDir;
 	}
@@ -123,7 +124,7 @@ class WiseChatOptions {
 		$excludeFromI18n = array('message_max_length');
 
 		if (!in_array($property, $excludeFromI18n)) {
-			if (preg_match('/^message_/', $property) || $property === 'hint_message') {
+			if (preg_match('/^message_/', $property) || in_array($property, array('hint_message', 'user_name_prefix', 'window_title', 'users_list_search_hint'))) {
 				// translate the string using WordPress i18n:
 				if (!array_key_exists('custom_i18n', $this->options) || $this->options['custom_i18n'] !== 1) {
 					return $default;
@@ -142,7 +143,15 @@ class WiseChatOptions {
 	* @return boolean
 	*/
 	public function isOptionNotEmpty($property) {
-		return is_array($this->options) && array_key_exists($property, $this->options) && $this->options[$property];
+		if (is_array($this->options) && array_key_exists($property, $this->options)) {
+			if (is_array($this->options[$property])) {
+				return count($this->options[$property]) > 0;
+			} else if (strlen($this->options[$property]) > 0) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 	
 	/**
@@ -154,7 +163,7 @@ class WiseChatOptions {
 	* @return string
 	*/
 	public function getEncodedOption($property, $default = '') {
-		return htmlentities((string) $this->getOption($property, $default), ENT_QUOTES, 'UTF-8');
+		return htmlentities($this->getOption($property, $default), ENT_QUOTES, 'UTF-8');
 	}
 	
 	/**

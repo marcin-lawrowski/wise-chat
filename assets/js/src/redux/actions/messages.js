@@ -1,3 +1,5 @@
+import $ from "jquery";
+
 export function sendMessage(content, attachments, customParameters, channelId) {
 
 	return function(dispatch, getState, {engine, configuration}) {
@@ -12,6 +14,10 @@ export function sendMessage(content, attachments, customParameters, channelId) {
 			},
 			(result) => {
 				dispatch({ type: "message.send", id: channelId, data: { inProgress: false, success: true, progress: 100, result: result } });
+				if (result.channelMapping) {
+					dispatch({ type: "application.channel.map", from: result.channelMapping.from, to: result.channelMapping.to });
+					dispatch({ type: "ui.channel.map", from: result.channelMapping.from, to: result.channelMapping.to, userCacheId: getState().application.user.cacheId });
+				}
 			},
 			(progress) => {
 				dispatch({ type: "message.send", id: channelId, data: { progress: progress } });
@@ -74,12 +80,55 @@ export function deleteMessages(ids) {
 	}
 }
 
+export function replaceMessage(message) {
+	return function(dispatch) {
+		dispatch({
+			type: "message.replace",
+			message: message
+		});
+	}
+}
+
+export function refreshMessage(id, channel) {
+
+	return function(dispatch, getState, {engine, configuration}) {
+		engine.getMessage({
+				id: id,
+				channel: channel,
+				checksum: configuration.checksum
+			},
+			response => {
+				if ($.isArray(response.result)) {
+					response.result.map( message => {
+						dispatch({
+							type: "message.replace",
+							message: message
+						});
+					});
+				}
+			},
+			error => { }
+		);
+	}
+
+}
+
 export function refreshSender(id, name) {
 	return function(dispatch) {
 		dispatch({
 			type: "messages.sender.replace",
 			id: id,
 			name: name
+		});
+	}
+}
+
+export function refreshMessageReactionsCounters(id, reactions) {
+	return function(dispatch) {
+		dispatch({
+			type: "message.reactions.counters.replace",
+			id: id,
+			reactions: reactions
 		});
 	}
 }
@@ -99,5 +148,11 @@ export function prepareImage(data, channelId) {
 				dispatch({ type: "message.image", id: channelId, data: { inProgress: false, success: false, error: error } });
 			}
 		);
+	}
+}
+
+export function clear() {
+	return {
+		type: 'messages.clear'
 	}
 }

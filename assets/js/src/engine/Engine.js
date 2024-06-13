@@ -70,6 +70,17 @@ export default class Engine {
 	}
 
 	/**
+	 * Loads a single message.
+	 *
+	 * @param {Object} messageRequest
+	 * @param {Function} successListener
+	 * @param {Function} errorListener
+	 */
+	getMessage(messageRequest, successListener, errorListener) {
+		console.log('Not implemented');
+	}
+
+	/**
 	 * Sends user command.
 	 *
 	 * @param {String} command

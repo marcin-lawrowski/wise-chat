@@ -38,9 +38,9 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 				'tab' => Controls_Manager::TAB_CONTENT,
 			]
 		);
-		$this->addText('channel', esc_html__( 'Channel', 'wise-chat' ), 'global');
+
+		$this->addText('channel', esc_html__( 'Channels', 'wise-chat' ), 'global');
 		$this->addCheckbox('access_mode', esc_html__( 'Disable Anonymous Users', 'wise-chat' ), '');
-		$this->addCheckbox('force_user_name_selection', esc_html__( 'Force Username Selection', 'wise-chat' ), '');
 		$this->addSettingsLink('chat_settings_advanced', 'general');
 		$this->end_controls_section();
 
@@ -51,6 +51,9 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 			'lightgray' => esc_html__('Light Gray', 'wise-chat'),
 			'colddark' => esc_html__('Cold Dark', 'wise-chat'),
 			'airflow' => esc_html__('Air Flow', 'wise-chat'),
+			'crystal' => esc_html__('Crystal', 'wise-chat'),
+			'clear' => esc_html__('Clear', 'wise-chat'),
+			'balloon' => esc_html__('Balloon', 'wise-chat'),
 		), 'lightgray');
 		$this->addText('chat_width', esc_html__( 'Width', 'wise-chat' ), '100%');
 		$this->addText('chat_height', esc_html__( 'Height', 'wise-chat' ), '500px');
@@ -187,6 +190,7 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$settings = $this->get_settings_for_display();
 
 		$config = array(
+			'mode' => 0,
 			'window_title' => $settings['window_title'],
 			'channel' => $settings['channel'],
 			'access_mode' => $settings['access_mode'],
@@ -245,19 +249,6 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 				'raw' => sprintf(
 					'<a href="%s" class="elementor-button elementor-button-default" target="_blank">%s</a>',
 					$url, esc_html__( 'Advanced Settings', 'wise-chat' )
-				)
-			]
-		);
-
-		$url = site_url().'/wp-admin/options-general.php?page=wise-chat-admin#tab=pro';
-
-		$this->add_control(
-			$id.'_pro_link',
-			[
-				'type' => Controls_Manager::RAW_HTML,
-				'raw' => sprintf(
-					'<a href="%s" class="elementor-button elementor-button-default" style="background-color: #4f3b5e; color: #fff;" target="_blank">%s</a>',
-					$url, 'Check Wise Chat Pro'
 				)
 			]
 		);

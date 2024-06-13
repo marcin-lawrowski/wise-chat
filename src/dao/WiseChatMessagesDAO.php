@@ -74,16 +74,20 @@ class WiseChatMessagesDAO {
 			'text' => $message->getText(),
 			'avatar_url' => $message->getAvatarUrl(),
 			'channel' => $message->getChannelName(),
-			'ip' => $message->getIp(),
+			'ip' => $message->getIp()
 		);
 
 		// update or insert:
 		if ($message->getId() !== null) {
 			$columns['user_id'] = $message->getWordPressUserId();
+			$columns['chat_recipient_id'] = $message->getRecipientId();
 			$wpdb->update($this->table, $columns, array('id' => $message->getId()), '%s', '%d');
 		} else {
 			if ($message->getWordPressUserId() > 0) {
 				$columns['user_id'] = $message->getWordPressUserId();
+			}
+			if ($message->getRecipientId() > 0) {
+				$columns['chat_recipient_id'] = $message->getRecipientId();
 			}
 			$wpdb->insert($this->table, $columns);
 			$message->setId($wpdb->insert_id);
@@ -214,11 +218,91 @@ class WiseChatMessagesDAO {
 	}
 
 	/**
+	 * @param WiseChatMessage $message
+	 *
+	 * @return WiseChatMessage[]
+	 */
+	public function getAllRepliesToMessage($message) {
+		global $wpdb;
+
+		$sql = sprintf("SELECT * FROM %s WHERE reply_to_message_id = %d LIMIT 100", $this->table, $message->getId());
+		$messagesRaw = $wpdb->get_results($sql);
+
+		return $this->populateMultiData($messagesRaw);
+	}
+
+	/**
+	 * @param WiseChatUser $user
+	 * @param WiseChatChannel $channel
+	 * @param integer $limit
+	 *
+	 * @return WiseChatMessage[]
+	 */
+	public function getAllNewestDirectMessages($user, $channel, $limit) {
+		global $wpdb;
+
+		$messages = array();
+
+		// get the newest direct messages when the user is the sender  (group by chat_recipient_id and get the max by time):
+		$sql = sprintf("SELECT o.*
+			FROM `%s` o
+		  	LEFT JOIN `%s` b ON o.chat_recipient_id = b.chat_recipient_id 
+			      	AND o.time < b.time AND b.channel = '%s' AND b.chat_recipient_id IS NOT NULL
+			      	AND b.chat_recipient_id != '' AND b.chat_user_id = %d AND b.admin = 0
+			WHERE b.time IS NULL AND o.channel = '%s' AND o.chat_recipient_id IS NOT NULL
+			      	AND o.chat_recipient_id != '' AND o.chat_user_id = %d AND o.admin = 0
+			ORDER BY o.time DESC LIMIT %d
+			", $this->table, $this->table, addslashes($channel->getName()), $user->getId(), addslashes($channel->getName()), $user->getId(), $limit);
+
+		$ownMessages = $wpdb->get_results($sql);
+		foreach ($ownMessages as $ownMessage) {
+			$messages[$ownMessage->chat_recipient_id][$ownMessage->time] = $ownMessage;
+		}
+
+		// get the newest direct messages when the user is the recipient (group by chat_user_id and get the max by time):
+		$sql = sprintf("SELECT o.*
+			FROM `%s` o
+		  	LEFT JOIN `%s` b ON o.chat_user_id = b.chat_user_id 
+			      	AND o.time < b.time AND b.channel = '%s' AND b.chat_recipient_id IS NOT NULL
+			      	AND b.chat_recipient_id != '' AND b.chat_recipient_id = %d AND b.admin = 0
+			WHERE b.time IS NULL AND o.channel = '%s' AND o.chat_recipient_id IS NOT NULL
+			      	AND o.chat_recipient_id != '' AND o.chat_recipient_id = %d AND o.admin = 0
+			ORDER BY o.time DESC LIMIT %d
+			", $this->table, $this->table, addslashes($channel->getName()), $user->getId(), addslashes($channel->getName()), $user->getId(), $limit);
+
+		$receivedMessages = $wpdb->get_results($sql);
+		foreach ($receivedMessages as $receivedMessage) {
+			$messages[$receivedMessage->chat_user_id][$receivedMessage->time] = $receivedMessage;
+		}
+
+		// get the newest messages of each chat participant:
+		$messagesByTime = array();
+		foreach ($messages as $chatParticipantId => $directMessages) {
+			krsort($directMessages);
+			reset($directMessages);
+			$firstTimestamp = key($directMessages);
+
+			$messagesByTime[] = $directMessages[$firstTimestamp];
+		}
+
+		// sort by time descending:
+		usort($messagesByTime, function($a, $b) { return $a->time > $b->time ? -1 : 1; });
+
+		$messages = array();
+		foreach ($messagesByTime as $messageRaw) {
+			$messages[] = self::populateData($messageRaw);
+		}
+
+		return $messages;
+	}
+
+	/**
 	 * Returns array of SQL WHERE conditions based on given criteria.
 	 *
 	 * @param WiseChatMessagesCriteria $criteria
 	 *
 	 * @return array
+	 * @throws Exception
 	 */
 	private function getSQLConditionsByCriteria($criteria) {
 		$conditions = array();
@@ -231,17 +315,36 @@ class WiseChatMessagesDAO {
 				$conditions[] = "channel IN ('".implode("', '", $channelNames)."')";
 			}
 		}
+		if ($criteria->getRecipientOrSenderId() !== null) {
+			$id = intval($criteria->getRecipientOrSenderId());
+			if ($criteria->isIncludeOnlyPrivateMessages()) {
+				$conditions[] = "(chat_recipient_id IS NOT NULL AND chat_recipient_id != '' AND (chat_user_id = $id OR chat_recipient_id = $id))";
+			} else {
+				$conditions[] = "(chat_recipient_id IS NULL OR chat_recipient_id = '' OR chat_user_id = $id OR chat_recipient_id = $id)";
+			}
+		} else if ($criteria->isIncludeOnlyPrivateMessages()) {
+			$conditions[] = "(chat_recipient_id IS NOT NULL AND chat_recipient_id != '')";
+		} else {
+			$conditions[] = "(chat_recipient_id IS NULL OR chat_recipient_id = '')";
+		}
+		if (count($criteria->getDirectChatters()) > 0) {
+			$chatters = $criteria->getDirectChatters();
+			if (count($chatters) !== 2) {
+				throw new Exception('Invalid number of chatters');
+			}
+			$conditions[] = "((chat_user_id = {$chatters[0]} AND chat_recipient_id = {$chatters[1]}) OR (chat_user_id = {$chatters[1]} AND chat_recipient_id = {$chatters[0]}))";
+		}
 		if ($criteria->getUserId() !== null) {
 			$conditions[] = "chat_user_id = ".intval($criteria->getUserId());
 		}
 		if ($criteria->getOffsetId() !== null) {
 			$conditions[] = "id > ".intval($criteria->getOffsetId());
 		}
-		if (!$criteria->isIncludeAdminMessages()) {
-			$conditions[] = "admin = 0";
-		}
 		if ($criteria->getMaximumMessageId() !== null) {
 			$conditions[] = "id < ".intval($criteria->getMaximumMessageId());
+		}
+		if (!$criteria->isIncludeAdminMessages()) {
+			$conditions[] = "admin = 0";
 		}
 		if ($criteria->getMaximumTime() !== null) {
 			$conditions[] = "time < ".intval($criteria->getMaximumTime());
@@ -287,6 +390,9 @@ class WiseChatMessagesDAO {
 		if ($messageRawData->user_id) {
 			$message->setWordPressUserId(intval($messageRawData->user_id));
 		}
+		if ($messageRawData->chat_recipient_id) {
+			$message->setRecipientId(intval($messageRawData->chat_recipient_id));
+		}
 
 		return $message;
 	}
@@ -309,6 +415,9 @@ class WiseChatMessagesDAO {
 		foreach ($messagesRaw as $messageRaw) {
 			$message = self::populateData($messageRaw);
 			$messagesToComplete[$message->getUserId()][] = $message;
+			if ($message->getRecipientId() > 0) {
+				$messagesRecipientsToComplete[$message->getRecipientId()][] = $message;
+			}
 			$messages[] = $message;
 		}
 
@@ -360,9 +469,12 @@ class WiseChatMessagesDAO {
 		$channels = $this->channelsDAO->getAll();
 		$fullSummary = array();
 		foreach ($channels as $channel) {
+			if (strpos($channel->getName(), 'bp-chat') === 0) {
+				continue;
+			}
 			if (array_key_exists($channel->getName(), $mainSummaryMap)) {
 				$channelPrepared = $mainSummaryMap[$channel->getName()];
-				$channelPrepared->secured = $channel->getPassword() && strlen($channel->getPassword()) > 0;
+				$channelPrepared->secured = $channel->getPassword() ? true : false;
 				$fullSummary[] = $channelPrepared;
 			} else {
 				$fullSummary[] = (object) array(
@@ -370,7 +482,7 @@ class WiseChatMessagesDAO {
 					'messages' => 0,
 					'users' => 0,
 					'last_message' => null,
-					'secured' => $channel->getPassword() ? true : false
+					'secured' => $channel->getPassword()
 				);
 			}
 		}

@@ -1,14 +1,13 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { confirm } from "actions/ui";
+import Link from "../../channel/components/Link";
 
 class DirectChannel extends React.Component {
 
 	constructor(props) {
 		super(props);
 
-		this.handleChannelClick = this.handleChannelClick.bind(this);
 		this.handleAvatarError = this.handleAvatarError.bind(this);
 	}
 
@@ -16,22 +15,12 @@ class DirectChannel extends React.Component {
 		e.target.src = this.props.configuration.baseDir + '/gfx/icons/user.png';
 	}
 
-	handleChannelClick(e) {
-		if (this.props.channel.url) {
-			return;
-		}
-		e.preventDefault();
-	}
-
 	render() {
 		return(
-			<a
-				ref={ this.props.forwardedRef }
-				href={ this.props.channel.url ? this.props.channel.url : '#'}
-				onClick={ e => this.handleChannelClick(e) }
-				target='_blank'
-				rel='noopener noreferrer nofollow'
-				className={ "wcChannelTrigger" + (this.props.highlighted ? ' wcAnimation wcAnimationFlash' : '') }
+			<Link
+				channel={ this.props.channel }
+				forwardedRef={ this.props.forwardedRef }
+				className={ "wcChannelTrigger" + (this.props.channel.id === this.props.focusedChannel ? ' wcFocusedChannel' : '') + (this.props.highlighted ? ' wcAnimation wcAnimationFlash' : '') }
 				onMouseEnter={ this.props.onMouseEnter }
 				onMouseLeave={ this.props.onMouseLeave }
 				onFocus={ this.props.onFocus }
@@ -44,7 +33,7 @@ class DirectChannel extends React.Component {
 					</React.Fragment>
 				}
 				{this.props.channel.avatar && <img src={ this.props.channel.avatar } onError={ this.handleAvatarError } className="wcFunctional wcAvatar" alt={this.props.channel.name}/> }
-				<span className="wcDetails">
+				<span className={ 'wcDetails' + (this.props.configuration.interface.browser.status ? ' wcDetailsWithStatus' : '' ) }>
 						<span
 							className="wcName"
 							style={ { color: this.props.channel.textColor ? this.props.channel.textColor : undefined } }
@@ -55,7 +44,7 @@ class DirectChannel extends React.Component {
 					{this.props.channel.city && <span className="wcCity">{this.props.channel.city}</span> }
 					{this.props.channel.countryCode && <span className="wcCountry">{this.props.channel.countryCode}</span> }
 				</span>
-			</a>
+			</Link>
 		)
 	}
 
@@ -71,8 +60,8 @@ const ConnectedDirectChannel = connect(
 		configuration: state.configuration,
 		i18n: state.application.i18n,
 		ignoredChannels: state.ui.ignoredChannels,
-	}),
-	{ confirm }
+		focusedChannel: state.ui.focusedChannel
+	})
 )(DirectChannel);
 
 export default React.forwardRef(({ open, ...props }, ref) => (

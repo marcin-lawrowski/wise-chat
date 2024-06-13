@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { appendToChannelInput } from "actions/ui";
+import Link from "ui/common/channel/components/Link";
 
 class Sender extends React.Component {
 
@@ -9,12 +10,27 @@ class Sender extends React.Component {
 		super(props);
 
 		this.handleMentionClick = this.handleMentionClick.bind(this);
+		this.renderMode3 = this.renderMode3.bind(this);
 	}
 
 	handleMentionClick(e) {
 		e.preventDefault();
 
 		this.props.appendToChannelInput(this.props.message.channel.id, '@' + this.props.message.sender.name + ':');
+	}
+
+	renderMode3(sender) {
+		return sender.channel ? <Link
+				channel={ sender.channel }
+				className={ "wcUser" }
+				style={{ color: sender.color }}
+			>
+				{ sender.name }
+			</Link>
+			:
+			<span className="wcUser" style={{ color: sender.color }}>
+				{ sender.name }
+			</span>
 	}
 
 	render() {
@@ -57,6 +73,8 @@ class Sender extends React.Component {
 						{ sender.name }
 					</a>
 				}
+
+				{ mode === 3 && this.renderMode3(sender) }
 			</React.Fragment>
 		)
 	}

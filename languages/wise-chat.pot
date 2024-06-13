@@ -1,15 +1,15 @@
-# Copyright (C) 2022 Kainex
+# Copyright (C) 2024 Kainex
 # This file is distributed under the same license as the Wise Chat plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Wise Chat 3.0\n"
+"Project-Id-Version: Wise Chat 3.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wise-chat\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-06-26T23:18:44+02:00\n"
+"POT-Creation-Date: 2024-06-08T11:17:57+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: wise-chat\n"
@@ -23,7 +23,7 @@ msgid "https://kainex.pl/projects/wp-plugins/wise-chat"
 msgstr ""
 
 #. Description of the plugin
-msgid "Fully-featured chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, themes, appearance settings, filters, bans and more."
+msgid "Fully-featured chat plugin for WordPress. Supports multiple channels, private messages, multisite installation, bad words filtering, themes, appearance settings, avatars, filters, bans and more."
 msgstr ""
 
 #. Author of the plugin
@@ -34,20 +34,21 @@ msgstr ""
 msgid "https://kainex.pl"
 msgstr ""
 
-#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:125
+#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:131
 msgid "Only logged in users are allowed to enter the chat"
 msgstr ""
 
-#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:129
+#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:135
 msgid "You are not allowed to enter the chat."
 msgstr ""
 
-#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:133
-#: src/endpoints/WiseChatEndpoint.php:276
+#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:139
+#: src/endpoints/WiseChatEndpoint.php:362
 msgid "You are blocked from using the chat"
 msgstr ""
 
-#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:137
+#: src/endpoints/maintenance/WiseChatMaintenanceAuth.php:143
+#: src/endpoints/WiseChatEndpoint.php:380
 msgid "The chat is closed now"
 msgstr ""
 
@@ -56,158 +57,530 @@ msgid "Unsupported type of file."
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:29
+#: src/services/WiseChatImagesService.php:43
 msgid "The size of the file exceeds allowed limit."
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:30
-msgid "Close"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:31
-msgid "OK"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:32
-msgid "Yes"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:33
-msgid "No"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:34
-msgid "Error"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:35
-msgid "Information"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:36
-msgid "Confirmation"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:37
-#: src/WiseChat.php:125
-#: src/WiseChat.php:236
-msgid "Enter your username"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:38
-msgid "Enter password"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:39
-msgid "Name"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:40
-msgid "Save"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:41
-msgid "Reset"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:42
-msgid "Mute sounds"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:43
-msgid "Text color"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:44
-msgid "Upload a picture"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:45
-msgid "Attach a file"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:46
-msgid "Insert an emoticon"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:47
-msgid "Use Shift+ENTER in order to move to the next line."
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:48
-msgid "Delete the message"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:49
-msgid "Ban this user"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:50
-msgid "Mute this user"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:51
-msgid "Report spam"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:52
-msgid "Are you sure you want to delete this message?"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:53
-msgid "Are you sure you want to ban this user?"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:54
-msgid "The user has been banned."
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:55
-msgid "Are you sure you want to mute this user?"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:56
-msgid "The user has been muted."
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:57
-msgid "Are you sure you want to report the message as spam?"
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:58
-msgid "Thank you for reporting this."
-msgstr ""
-
-#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:59
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:68
 msgid "Search ..."
 msgstr ""
 
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:31
+msgid "Close"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:32
+msgid "OK"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:33
+#: src/integrations/elementor/addons/WiseChatAddon.php:145
+msgid "Yes"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:34
+#: src/integrations/elementor/addons/WiseChatAddon.php:146
+msgid "No"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:35
+msgid "Error"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:36
+msgid "Information"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:37
+msgid "Confirmation"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:38
+#: src/WiseChat.php:286
+msgid "Enter your username"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:39
+msgid "Enter password"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:40
+msgid "Name"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:41
+msgid "Save"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:42
+msgid "Reset"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:43
+msgid "Mute sounds"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:44
+msgid "Enable E-mail Notifications"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:45
+msgid "Text color"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:46
+msgid "Upload a picture"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:47
+msgid "Attach a file"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:48
+msgid "Insert an emoticon"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:49
+msgid "Use Shift+ENTER in order to move to the next line."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:50
+msgid "Approve the message"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:51
+msgid "Delete the message"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:52
+msgid "Edit the message"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:53
+msgid "Reply to"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:54
+msgid "Ban this user"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:55
+msgid "Mute this user"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:56
+msgid "Report spam"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:57
+msgid "Are you sure you want to delete this message?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:58
+msgid "Are you sure you want to ban this user?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:59
+msgid "The user has been banned."
+msgstr ""
+
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:60
-msgid "Settings have been saved."
+msgid "Are you sure you want to mute this user?"
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:61
-msgid "Maximize"
+msgid "The user has been muted."
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:62
-msgid "Minimize"
+msgid "Are you sure you want to report the message as spam?"
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:63
-msgid "The chat is full now. Try again later."
+msgid "Thank you for reporting this."
 msgstr ""
 
 #: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:64
-#: src/WiseChat.php:238
+msgid "Are you sure you want to approve this message?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:65
+msgid "Are you sure you want to leave this conversation?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:66
+msgid "The message has been posted, but first it must be approved by the administrator."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:67
+msgid "Replying to"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:69
+msgid "invites you to the private chat. Do you accept it?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:70
+msgid "Ignore this user"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:71
+msgid "This user is ignored by you. Would you like to stop ignoring this user?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:72
+msgid "No recent chats"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:73
+msgid "You are not allowed to send private messages to this user."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:74
+msgid "Settings have been saved."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:75
+msgid "Maximize"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:76
+msgid "Minimize"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:77
+msgid "The chat is full now. Try again later."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:78
+msgid "Chats archive"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:79
+msgid "Open chats"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:80
+msgid "Unread chats"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:81
+msgid "Unread Messages"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:82
+msgid "Messages Archive"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:83
+msgid "The length of the message exceeds allowed limit."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:84
+msgid "The user is not in the chat"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:85
+#: src/WiseChat.php:290
 msgid "Online users"
 msgstr ""
 
-#: src/services/user/WiseChatAuthentication.php:228
-msgid "Only letters, number, spaces, hyphens and underscores are allowed"
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:86
+msgid "Attaching voice message"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:87
+msgid "Could not initialize the microphone. Please set your web browser to allow for sound recording."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:89
+msgid "Incoming video call"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:90
+msgid "Video call"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:91
+msgid "There is an active video stream in this channel. Are you sure you want to end the call?"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:92
+msgid "Make a video call"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:93
+msgid "The call was not answered"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:94
+msgid "The call was ended by the remote participant"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:95
+msgid "The call was ended"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:96
+msgid "Calling ..."
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:97
+msgid "End the call"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:98
+msgid "Accept"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:99
+msgid "Decline"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:100
+msgid "Mute"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:101
+msgid "Unmute"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:102
+msgid "Camera off"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:103
+msgid "Camera on"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:104
+msgid "Switch to chat"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:105
+msgid "Switch to video call"
+msgstr ""
+
+#: src/endpoints/maintenance/WiseChatMaintenanceI18n.php:106
+msgid "You can open only one video stream at time"
+msgstr ""
+
+#: src/endpoints/WiseChatAuthEndpoint.php:178
+msgid "Invalid password."
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:37
+msgid "Settings"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:42
+#: src/WiseChat.php:279
+msgid "Channels"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:43
+msgid "Disable Anonymous Users"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:47
+#: src/WiseChat.php:147
+#: src/WiseChat.php:308
+msgid "Chat"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:48
+msgid "Window Title"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:49
+msgid "Theme"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:50
+msgid "Default"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:51
+msgid "Light Gray"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:52
+msgid "Cold Dark"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:53
+msgid "Air Flow"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:54
+msgid "Crystal"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:55
+msgid "Clear"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:56
+msgid "Balloon"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:58
+msgid "Width"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:59
+msgid "Height"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:60
+msgid "Messages Order"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:61
+msgid "Newest on the bottom"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:62
+msgid "Newest on the top"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:69
+msgid "Messages"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:70
+msgid "Message Time Mode"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:71
+msgid "Hidden"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:72
+msgid "Full"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:73
+msgid "Elapsed"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:75
+#: src/integrations/elementor/addons/WiseChatAddon.php:107
+msgid "Show Avatars"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:76
+#: src/integrations/elementor/addons/WiseChatAddon.php:94
+#: src/integrations/elementor/addons/WiseChatAddon.php:112
+msgid "Background Color"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:77
+#: src/integrations/elementor/addons/WiseChatAddon.php:95
+#: src/integrations/elementor/addons/WiseChatAddon.php:113
+msgid "Font Color"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:82
+msgid "Input"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:84
+msgid "Show Emoticon Button"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:85
+msgid "Show Image Button"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:86
+msgid "Show File Button"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:87
+msgid "Show Submit Button"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:88
+msgid "Multiline Messages"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:89
+msgid "Show User Name"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:90
+msgid "Input Location"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:91
+msgid "Bottom"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:92
+msgid "Top"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:100
+msgid "Browser"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:101
+msgid "Enabled"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:102
+msgid "Location"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:103
+msgid "Right"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:104
+msgid "Left"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:106
+msgid "Show Users Search Box"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:108
+msgid "Show National Flags"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:109
+msgid "Show City And Country"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:110
+msgid "Show Online / Offline Mark"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:111
+msgid "Show Online Users Counter"
+msgstr ""
+
+#: src/integrations/elementor/addons/WiseChatAddon.php:251
+msgid "Advanced Settings"
+msgstr ""
+
+#: src/rendering/WiseChatUITemplates.php:139
+#: src/rendering/WiseChatUITemplates.php:235
+msgid "Anonymous user"
 msgstr ""
 
 #: src/services/user/WiseChatAuthentication.php:238
+msgid "Only letters, number, spaces, hyphens and underscores are allowed"
+msgstr ""
+
+#: src/services/user/WiseChatAuthentication.php:248
 msgid "This name is already occupied"
+msgstr ""
+
+#: src/services/user/WiseChatAuthentication.php:249
+msgid "Anonymous"
 msgstr ""
 
 #: src/services/WiseChatImagesService.php:242
@@ -215,67 +588,99 @@ msgstr ""
 msgid "Unsupported type of file"
 msgstr ""
 
-#: src/services/WiseChatMessagesService.php:121
+#: src/services/WiseChatMessagesService.php:129
 msgid "You are not allowed to send messages. You have been muted."
 msgstr ""
 
-#: src/WiseChat.php:221
-#: src/WiseChat.php:249
+#: src/WiseChat.php:268
+#: src/WiseChat.php:310
 msgid "Loading the chat ..."
 msgstr ""
 
-#: src/WiseChat.php:222
+#: src/WiseChat.php:269
+msgid "Loading ..."
+msgstr ""
+
+#: src/WiseChat.php:270
 msgid "Sending ..."
 msgstr ""
 
-#: src/WiseChat.php:223
+#: src/WiseChat.php:271
 msgid "Send"
 msgstr ""
 
-#: src/WiseChat.php:225
+#: src/WiseChat.php:272
+msgid "Enter message here"
+msgstr ""
+
+#: src/WiseChat.php:273
 msgid "Customize"
 msgstr ""
 
-#: src/WiseChat.php:226
+#: src/WiseChat.php:274
 msgid "sec. ago"
 msgstr ""
 
-#: src/WiseChat.php:227
+#: src/WiseChat.php:275
 msgid "min. ago"
 msgstr ""
 
-#: src/WiseChat.php:228
+#: src/WiseChat.php:276
 msgid "yesterday"
 msgstr ""
 
-#: src/WiseChat.php:229
+#: src/WiseChat.php:277
 msgid "Insert into message"
 msgstr ""
 
-#: src/WiseChat.php:230
+#: src/WiseChat.php:278
 msgid "Users"
 msgstr ""
 
-#: src/WiseChat.php:231
-msgid "Channels"
-msgstr ""
-
-#: src/WiseChat.php:232
+#: src/WiseChat.php:280
 msgid "Channel"
 msgstr ""
 
-#: src/WiseChat.php:233
+#: src/WiseChat.php:281
 msgid "Recent"
 msgstr ""
 
-#: src/WiseChat.php:234
+#: src/WiseChat.php:282
 msgid "Chats"
 msgstr ""
 
-#: src/WiseChat.php:235
+#: src/WiseChat.php:283
+msgid "Users and Channels"
+msgstr ""
+
+#: src/WiseChat.php:284
 msgid "No channels open."
 msgstr ""
 
-#: src/WiseChat.php:237
+#: src/WiseChat.php:285
+msgid "No chats open."
+msgstr ""
+
+#: src/WiseChat.php:287
 msgid "Log in"
+msgstr ""
+
+#: src/WiseChat.php:288
+msgid "Log in using"
+msgstr ""
+
+#: src/WiseChat.php:289
+msgid "Log in anonymously"
+msgstr ""
+
+#: blocks/wise-chat/build/block.json
+#: blocks/wise-chat/src/block.json
+msgctxt "block title"
+msgid "Wise Chat"
+msgstr ""
+
+#: blocks/wise-chat/build/block.json
+#: blocks/wise-chat/src/block.json
+msgctxt "block description"
+msgid "Chat window"
 msgstr ""

@@ -47,6 +47,7 @@ class CustomizeArea extends React.Component {
 		return {
 			name: this.props.user.name,
 			muteSounds: this.props.user.settings.muteSounds,
+			emailNotifications: this.props.user.settings.enableNotifications,
 			textColor: this.props.user.settings.textColor
 		}
 	}
@@ -102,6 +103,20 @@ class CustomizeArea extends React.Component {
 								type="checkbox"
 								checked={this.state.muteSounds}
 								onChange={e => this.handlePropertySet('muteSounds', e.target.checked)}
+							/>
+						</label>
+					</div>
+				}
+
+				{this.props.user.settings.allowControlUserNotifications &&
+					<div className="wcProperty">
+						<label>
+							{this.props.i18n.enableNotifications}
+							<input
+								className='wcEnableNotifications'
+								type='checkbox'
+								checked={this.state.emailNotifications}
+								onChange={e => this.handlePropertySet('emailNotifications', e.target.checked)}
 							/>
 						</label>
 					</div>

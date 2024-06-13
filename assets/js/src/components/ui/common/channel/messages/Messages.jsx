@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Scrollbar } from "react-scrollbars-custom";
 import Message from "./message/Message";
-import { notify } from "actions/ui";
+import { notify, unreadAdd, unreadClear } from "actions/ui";
 import { logInfo } from "actions/log";
 import { loadPastMessages } from "actions/messages";
 import Loader from "ui/common/Loader";
@@ -29,14 +29,16 @@ class Messages extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const messagesChange = this.props.messages !== prevProps.messages && this.props.messages.length > 0;
+		const messagesChange = this.props.messages !== prevProps.messages;
 		const messagesPastLoaded = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length > 0;
 		const messagesPastLoadedEmpty = this.props.messagesPast !== prevProps.messagesPast && this.props.messagesPast.success === true && this.props.messagesPast.result.length === 0;
 
-		if (messagesChange) {
+		if (messagesChange && this.props.messages.length > 0) {
+			const mode = this.props.configuration.notifications.newMessage.mode;
 			const prevIds = Array.isArray(prevProps.messages) ? prevProps.messages.map( message => message.id ) : [];
 			const diff = this.props.messages.filter(
-				message => !prevIds.includes(message.id) && !message.locked && !message.own
+				message => !prevIds.includes(message.id) && !message.locked && !message.own &&
+					(mode === '' || (mode === 'direct' && this.props.channel.type === 'direct') || (mode === 'public' && this.props.channel.type === 'public'))
 			);
 			if (diff.length > 0 && this.notificationsEnabled) {
 				let wasNotified = false;
@@ -50,8 +52,13 @@ class Messages extends React.Component {
 				if (!wasNotified) {
 					this.props.notify('newMessage');
 				}
+				if (this.props.channel.id !== this.props.focusedChannel) {
+					this.props.unreadAdd(this.props.channel.id, diff.length);
+				}
 			}
+		}
 
+		if (messagesChange) {
 			this.setState( state => ({ messages: this.messagesToState(this.props.messages) }) );
 		}
 
@@ -111,8 +118,8 @@ class Messages extends React.Component {
 					<Loader message={ this.props.configuration.i18n.loading } center={ true } marginTop={ 10 } marginBottom={ 10 } />
 				}
 
-				{ this.state.messages.map( (message, index) =>
-					<Message key={ message.id } channel={ this.props.channel } message={ message } />
+				{ this.state.messages.map( (message, index, array) =>
+					<Message key={ message.id } channel={ this.props.channel } message={ message } previousMessage={ array[index - 1] } />
 				)}
 
 				{ this.props.configuration.messagesOrder !== 'ascending' && this.props.messagesPast && this.props.messagesPast.inProgress &&
@@ -138,5 +145,5 @@ export default connect(
 		messages: state.messages.received[ownProps.channel.id],
 		messagesPast: state.messages.receivedPast[ownProps.channel.id]
 	}),
-	{ notify, logInfo, loadPastMessages }
+	{ notify, unreadAdd, unreadClear, logInfo, loadPastMessages }
 )(Messages);

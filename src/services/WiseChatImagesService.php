@@ -40,7 +40,7 @@ class WiseChatImagesService {
 		$this->checkImagesRequirements();
 		
 		if (strlen($binaryImageData) > $this->options->getIntegerOption('images_size_limit', 3145728)) {
-			throw new Exception($this->options->getEncodedOption('message_error_8'));
+			throw new Exception($this->options->getEncodedOption('message_error_8', __('The size of the file exceeds allowed limit.', 'wise-chat')));
 		}
 		
 		try {

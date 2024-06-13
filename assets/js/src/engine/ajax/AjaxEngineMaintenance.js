@@ -12,11 +12,9 @@ export default class AjaxEngineMaintenance  {
 		this.started = false;
 		this.REFRESH_TIMEOUT = 20000;
 		this.ENDPOINT_URL = configuration.engines.ajax.apiWPEndpointBase + '?action=wise_chat_maintenance_endpoint';
-		this.lastActionId = 0;
 		this.full = true; // run full data request on page load
 		this.request = null;
 		this.interval = null;
-		this.actionsIdsCache = {};
 
 		this.performMaintenanceRequest = this.performMaintenanceRequest.bind(this);
 		this.analyzeResponse = this.analyzeResponse.bind(this);
@@ -90,7 +88,6 @@ export default class AjaxEngineMaintenance  {
 
 		let data = {
 			full: this.full,
-			fromActionId: this.lastActionId,
 			channelIds: this.configuration.channelIds,
 			checksum: this.configuration.checksum
 		};
@@ -105,14 +102,6 @@ export default class AjaxEngineMaintenance  {
 
 	analyzeResponse(maintenance) {
 		try {
-			if (maintenance.lastActionId) {
-				if (this.lastActionId < maintenance.lastActionId) {
-					this.lastActionId = maintenance.lastActionId;
-				}
-			}
-			if (maintenance.actions) {
-				this.executeActions(maintenance.actions);
-			}
 			if (maintenance.events) {
 				this.handleEvents(maintenance.events);
 			}
@@ -127,22 +116,6 @@ export default class AjaxEngineMaintenance  {
 			this.logDebug('[analyzeResponse] [exception]', e.message);
 			this.logError('Maintenance error: corrupted data');
 		}
-	}
-
-	executeActions(actions) {
-		let actionsFinal = [];
-
-		for (let x = 0; x < actions.length; x++) {
-			let action = actions[x];
-			let actionId = action.id;
-
-			if (!this.actionsIdsCache[actionId]) {
-				this.actionsIdsCache[actionId] = true;
-				actionsFinal.push(action);
-			}
-		}
-
-		this.emitter.emit('actions', actionsFinal);
 	}
 
 	handleEvents(events) {
