@@ -187,6 +187,7 @@ var Chat = /*#__PURE__*/function (_React$Component) {
         var channelsStorage = new _channelsStorage2["default"](this.props.user.cacheId);
 
         if (channelsStorage.isEmpty()) {
+          console.log('empty');
           this.autoOpenChannels();
         } else {
           this.props.restoreChannels();
@@ -212,8 +213,8 @@ var Chat = /*#__PURE__*/function (_React$Component) {
     key: "autoOpenChannels",
     value: function autoOpenChannels() {
       if (this.props.autoOpenChannel) {
-        this.props.focusChannel(this.props.autoOpenChannel);
         this.props.openChannel(this.props.autoOpenChannel);
+        this.props.focusChannel(this.props.autoOpenChannel);
         return [this.props.autoOpenChannel];
       }
 

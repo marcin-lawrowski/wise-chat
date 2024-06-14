@@ -5,7 +5,7 @@ Tags: chat, plugin, gutenberg, ajax, javascript, shortcode, social, widget, elem
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.5.4
-Stable tag: 3.3
+Stable tag: 3.3.1
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -396,6 +396,9 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.3.1 =
+* Fixed: no channel open message
 
 = 3.3 =
 * Private messages

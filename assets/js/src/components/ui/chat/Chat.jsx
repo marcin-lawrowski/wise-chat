@@ -64,6 +64,7 @@ class Chat extends React.Component {
 		if (userLoaded && (!prevProps.user || prevProps.user.id !== this.props.user.id)) {
 			const channelsStorage = new ChannelsStorage(this.props.user.cacheId);
 			if (channelsStorage.isEmpty()) {
+				console.log('empty');
 				this.autoOpenChannels();
 			} else {
 				this.props.restoreChannels();
@@ -86,8 +87,8 @@ class Chat extends React.Component {
 
 	autoOpenChannels() {
 		if (this.props.autoOpenChannel) {
-			this.props.focusChannel(this.props.autoOpenChannel);
 			this.props.openChannel(this.props.autoOpenChannel);
+			this.props.focusChannel(this.props.autoOpenChannel);
 
 			return [this.props.autoOpenChannel];
 		}
