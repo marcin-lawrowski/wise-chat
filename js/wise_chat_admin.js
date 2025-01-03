@@ -346,4 +346,11 @@ jQuery(document).ready(function($){
 
 	});
 
+	jQuery('.wc-add-bot-button').on('click', function() {
+		jQuery('.wc-bot-form-new').show();
+	});
+	jQuery('.wc-bot-cancel-button').on('click', function() {
+		jQuery(this).closest('.wc-bot-form').hide();
+	});
+
 });

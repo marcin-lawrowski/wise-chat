@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat
-	Version: 3.3.1
+	Version: 3.3.2
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
 	Description: Fully-featured chat plugin for WordPress. Supports multiple channels, private messages, multisite installation, bad words filtering, themes, appearance settings, avatars, filters, bans and more.
 	Author: Kainex
@@ -9,7 +9,7 @@
 	Text Domain: wise-chat
 */
 
-define('WISE_CHAT_VERSION', '3.3.1');
+define('WISE_CHAT_VERSION', '3.3.2');
 define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
 define('WISE_CHAT_NAME', 'Wise Chat');
 define('WISE_CHAT_SLUG', strtolower(str_replace(' ', '_', WISE_CHAT_NAME)));

@@ -1,11 +1,11 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
 Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme
-Tags: chat, plugin, gutenberg, ajax, javascript, shortcode, social, widget, elementor, responsive, chat plugin, buddypress, buddypress chat, buddy, bp, chatbox, wise chat, wisechat, shoutbox, wordpress chat, online chat, social, chat software, webchat, free chat, community, visitor chat, im chat, pure chat, web chat, wordpress plugin, instant message, messaging, smiles, guestbook, themes, communication, contact
+Tags: chat, social, buddypress chat, chatbox, webchat
 Requires at least: 3.6
 Requires PHP: 5.2.0
-Tested up to: 6.5.4
-Stable tag: 3.3.1
+Tested up to: 6.7.1
+Stable tag: 3.3.2
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,20 +31,28 @@ Advanced chat plugin for WordPress. It requires no server, supports multiple cha
 
 See below for the full list of features.
 
+**[Check Wise Chat Pro with AI](https://kainex.pl/projects/wp-plugins/wise-chat-pro-ai?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**:
+* OpenAI Integration
+* GPT Assistants
+* AI Chat Bots
+* All features of Wise Chat Pro
+* Premium support and free updates for 6/12/18 months (depending on the option)
+
 **[Check Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**:
 * Private one-to-one chats
 * Facebook/Twitter/G+ login
+* Video calls
 * Voice messages
 * Avatars
 * Tenor GIFs
 * Reactions (liking chat messages)
 * Facebook-like sidebar mode
-* 3 Pro themes
+* Pro themes
 * Custom emoticons and 3 use pre-defined sets
 * E-mail notifications
 * Pending messages (full moderation)
 * Multisite support
-* BuddyPress integration (friends and groups)
+* BuddyPress/Gutenberg/Elementor integration
 * Edit and reply to messages
 * Hooks
 * Premium support and free updates for 6/12/18 months (depending on the option)
@@ -377,7 +385,7 @@ Plugin detects EXIF data in images. If an image doesn't have this data then noth
 
 = I am experiencing errors like "Fatal error: Call to undefined function openssl_pkey_get_public() (...)". What is wrong? =
 
-Make sure that openssl extension for your PHP installation is loaded and works correctly. In most cases theses errors are caused by missing openssl module.
+Make sure that openssl extension for your PHP installation is loaded and works correctly. In most cases these errors are caused by missing openssl module.
 
 = How to send messages using just keyboard in multiline mode? =
 
@@ -396,6 +404,9 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.3.2 =
+* Fixed: breaking the site with Elementor installed
 
 = 3.3.1 =
 * Fixed: no channel open message

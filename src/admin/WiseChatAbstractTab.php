@@ -128,6 +128,13 @@ abstract class WiseChatAbstractTab {
 	}
 
 	/**
+	 * @return array Returns an array of PRO fields.
+	 */
+	public function getProAiFields() {
+		return array();
+	}
+
+	/**
 	* @return array
 	*/
 	public function getRadioGroups() {
@@ -201,6 +208,13 @@ abstract class WiseChatAbstractTab {
 		printf('<p class="description wcProDescription">%s</p>', 'Notice: This feature is available after upgrading to Wise Chat Pro. '.$button);
 	}
 
+	protected function printProAiFeatureNotice() {
+		$button = '<a class="button-secondary wcAdminButtonProAI" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro-ai?utm_source=wisechat&utm_medium=banner&utm_campaign=pro_ai_feature" title="Check Wise Chat Pro with AI">
+						Check Wise Chat <strong>Pro with AI</strong>
+					</a>';
+		printf('<p class="description wcProDescription">%s</p>', 'Notice: This feature is available after upgrading to Wise Chat Pro with AI. '.$button);
+	}
+
 	/**
 	* Callback method for displaying plain text field with a hint. If the property is not defined the default value is used.
 	*
@@ -213,6 +227,7 @@ abstract class WiseChatAbstractTab {
 		$defaultValue = array_key_exists($id, $defaults) ? $defaults[$id] : '';
 		$parentId = $this->getFieldParent($id);
 		$isProFeature = in_array($id, $this->getProFields());
+		$isProAiFeature = in_array($id, $this->getProAiFields());
 
 		printf(
 			'<input type="text" id="%s" name="'.WiseChatOptions::OPTIONS_NAME.'[%s]" value="%s" %s data-parent-field="%s" />',
@@ -226,6 +241,9 @@ abstract class WiseChatAbstractTab {
 		}
 		if ($isProFeature) {
 			$this->printProFeatureNotice();
+		}
+		if ($isProAiFeature) {
+			$this->printProAiFeatureNotice();
 		}
 	}
 

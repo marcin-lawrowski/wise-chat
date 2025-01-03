@@ -20,6 +20,7 @@ class WiseChatSettings {
 	*/
 	private $tabs = array(
 		'wise-chat-general' => 'General',
+		'wise-chat-ai' => 'AI',
 		'wise-chat-authentication' => 'Authentication',
 		'wise-chat-messages' => 'Messages Posting',
 		'wise-chat-moderation' => 'Moderation',
@@ -43,9 +44,15 @@ class WiseChatSettings {
 	* @var array Generated sections
 	*/
 	private $sections = array();
+
+    /**
+	* @var WiseChatOptions
+	*/
+	protected $options;
 	
 	public function __construct() {
 		WiseChatContainer::load('admin/WiseChatAbstractTab');
+        $this->options = WiseChatOptions::getInstance();
 	}
 	
 	/**
@@ -175,6 +182,10 @@ class WiseChatSettings {
 						background: #4f3b5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px 4px;
 						border: 1px solid #4f3b5e; color: #fff; font-size: 1.2em; padding-left: 61px; padding-right: 35px;
 					}
+                    .wp-admin a.wcAdminButtonProAI, .wp-admin a.wcAdminButtonProAI:hover, .wp-admin a.wcAdminButtonProAI:focus, #wise-chat-proContainer a.wcAdminButtonProAI, #wise-chat-proContainer a.wcAdminButtonProAI:hover {
+						background: #384a5e url("<?php echo $options->getBaseDir(); ?>/gfx/icons/small-pro-icon.png") no-repeat 10px 4px;
+						border: 1px solid #384a5e; color: #fff; font-size: 1.2em; padding-left: 41px;
+					}
 					.wp-admin p.wcProDescription {
 						color: #f00;
 					}
@@ -195,6 +206,8 @@ class WiseChatSettings {
 						padding-left: 31px; background: #0085ba;
 						border: 1px solid #0085ba;
 					}
+                    .our-products a { outline: none; }
+                    .our-products a img { border-radius: 10px; }
 				</style>
 			
 				<h2><?php echo self::MENU_TITLE ?></h2>
@@ -215,20 +228,11 @@ class WiseChatSettings {
 							echo "<div id='{$pageId}Container' class='wcAdminTabContainer' style='{$hideContainer}'>";
 							?>
 								<div class='postbox' style="border: 1px solid #4f3b5e;">
-									<h3 class='hndle'><span>Check our Products</span></h3>
-									<div class='inside'>
-										<p class='description'>
-											<a class="button-secondary wcAdminButtonPro" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
-												Wise Chat <strong>Pro</strong>
-											</a>
-											<span style='display: inline-block; font-size: 1.2em'>Video calls, Voice messages, 1-on-1 chats, Pro themes, sidebar mode, notifications, GIFs library, message reactions and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a></span>
-										</p>
-										<p class='description'>
-											<a class="button-secondary wcAdminButtonPro" style="background-color: #5f463f" target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">
-												Wise Chat <strong>Live</strong>
-											</a>
-											<span style='display: inline-block; font-size: 1.2em'>Extended version of Wise Chat Pro + <strong>live chat features:</strong> customizable live chat widget, incoming chats management page, multiple operators and <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro">more</a> </span>
-										</p>
+									<h3 class='hndle'><span>Check our Products!</span></h3>
+									<div class='inside our-products'>
+                                        <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro"><img src='<?php echo $this->options->getBaseDir(); ?>/gfx/pro/wise-chat-pro-banner.png' /></a>
+                                        <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-pro-ai?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Pro with AI"><img src='<?php echo $this->options->getBaseDir(); ?>/gfx/pro/wise-chat-pro-ai-banner.png' /></a>
+                                        <a target="_blank" href="https://kainex.pl/projects/wp-plugins/wise-chat-live?utm_source=wisechat&utm_medium=banner&utm_campaign=top_hint" title="Check Wise Chat Live"><img src='<?php echo $this->options->getBaseDir(); ?>/gfx/pro/wise-chat-live-banner.png' /></a>
 									</div>
 								</div>
 							<?php

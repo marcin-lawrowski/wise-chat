@@ -57,25 +57,24 @@ class WiseChatFeaturesTab extends WiseChatAbstractTab {
 
 		for ($i = 1; $i <= 7; $i++) {
 			$classes = $i % 2 == 0 ? 'alternate' : '';
-
-			if (!array_key_exists($i, $custom)) {
-				$custom[$i] = array(
+			$key = $i - 1;
+			if (!array_key_exists($key, $custom)) {
+				$custom[$key] = array(
 					'action' => '', 'active' => '', 'image' => '', 'imageSm' => '',
 				);
 			}
 
-			$key = $i - 1;
 			$idInput = sprintf(
 				'<input type="hidden" name="%s[reactions_custom][%d][id]" value="%d">',
 				WiseChatOptions::OPTIONS_NAME, $key, $i
 			);
 			$actionInput = sprintf(
 				'<input type="text" name="%s[reactions_custom][%d][action]" value="%s" maxlength="100" disabled style="max-width: 100px;">%s',
-				WiseChatOptions::OPTIONS_NAME, $key, htmlspecialchars($custom[$key]['action']), $i === 1 ? '<p class="description">e.g. Like</p>' : ''
+				WiseChatOptions::OPTIONS_NAME, $key, '', $i === 1 ? '<p class="description">e.g. Like</p>' : ''
 			);
 			$activeInput = sprintf(
 				'<input type="text" name="%s[reactions_custom][%d][active]" value="%s" maxlength="100" disabled style="max-width: 100px;">%s',
-				WiseChatOptions::OPTIONS_NAME, $key, htmlspecialchars($custom[$key]['active']), $i === 1 ? '<p class="description">e.g. I like it</p>' : ''
+				WiseChatOptions::OPTIONS_NAME, $key, '', $i === 1 ? '<p class="description">e.g. I like it</p>' : ''
 			);
 
 			$imageTag = '';
