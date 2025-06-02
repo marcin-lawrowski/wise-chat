@@ -252,6 +252,8 @@ class WiseChatAttachmentsService {
 				'post_title' => $name
 			);
 			wp_update_post($postUpdate);
+
+			$this->ensureProtectionMeasures($attachmentId);
 		}
 		
 		return $result;
@@ -346,6 +348,22 @@ class WiseChatAttachmentsService {
 	private function deleteTempFile() {
 		if ($this->tempFileName && file_exists($this->tempFileName) && is_writable($this->tempFileName)){
 			unlink($this->tempFileName);
+		}
+	}
+
+	private function ensureProtectionMeasures(int $attachmentId) {
+		$fullSizePath = get_attached_file($attachmentId);
+		$directory = dirname($fullSizePath);
+		if (!is_dir($directory) || !is_writable($directory)) {
+			return;
+		}
+		$htaccessPath = rtrim($directory, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'.htaccess';
+		if (!file_exists($htaccessPath)) {
+			file_put_contents($htaccessPath, 'Options All -Indexes');
+		}
+		$indexPath = rtrim($directory, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'index.php';
+		if (!file_exists($indexPath)) {
+			file_put_contents($indexPath, '<'.'?'.'php // Silence is golden. ');
 		}
 	}
 	

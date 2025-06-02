@@ -5,7 +5,7 @@ Tags: chat, social, buddypress chat, chatbox, webchat
 Requires at least: 3.6
 Requires PHP: 5.2.0
 Tested up to: 6.7.1
-Stable tag: 3.3.2
+Stable tag: 3.3.4
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -404,6 +404,12 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.3.4 =
+* Security: prevent listing directories with uploaded images or attachments (improvement)
+
+= 3.3.3 =
+* Security: prevent listing directories with uploaded images or attachments
 
 = 3.3.2 =
 * Fixed: breaking the site with Elementor installed

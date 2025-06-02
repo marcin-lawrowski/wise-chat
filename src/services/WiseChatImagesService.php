@@ -296,6 +296,8 @@ class WiseChatImagesService {
 				'post_title' => $_FILES[self::UPLOAD_FILE_NAME]['name']
 			);
 			wp_update_post($postUpdate);
+
+			$this->ensureProtectionMeasures($attachmentId);
 		}
 		
 		return $result;
@@ -389,6 +391,22 @@ class WiseChatImagesService {
 	*/
 	private function logError($message) {
 		@trigger_error('WordPress Wise Chat plugin error (ImagesService): '.$message, E_USER_NOTICE);
+	}
+
+	private function ensureProtectionMeasures(int $attachmentId) {
+		$fullSizePath = get_attached_file($attachmentId);
+		$directory = dirname($fullSizePath);
+		if (!is_dir($directory) || !is_writable($directory)) {
+			return;
+		}
+		$htaccessPath = rtrim($directory, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'.htaccess';
+		if (!file_exists($htaccessPath)) {
+			file_put_contents($htaccessPath, 'Options All -Indexes');
+		}
+		$indexPath = rtrim($directory, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.'index.php';
+		if (!file_exists($indexPath)) {
+			file_put_contents($indexPath, '<'.'?'.'php // Silence is golden. ');
+		}
 	}
 	
 }
