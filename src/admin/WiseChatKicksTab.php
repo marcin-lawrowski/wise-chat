@@ -59,7 +59,7 @@ class WiseChatKicksTab extends WiseChatAbstractTab {
 		foreach ($kicks as $kick) {
 			$deleteURL = $url.'&wc_action=deleteKick&id='.urlencode($kick->getId()).'&tab=kicks'.'&nonce='.wp_create_nonce('deleteKick');
 			$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure you want to delete this IP?\")'>Delete</a><br />";
-			$html .= sprintf("[%s] %s | <i>%s</i> | %s", $kick->getIp(), date('Y-m-d H:i:s', $kick->getCreated()), $kick->getLastUserName(), $deleteLink);
+			$html .= sprintf("[%s] %s | <i>%s</i> | %s", sanitize_text_field($kick->getIp()), date('Y-m-d H:i:s', $kick->getCreated()), $kick->getLastUserName(), $deleteLink);
 		}
 		$html .= "</div>";
 		print($html);

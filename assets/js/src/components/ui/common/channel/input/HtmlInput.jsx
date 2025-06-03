@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import HtmlRenderer from "utils/html-renderer";
 import { renderToString } from 'react-dom/server';
 import { logError } from "actions/log";
+import sanitizeHtml from 'sanitize-html';
 
 class HtmlInput extends React.Component {
 
@@ -166,7 +167,7 @@ class HtmlInput extends React.Component {
 			// Browsers: Edge, Chrome, Firefox, Safari
 			const maxLength = this.props.configuration.interface.input.maxLength - this.getCharactersCount($(this.editableRef.current).html());
 			if (maxLength > 0) {
-				document.execCommand('insertText', false, text.substring(0, maxLength));
+				document.execCommand('insertText', false, sanitizeHtml(text.substring(0, maxLength)));
 
 				// paste actions triggered by a mouse button are omitted because of lack of onKeyUp events, we need to trigger the change manually:
 				this.triggerChange();

@@ -97,7 +97,7 @@ class WiseChatBansTab extends WiseChatAbstractTab {
 		foreach ($bans as $ban) {
 			$deleteURL = $url.'&wc_action=deleteBan&tab=bans&ip='.urlencode($ban->getIp()).'&nonce='.wp_create_nonce('deleteBan');
 			$deleteLink = "<a href='{$deleteURL}' onclick='return confirm(\"Are you sure?\")'>Delete</a><br />";
-			$html .= sprintf("[%s] %s left | %s", $ban->getIp(), $this->getTimeSummary($ban->getTime() - time()), $deleteLink);
+			$html .= sprintf("[%s] %s left | %s", sanitize_text_field($ban->getIp()), $this->getTimeSummary($ban->getTime() - time()), $deleteLink);
 		}
 		$html .= "</div>";
 		print($html);

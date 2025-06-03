@@ -412,15 +412,24 @@ class WiseChatAuthentication {
      * @return string
      */
     private function getRemoteAddress() {
+		$ipProposal = null;
 	    if (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) {
 		    $ipAddresses = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
-		    return trim($ipAddresses[0]);
+		    $ipProposal = trim($ipAddresses[0]);
 	    } else if (array_key_exists('REMOTE_ADDR', $_SERVER)) {
-		    return $_SERVER["REMOTE_ADDR"];
+		    $ipProposal = $_SERVER["REMOTE_ADDR"];
 	    } else if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
-		    return $_SERVER["HTTP_CLIENT_IP"];
+		    $ipProposal = $_SERVER["HTTP_CLIENT_IP"];
 	    }
+
+		if ($ipProposal === null) {
+			return '';
+		}
+
+		if (filter_var($ipProposal, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) || filter_var($ipProposal, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+			return $ipProposal;
+		}
 
 	    return '';
     }
