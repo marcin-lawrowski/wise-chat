@@ -13,7 +13,7 @@
 		"babelify": "^10.0.0",
 		"browserify": "^16.5.2",
 		"browserslist": "^4.14.5",
-		"exorcist": "^1.0.1",
+		"exorcist": "^2.0.0",
 		"gulp": "^4.0.2",
 		"gulp-autoprefixer": "^7.0.1",
 		"gulp-babel": "^8.0.0",
