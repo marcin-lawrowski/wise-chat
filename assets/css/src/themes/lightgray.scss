@@ -531,13 +531,6 @@
       font-weight: bold;
     }
   }
-
-  .wcToasts {
-    .wcToast {
-      background-color: #f1f1f1;
-      box-shadow: 0 0 15px rgba(60, 60, 60, 0.2);
-    }
-  }
 }
 
 @mixin lightgray-global {
@@ -616,7 +609,7 @@
         background: transparent url("../../gfx/themes/lightgray/gfx/edit.svg") no-repeat 50%;
       }
 
-      .wcMute {
+      .wcMute, .wcUnMute {
         background: transparent url("../../gfx/themes/lightgray/gfx/mute.svg") no-repeat 50%;
       }
 
@@ -652,7 +645,7 @@
     }
   }
   .wcRecentEmpty-content.wcLightgrayTheme-content {
-    height: 50px;
+    height: 100px;
     .wcRecentChats {
       display: flex;
       align-items: center;
@@ -661,19 +654,28 @@
 }
 
 @mixin lightgray-common {
+  --wc-font-color: #151618;
+  --wc-link-color: #00d5ff;
+
   &, * {
-    font: 13px/22px 'Maven Pro', sans-serif;
-    color: #151618;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--wc-font-color);
   }
 
   a {
-    color: #00d5ff;
+    color: var(--wc-link-color);
     box-shadow: none;
   }
 
-  button:not(.wcFunctional),button:not(.wcFunctional):focus, button:not(.wcFunctional):active,
-  input[type="button"], input[type="button"]:focus, input[type="button"]:active,
-  input[type="submit"], input[type="submit"]:focus, input[type="submit"]:active {
+  .wcIcon {
+    background-color: #a6a6a6;
+  }
+
+  button.wcButton, button.wcButton:focus, button.wcButton:active,
+  input[type="button"].wcButton, input[type="button"].wcButton:focus, input[type="button"].wcButton:active,
+  input[type="submit"].wcButton, input[type="submit"].wcButton:focus, input[type="submit"].wcButton:active {
     border-radius: 15px !important; background-image: none; background-repeat: no-repeat; border: 0!important;
     color: #FFF !important; padding: 5px 20px !important; box-shadow: none; font-weight: normal !important; line-height: 20px !important;
     height: 40px; outline: none; min-height: 40px !important;
@@ -689,16 +691,25 @@
     -webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
     -o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
     transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+
+    &.wcButtonDanger {
+      color: #fff !important;
+      background: #dc3545 !important;
+      border-color: #dc3545 !important;
+      &:hover {
+        background: #ff0000 !important;
+      }
+    }
   }
 
-  input[type="text"], input[type="password"], textarea {
+  input[type="text"].wcControl, input[type="password"].wcControl, textarea.wcControl {
     height: 40px; line-height: 40px; box-shadow: none;
-    background-color: #ffffff; color: #111; border-radius: 15px; margin: 0; outline: 0 none;
+    background-color: #ffffff; color: var(--wc-font-color);; border-radius: 15px; margin: 0; outline: 0 none;
     padding: 4px 4px 4px 15px;
     border: none;
   }
 
-  input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+  input[type="text"]:focus.wcControl, input[type="password"]:focus.wcControl, textarea:focus.wcControl {
     background-color: #ffffff; border: none;
   }
 
@@ -751,5 +762,26 @@
     background-color: #ffe9e9;
     border: none;
   }
+
+  /*
+  // forms:
+  .wcFormControl, .wcFormControl:hover, .wcFormControl:active {
+    color: #111;
+  }
+
+  .wcFormControl:focus {
+    color: #111;
+    border-color: #00d5ff;
+    box-shadow: 0 0 0 0.25rem rgba(0, 213, 255, 0.29);
+  }
+
+  .wcFormCheck {
+    &:checked {
+      background-color: #00d5ff;
+      border-color: #00d5ff;
+    }
+  }
+
+   */
 
 }

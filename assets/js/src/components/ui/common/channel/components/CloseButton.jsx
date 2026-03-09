@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import { focusChannel, closeChannel, confirm, logOff } from "actions/ui";
+import { focusChannel, closeChannel, confirm, logOff, destroy } from "actions/ui";
 
 class CloseButton extends React.Component {
 
@@ -60,6 +60,9 @@ class CloseButton extends React.Component {
 		if (this.props.configuration.interface.channel.logOffOnCloseLast && closedLast) {
 			this.props.logOff();
 		}
+		if (this.props.configuration.interface.channel.destroyOnCloseLast && closedLast) {
+			this.props.destroy();
+		}
 	}
 
 	getFirstChannelAfterIndex(afterIndex) {
@@ -100,5 +103,5 @@ export default connect(
 		openedChannels: state.ui.openedChannels,
 		focusedChannel: state.ui.focusedChannel,
 		stream: state.ui.streams.find( stream => stream.channel && stream.channel.id === ownProps.channel.id )
-	}), { focusChannel, closeChannel, confirm, logOff }
+	}), { focusChannel, closeChannel, confirm, logOff, destroy }
 )(CloseButton);

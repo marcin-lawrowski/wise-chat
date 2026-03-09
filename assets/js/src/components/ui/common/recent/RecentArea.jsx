@@ -13,6 +13,10 @@ class RecentArea extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			tab: 'messages'
+		}
+
 		this.handleClick = this.handleClick.bind(this);
 		this.handleAvatarError = this.handleAvatarError.bind(this);
 	}
@@ -86,30 +90,49 @@ class RecentArea extends React.Component {
 		</div>
 	}
 
+	switchTab(e, tab) {
+		e.preventDefault();
+		this.setState({tab: tab});
+	}
+
 	render() {
 		if (!this.props.configuration.interface.recent.enabled) {
 			return null;
 		}
 
+		const feedTotal = this.props.userFeed.length;
+		const unseenFeedTotal = this.props.userFeed.filter( userFeedEntry => !userFeedEntry.seen ).length;
 		const unreadChats = this.props.recentChats.filter( recentChat => !recentChat.read );
 		const chatArchive = this.props.recentChats.filter( recentChat => recentChat.read );
 
 		return(
 			<div className="wcRecentChats">
-				{ this.props.recentChats.length > 0 ? (
-					<Scrollbar scrollTop={ 0 }>
-						{ unreadChats.length > 0 && <div className="wcHeader wcUnreadMessages">{ this.props.i18n.unreadMessages } </div> }
-						{ unreadChats.map( (recentChat, index, array) => this.renderEntry(recentChat, index, array) ) }
-						{ chatArchive.length > 0 && <div className="wcHeader wcUnreadMessages">{ this.props.i18n.messagesArchive } </div> }
-						{ chatArchive.map( (recentChat, index, array) => this.renderEntry(recentChat, index, array) ) }
-					</Scrollbar>
-				):(
-					<span className="wcNoRecent">{ this.props.i18n.noRecentChats }</span>
-				)}
+				{ feedTotal > 0 &&
+					<div className="wcPrimaryTabs">
+						<li className="wcPrimaryTabItem">
+							<a className={ `wcPrimaryTabLink ${ this.state.tab === 'messages' ? 'wcPrimaryTabItemActive' : '' }` } onClick={ e => this.switchTab(e, 'messages') } href="#">{ unreadChats.length > 0 && <span className="wcRedCounter">{ unreadChats.length }</span> } { this.props.i18n.recentChats }</a>
+						</li>
+						<li className="wcPrimaryTabItem">
+							<a className={ `wcPrimaryTabLink ${ this.state.tab === 'feed' ? 'wcPrimaryTabItemActive' : '' }` } onClick={ e => this.switchTab(e, 'feed') } href="#">{ unseenFeedTotal > 0 && <span className="wcRedCounter">{ unseenFeedTotal }</span> } { this.props.i18n.notifications }</a>
+						</li>
+					</div>
+				}
+
+				<div className={ 'wcRecentContainer' + (this.state.tab !== 'messages' ? ' wcInvisible' : '') }>
+					{ this.props.recentChats.length > 0 ? (
+						<Scrollbar scrollTop={ 0 }>
+							{ unreadChats.length > 0 && <div className="wcHeader wcUnreadMessages">{ this.props.i18n.unreadMessages } </div> }
+							{ unreadChats.map( (recentChat, index, array) => this.renderEntry(recentChat, index, array) ) }
+							{ chatArchive.length > 0 && <div className="wcHeader wcUnreadMessages">{ this.props.i18n.messagesArchive } </div> }
+							{ chatArchive.map( (recentChat, index, array) => this.renderEntry(recentChat, index, array) ) }
+						</Scrollbar>
+					):(
+						<span className="wcNoRecent">{ this.props.i18n.noRecentChats }</span>
+					)}
+				</div>
 			</div>
 		);
 	}
-
 }
 
 RecentArea.propTypes = {
@@ -122,6 +145,7 @@ export default connect(
 		configuration: state.configuration,
 		channels: state.application.channels,
 		recentChats: state.application.recentChats,
+		userFeed: state.application.userFeed,
 		command: state.commands.sent.recent,
 		ignoredChannels: state.ui.ignoredChannels
 	}),

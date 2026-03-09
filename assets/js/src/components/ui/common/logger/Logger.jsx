@@ -52,7 +52,7 @@ class Logger extends React.Component {
 							)}
 						</div>
 						<div className="wcFooter">
-							<button onClick={ e => { e.preventDefault(); this.close(); } }>Close</button>
+							<button className="wcButton" onClick={ e => { e.preventDefault(); this.close(); } }>Close</button>
 						</div>
 					</div>
 				</Popup>

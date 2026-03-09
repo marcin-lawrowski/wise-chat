@@ -18,11 +18,11 @@ class Link extends React.Component {
 		}
 		e.preventDefault();
 
-		if (!this.props.configuration.interface.channel.directEnabled) {
+		if (this.props.channel.own || !this.props.configuration.interface.channel.directEnabled) {
 			return;
 		}
 
-		this.props.addChannel(this.props.channel);
+		this.props.addChannel(this.props.channel, true);
 
 		// display a confirmation if the channel is ignored:
 		const channelId = this.props.channel.id;

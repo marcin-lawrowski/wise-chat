@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Popup from 'reactjs-popup';
 import { clearConfirm } from "actions/ui";
+import Modal from "../modal/Modal";
 
 class Confirms extends React.Component {
 
@@ -46,26 +47,26 @@ class Confirms extends React.Component {
 	}
 
 	handleCancel() {
+		this.close();
 		if (this.props.confirms && this.props.confirms.cancelCallback) {
 			this.props.confirms.cancelCallback();
 		}
-		this.close();
 	}
 
 	handleConfirm() {
+		this.close();
 		if (this.props.confirms.callback) {
 			this.props.confirms.callback();
 		}
-		this.close();
 	}
 
 	handleCustomButton(event, button) {
 		event.preventDefault();
 
+		this.close();
 		if (button.callback) {
 			button.callback();
 		}
-		this.close();
 	}
 
 	render() {
@@ -73,46 +74,40 @@ class Confirms extends React.Component {
 			return null;
 		}
 
-		return(
-			<React.Fragment>
-				<Popup
-					className={ "wcPopup wcAlertPopup wcAlertPopupConfirm " + this.props.configuration.themeClassName + ' ' + this.props.confirms.configuration.className }
-					open={ this.state.popupOpen }
-					modal
-					closeOnDocumentClick
-					onClose={ this.handleCancel }
-				>
-					<div className="wcHeader">
-						<h5>{ this.props.confirms.configuration.title ? this.props.confirms.configuration.title : this.props.i18n.confirmation }</h5>
-						<a href="#" className="wcClose" title={ this.props.i18n.close } onClick={ e => { e.preventDefault(); this.handleCancel() } } />
-					</div>
-					<div className="wcBody">
-						{ this.props.confirms.text }
+		let footer = [];
+		if (!this.props.confirms.configuration?.buttonNo?.hidden) {
+			footer.push(<button key="no" className="wcButton wcNoButton" onClick={this.handleCancel}>{this.props.confirms.configuration?.buttonNo?.text ?? this.props.i18n.no}</button>);
+		}
+		if (!this.props.confirms.configuration?.buttonYes?.hidden) {
+			footer.push(<button key="yes" className="wcButton wcYesButton" onClick={ this.handleConfirm }>{ this.props.confirms.configuration?.buttonYes?.text ?? this.props.i18n.yes }</button>);
+		}
+		if (this.props.confirms.buttons) {
+			this.props.confirms.buttons.map( (button, index) => {
+				if (button.type === 'link') {
+					footer.push(<a key={ index } href="#" className={ "wcButton " + (button.className ?? '') } onClick={ e => this.handleCustomButton(e, button) }>{ button.text }</a>);
+				} else {
+					footer.push(<button key={ index } className={ "wcButton " + (button.className ?? '') } onClick={ e => this.handleCustomButton(e, button) }>{ button.text }</button>);
+				}
+			});
+		}
 
-						{ this.props.confirms.configuration.sound &&
-							<audio loop autoPlay preload="auto">
-								<source src={ this.props.confirms.configuration.sound.src } type="audio/ogg" />
-							</audio>
-						}
-					</div>
-					<div className="wcFooter">
-						{ !this.props.confirms.configuration?.buttonNo?.hidden &&
-							<button className="wcNoButton" onClick={this.handleCancel}>{this.props.confirms.configuration?.buttonNo?.text ?? this.props.i18n.no}</button>
-						}
-						{ !this.props.confirms.configuration?.buttonYes?.hidden &&
-							<button className="wcYesButton" onClick={ this.handleConfirm }>{ this.props.confirms.configuration?.buttonYes?.text ?? this.props.i18n.yes }</button>
-						}
-						{ this.props.confirms.buttons && this.props.confirms.buttons.map( (button, index) => button.type === 'link' ?
-							(
-								<a key={ index } href="#" className={ "wcButton " + (button.className ?? '') } onClick={ e => this.handleCustomButton(e, button) }>{ button.text }</a>
-							) : (
-								<button key={ index } className={ "wcButton " + (button.className ?? '') } onClick={ e => this.handleCustomButton(e, button) }>{ button.text }</button>
-							)
-						)}
-					</div>
-				</Popup>
-			</React.Fragment>
-		);
+		return <Modal
+			className={ this.props.confirms.configuration.className }
+			open={ this.state.popupOpen }
+			closeOnDocumentClick={ true }
+			onClose={ this.handleCancel }
+			title={ this.props.confirms.configuration.title ? this.props.confirms.configuration.title : this.props.i18n.confirmation }
+			footer={ footer }
+			footerCloseButtonVisible={ false }
+		>
+			{ this.props.confirms.text }
+
+			{ this.props.confirms.configuration.sound &&
+				<audio loop autoPlay preload="auto">
+					<source src={ this.props.confirms.configuration.sound.src } type="audio/ogg" />
+				</audio>
+			}
+		</Modal>
 	}
 
 }

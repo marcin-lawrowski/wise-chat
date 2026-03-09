@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import Popup from 'reactjs-popup';
 import { clearAlerts } from "actions/ui";
+import Modal from "../modal/Modal";
 
 class Alerts extends React.Component {
 
@@ -38,28 +38,17 @@ class Alerts extends React.Component {
 	}
 
 	render() {
-		return(
-			<React.Fragment>
-				<Popup
-					className={ "wcPopup wcAlertPopup wcAlertPopup" + this.state.type + ' ' + this.props.configuration.themeClassName }
-					open={ this.state.popupOpen }
-					modal
-					closeOnDocumentClick
-					onClose={ this.close }
-				>
-					<div className="wcHeader">
-						<h5>{ this.state.title }</h5>
-						<a href="#" className="wcClose" title={ this.props.i18n.close } onClick={ e => { e.preventDefault(); this.close() } } />
-					</div>
-					<div className="wcBody">
-						{ this.state.text }
-					</div>
-					<div className="wcFooter">
-						<button className="wcCloseButton" onClick={ this.close }>{ this.props.i18n.ok }</button>
-					</div>
-				</Popup>
-			</React.Fragment>
-		);
+		return (
+			<Modal
+				title={ this.state.title }
+				open={ this.state.popupOpen }
+				onClose={ this.close }
+				closeButtonLabel={ this.props.i18n.ok }
+				size="sm"
+			>
+				{ this.state.text }
+			</Modal>
+		)
 	}
 
 }
@@ -68,8 +57,7 @@ export default connect(
 	(state) => ({
 		error: state.ui.alerts.error,
 		info: state.ui.alerts.info,
-		i18n: state.application.i18n,
-		configuration: state.configuration
+		i18n: state.application.i18n
 	}),
 	{ clearAlerts }
 )(Alerts);

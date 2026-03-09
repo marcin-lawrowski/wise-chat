@@ -1,4 +1,12 @@
 <?php
+
+	use Kainex\WiseChat\Container;
+	use Kainex\WiseChat\Endpoints\MessagesEndpoint;
+	use Kainex\WiseChat\Endpoints\UserCommandEndpoint;
+	use Kainex\WiseChat\Loader;
+	use Kainex\WiseChat\Services\ImagesService;
+	use Kainex\WiseChat\Options;
+
 	define('DOING_AJAX', true);
 	define('SHORTINIT', true);
 	
@@ -12,31 +20,42 @@
 
 	ini_set('html_errors', 0);
 
-	require_once(dirname(__DIR__).'/WiseChatContainer.php');
-	WiseChatContainer::load('WiseChatInstaller');
-	WiseChatContainer::load('WiseChatOptions');
-	require_once(dirname(__FILE__).'/wp_core.php');
+	// class loader:
+	require_once(dirname(__DIR__).'/Loader.php');
+	Loader::install();
 
+	require_once(dirname(__FILE__).'/wp_core.php');
 	send_nosniff_header();
 
-	if (WiseChatOptions::getInstance()->isOptionEnabled('enabled_debug', false)) {
+	define('WISE_CHAT_VERSION_AI', true);
+
+	// DI container:
+	$container = Container::getInstance();
+
+	/** @var Options $options */
+	$options = $container->get(Options::class);
+
+	if ($options->isOptionEnabled('enabled_debug')) {
 		error_reporting(E_ALL);
 		ini_set("display_errors", 1);
 	}
 
+	global $wp_actions;
+	$wp_actions[ 'plugins_loaded' ] = 1; // hack: to prevent warning from WP User Query
+
 	// removing images downloaded by the chat:
-	/** @var WiseChatImagesService $wiseChatImagesService */
-	$wiseChatImagesService = WiseChatContainer::get('services/WiseChatImagesService');
+	/** @var ImagesService $wiseChatImagesService */
+	$wiseChatImagesService = $container->get(ImagesService::class);
 	add_action('delete_attachment', array($wiseChatImagesService, 'removeRelatedImages'));
 	
 	$action = $_REQUEST['action'];
 	if ($action === 'wise_chat_messages_endpoint') {
-		/** @var WiseChatMessagesEndpoint $endpoint */
-		$endpoint = WiseChatContainer::get('endpoints/WiseChatMessagesEndpoint');
+		/** @var MessagesEndpoint $endpoint */
+		$endpoint = $container->get(MessagesEndpoint::class);
 		$endpoint->messagesEndpoint();
 	} else if ($action === 'wise_chat_prepare_image_endpoint') {
-		/** @var WiseChatUserCommandEndpoint $endpoint */
-		$endpoint = WiseChatContainer::get('endpoints/WiseChatUserCommandEndpoint');
+		/** @var UserCommandEndpoint $endpoint */
+		$endpoint = $container->get(UserCommandEndpoint::class);
 		$endpoint->prepareImageEndpoint();
 	} else if ($action === 'check') {
 		die('OK');

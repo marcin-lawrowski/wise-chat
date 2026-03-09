@@ -26,7 +26,7 @@ class Incoming extends React.Component {
 				const incoming = this.props.incomingChats[0];
 
 				// ask for confirmation of the first incoming chat:
-				if (this.state.isConfirmInProgress === false && !this.props.openedChannels.includes(incoming.channel)) {
+				if (this.state.isConfirmInProgress === false && !this.props.openedChannels.includes(incoming.channelId)) {
 					this.setState({isConfirmInProgress: true});
 					this.props.confirm(incoming.channelName + ' ' + this.props.i18n.incomingAskApproval, this.incomingConfirmed, this.incomingCancelled, [{
 						text: this.props.i18n.ignoreUser,
@@ -38,41 +38,41 @@ class Incoming extends React.Component {
 				// auto-open all incoming chats:
 				this.props.incomingChats
 					.map( incomingChat => {
-						const channel = incomingChat.channel;
+						const channelId = incomingChat.channelId;
 
-						if (!this.props.openedChannels.includes(channel)) {
-							this.props.openChannel(channel);
+						if (!this.props.openedChannels.includes(channelId)) {
+							this.props.openChannel(channelId);
 							if (this.props.configuration.interface.incoming.focus) {
-								this.props.focusChannel(channel);
+								this.props.focusChannel(channelId);
 							} else {
-								this.props.unreadAdd(channel, 1);
+								this.props.unreadAdd(channelId, 1);
 							}
 							this.props.notify('newChat');
 						}
 					});
 
 				// mark the incoming chat handled:
-				this.props.deleteIncomingChats(this.props.incomingChats.map( incomingChat => incomingChat.channel ));
+				this.props.deleteIncomingChats(this.props.incomingChats.map( incomingChat => incomingChat.channelId ));
 			}
 		}
 	}
 
 	incomingIgnored() {
-		this.props.ignoreChannel(this.props.incomingChats[0].channel);
+		this.props.ignoreChannel(this.props.incomingChats[0].channelId);
 		this.deleteLastIncomingChat();
 		this.setState({isConfirmInProgress: false});
 	}
 
 	incomingConfirmed() {
-		const channel = this.props.incomingChats[0].channel;
-		if (!this.props.openedChannels.includes(channel)) {
-			this.props.openChannel(channel);
+		const channelId = this.props.incomingChats[0].channelId;
+		if (!this.props.openedChannels.includes(channelId)) {
+			this.props.openChannel(channelId);
 		}
 
 		if (this.props.configuration.interface.incoming.focus) {
-			this.props.focusChannel(channel);
+			this.props.focusChannel(channelId);
 		} else {
-			this.props.unreadAdd(channel, 1);
+			this.props.unreadAdd(channelId, 1);
 		}
 
 		this.deleteLastIncomingChat();
@@ -86,7 +86,7 @@ class Incoming extends React.Component {
 
 	deleteLastIncomingChat() {
 		if (this.props.incomingChats.length > 0) {
-			this.props.deleteIncomingChats([this.props.incomingChats[0].channel]);
+			this.props.deleteIncomingChats([this.props.incomingChats[0].channelId]);
 		}
 	}
 

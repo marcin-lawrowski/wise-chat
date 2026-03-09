@@ -1,6 +1,7 @@
 @import "./channel-input";
 @import "./channel-input-xxs";
 @import "./channel-messages";
+@import "./channel-stream";
 
 @mixin channel {
 
@@ -76,7 +77,14 @@
       grid-auto-flow: column;
       grid-auto-columns: 1fr;
 
+      @include channel-stream;
       @include channel-messages;
+    }
+
+    &.wcChannelSizeXs, &.wcChannelSizeXXs {
+      .wcChannelData {
+        @include channel-stream-compact;
+      }
     }
 
     @include channel-input;

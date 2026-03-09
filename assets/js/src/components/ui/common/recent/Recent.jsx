@@ -10,15 +10,18 @@ class Recent extends React.Component {
 		if (!this.props.configuration.interface.recent.enabled || ['recent-with-current', 'recent'].includes(this.props.configuration.interface.browser.mode)) {
 			return null;
 		}
-		const unreadQuantity = this.props.recentChats.filter( recentChat => recentChat.read === false).length;
+		const unreadQuantity = this.props.recentChats.filter( recentChat => recentChat.read === false).length +
+			this.props.userFeed.filter( userFeedEntry => userFeedEntry.seen === false).length;
+		const itemsQuantity = this.props.recentChats.length + this.props.userFeed.length;
 
 		return(
 			<Popup
 				trigger={ open => <a className={ "wcFunctional wcRecentTrigger" + (open ? ' wcOpen' : '') }>{ unreadQuantity ? <span>{ unreadQuantity }</span> : '' }</a> }
 				position="left center"
-				className={ "wcPopup wcRecentPopup " + this.props.configuration.themeClassName + (this.props.recentChats.length === 0 ? ' wcRecentEmpty' : '' ) }
+				className={ "wcPopup wcRecentPopup " + this.props.configuration.themeClassName + (itemsQuantity === 0 ? ' wcRecentEmpty' : '' ) }
 				on={['click']}
 				arrow={ false }
+				nested={ true }
 				keepTooltipInside={ this.props.keepInside }
 			>
 				{ close => <RecentArea onClick={ close } /> }
@@ -43,6 +46,7 @@ Recent.propTypes = {
 export default connect(
 	(state) => ({
 		configuration: state.configuration,
-		recentChats: state.application.recentChats
+		recentChats: state.application.recentChats,
+		userFeed: state.application.userFeed
 	})
 )(Recent);

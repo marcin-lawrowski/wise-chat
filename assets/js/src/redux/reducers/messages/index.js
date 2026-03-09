@@ -1,3 +1,5 @@
+import mergeMessages from "utils/messages";
+
 const defaultState = {
 	posted: {},
 	received: {},
@@ -29,6 +31,8 @@ export default function messages(state = defaultState, action) {
 				grouped[message.channel.id].push(message);
 			}
 
+			Object.keys(grouped).map( channelId => grouped[channelId] = mergeMessages(grouped[channelId]) );
+
 			return createState(state, { received: { ...state.received, ...grouped } });
 		case 'message.receive.past':
 
@@ -36,31 +40,22 @@ export default function messages(state = defaultState, action) {
 				receivedPast: { ...state.receivedPast, [action.channelId]: Object.assign({}, state.receivedPast[action.channelId], action.data) }
 			});
 		case 'message.receive.past.done':
-			const mergedMessages = state.received[action.channelId] ? [ ...state.received[action.channelId], ...action.data ] : action.data;
-
-			// remove duplicates:
-			const uniqueMessages = [...mergedMessages.reduce((p, c) => p.set(c.id, c), new Map())].map(([key, value]) => value);
-
-			// sort:
-			const sortedMessages = uniqueMessages.sort((a, b) => {
-				if (a.sortKey < b.sortKey) {
-					return -1;
-				}
-				if (a.sortKey > b.sortKey) {
-					return 1;
-				}
-
-				return 0;
-			});
+			const mergedMessages = state.received[action.channelId] ? mergeMessages([ ...state.received[action.channelId], ...action.data ]) : action.data;
 
 			return createState(state, {
-				received: { ...state.received, [action.channelId]: sortedMessages }
+				received: { ...state.received, [action.channelId]: mergedMessages }
 			});
 		case 'message.image':
 			return createState(state, { image: { ...state.image, [action.id]: Object.assign({}, state.image[action.id], action.data) } });
 		case 'message.delete':
-			return state.received[action.channel]
-				? createState(state, { received: { ...state.received, [action.channel]: state.received[action.channel].filter( message => message.id !== action.id ) } })
+			const deleteMessageChannelId = Object.keys(state.received).find( channelId => state.received[channelId].find( message => message.id === action.id ) );
+
+			return deleteMessageChannelId
+				? createState(state, { received: { ...state.received, [deleteMessageChannelId]: state.received[deleteMessageChannelId].filter( message => message.id !== action.id ) } })
+				: state;
+		case 'message.delete.all.from.channel':
+			return state.received[action.channelId]
+				? createState(state, { received: { ...state.received, [action.channelId]: [] } })
 				: state;
 		case 'message.delete.multiple':
 			const newReceived = {};
@@ -74,6 +69,8 @@ export default function messages(state = defaultState, action) {
 			return state.received[action.message.channel.id]
 				? createState(state, { received: { ...state.received, [action.message.channel.id]: state.received[action.message.channel.id].map( message => message.id !== action.message.id ? message : { ...action.message } ) } })
 				: state;
+		case 'messages.replace.all':
+			return createState(state, { received: { ...state.received, [action.channelId]: action.messages } });
 		case 'messages.sender.replace':
 			const newSenderAlteredReceived = {};
 

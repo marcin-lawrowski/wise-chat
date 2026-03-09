@@ -39,7 +39,7 @@ jQuery(document).ready(function($){
 			alert('Please select the image first.');
 			return;
 		}
-		var href = jQuery(this).attr('href') + '&newEmoticonAttachmentId=' + encodeURIComponent(attachmentId) + '&newEmoticonAlias=' + encodeURIComponent(alias) + '&tab=emoticons';
+		var href = jQuery(this).attr('href') + '&newEmoticonAttachmentId=' + encodeURIComponent(attachmentId) + '&newEmoticonAlias=' + encodeURIComponent(alias) + '&wc_tab=emoticons';
 		jQuery(this).attr('href', href);
 	});
 
@@ -47,7 +47,7 @@ jQuery(document).ready(function($){
 		var source = jQuery('[name="newPmRuleSource"]').val();
 		var target = jQuery('[name="newPmRuleTarget"]').val();
 
-		var href = jQuery(this).attr('href') + '&newPmRuleSource=' + encodeURIComponent(source) + '&newPmRuleTarget=' + encodeURIComponent(target) + '&tab=permissions';
+		var href = jQuery(this).attr('href') + '&newPmRuleSource=' + encodeURIComponent(source) + '&newPmRuleTarget=' + encodeURIComponent(target) + '&wc_tab=permissions';
 		jQuery(this).attr('href', href);
 	});
 
@@ -117,7 +117,7 @@ jQuery(document).ready(function($){
 				'&recipientEmail=' + encodeURIComponent(recipientEmail) +
 				'&subject=' + encodeURIComponent(subject) +
 				'&content=' + encodeURIComponent(content) +
-				'&tab=notifications';
+				'&wc_tab=notifications';
 			jQuery(this).attr('href', href);
 		}
 	});
@@ -139,7 +139,7 @@ jQuery(document).ready(function($){
 				'&frequency=' + encodeURIComponent(frequency) +
 				'&subject=' + encodeURIComponent(subject) +
 				'&content=' + encodeURIComponent(content) +
-				'&tab=notifications';
+				'&wc_tab=notifications';
 			jQuery(this).attr('href', href);
 		}
 	});
@@ -204,7 +204,7 @@ jQuery(document).ready(function($){
 			mappedRights.push($(element).val());
 		});
 
-		jQuery(this).attr('href', jQuery(this).attr('href') + '&tab=moderation&addModeratorUserLogin=' + encodeURIComponent(user) + '&addModeratorRights=' + encodeURIComponent(mappedRights.join(',')));
+		jQuery(this).attr('href', jQuery(this).attr('href') + '&wc_tab=moderation&addModeratorUserLogin=' + encodeURIComponent(user) + '&addModeratorRights=' + encodeURIComponent(mappedRights.join(',')));
 	});
 
 	jQuery( ".wc-radio-option" ).change(function() {
@@ -268,7 +268,7 @@ jQuery(document).ready(function($){
 		}
 
 		// Lightweight
-		jQuery.ajax({ type: "get", dataType: "text", url: wcAdminConfig.pluginurl + 'endpoints/', data: { action: "check" } })
+		jQuery.ajax({ type: "get", dataType: "text", url: wcAdminConfig.pluginurl + 'Endpoints/', data: { action: "check" } })
 		.done(function(response) {
 			if (response === 'OK') {
 				resultLightweight = 'OK';
@@ -284,7 +284,7 @@ jQuery(document).ready(function($){
 				resultLightweight += 'Please de-activate the plugin and activate it again.';
 			} else if (jqXHR.status < 500) {
 				resultLightweight += 'The chat is being blocked by a security plugin or the server. Please make sure that PHP files may be directly executed here: ' +
-					wcAdminConfig.pluginurl + 'endpoints/';
+					wcAdminConfig.pluginurl + 'Endpoints/';
 			} else {
 				resultLightweight += 'Please make sure you run your site with newest the Wise Chat, WordPress and PHP.';
 			}
@@ -292,7 +292,7 @@ jQuery(document).ready(function($){
 		});
 
 		// Ultra
-		jQuery.ajax({ type: "get", dataType: "text", url: wcAdminConfig.pluginurl + 'endpoints/ultra/index.php', data: { action: "check", channelIds: [1], lastId: 0, lastCheckTime: 0, fromActionId: 0 } })
+		jQuery.ajax({ type: "get", dataType: "text", url: wcAdminConfig.pluginurl + 'Endpoints/Ultra/index.php', data: { action: "check", channelIds: [1], lastId: 0, lastCheckTime: 0, fromActionId: 0 } })
 		.done(function(response) {
 			if (response === 'OK') {
 				resultUltra = 'OK';
@@ -310,7 +310,7 @@ jQuery(document).ready(function($){
 				resultUltra += 'Please confirm that you use standard wp-config.php and wp-load.php files in their standard locations. Details: ' + errorMessage;
 			} else if (jqXHR.status < 500) {
 				resultUltra += 'The chat is being blocked by a security plugin or the server. Please make sure that PHP files may be directly executed here: ' +
-					wcAdminConfig.pluginurl + 'endpoints/ultra/index.php';
+					wcAdminConfig.pluginurl + 'Endpoints/Ultra/index.php';
 			} else {
 				resultUltra += 'Please make sure you run your site with the newest Wise Chat, WordPress and PHP.';
 			}
@@ -351,6 +351,127 @@ jQuery(document).ready(function($){
 	});
 	jQuery('.wc-bot-cancel-button').on('click', function() {
 		jQuery(this).closest('.wc-bot-form').hide();
+	});
+
+	function reloadToTab(tabName) {
+		if (location.href.match(/#/)) {
+			location.href = location.href.split('#')[0] + '#wc_tab=' + tabName;
+		} else {
+			location.href = location.href + '#wc_tab=' + tabName;
+		}
+		location.reload();
+	}
+
+	jQuery('.wc-bot-edit-button').on('click', function() {
+		var id = jQuery(this).data('id');
+		jQuery('.wc-bot-form-' + id).show();
+	});
+
+	jQuery('.wc-bot-delete-button').on('click', function() {
+		var id = jQuery(this).data('id');
+		var nonce = jQuery(this).data('nonce');
+		if (!confirm('Are your sure you want to delete?')) {
+			return;
+		}
+
+		var data = {
+			action: "wise_chat_admin_ai_bot_delete",
+			id: id,
+			nonce: nonce
+		}
+
+		jQuery.ajax({ type: "post", dataType: "text", url: wcAdminConfig.ajaxurl, data: data })
+		.done(function(response) {
+			var responseObj = jQuery.parseJSON(response);
+
+			if (responseObj) {
+				if (responseObj.error) {
+					alert('Error: ' + responseObj.error);
+				} else {
+					reloadToTab('ai')
+				}
+			} else {
+				alert('Unknown error');
+				console.err(response);
+			}
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			alert('Unknown error');
+			console.err(textStatus);
+		});
+
+	});
+	jQuery('.wc-bot-save-button').on('click', function() {
+		var table = jQuery(this).closest('.wc-bot-form');
+		var id = table.data('id');
+		var name = table.find('[name=wc-bot-name-' + id + ']').val();
+		var email = table.find('[name=wc-bot-email-' + id + ']').val();
+		var model = table.find('[name=wc-bot-model-' + id + ']').val();
+		var type = table.find('[name=wc-bot-type-' + id + ']:checked').val();
+		var images = table.find('[name=wc-bot-images-enable-' + id + ']:checked').val();
+		var nonce = table.find('[name=wc-bot-nonce-' + id + ']').val();
+		var roleDescription = table.find('[name=wc-bot-role-description-' + id + ']').val();
+		var data;
+
+		if (name.length === 0) {
+			alert('Name cannot be empty');
+			return;
+		}
+		if (roleDescription.length === 0) {
+			alert('Role description cannot be empty');
+			return;
+		}
+		if (id === 'new') {
+			if (email.length === 0) {
+				alert('Email cannot be empty');
+				return;
+			}
+			if (model.length === 0) {
+				alert('Model cannot be empty');
+				return;
+			}
+
+			data = {
+				action: "wise_chat_admin_ai_bot_create",
+				name: name,
+				email: email,
+				roleDescription: roleDescription,
+				type: type,
+				images: images === '1',
+				model: model,
+				nonce: nonce
+			}
+		} else {
+			data = {
+				id: id,
+				action: "wise_chat_admin_ai_bot_save",
+				name: name,
+				model: model,
+				roleDescription: roleDescription,
+				nonce: nonce,
+				images: images === '1'
+			}
+		}
+
+		jQuery.ajax({ type: "post", dataType: "text", url: wcAdminConfig.ajaxurl, data: data })
+		.done(function(response) {
+			var responseObj = jQuery.parseJSON(response);
+
+			if (responseObj) {
+				if (responseObj.error) {
+					alert('Error: ' + responseObj.error);
+				} else {
+					reloadToTab('ai')
+				}
+			} else {
+				alert('Unknown error');
+				console.err(response);
+			}
+		})
+		.fail(function(jqXHR, textStatus, errorThrown) {
+			alert('Unknown error');
+			console.err(textStatus);
+		});
 	});
 
 });

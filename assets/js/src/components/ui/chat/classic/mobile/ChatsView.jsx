@@ -58,7 +58,7 @@ export default connect(
 	(state) => ({
 		configuration: state.configuration,
 		i18nBase: state.configuration.i18n,
-		publicChannels: state.application.publicChannels,
+		publicChannels: state.application.channels.filter( channel => channel.type !== 'direct' ),
 		channels: state.application.channels,
 		openedChannels: state.ui.openedChannels,
 		channelsUi: state.ui.channels

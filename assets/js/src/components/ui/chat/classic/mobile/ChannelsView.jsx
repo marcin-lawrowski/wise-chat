@@ -38,8 +38,10 @@ class ChannelsView extends React.Component {
 			<Scrollbar>
 				{ this.props.publicChannels.map( channel =>
 					<div key={ channel.id } className={ this.getPublicChannelClasses(channel) } onClick={ e => this.handleChannelClick(channel) }>
-						<img src={ channel.avatar ? channel.avatar : '' } className="wcFunctional wcChannelAvatar" alt={ channel.name } />
-						<span className="wcName">{ channel.name }</span>
+						<div className="wcDetails">
+							<img src={ channel.avatar ? channel.avatar : '' } className="wcFunctional wcChannelAvatar" alt={ channel.name } />
+							<span className="wcName">{ channel.name }</span>
+						</div>
 					</div>
 				) }
 			</Scrollbar>
@@ -55,7 +57,7 @@ ChannelsView.propTypes = {
 export default connect(
 	(state) => ({
 		configuration: state.configuration,
-		publicChannels: state.application.publicChannels
+		publicChannels: state.application.channels.filter( channel => channel.type !== 'direct' )
 	}),
 	{ focusChannel, openChannel, setMobileTopTab, setMobileTitle }
 )(ChannelsView);

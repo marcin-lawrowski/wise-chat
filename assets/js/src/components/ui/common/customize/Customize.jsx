@@ -28,7 +28,7 @@ class Customize extends React.Component {
 
 		return(
 			<div className={ 'wcCustomizations' + (!this.props.visible ? ' wcInvisible' : '') } style={ { backgroundColor: this.props.configuration.defaultBackgroundColor } }>
-				<a href="#" className="wcCustomizeButton wcFunctional" onClick={ e => this.togglePanel(e) }>{ this.props.i18nBase.customize }</a>
+				<a href="#" className="wcCustomizeButton wcFunctional" onClick={ e => this.togglePanel(e) }><span className="wcIcon wcIconSm wcIconGear wcMarginRight1" />{ this.props.i18nBase.customize }</a>
 
 				<CustomizeArea visible={ this.state.visible } onSave={ () => this.setState({ visible: false }) } />
 			</div>

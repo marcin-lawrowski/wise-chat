@@ -88,7 +88,6 @@ export default class AjaxEngineMaintenance  {
 
 		let data = {
 			full: this.full,
-			channelIds: this.configuration.channelIds,
 			checksum: this.configuration.checksum
 		};
 

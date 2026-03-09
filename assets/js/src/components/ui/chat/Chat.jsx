@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import { restoreChannels, focusChannel, openChannel, minimizeChannels, completeInit, updateProperties } from "actions/ui";
+import { restoreChannels, minimizeChannels, completeInit, updateProperties } from "actions/ui";
 import Engine from "engine/Engine";
 import ClassicChat from "./classic/ClassicChat";
 import Alerts from "ui/common/alerts/Alerts";
@@ -10,7 +10,6 @@ import Incoming from "ui/common/incoming/Incoming";
 import UserSession from "ui/common/session/UserSession";
 import Notifications from "ui/common/notifications/Notifications";
 import ChannelsManager from "../common/logic/ChannelsManager";
-import ChannelsStorage from "utils/channels-storage";
 import $ from "jquery";
 
 class Chat extends React.Component {
@@ -55,55 +54,28 @@ class Chat extends React.Component {
 		});
 	}
 
+
 	componentDidUpdate(prevProps) {
 		const userLoaded = this.props.user !== prevProps.user && this.props.user;
 		const authLoaded = this.props.auth !== prevProps.auth && this.props.auth;
-		const domDestroyed = this.props.domPresent !== prevProps.domPresent && this.props.domPresent === false;
 
 		// restore saved channels
 		if (userLoaded && (!prevProps.user || prevProps.user.id !== this.props.user.id)) {
-			const channelsStorage = new ChannelsStorage(this.props.user.cacheId);
-			if (channelsStorage.isEmpty()) {
-				console.log('empty');
-				this.autoOpenChannels();
-			} else {
-				this.props.restoreChannels();
-			}
+			this.props.restoreChannels();
 			this.props.completeInit();
 		}
-
-		// restore the storage of auth mode:
-		if (authLoaded && !this.props.user) {
-			const channelsStorage = new ChannelsStorage('na');
-			if (!channelsStorage.isEmpty()) {
-				this.props.restoreChannels();
-			}
-		}
-
-		if (domDestroyed) {
-			this.props.engine.stop();
-		}
-	}
-
-	autoOpenChannels() {
-		if (this.props.autoOpenChannel) {
-			this.props.openChannel(this.props.autoOpenChannel);
-			this.props.focusChannel(this.props.autoOpenChannel);
-
-			return [this.props.autoOpenChannel];
-		}
-
-		return [];
 	}
 
 	render() {
 		return(
 			<React.Fragment>
-				<ClassicChat />
+				{ this.props.configuration.mode === 0 &&
+					<ClassicChat />
+				}
 				<ChannelsManager />
 				<Alerts />
 				<Confirms />
-				<Incoming />
+				{ this.props.configuration.interface.incoming.enabled && <Incoming /> }
 				<Notifications />
 				<UserSession />
 			</React.Fragment>
@@ -122,10 +94,7 @@ export default connect(
 		configuration: state.configuration,
 		user: state.application.user,
 		auth: state.application.auth,
-		publicChannels: state.application.publicChannels,
-		autoOpenChannel: state.application.autoOpenChannel,
-		openedChannels: state.ui.openedChannels,
-		domPresent: state.application.domPresent
+		openedChannels: state.ui.openedChannels
 	}),
-	{ restoreChannels, focusChannel, openChannel, minimizeChannels, completeInit, updateProperties }
+	{ restoreChannels, minimizeChannels, completeInit, updateProperties }
 )(Chat);

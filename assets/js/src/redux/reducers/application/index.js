@@ -1,15 +1,14 @@
 const defaultState = {
-	domPresent: true,
 	channels: [], // this is global channels storage (both those online and past / offline)
-	publicChannels: [],
-	directChannels: [],
-	autoOpenChannel: undefined,
+	browserChannels: [],
+	autoOpenChannels: [],
 	onlineUsersCounter: 0,
 	channelMap: undefined,
 	users: [],
 	usersCounter: [],
 	absentUsers: [],
 	newUsers: [],
+	userFeed: [],
 	userRights: {},
 	user: undefined,
 	auth: undefined,
@@ -42,25 +41,34 @@ export default function application(state = defaultState, action) {
 			return createState(state, {
 				channels: JSON.stringify(channelCandidates) !== JSON.stringify(state.channels) ? channelCandidates : state.channels
 			});
-		case 'publicChannels':
+		case 'browserChannels':
 			// add to global channels storage only if not present:
-			const publicChannelCandidates = action.data
+			const browserChannelCandidates = action.data
 				.filter( channelCandidate => !state.channels.find( channel => channel.id === channelCandidate.id) );
-			const channelCandidatesOfPublic = publicChannelCandidates.length > 0 ? [...state.channels, ...publicChannelCandidates] : state.channels;
+			const channelCandidatesOfBrowser = (browserChannelCandidates.length > 0 ? [...state.channels, ...browserChannelCandidates] : state.channels).map( channel => action.data.find( channelCandidate => channel.id === channelCandidate.id ) ?? channel );
 
 			return createState(state, {
-				publicChannels: JSON.stringify(state.publicChannels) !== JSON.stringify(action.data) ? action.data : state.publicChannels,
-				channels: JSON.stringify(channelCandidatesOfPublic) !== JSON.stringify(state.channels) ? channelCandidatesOfPublic : state.channels
+				browserChannels: JSON.stringify(state.browserChannels) !== JSON.stringify(action.data) ? action.data : state.browserChannels,
+				onlineUsersCounter: action.data.filter( channel => channel.online === true && channel.type === 'direct' ).length,
+				channels: JSON.stringify(channelCandidatesOfBrowser) !== JSON.stringify(state.channels) ? channelCandidatesOfBrowser : state.channels
 			});
-		case 'directChannels':
-			// add to global channels storage only if not present:
-			const directChannelCandidates = action.data
+		case 'autoOpenChannels':
+			const operatorsChannelCandidates = action.data
 				.filter( channelCandidate => !state.channels.find( channel => channel.id === channelCandidate.id) );
-			const channelCandidatesOfDirect = directChannelCandidates.length > 0 ? [...state.channels, ...directChannelCandidates] : state.channels;
+			const channelCandidatesOfOperators = (operatorsChannelCandidates.length > 0 ? [...state.channels, ...operatorsChannelCandidates] : state.channels).map( channel => action.data.find( channelCandidate => channel.id === channelCandidate.id ) ?? channel );
 
 			return createState(state, {
-				directChannels: JSON.stringify(state.directChannels) !== JSON.stringify(action.data) ? action.data : state.directChannels,
-				channels: JSON.stringify(channelCandidatesOfDirect) !== JSON.stringify(state.channels) ? channelCandidatesOfDirect : state.channels
+				autoOpenChannels: JSON.stringify(state.autoOpenChannels) !== JSON.stringify(action.data) ? action.data : state.autoOpenChannels,
+				channels: JSON.stringify(channelCandidatesOfOperators) !== JSON.stringify(state.channels) ? channelCandidatesOfOperators : state.channels
+			});
+		case 'openChannels':
+			const openChannelCandidates = action.data
+				.filter( channelCandidate => !state.channels.find( channel => channel.id === channelCandidate.id) );
+			const channelCandidatesOfOpens = (openChannelCandidates.length > 0 ? [...state.channels, ...openChannelCandidates] : state.channels).map( channel => action.data.find( channelCandidate => channel.id === channelCandidate.id ) ?? channel );
+
+			return createState(state, {
+				openChannels: JSON.stringify(state.openChannels) !== JSON.stringify(action.data) ? action.data : state.openChannels,
+				channels: JSON.stringify(channelCandidatesOfOpens) !== JSON.stringify(state.channels) ? channelCandidatesOfOpens : state.channels
 			});
 		case 'recentChats':
 			const recentChatsChannels = action.data.map( recentChat => recentChat.channel );
@@ -75,9 +83,13 @@ export default function application(state = defaultState, action) {
 				recentChats: action.data,
 				channels: JSON.stringify(channelsAltered) !== JSON.stringify(state.channels) ? channelsAltered : state.channels
 			});
-		case 'autoOpenChannel':
+		case 'userFeed':
+		case 'application.userFeed.merge':
+			const currentIDs = state.userFeed.map( entry => entry.id );
+			const newInput = action.data.filter( entry => !currentIDs.includes(entry.id) );
+
+			return newInput.length > 0 ? createState(state, { userFeed: [ ...state.userFeed, ...newInput ].sort( (a, b) => a.created.localeCompare(b.created) ).reverse() }) : state;
 		case 'users':
-		case 'onlineUsersCounter':
 		case 'usersCounter':
 		case 'absentUsers':
 		case 'newUsers':
@@ -100,59 +112,48 @@ export default function application(state = defaultState, action) {
 				channels: state.channels.map( channel => {
 					return channel.id === action.data ? { ...channel, authorized: true } : channel
 				} ),
-				publicChannels: state.publicChannels.map( channel => {
+				browserChannels: state.browserChannels.map( channel => {
 					return channel.id === action.data ? { ...channel, authorized: true } : channel
 				} )
 			});
 		case 'application.heartbeat':
 			return createState(state, { heartbeat: action.data });
-		case 'application.dom.present':
-			if (state.domPresent !== action.data) {
-				return createState(state, { domPresent: action.data });
-			}
-			return state;
 		case 'application.recent.read':
 			return createState(state, { recentChats: state.recentChats.map( recentChat => recentChat.channel.id !== action.data ? recentChat : { ...recentChat, read: true }) });
-		case 'application.incoming':
-			// detect unique incoming chats:
-			const incomingChats = action.data
-				.filter( message => message.own === false && message.live === true && message.channel.type === 'direct' )
-				.filter( message => !state.incomingChats.find( incomingChat => incomingChat.channel === message.channel.id) );
-
-			// add to global channels storage only if not present:
-			const incomingChannelsCandidates = incomingChats
-				.filter( message => !state.channels.find( channel => message.channel.id === channel.id) )
-				.map( message => message.channel );
-
-			return createState(state, {
-				channels: incomingChannelsCandidates.length > 0 ? [ ...state.channels, ...incomingChannelsCandidates ] : state.channels,
-				incomingChats: incomingChats.length > 0 ? [...state.incomingChats, ...incomingChats.map( message => ({ channel: message.channel.id, channelName: message.channel.name }) ) ] : state.incomingChats
-			});
+		case 'application.feed.read':
+			return createState(state, { userFeed: state.userFeed.map( userFeedEntry => userFeedEntry.id !== action.data ? userFeedEntry : { ...userFeedEntry, seen: true }) });
+		case 'application.incoming.add':
+			return createState(state, { incomingChats: [...state.incomingChats, action.data ] });
 		case 'application.incoming.delete':
 			return createState(state, {
-				incomingChats: state.incomingChats.filter( incomingChat => !action.data.includes(incomingChat.channel) )
+				incomingChats: state.incomingChats.filter( incomingChat => !action.data.includes(incomingChat.channelId) )
 			});
 		case 'application.channel.replace':
 			return createState(state, {
 				channels: state.channels.map( channel => {
-					return channel.id === action.id ? { ...channel, name: action.name } : channel
+					return channel.id === action.channel.id ? { ...channel, ...action.channel } : channel
 				} ),
-				publicChannels: state.publicChannels.map( channel => {
-					return channel.id === action.id ? { ...channel, name: action.name } : channel
-				} ),
-				directChannels: state.publicChannels.map( channel => {
-					return channel.id === action.id ? { ...channel, name: action.name } : channel
+				browserChannels: state.browserChannels.map( channel => {
+					return channel.id === action.channel.id ? { ...channel, ...action.channel } : channel
 				} )
 			});
 		case 'application.channel.add':
 			return createState(state, {
-				channels: state.channels.find( channel => channel.id === action.channel.id ) ? state.channels : [ ...state.channels, action.channel ],
-				publicChannels: action.channel.type === 'public' && !state.publicChannels.find( channel => channel.id === action.channel.id )
-					? [ ...state.publicChannels, action.channel ]
-					: state.publicChannels,
-				directChannels: action.channel.type === 'direct' && !state.directChannels.find( channel => channel.id === action.channel.id )
-					? [ ...state.directChannels, action.channel ]
-					: state.directChannels,
+				channels: state.channels.find( channel => channel.id === action.channel.id )
+					? state.channels.map( channel => channel.id === action.channel.id ? action.channel : channel )
+					: [ ...state.channels, action.channel ],
+				browserChannels: action.storageOnly
+					? state.browserChannels
+					: (
+						state.browserChannels.find( channel => channel.id === action.channel.id )
+						? state.browserChannels.map( channel => channel.id === action.channel.id ? action.channel : channel )
+						: [ ...state.browserChannels, action.channel ]
+					)
+			});
+		case 'application.channel.remove':
+			return createState(state, {
+				channels: state.channels.filter( channel => channel.id !== action.channelId ),
+				browserChannels: state.browserChannels.filter( channel => channel.id !== action.channelId )
 			});
 		case 'application.clear':
 			return createState(state, { ...defaultState, checkSum: state.checkSum, i18n: state.i18n, heartbeat: state.heartbeat });

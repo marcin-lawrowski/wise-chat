@@ -45,6 +45,7 @@ class UsersView extends React.Component {
 						<div className="wcSearch">
 							<input
 								type="text"
+								className="wcControl"
 								placeholder={ this.props.i18n.subChannelsSearchHint }
 								value={ this.state.searchPhrase }
 								onChange={ (e) => this.setState({ searchPhrase: e.target.value })}
@@ -69,7 +70,7 @@ UsersView.propTypes = {
 export default connect(
 	(state) => ({
 		configuration: state.configuration,
-		directChannels: state.application.directChannels,
+		directChannels: state.application.channels.filter( channel => channel.type === 'direct' ),
 		i18n: state.application.i18n,
 		focusedChannel: state.ui.focusedChannel
 	}),

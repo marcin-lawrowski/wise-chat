@@ -22,6 +22,7 @@ const defaultState = {
 		title: undefined
 	},
 	logOffRequest: undefined,
+	destroyRequest: undefined,
 	streams: [],
 	streamRequest: undefined,
 	twilio: {
@@ -51,7 +52,9 @@ export default function ui(state = defaultState, action) {
 		case 'ui.channel.open':
 			return state.openedChannels.includes(action.id)
 				? state
-				: createState(state, { openedChannels: [ ...state.openedChannels, action.id ] } );
+				: createState(state, { openedChannels: action.openFirst ? [ action.id, ...state.openedChannels ] : [ ...state.openedChannels, action.id ] } );
+		case 'ui.channel.open.only':
+			return createState(state, { openedChannels: [ action.id ] });
 		case 'ui.channel.open.multiple':
 			if (!Array.isArray(action.channels)) {
 				return state;
@@ -83,7 +86,7 @@ export default function ui(state = defaultState, action) {
 			const ignoredChannels = [...new Set(action.channels.filter( channel => !state.ignoredChannels.includes(channel)))];
 			return createState(state, { ignoredChannels: [ ...state.ignoredChannels, ...ignoredChannels ] } )
 		case 'ui.channel.close':
-			return createState(state, { openedChannels: state.openedChannels.filter( channelId => channelId !== action.id) } )
+			return createState(state, { openedChannels: state.openedChannels.filter( channelId => channelId !== action.id), focusedChannel: state.focusedChannel === action.id ? undefined : state.focusedChannel } )
 		case 'ui.channel.input.append':
 			return createState(state, { channels: { ...state.channels, [action.id]: { ...state.channels[action.id], inputAppend: action.text } } } );
 		case 'ui.channel.unread.add':
@@ -150,6 +153,8 @@ export default function ui(state = defaultState, action) {
 			return createState(state, { notifications: [] });
 		case 'ui.log.off':
 			return createState(state, { logOffRequest: new Date() });
+		case 'ui.destroy':
+			return createState(state, { destroyRequest: new Date() });
 		case 'ui.clear':
 			return createState(state, defaultState);
 		case 'ui.stream.request':

@@ -31,7 +31,9 @@ class EmoticonsPopup extends React.Component {
 	}
 
 	render() {
-		const layerHeight = this.layerHeight;
+		const custom = this.props.configuration.interface.input.emoticons.custom;
+		const categoriesEnabled = this.props.configuration.interface.input.gifs.enabled;
+		const layerHeight = this.layerHeight + (categoriesEnabled ? 50 : 0);
 		let layerWidth = this.props.windowSizeClass !== 'XXs' ? this.layerWidth : '80%';
 
 		return (
@@ -48,10 +50,21 @@ class EmoticonsPopup extends React.Component {
 				>
 					{close => (
 						<div className="wcAddonsLibrary">
+							{ categoriesEnabled &&
+								<div className="wcCategories">
+									<a href="#" className={ "wcFunctional wcCategoryButton " + (this.state.tab === 'emoticons' ? 'wcCategoryButtonActive' : '') } onClick={ e => { e.preventDefault(); this.setState({ tab: 'emoticons' }); } }><span className="wcIcon wcIconEmotion" /></a>
+									<a href="#" className={ "wcFunctional wcCategoryButton " + (this.state.tab === 'gifs' ? 'wcCategoryButtonActive' : '') } onClick={ e => { e.preventDefault(); this.setState({ tab: 'gifs' }); } }><span className="wcIcon wcIconGif" /></a>
+								</div>
+							}
 
 							<div className={ 'wcCategory wcCategoryEmoticons ' + (this.state.tab !== 'emoticons' ? 'wcInvisible' : '') }>
 								<Scrollbar noScrollX={ true }>
-									{ this.emoticons.map( (emoticon, index) =>
+									{ custom && this.emoticons.map( (emoticon, index) =>
+										<a href="#" key={ index } onClick={ e => { this.handleClick(e, emoticon); close(); } }>
+											<img src={ emoticon.urlFull } style={ emoticon.maxWidth ? { maxWidth: emoticon.maxWidth } : undefined } />
+										</a>
+									)}
+									{ !custom && this.emoticons.map( (emoticon, index) =>
 										<a href="#" key={ index } onClick={ e => { this.handleClick(e, emoticon); close(); } }>
 											<span className={ 'wcEmoticon ' + emoticon.class } />
 										</a>

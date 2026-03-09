@@ -1,22 +1,30 @@
 <?php
 
+namespace Kainex\WiseChat\Integrations;
+
+use Kainex\WiseChat\Container;
+use Kainex\WiseChat\DAO\User\UsersDAO;
+use Kainex\WiseChat\Services\ClientSide\ClientSide;
+
 /**
  * WiseChat integrations helper class.
  *
- * @author Kainex <contact@kainex.pl>
+ * @author Kainex <contact@kaine.pl>
  */
 class WiseChatHelper {
 
 	/**
+	 * TODO: FIX!
+	 *
 	 * @param integer $wordPressUserId
 	 * @return string
 	 */
 	public static function getDirectChannelId($wordPressUserId) {
-		/** @var WiseChatUsersDAO $usersDAO */
-		$usersDAO = WiseChatContainer::getLazy('dao/user/WiseChatUsersDAO');
+		/** @var UsersDAO $usersDAO */
+		$usersDAO = Container::getInstance()->get(UsersDAO::class);
 
-		/** @var WiseChatClientSide $clientSide */
-		$clientSide = WiseChatContainer::getLazy('services/client-side/WiseChatClientSide');
+		/** @var ClientSide $clientSide */
+		$clientSide = Container::getInstance()->get(ClientSide::class);
 
 
 		$id = $usersDAO->getLatestByWordPressId($wordPressUserId);

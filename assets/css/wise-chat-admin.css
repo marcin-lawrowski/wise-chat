@@ -8,3 +8,8 @@
 .block-editor-block-inspector .components-base-control.mb-0 {
     margin-bottom: 0;
 }
+
+.wc-bot-form-table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

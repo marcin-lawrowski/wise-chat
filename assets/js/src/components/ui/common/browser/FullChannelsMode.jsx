@@ -23,6 +23,7 @@ class FullChannelsMode extends React.Component {
 		this.handleChannelClick = this.handleChannelClick.bind(this);
 		this.handleSearchClear = this.handleSearchClear.bind(this);
 		this.clearHighlighted = this.clearHighlighted.bind(this);
+		this.sortChannels = this.sortChannels.bind(this);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -88,14 +89,24 @@ class FullChannelsMode extends React.Component {
 		return classes.join(' ');
 	}
 
+	sortChannels(a, b) {
+        if (a.online === false && b.online === true) {
+            return 1;
+        }
+         if (a.online === true && b.online === false) {
+            return -1;
+        }
+
+        return a.name.localeCompare(b.name);
+    };
+
 	render() {
-		const showPublicChannels = this.props.publicChannels.length > 1 && this.props.configuration.interface.chat.publicEnabled;
+		const showPublicChannels = (this.props.publicChannels.length > 1 || this.props.userRights.createChannels || this.props.userRights.searchChannels) && this.props.configuration.interface.chat.publicEnabled;
 
 		return(
 			<React.Fragment>
 				{ showPublicChannels &&
-					<div className="wcChannels wcPublicChannels">
-						<span className="wcLabel">{ this.props.i18nBase.channels }</span>
+					<div className={ "wcChannels wcPublicChannels " + (this.props.directChannels.length === 0 ? 'wcPublicChannelsExpanded' : '') }>
 						<div className="wcList" style={ { height: this.props.publicChannels.length <= this.MAX_PUBLIC_CHANNELS ? 'auto' : undefined } }>
 							<Scrollbar native={ this.props.publicChannels.length <= this.MAX_PUBLIC_CHANNELS } noScrollX={ true }>
 								{ this.props.publicChannels.map( channel =>
@@ -111,6 +122,8 @@ class FullChannelsMode extends React.Component {
 												style={ { color: channel.textColor ? channel.textColor : undefined } }
 											>
 												{channel.name}
+
+
 											</span>
 										</span>
 									</a>
@@ -127,7 +140,7 @@ class FullChannelsMode extends React.Component {
 							}
 							<div className="wcList">
 								<Scrollbar noScrollX={ true }>
-									{ this.props.directChannels.filter( channel => !this.state.searchPhrase || channel.name.match(new RegExp(this.state.searchPhrase, 'i'))).map( (channel, index) =>
+									{ this.props.directChannels.sort( this.sortChannels ).filter( channel => !this.state.searchPhrase || channel.name.match(new RegExp(this.state.searchPhrase, 'i'))).map( (channel, index) =>
 										<React.Fragment key={ channel.id}>
 											<DirectChannel channel={ channel } highlighted={ this.state.highlighted.includes(channel.id) } />
 										</React.Fragment>
@@ -141,6 +154,7 @@ class FullChannelsMode extends React.Component {
 								<div className="wcSearch">
 									<input
 										type="text"
+										className="wcControl"
 										placeholder={ this.props.i18n.subChannelsSearchHint }
 										value={ this.state.searchPhrase }
 										onChange={ (e) => this.setState({ searchPhrase: e.target.value })}
@@ -175,12 +189,13 @@ FullChannelsMode.propTypes = {
 export default connect(
 	(state) => ({
 		configuration: state.configuration,
-		publicChannels: state.application.publicChannels,
-		directChannels: state.application.directChannels,
+		publicChannels: state.application.browserChannels.filter( channel => channel.type !== 'direct' ),
+		directChannels: state.application.browserChannels.filter( channel => channel.type === 'direct' ),
 		i18nBase: state.configuration.i18n,
 		i18n: state.application.i18n,
 		focusedChannel: state.ui.focusedChannel,
-		ignoredChannels: state.ui.ignoredChannels
+		ignoredChannels: state.ui.ignoredChannels,
+		userRights: state.application.user.rights
 	}),
 	{ focusChannel, openChannel, stopIgnoringChannel, confirm, notify }
 )(FullChannelsMode);

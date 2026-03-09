@@ -5,7 +5,7 @@
 	border: 0; padding-top: 0; color: #cad6e2;
 	-webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;
 	overflow: hidden;
-    background: #26323e;
+    background: var(--wc-bg-color);
 
     .wcTitle {
       padding: 10px 13px;
@@ -356,12 +356,6 @@
     }
   }
 
-  .wcCustomizations{
-    a.wcCustomizeButton:before {
-      background-image: url("../../gfx/themes/colddark/gfx/custom.svg");
-    }
-  }
-
   .wcCounter {
     font-size: 10px;
   }
@@ -624,14 +618,6 @@
       font-weight: bold;
     }
   }
-
-  .wcToasts {
-    .wcToast {
-      background-color: #202a35;
-      color: rgb(202, 214, 226);
-      box-shadow: 0 0 15px rgba(0, 0, 0, 60%);
-    }
-  }
 }
 
 @mixin colddark-global {
@@ -673,9 +659,6 @@
     }
     > .wcFooter {
       border-top: 1px solid #26323e;
-      .wcButton {
-        color: #cad6e2;
-      }
     }
 
     .wcRecentChats {
@@ -731,7 +714,7 @@
         background: transparent url("../../gfx/themes/colddark/gfx/edit.svg") no-repeat 50%;
       }
 
-      .wcMute {
+      .wcMute, .wcUnMute {
         background: transparent url("../../gfx/themes/colddark/gfx/mute.svg") no-repeat 50%;
       }
 
@@ -780,7 +763,7 @@
     }
   }
   .wcRecentEmpty-content.wcColddarkTheme-content {
-    height: 50px;
+    height: 100px;
     .wcRecentChats {
       display: flex;
       align-items: center;
@@ -789,19 +772,30 @@
 }
 
 @mixin colddark-common {
+  --wc-font-color: #cad6e2;
+  --wc-form-font-color: #1a212b;
+  --wc-link-color: #24b4ff;
+  --wc-bg-color: #26323e;
+
   &, * {
-    font: 13px/22px 'Maven Pro', sans-serif;
-    color: #cad6e2;
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 13px;
+    line-height: 22px;
+    color: var(--wc-font-color);
   }
 
   a {
-    color: #24b4ff;
+    color: var(--wc-link-color);
     box-shadow: none;
   }
 
-  button:not(.wcFunctional),button:not(.wcFunctional):focus, button:not(.wcFunctional):active,
-  input[type="button"], input[type="button"]:focus, input[type="button"]:active,
-  input[type="submit"], input[type="submit"]:focus, input[type="submit"]:active {
+  .wcIcon {
+    background-color: #465767;
+  }
+
+  button.wcButton, button.wcButton:focus, button.wcButton:active,
+  input[type="button"].wcButton, input[type="button"].wcButton:focus, input[type="button"].wcButton:active,
+  input[type="submit"].wcButton, input[type="submit"].wcButton:focus, input[type="submit"].wcButton:active {
     border-radius: 15px !important; background-image: none; background-repeat: no-repeat; border: 0!important;
     color: #FFF !important; padding: 5px 20px !important; box-shadow: none; font-weight: normal !important; line-height: 20px !important;
     height: 40px; outline: none; min-height: 40px !important;
@@ -816,24 +810,33 @@
     -webkit-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
     -o-transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
     transition: all 250ms cubic-bezier(0.62, 0.155, 0.47, 0.86);
+
+    &:hover {
+      background: #57d6ff !important; /* Old browsers */
+      background: -moz-linear-gradient(top,  #57d6ff 0%, #24b4ff 100%) !important; /* FF3.6-15 */
+      background: -webkit-linear-gradient(top,  #57d6ff 0%,#24b4ff 100%) !important; /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom,  #57d6ff 0%,#24b4ff 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#57d6ff', endColorstr='#24b4ff',GradientType=0 ) !important; /* IE6-9 */
+      box-shadow: none !important; font-weight: normal !important;
+    }
+
+    &.wcButtonDanger {
+      color: #fff !important;
+      background: #dc3545 !important;
+      border-color: #dc3545 !important;
+      &:hover {
+        background: #ff0000 !important;
+      }
+    }
   }
 
-  button:not(.wcFunctional):hover, input[type="button"]:hover, input[type="submit"]:hover {
-    background: #57d6ff !important; /* Old browsers */
-    background: -moz-linear-gradient(top,  #57d6ff 0%, #24b4ff 100%) !important; /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  #57d6ff 0%,#24b4ff 100%) !important; /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  #57d6ff 0%,#24b4ff 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#57d6ff', endColorstr='#24b4ff',GradientType=0 ) !important; /* IE6-9 */
-    box-shadow: none !important; font-weight: normal !important;
-  }
-
-  input[type="text"], input[type="password"], textarea {
+  input[type="text"].wcControl, input[type="password"].wcControl, textarea.wcControl {
     height: 40px; font-size: 1em; line-height: 40px; box-shadow: none;
     background-color: #ecf3fb; border-radius: 15px; margin: 0; outline: 0 none; padding: 4px;
     padding-left: 15px; border: 1px solid transparent; color: #1a212b;
   }
 
-  input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+  input[type="text"]:focus.wcControl, input[type="password"]:focus.wcControl, textarea:focus.wcControl {
     background-color: #ffffff; border: 1px solid transparent;
   }
 

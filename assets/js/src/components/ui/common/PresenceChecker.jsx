@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import { updateDOMPresence } from "actions/application";
+import { destroy } from "actions/ui";
 import $ from 'jquery';
 import {connect} from "react-redux";
 
@@ -8,6 +8,10 @@ class PresenceChecker extends React.Component {
 
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			domPresent: true
+		};
 
 		this.domCheck = this.domCheck.bind(this);
 	}
@@ -23,13 +27,14 @@ class PresenceChecker extends React.Component {
 	}
 
 	domCheck() {
-		if ($('#' + this.props.configuration.chatId).length > 0) {
-			if (this.props.domPresent === false) {
-				this.props.updateDOMPresence(true);
+		if ($.contains(document, this.props.rootElement)) {
+			if (this.state.domPresent === false) {
+				this.setState({ domPresent: true });
 			}
 		} else {
-			if (this.props.domPresent === true) {
-				this.props.updateDOMPresence(false);
+			if (this.state.domPresent === true) {
+				this.setState({ domPresent: false });
+				this.props.destroy();
 			}
 		}
 	}
@@ -45,9 +50,5 @@ PresenceChecker.propTypes = {
 };
 
 export default connect(
-	(state) => ({
-		domPresent: state.application.domPresent,
-		configuration: state.configuration
-	}),
-	{ updateDOMPresence }
+	(state) => ({ }), { destroy }
 )(PresenceChecker);

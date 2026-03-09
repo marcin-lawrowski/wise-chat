@@ -36,8 +36,14 @@
   }
 
   .wcRecentChats {
-    height: 100%;
+    display: flex;
+    flex-direction: column;
     line-height: 1.1em;
+    height: 100%;
+
+    .wcRecentContainer {
+      flex-grow: 1;
+    }
 
     .wcHeader {
      //text-align: center;
@@ -77,6 +83,10 @@
 
           .wcName {
             font-weight: bold;
+
+            img.wcReaction {
+              height: 0.8rem;
+            }
           }
 
           .wcTime > span {

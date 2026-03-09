@@ -1,5 +1,7 @@
 <?php
 
+namespace Kainex\WiseChat\Integrations\Elementor\Addons;
+
 use Elementor\Controls_Manager;
 use Elementor\Plugin;
 
@@ -45,15 +47,11 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 		$this->end_controls_section();
 
 		$this->startSection('section_style_chat', esc_html__( 'Chat', 'wise-chat' ));
-		$this->addText('window_title', esc_html__( 'Window Title', 'wise-chat' ), 'Chat');
 		$this->addSelect('theme', esc_html__('Theme', 'wise-chat'), array(
 			'' => esc_html__('Default', 'wise-chat'),
 			'lightgray' => esc_html__('Light Gray', 'wise-chat'),
 			'colddark' => esc_html__('Cold Dark', 'wise-chat'),
 			'airflow' => esc_html__('Air Flow', 'wise-chat'),
-			'crystal' => esc_html__('Crystal', 'wise-chat'),
-			'clear' => esc_html__('Clear', 'wise-chat'),
-			'balloon' => esc_html__('Balloon', 'wise-chat'),
 		), 'lightgray');
 		$this->addText('chat_width', esc_html__( 'Width', 'wise-chat' ), '100%');
 		$this->addText('chat_height', esc_html__( 'Height', 'wise-chat' ), '500px');
@@ -191,10 +189,8 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 
 		$config = array(
 			'mode' => 0,
-			'window_title' => $settings['window_title'],
 			'channel' => $settings['channel'],
 			'access_mode' => $settings['access_mode'],
-			'force_user_name_selection' => $settings['force_user_name_selection'],
 			'theme' => $settings['theme'],
 			'show_emoticon_insert_button' => $settings['show_emoticon_insert_button'],
 			'show_message_submit_button' => $settings['show_message_submit_button'],
@@ -202,8 +198,8 @@ class WiseChatAddon extends \Elementor\Widget_Base {
 			'multiline_support' => $settings['multiline_support'],
 			'input_controls_location' => $settings['input_controls_location'],
 			'show_user_name' => $settings['show_user_name'],
-			'background_color_input' => $settings['background_color_input'],
-			'text_color_input_field' => $settings['text_color_input_field'],
+			'background_color_input' => $settings['background_color_input'] ?? '',
+			'text_color_input_field' => $settings['text_color_input_field'] ?? '',
 			'messages_time_mode' => $settings['messages_time_mode'],
 			'show_avatars' => $settings['show_avatars'],
 			'chat_width' => $settings['chat_width'],

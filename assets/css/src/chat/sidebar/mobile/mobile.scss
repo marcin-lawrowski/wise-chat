@@ -1,0 +1,15 @@
+@mixin mobile {
+  width: 100%;
+
+  .wcColumn {
+    width: 100%;
+
+    .wcMobileContainer {
+      flex-grow: 1;
+      max-height: 500px;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+}

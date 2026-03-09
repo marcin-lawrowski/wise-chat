@@ -22,6 +22,7 @@ require_once(ABSPATH.WPINC.'/l10n.php');
 require_once(ABSPATH.WPINC.'/class-wp-textdomain-registry.php');
 require_once(ABSPATH.WPINC.'/class-wp-locale.php');
 require_once(ABSPATH.WPINC.'/class-wp-locale-switcher.php');
+require_once(ABSPATH.WPINC.'/class-wp-block-parser.php');
 wp_load_translations_early();
 
 if (file_exists(ABSPATH.WPINC.'/class-wp-session-tokens.php')) {

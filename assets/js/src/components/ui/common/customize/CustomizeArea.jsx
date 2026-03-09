@@ -81,14 +81,14 @@ class CustomizeArea extends React.Component {
 						<label>
 							{ this.props.i18n.name }:&nbsp;
 							<input
-								className="wcUserName"
+								className="wcControl wcUserName"
 								type="text"
 								maxLength={ this.props.configuration.interface.customization.userNameLengthLimit }
 								value={ this.state.name }
 								onChange={ e => this.setState({ name: e.target.value })}
 							/>
 						</label>
-						<button className="wcUserNameApprove" type="button" onClick={ this.handleNameSave }>
+						<button className="wcButton wcUserNameApprove" type="button" onClick={ this.handleNameSave }>
 							{ this.props.i18n.save }
 						</button>
 					</div>
@@ -126,7 +126,7 @@ class CustomizeArea extends React.Component {
 					<div id="color" className="wcProperty">
 						<label>{ this.props.i18n.textColor }: </label>
 						<ColorPopup color={ this.state.textColor } onSelect={ color => this.handlePropertySet('textColor', color) } />
-						<button className="wcTextColorReset" type="button" onClick={ e => this.handlePropertySet('textColor', null) }>
+						<button className="wcButton wcTextColorReset" type="button" onClick={ e => this.handlePropertySet('textColor', null) }>
 							{ this.props.i18n.reset }
 						</button>
 					</div>

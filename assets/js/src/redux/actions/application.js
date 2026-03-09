@@ -19,6 +19,13 @@ export function markRecentChatRead(channel) {
 	}
 }
 
+export function markFeedEntryAsSeen(userFeedEntryId) {
+	return {
+		type: 'application.feed.read',
+		data: userFeedEntryId
+	}
+}
+
 export function refreshAuthenticationData() {
 	return function(dispatch, getState, {engine}) {
 		engine.triggerMaintenance();
@@ -32,39 +39,24 @@ export function markChannelAuthorized(channelId) {
 	}
 }
 
-export function updateDOMPresence(isPresent) {
+export function addIncomingChat(incomingChat) {
 	return {
-		type: 'application.dom.present',
-		data: isPresent
+		type: 'application.incoming.add',
+		data: incomingChat
 	}
 }
 
-/**
- * Detects new incoming direct messages and stores them in the store.
- * Usage: display new incoming chats either by opening them or displaying a confirmation dialog.
- *
- * @param {Array} messages
- * @returns {{data: *, type: string}}
- */
-export function detectIncomingChats(messages) {
-	return {
-		type: 'application.incoming',
-		data: messages
-	}
-}
-
-export function deleteIncomingChats(channels) {
+export function deleteIncomingChats(channelsIDs) {
 	return {
 		type: 'application.incoming.delete',
-		data: channels
+		data: channelsIDs
 	}
 }
 
-export function refreshChannel(channelId, name) {
+export function refreshChannel(channel) {
 	return {
 		type: 'application.channel.replace',
-		id: channelId,
-		name: name
+		channel: channel
 	}
 }
 
@@ -74,9 +66,24 @@ export function clear() {
 	}
 }
 
-export function addChannel(channel) {
+export function addChannel(channel, storageOnly = false) {
 	return {
 		type: 'application.channel.add',
-		channel: channel
+		channel: channel,
+		storageOnly: storageOnly
+	}
+}
+
+export function removeChannel(channelId) {
+	return {
+		type: 'application.channel.remove',
+		channelId: channelId
+	}
+}
+
+export function mergeFeed(feedInput) {
+	return {
+		type: 'application.userFeed.merge',
+		data: feedInput
 	}
 }

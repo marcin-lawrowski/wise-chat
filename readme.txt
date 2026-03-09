@@ -1,30 +1,32 @@
 === Wise Chat ===
 Contributors: marcin.lawrowski
 Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme
-Tags: chat, social, buddypress chat, chatbox, webchat
-Requires at least: 3.6
-Requires PHP: 5.2.0
-Tested up to: 6.7.1
-Stable tag: 3.3.5
+Tags: chat, social, gpt chat, ai chat, webchat
+Requires at least: 6.2
+Requires PHP: 7.4
+Tested up to: 6.9
+Stable tag: 3.4
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Advanced chat plugin for WordPress. It requires no server, supports multiple channels, bad words filtering, appearance settings, moderation, bans and more.
+Advanced chat plugin for WordPress with AI ChatGPT bots. Requires no server, supports multiple channels, appearance settings, moderation, bans.
 
 == Description ==
 
-**Wise Chat** is a leading chat plugin that helps to build social networks and this way it increases user's engagement on your website. The plugin provides a platform to send real time messages in chat rooms. The chat is easy to setup and configure. Its every single feature is extremely adjustable. Our development team is constantly working on new features and supporting the existing ones.
+**Wise Chat** is a leading chat plugin that helps to build social networks and this way it increases user's engagement on your website. The plugin provides a platform to send real-time messages in chat rooms both between real users and AI chatbots. The chat is easy to set up and configure. Its every single feature is extremely adjustable. Our development team is constantly working on new features and supporting the existing ones.
 
 **[DEMO](https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-demo?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Documentation](https://kainex.pl/projects/wp-plugins/wise-chat/documentation?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Features](https://kainex.pl/projects/wp-plugins/wise-chat/features?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)** | **[Wise Chat PRO](https://kainex.pl/projects/wp-plugins/wise-chat-pro?utm_source=wisechat-page&utm_medium=lead&utm_campaign=readme)**
 
 * Easy setup and configuration
+* AI Chat bots (OpenAI's ChatGTP integration)
 * Themes, appearance adjustments, mobile friendly
 * No external server required
-* Elementor and Gutenberg integration
+* Elementor and Gutenberg (WordPress blocks) integration
 * Unlimited number of channels and users, password-protected channels
-* WordPress users, anonymous users, single sign-on
+* WordPress users integration, anonymous users, single sign-on
 * Read-only mode, access control, moderation, opening hours
 * Banning and muting users
+* Replying to messages
 * Flood Control, bad words filter, spam reporting
 * Posting links, images, camera pictures, files, emoticons, YT videos
 * Localization and backups
@@ -404,6 +406,11 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.4 =
+* ChatGPT integration
+* Replying to messages
+* Many minor improvements
 
 = 3.3.5 =
 * Security improvements

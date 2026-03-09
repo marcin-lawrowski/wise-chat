@@ -9,6 +9,11 @@
  * Network: true
 */
 
+use Kainex\WiseChat\Container;
+use Kainex\WiseChat\Endpoints\MessagesEndpoint;
+use Kainex\WiseChat\Endpoints\UserCommandEndpoint;
+use Kainex\WiseChat\Loader;
+
 if (!headers_sent()) {
 	header('Content-Type: text/html');
 	header('Cache-Control: no-cache');
@@ -37,23 +42,32 @@ wp_cookie_constants();
 require_once(ABSPATH.WPINC.'/pluggable.php');
 
 $GLOBALS['wp_rewrite'] = new WP_Rewrite();
+$GLOBALS['wp_query'] = new WP_Query();
 
-require_once('{{PLUGIN_DIR}}src/WiseChatContainer.php');
-WiseChatContainer::load('WiseChatInstaller');
-WiseChatContainer::load('WiseChatOptions');
+require_once('{{PLUGIN_DIR}}src/Loader.php');
+Loader::install();
 
-$action = $_REQUEST['action'];
-if ($action === 'wise_chat_messages_endpoint') {
-	/** @var WiseChatMessagesEndpoint $endpoint */
-	$endpoint = WiseChatContainer::get('endpoints/WiseChatMessagesEndpoint');
-	$endpoint->messagesEndpoint();
-} else if ($action === 'wise_chat_prepare_image_endpoint') {
-	/** @var WiseChatUserCommandEndpoint $endpoint */
-	$endpoint = WiseChatContainer::get('endpoints/WiseChatUserCommandEndpoint');
-	$endpoint->prepareImageEndpoint();
-} else if ($action === 'check') {
-	die('OK');
-} else {
-	http_response_code(400);
-    die(json_encode(['error' => 'Invalid action']));
-}
+// TODO: check if there are new messages sooner
+
+add_action('plugins_loaded', function() {
+	// the code must be executed here because some WP function generate warnings: WP_User_Query::query()
+	$action = $_REQUEST['action'];
+	if ($action === 'wise_chat_messages_endpoint') {
+		$container = Container::getInstance();
+
+		/** @var MessagesEndpoint $endpoint */
+		$endpoint = $container->get(MessagesEndpoint::class);
+		$endpoint->messagesEndpoint();
+	} else if ($action === 'wise_chat_prepare_image_endpoint') {
+		$container = Container::getInstance();
+
+		/** @var UserCommandEndpoint $endpoint */
+		$endpoint = $container->get(UserCommandEndpoint::class);
+		$endpoint->prepareImageEndpoint();
+	} else if ($action === 'check') {
+		die('OK');
+	} else {
+		http_response_code(400);
+		die(json_encode(['error' => 'Invalid action']));
+	}
+}, 1);

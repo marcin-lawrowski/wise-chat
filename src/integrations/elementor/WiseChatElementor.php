@@ -1,5 +1,10 @@
 <?php
 
+namespace Kainex\WiseChat\Integrations\Elementor;
+
+use Kainex\WiseChat\Container;
+use Kainex\WiseChat\Integrations\Elementor\Addons\WiseChatAddon;
+
 /**
  * WiseChat Elementor integration class.
  *
@@ -8,7 +13,7 @@
 class WiseChatElementor {
 
 	public function register($widgetsManager) {
-		$widgetsManager->register(WiseChatContainer::get('integrations/elementor/addons/WiseChatAddon'));
+		$widgetsManager->register(Container::getInstance()->get(WiseChatAddon::class));
 	}
 
 }

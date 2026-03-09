@@ -1,0 +1,118 @@
+@mixin forms {
+
+  .wcFormRow {
+    margin-bottom: 1rem !important;
+  }
+
+  input.wcControl {
+    width: auto;
+    display: inline;
+  }
+
+  .wcFormControl, .wcFormControl:hover, .wcFormControl:active {
+    margin: 0;
+    font-family: inherit;
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--wc-form-font-color);
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid var(--wc-color-form-border);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  }
+  .wcFormControl:focus {
+    color: var(--wc-form-font-color);
+    background-color: #fff;
+    border-color: var(--wc-color-form-border);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--wc-color-form-focus);
+  }
+
+  textarea.wcFormControl {
+    resize: vertical;
+    min-height: calc(1.5em + (0.75rem + 2px));
+  }
+
+  .wcFormCheck {
+    width: 1em;
+    height: 1em;
+    margin: 0.25em 0 0;
+    vertical-align: top;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid var(--wc-color-form-border);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+
+    &:focus {
+      border-color: var(--wc-color-form-border);
+      outline: 0;
+      box-shadow: 0 0 0 0.25rem var(--wc-color-form-focus);
+    }
+
+    &:checked[type=radio] {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
+    }
+    &:checked[type=checkbox] {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+    }
+
+    &:checked {
+      background-color: var(--wc-color-form-checked);
+      border-color: var(--wc-color-form-checked);
+    }
+
+    &[type=radio] {
+      border-radius: 50%;
+    }
+
+    &:disabled {
+      pointer-events: none;
+      filter: none;
+      opacity: .5;
+    }
+  }
+
+  .wcFormCheckLabel {
+    padding-left: 0.25em;
+    margin-right: 0.75em;
+  }
+
+  .wcFormControlBorder {
+    border: 1px solid var(--wc-color-form-border);
+    border-radius: 0.25rem;
+  }
+
+  // validation:
+  .wcFormErrorMessage {
+    display: none;
+  }
+
+  .wcFormControl.wcFormError ~ .wcFormErrorMessage, .wcFormCheck.wcFormError ~ .wcFormErrorMessage {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: .925em;
+    color: var(--wc-color-form-validation-error);
+  }
+
+  .wcFormControl.wcFormError, .wcFormCheck.wcFormError {
+    border-color: var(--wc-color-form-validation-error);
+
+    &:focus {
+      box-shadow: 0 0 0 0.25rem var(--wc-color-form-validation-error-focus);
+    }
+  }
+}

@@ -101,7 +101,7 @@ class InputRich extends React.Component {
 				</div>
 			)
 		}
-		if (this.props.channel.type === 'public' && this.props.channel.readOnly) {
+		if (['public', 'private'].includes(this.props.channel.type) && this.props.channel.readOnly) {
 			return null;
 		}
 		const replyToMessage = this.props.replyTo && this.props.channelMessages ? this.props.channelMessages.find( message => message.id === this.props.replyTo ) : undefined;
@@ -136,7 +136,7 @@ class InputRich extends React.Component {
 							<EmoticonsPopup onSelect={ this.handleEmoticonSelect } />
 						}
 
-						{this.props.configuration.interface.input.images.enabled &&
+						{this.props.configuration.interface.input.images.enabled && this.props.channel.configuration.enableImages &&
 							<div className="wcInputButton wcImageAttachment" title={ this.props.i18n.uploadPicture }>
 								<input
 									type="file"
@@ -147,7 +147,7 @@ class InputRich extends React.Component {
 							</div>
 						}
 
-						{this.props.configuration.interface.input.attachments.enabled &&
+						{this.props.configuration.interface.input.attachments.enabled && this.props.channel.configuration.enableAttachments &&
 							<div className="wcInputButton wcFileAttachment" title={ this.props.i18n.attachFile }>
 								<input
 									type="file"
@@ -159,7 +159,7 @@ class InputRich extends React.Component {
 						}
 						{ this.props.configuration.interface.input.submit &&
 							<button
-								className="wcSubmit"
+								className="wcButton wcSubmit"
 								onClick={ this.sendMessage }
 								disabled={ this.props.postedMessage.inProgress }
 							>

@@ -71,6 +71,15 @@ export function deleteMessage(id, channel) {
 	}
 }
 
+export function deleteAllMessagesFromChannel(channelId) {
+	return function(dispatch) {
+		dispatch({
+			type: "message.delete.all.from.channel",
+			channelId: channelId
+		});
+	}
+}
+
 export function deleteMessages(ids) {
 	return function(dispatch) {
 		dispatch({
@@ -89,12 +98,20 @@ export function replaceMessage(message) {
 	}
 }
 
-export function refreshMessage(id, channel) {
+export function replaceMessages(channelId, messages) {
+	return function(dispatch) {
+		dispatch({
+			type: "messages.replace.all",
+			channelId: channelId,
+			messages: messages
+		});
+	}
+}
 
+export function refreshMessage(id) {
 	return function(dispatch, getState, {engine, configuration}) {
 		engine.getMessage({
 				id: id,
-				channel: channel,
 				checksum: configuration.checksum
 			},
 			response => {
@@ -110,7 +127,6 @@ export function refreshMessage(id, channel) {
 			error => { }
 		);
 	}
-
 }
 
 export function refreshSender(id, name) {

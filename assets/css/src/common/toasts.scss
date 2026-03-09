@@ -1,34 +1,57 @@
 @mixin toasts {
 
   .wcToasts {
-    position: absolute;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     top: 20px;
-    left: 5px;
-    right: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: calc(var(--wc-z-index) + 100);
 
     .wcToast {
+      font-size: 1.2em;
+      background: #fff;
       pointer-events: auto;
-      min-width: 250px;
+      min-width: 300px;
       margin-bottom: 12px;
       padding: 12px 25px;
-      box-shadow: 0 0 3px rgba(0,0,0,.16);
-      border-radius: 5px;
-      border: 1px solid #d7d7d7;
       cursor: pointer;
+      border-color: #e9eef0;
+      box-shadow: 2px 2px 15px rgba(60,60,60,.1);
+      border-radius: 5px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+
+      .wcToastIcon {
+        border-radius: 50%;
+        padding: 10px;
+        margin-right: 10px;
+      }
+      .wcIcon {
+        display: block;
+        width: 16px;
+        height: 16px;
+        background-color: #fff;
+      }
 
       &.wcToastError {
-        border: 1px solid rgba(255, 197, 197, 0.9);
-        &:hover {
-          border: 1px solid rgba(255, 197, 197, 1);
+        border-left: 6px solid #EF5252;
+        .wcToastIcon {
+          padding: 6px;
+          background-color: #EF5252;
+          .wcIcon {
+            width: 24px;
+            height: 24px;
+          }
         }
       }
       &.wcToastInfo {
-        border: 1px solid rgba(178, 226, 152, 0.9);
-        &:hover {
-          border: 1px solid rgba(178, 226, 152, 1);
+        border-left: 6px solid #76bf55;
+        .wcToastIcon {
+          background-color: #76bf55;
         }
       }
     }

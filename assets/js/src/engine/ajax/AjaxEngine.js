@@ -146,7 +146,6 @@ export default class AjaxEngine extends Engine {
 		}
 
 		let data = {
-			channelIds: this.configuration.channelIds,
 			lastId: this.lastId,
 			fromActionId: this.lastActionId,
 			lastCheckTime: this.lastCheckTime,

@@ -10,7 +10,6 @@ import RecentView from "./RecentView";
 import { capitalizeFirstLetter } from "utils/string";
 import ChannelView from "./ChannelView";
 import CustomizeView from "./CustomizeView";
-import Toasts from "ui/common/toasts/Toasts";
 
 class MobileChat extends React.Component {
 
@@ -60,7 +59,7 @@ class MobileChat extends React.Component {
 		];
 
 		if (this.props.configuration.interface.recent.enabled) {
-			topTabs.push({ slug: 'recent', name: this.props.i18nBase.recent, component: <RecentView />, header: true, redCounter: this.props.recentChats.filter( recentChat => recentChat.read === false).length });
+			topTabs.push({ slug: 'recent', name: this.props.i18nBase.recent, component: <RecentView />, header: true, redCounter: this.props.recentChats.filter( recentChat => recentChat.read === false).length + this.props.userFeed.filter( userFeedEntry => userFeedEntry.seen === false).length });
 		}
 		if (this.props.user && this.props.user.settings.allowCustomize) {
 			topTabs.push({ slug: 'customize', name: '', component: <CustomizeView visible={ this.props.topTab === 'customize' } />, header: true },);
@@ -92,7 +91,6 @@ class MobileChat extends React.Component {
 				{this.props.configuration.debug &&
 					<Logger/>
 				}
-				<Toasts />
 			</React.Fragment>
 		)
 	}
@@ -119,7 +117,8 @@ export default connect(
 		openedChannels: state.ui.openedChannels,
 		user: state.application.user,
 		recentChats: state.application.recentChats,
-		publicChannels: state.application.publicChannels
+		userFeed: state.application.userFeed,
+		publicChannels: state.application.channels.filter( channel => channel.type !== 'direct' )
 	}),
 	{ setMobileTopTab, setMobileTitle, focusChannel, openChannel }
 )(MobileChat);

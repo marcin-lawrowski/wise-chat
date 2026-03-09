@@ -5,7 +5,6 @@ import Browser from "ui/common/browser/Browser";
 import Logger from "ui/common/logger/Logger";
 import TabbedController from "./TabbedController";
 import Customize from "ui/common/customize/Customize";
-import Toasts from "ui/common/toasts/Toasts";
 import Recent from "ui/common/recent/Recent";
 
 class DesktopChat extends React.Component {
@@ -23,7 +22,7 @@ class DesktopChat extends React.Component {
 				}
 				<div className={ "wcBody " + (browserLocation === 'left' ? 'wcBrowserAreaLeft' : 'wcBrowserAreaRight')}>
 					<div className="wcMessagesArea">
-						<TabbedController />
+						{ this.props.configuration.interface.chat.classic.channelsView === 'tabs' && <TabbedController /> }
 						<Customize />
 					</div>
 					{this.props.configuration.interface.browser.enabled &&
@@ -32,7 +31,6 @@ class DesktopChat extends React.Component {
 						</div>
 					}
 				</div>
-				<Toasts />
 
 				{this.props.configuration.debug &&
 					<Logger/>

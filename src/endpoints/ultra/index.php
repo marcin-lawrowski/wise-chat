@@ -12,11 +12,10 @@ if (!isset($_REQUEST['action']) || !in_array($_REQUEST['action'], array('wise_ch
 }
 
 // check required parameters
-if (!isset($_REQUEST['channelIds']) || !isset($_REQUEST['lastId'])) {
+if (!isset($_REQUEST['lastId'])) {
     http_response_code(400);
     die(json_encode(['error' => 'Missing required parameters']));
 }
-$channelIds = array_map('intval', array_filter($_REQUEST['channelIds']));
 $lastTimeGmt = $_REQUEST['lastCheckTime'];
 $fromActionId = intval($_REQUEST['fromActionId']);
 $lastTime = strtotime($lastTimeGmt);
@@ -67,12 +66,13 @@ foreach ($checkConstants as $checkConstant) {
 // connect to db:
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 try {
+	$forward = false;
 	$dbWC = new mysqli($constants['DB_HOST'], $constants['DB_USER'], $constants['DB_PASSWORD'], $constants['DB_NAME']);
 
 	// get a message:
 	$channelsTable = $variables['table_prefix'].'wise_chat_channels';
 	$messagesTable = $variables['table_prefix'].'wise_chat_messages';
-	$sql = sprintf("SELECT id FROM %s WHERE (`channel` IN (SELECT `name` FROM %s WHERE `id` IN (%s)) OR `channel` = '__private') AND `time` > %d LIMIT 1;", $messagesTable, $channelsTable, implode(', ', $channelIds), $lastTime);
+	$sql = sprintf("SELECT id FROM %s WHERE `time` > %d LIMIT 1;", $messagesTable, $lastTime);
 	$result = $dbWC->query($sql);
 	$rowsNum = $result->num_rows;
 	$result->free();
@@ -96,7 +96,7 @@ try {
     die(json_encode($data));
 }
 
-if ($rowsNum === 0 && $actionsNum === 0) {
+if ($rowsNum === 0 && $actionsNum === 0 && !$forward) {
 	if ($_REQUEST['action'] === 'check') {
 		die('OK');
 	}

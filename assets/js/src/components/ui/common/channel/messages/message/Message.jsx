@@ -6,7 +6,9 @@ import Sender from "./Sender";
 import $ from "jquery";
 import Actions from "./Actions";
 import Decorator from "./Decorator";
+import Quoted from "./Quoted";
 import Avatar from "./Avatar";
+import Reactions from "./Reactions";
 import moment from "moment";
 
 class Message extends React.Component {
@@ -98,9 +100,8 @@ class Message extends React.Component {
 			return null;
 		}
 
-		const reactionsEnabled = false;
+		const reactionsEnabled = this.props.configuration.interface.message.reactions.enabled;
 		const compactMode = this.props.configuration.interface.message.compact;
-		const editEnabled = false;
 
 		const classes = ['wcMessage'];
 		if (this.state.hover) {
@@ -111,9 +112,6 @@ class Message extends React.Component {
 		}
 		if (this.props.message.sender.source === 'w') {
 			classes.push('wcWpUser');
-		}
-		if (this.props.message.awaitingApproval) {
-			classes.push('wcAwaitingApproval');
 		}
 		if (this.props.message.cssClasses) {
 			classes.push(this.props.message.cssClasses);
@@ -132,14 +130,18 @@ class Message extends React.Component {
 				<div className="wcRowBody">
 					<Avatar message={ this.props.message } />
 
-					<div className={ "wcContent" + (this.props.edit ? ' wcEditing' : '') }>
+					<div className={ "wcContent" }>
+						{ this.props.message.quoted &&
+							<Quoted message={ this.props.message.quoted } />
+						}
 						<div ref={ this.contentRef } className="wcInternalContent" style={{ color: this.props.message.color }}>
-							<Decorator editEnabled={ editEnabled }>
+							<Decorator>
 								{ this.props.message.text }
 							</Decorator>
 						</div>
 						{ compactMode && !reactionsEnabled && <Time timeUTC={ this.props.message.timeUTC } dateVisible={ false } /> }
-						<Actions channel={ this.props.channel } message={ this.props.message } visible={ this.state.actionsVisible && !this.props.edit }/>
+						<Reactions message={ this.props.message } />
+						<Actions channel={ this.props.channel } message={ this.props.message } visible={ this.state.actionsVisible }/>
 					</div>
 				</div>
 			</div>
@@ -154,8 +156,7 @@ Message.propTypes = {
 	message: PropTypes.object.isRequired,
 	previousMessage: PropTypes.object,
 	i18n: PropTypes.object.isRequired,
-	i18nBase: PropTypes.object,
-	edit: PropTypes.bool
+	i18nBase: PropTypes.object
 };
 
 export default connect(
@@ -163,7 +164,6 @@ export default connect(
 		configuration: state.configuration,
 		userRights: state.application.user.rights,
 		i18n: state.application.i18n,
-		i18nBase: state.configuration.i18n,
-		edit: state.ui.editableMessages[ownProps.message.id]
+		i18nBase: state.configuration.i18n
 	})
 )(Message);

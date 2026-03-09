@@ -15,7 +15,6 @@ class Decorator extends React.Component {
 	}
 
 	onShortcodeRender(name, params, index) {
-
 		return <span key={ index }>vii</span>;
 	}
 

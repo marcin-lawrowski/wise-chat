@@ -55,10 +55,10 @@ class Toasts extends React.Component {
 					<div
 						key={ index }
 						onClick={ e => this.handleClick(index) }
-						className={ "wcToast wcToast" + capitalizeFirstLetter(toast.type) }
+						className={ "wcToast wcAnimation wcAnimationFade wcToast" + capitalizeFirstLetter(toast.type) }
 						style={ { backgroundColor: this.props.configuration.defaultBackgroundColor } }
 					>
-						{ toast.text }
+						<div className="wcToastIcon"><span className={ `wcIcon ${toast.type === 'info' ? 'wcIconTick' : 'wcIconTimes'}` } /></div> { toast.text }
 					</div>
 				)}
 			</div>

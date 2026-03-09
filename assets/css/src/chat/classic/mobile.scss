@@ -90,9 +90,8 @@
     padding-bottom: 2%;
     flex-grow: 1;
 
-    &.wcTabContentChats {
-      @include current;
-    }
+    @include current;
+
     &.wcTabContentChannels {
       display: flex;
       flex-direction: column;

@@ -36,7 +36,11 @@ jQuery(window).on('load', function() {
 	installXhrProgressEvent();
 
 	window._wiseChat = {
+		instances: [],
 		init: function(element) {
+			if (jQuery(element).hasClass('wcInvisible')) {
+				return;
+			}
 			let config = jQuery(element).data('wc-config');
 
 			if (typeof config !== 'object') {
@@ -47,10 +51,27 @@ jQuery(window).on('load', function() {
 			config.defaultBackgroundColor = config.theme.length === 0 ? getAncestorBackgroundColor(jQuery(element)) : null;
 
 			renderApplication(jQuery(element)[0], config);
+			this.instances.push(config);
 		}
 	}
 
 	jQuery(".wcContainer[data-wc-config]").each(function() {
 		window._wiseChat.init(this);
+	});
+
+	jQuery(".wcChatButton").on('click', function(e) {
+		e.preventDefault();
+
+		if (window._wiseChat.instances.length > 0) {
+			alert('Could not open the chat. Please close any other chats first.');
+			return;
+		}
+
+		const button = jQuery(this);
+		const chatRoot = jQuery(button.data('wc-template'));
+		jQuery(document.body).append(chatRoot);
+		chatRoot.removeClass('wcInvisible').each(function() {
+			window._wiseChat.init(this);
+		});
 	});
 });

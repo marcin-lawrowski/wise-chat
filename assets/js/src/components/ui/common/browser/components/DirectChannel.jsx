@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import Link from "../../channel/components/Link";
-
 class DirectChannel extends React.Component {
 
 	constructor(props) {
@@ -40,6 +39,7 @@ class DirectChannel extends React.Component {
 						>
 							{this.props.channel.name}
 						</span>
+					{this.props.channel.muted && <span className="wcIcon wcIconProhibited wcIconXs" title={ this.props.i18n.muted } /> }
 					{this.props.channel.countryFlagSrc && <img src={ this.props.channel.countryFlagSrc } className="wcFunctional wcCountryFlag" alt={this.props.channel.countryCode}/> }
 					{this.props.channel.city && <span className="wcCity">{this.props.channel.city}</span> }
 					{this.props.channel.countryCode && <span className="wcCountry">{this.props.channel.countryCode}</span> }

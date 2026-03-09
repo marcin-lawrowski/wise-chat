@@ -9,6 +9,10 @@
     flex-grow: 0;
     margin-bottom: 12px;
 
+    &.wcPublicChannelsExpanded {
+      flex-grow: 1;
+    }
+
     .wcList {
       min-height: 150px;
       flex-grow: 1;
@@ -102,6 +106,8 @@
       flex-grow: 0;
       padding: 5px 15px 5px 10px;
       line-height: 1em;
+      display: flex;
+      align-items: center;
     }
 
     .wcChannelTrigger {
@@ -120,6 +126,10 @@
 
       >:not(:last-child) {
         margin-right: 5px;
+      }
+
+      .wcChannelEditButton {
+        display: none;
       }
 
       &.wcFocusedChannel {
@@ -173,6 +183,8 @@
           -webkit-hyphens: auto;
           hyphens: auto;
           min-width: 0;
+          display: flex;
+          align-items: center;
         }
 
         >:not(:last-child) {
@@ -205,6 +217,10 @@
 
     .wcChannelTrigger:hover {
       background-color: #f7f7f7;
+
+      .wcChannelEditButton {
+        display: inline-block;
+      }
     }
 
   }

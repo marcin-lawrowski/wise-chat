@@ -74,6 +74,10 @@
         padding-right: 1px;
         font-size: 0.9em;
       }
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
       &:not(:last-child) {
         margin-right: 3px;

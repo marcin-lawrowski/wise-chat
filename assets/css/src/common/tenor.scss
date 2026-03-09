@@ -1,0 +1,68 @@
+@mixin tenor {
+  .wcTenor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .wcTenorPowered {
+      color: #888 !important;
+    }
+
+    .wcTenorSearch {
+      margin: 0;
+      background-image: url(../../gfx/icons/search.svg);
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+      background-position: 10px center;
+      padding-left: 25px;
+
+      input {
+        width: 100%;
+        border: none;
+        outline: 0;
+        margin-right: 15px;
+        line-height: 1em;
+      }
+
+      .wcClear {
+        width: 35px;
+        height: 35px;
+        background-image: url(../../gfx/icons/x.svg);
+        background-position: 50%;
+        background-size: contain;
+        cursor: pointer;
+        transition: all .2s ease-in;
+      }
+    }
+
+    .wcTenorResults {
+      display: flex;
+      flex-direction: row;
+      margin-top: 2px;
+
+      .wcTenorResultsColumn {
+        width: 50%;
+        a {
+          color: inherit;
+        }
+        img {
+          width: 100%;
+          cursor: pointer;
+          background-color: lightgreen;
+          transition: padding 1s;
+          padding: 0;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          display: block;
+          &:hover {
+            border: none;
+            outline: 0;
+          }
+        }
+      }
+    }
+  }
+}

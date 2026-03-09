@@ -1,4 +1,5 @@
 import ChannelsStorage from "utils/channels-storage";
+import {sendUserCommand} from "./commands";
 
 export function requestChannelOpening(channelId) {
 	return {
@@ -15,9 +16,6 @@ export function clearChannelOpeningRequest() {
 
 export function focusChannel(channelId) {
 	return function(dispatch, getState) {
-		if (!getState().ui.openedChannels.includes(channelId)) {
-			return;
-		}
 		const channelsStorage = new ChannelsStorage(getState().application.user.cacheId);
 		channelsStorage.markFocused(channelId);
 
@@ -29,24 +27,21 @@ export function focusChannel(channelId) {
 	}
 }
 
-export function openChannel(channelId) {
-	return function(dispatch, getState) {
+export function openChannel(channelId, openFirst = false) {
+	return function(dispatch, getState, advanced) {
 		let x = 6;
 		let counter = 10;
-		if (getState().ui.openedChannels.includes(channelId)) {
-			return;
-		}
 		const limit = counter - 2 - x;
 		if (getState().ui.openedChannels.length > limit) {
 			dispatch(alertInfo('You can open no more than 3 channels at the same time'));
 			return;
 		}
-		const channelsStorage = new ChannelsStorage(getState().application.user.cacheId);
-		channelsStorage.markOpen(channelId);
 
+		sendUserCommand('openChannel', 'openChannel', { channelId: channelId, openFirst: openFirst })(dispatch, getState, advanced);
 		dispatch({
 			type: 'ui.channel.open',
-			id: channelId
+			id: channelId,
+			openFirst: openFirst
 		});
 	}
 }
@@ -68,12 +63,11 @@ export function ignoreChannel(channelId) {
  */
 export function restoreChannels() {
 	return function(dispatch, getState) {
-		const channelsStorage = new ChannelsStorage(getState().application.user ? getState().application.user.cacheId : 'na');
+		const state = getState();
+		const configuration = state.configuration;
+		const channelsStorage = new ChannelsStorage(state.application.user ? state.application.user.cacheId : 'na');
+		let openChannelsIDs = state.application.user.openChannels;
 
-		dispatch({
-			type: 'ui.channel.open.multiple',
-			channels: channelsStorage.getOpenedChannels()
-		});
 		dispatch({
 			type: 'ui.channel.ignore.multiple',
 			channels: channelsStorage.getIgnoredChannels()
@@ -83,20 +77,76 @@ export function restoreChannels() {
 			channels: channelsStorage.getHiddenChannels()
 		});
 
-		if (channelsStorage.getFocused()) {
-			const focusedChannelId = channelsStorage.getFocused();
-
-			// focus the channel only if it exists:
-			if (getState().application.channels.find( channel => channel.id === focusedChannelId )) {
-				dispatch(focusChannel(channelsStorage.getFocused()));
-			} else {
-				// or open the last existing channel:
-				const lastExistingOpenedChannel = [ ...channelsStorage.getOpenedChannels() ]
-					.reverse()
-					.find( openedChannelId => getState().application.channels.find( channel => channel.id === openedChannelId ) );
-				if (lastExistingOpenedChannel) {
-					dispatch(focusChannel(lastExistingOpenedChannel));
+		if (configuration.interface.browser.autoOpen) {
+			const openedChannels = state.application.channels.filter( channel => state.application.user.openChannels.includes(channel.id) );
+			const autoOpenChannels = state.application.autoOpenChannels;
+			if (autoOpenChannels.length > 0) {
+				const autoOpenChannelsIDs = autoOpenChannels.map( channel => channel.id );
+				const onlineChannels = autoOpenChannels.filter( channel => channel.online === true );
+				let candidate;
+				if (onlineChannels.length > 0) {
+					candidate = onlineChannels[Math.floor(Math.random() * onlineChannels.length)];
+				} else {
+					candidate = autoOpenChannels[Math.floor(Math.random() * autoOpenChannels.length)];
 				}
+				if (openedChannels.length === 0) {
+					dispatch(openChannel(candidate.id));
+					dispatch(focusChannel(candidate.id));
+				} else {
+					const openedAutoOpenChannel = autoOpenChannels.find( channel => openedChannels.includes(channel.id) );
+
+					if (openedAutoOpenChannel) {
+						dispatch({
+							type: 'ui.channel.open.only',
+							id: openedAutoOpenChannel.id
+						});
+						dispatch(focusChannel(openedAutoOpenChannel.id));
+					} else {
+						dispatch({
+							type: 'ui.channel.open.only',
+							id: candidate.id
+						});
+						dispatch(focusChannel(candidate.id));
+					}
+				}
+				return;
+			}
+		} else if (configuration.interface.browser.autoOpenFirstPublic) {
+			// in case no opened channel open the first public channel:
+			const publicChannels = state.application.browserChannels.filter( channel => channel.type === 'public' );
+			const openedChannels = state.application.channels.filter( channel => state.application.user.openChannels.includes(channel.id) );
+			if ((openedChannels.length === 0 || configuration.interface.browser.autoOpenOnlyExisting) && publicChannels.length > 0) {
+				dispatch(openChannel(publicChannels[0].id));
+				dispatch(focusChannel(publicChannels[0].id));
+				if (configuration.mode === 1 && configuration.interface.chat.fb.minimizeOnStart) {
+					dispatch(minimizeChannel(publicChannels[0].id));
+				}
+				return;
+			}
+		}
+
+		dispatch({
+			type: 'ui.channel.open.multiple',
+			channels: openChannelsIDs
+		});
+
+		let focusResolved = false;
+		const focusedChannelId = channelsStorage.getFocused();
+		if (focusedChannelId) {
+			const focusedChannel = getState().application.channels.find( channel => channel.id === focusedChannelId );
+			if (focusedChannel) {
+				dispatch(focusChannel(focusedChannelId));
+				focusResolved = true;
+			}
+		}
+
+		if (!focusResolved) {
+			// open the last existing channel:
+			const lastExistingOpenedChannel = [ ...openChannelsIDs ]
+				.reverse()
+				.find( openedChannelId => getState().application.channels.find( channel => channel.id === openedChannelId ) );
+			if (lastExistingOpenedChannel) {
+				dispatch(focusChannel(lastExistingOpenedChannel));
 			}
 		}
 	}
@@ -109,9 +159,8 @@ export function completeInit() {
 }
 
 export function closeChannel(channelId) {
-	return function(dispatch, getState) {
-		const channelsStorage = new ChannelsStorage(getState().application.user.cacheId);
-		channelsStorage.clear(channelId);
+	return function(dispatch, getState, advanced) {
+		sendUserCommand('closeChannel', 'closeChannel', { channelId: channelId })(dispatch, getState, advanced);
 
 		dispatch({
 			type: 'ui.channel.close',
@@ -318,6 +367,12 @@ export function setChannelProperty(channelId, name, value) {
 export function logOff() {
 	return {
 		type: 'ui.log.off'
+	}
+}
+
+export function destroy() {
+	return {
+		type: 'ui.destroy'
 	}
 }
 

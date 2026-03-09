@@ -63,6 +63,12 @@ class Channel extends React.Component {
 		let classes = [
 			'wcChannel', 'wcChannelView' + this.state.view, this.props.configuration.interface.channel.inputLocation === 'top' ? ' wcTopInput' : ' wcBottomInput'
 		];
+		if (this.props.stream) {
+			classes.push('wcChannelStream');
+		}
+		if (this.props.stream && this.props.uiChannel && this.props.uiChannel.streamMaximized) {
+			classes.push('wcChannelStreamMaximized');
+		}
 		if (this.props.className) {
 			classes.push(this.props.className);
 		}
@@ -96,6 +102,11 @@ class Channel extends React.Component {
 							<Full />
 						) : (
 							<React.Fragment>
+								<div className="wcChannelViewToolbar">
+									<button className={ "wcFunctional wcChannelViewButton wcChannelViewButtonChat" + ( this.state.view === 'Chat' ? ' wcChannelViewButtonCurrent' : '' )} onClick={ e => this.switchView('Chat') } title={ this.props.i18n.switchToChat } />
+									<button className={ "wcFunctional wcChannelViewButton wcChannelViewButtonStream" + ( this.state.view === 'Stream' ? ' wcChannelViewButtonCurrent' : '' )} onClick={ e => this.switchView('Stream') } title={ this.props.i18n.switchToVideoCall } />
+								</div>
+
 								<div className="wcChannelData">
 									<Messages channel={ this.props.channel } />
 								</div>

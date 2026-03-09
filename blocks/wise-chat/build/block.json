@@ -23,10 +23,6 @@
       "type": "boolean",
       "default": false
     },
-    "window_title": {
-      "type": "string",
-      "default": "Chat"
-    },
     "theme": {
       "type": "string",
       "default": "lightgray"

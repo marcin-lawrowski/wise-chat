@@ -94,11 +94,6 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ value => setAttributes( { access_mode: value } ) }
                         help="Only logged in WordPress users are allowed to enter the chat"
                     />
-                    <TextControl
-                        label="Window Title"
-                        value={ attributes.window_title }
-                        onChange={ value => setAttributes( { window_title: value } ) }
-                    />
                     <SelectControl
                         label="Theme"
                         value={ attributes.theme }

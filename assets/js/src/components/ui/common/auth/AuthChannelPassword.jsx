@@ -56,7 +56,7 @@ class AuthChannelPassword extends React.Component {
 				<div className="wcFormRow">
 					<input
 						type="password"
-						className="wcInputText wcUserName"
+						className="wcControl wcInputText wcUserName"
 						value={ this.state.password }
 						onChange={ e => this.setState({ password: e.currentTarget.value })}
 						disabled={ this.props.authResult && this.props.authResult.inProgress }
