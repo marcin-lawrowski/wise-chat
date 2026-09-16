@@ -17,7 +17,7 @@ export default class HtmlRenderer {
 					let url = match[1];
 
 					if (this.configuration.interface.message.links) {
-						let finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "http://" : '') + url;
+						let finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
 						if (match[2]) {
 							url = match[3];
 						}

@@ -7881,11 +7881,14 @@ var Decorator = /*#__PURE__*/function (_React$Component) {
   (0, _createClass2["default"])(Decorator, [{
     key: "onShortcodeRender",
     value: function onShortcodeRender(name, params, index, full) {
+      var url = params.src ? params.src : '';
+      var finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+
       switch (name) {
         case 'link':
           return /*#__PURE__*/_react["default"].createElement("a", {
             key: index,
-            href: params.src,
+            href: finalUrl,
             target: params.target,
             className: params.className,
             title: params.title,
@@ -7896,7 +7899,7 @@ var Decorator = /*#__PURE__*/function (_React$Component) {
         case 'img':
           return /*#__PURE__*/_react["default"].createElement("img", {
             key: index,
-            src: params.src,
+            src: finalUrl,
             className: params.className,
             alt: params.alt
           });
@@ -12832,7 +12835,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
           var url = match[1];
 
           if (_this.configuration["interface"].message.links) {
-            var finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "http://" : '') + url;
+            var finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
 
             if (match[2]) {
               url = match[3];
@@ -42604,7 +42607,7 @@ process.umask = function() { return 0; };
 
 var printWarning = function() {};
 
-if ("development" !== 'production') {
+if ("production" !== 'production') {
   var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
   var loggedTypeFailures = {};
   var has = Function.call.bind(Object.prototype.hasOwnProperty);
@@ -42635,7 +42638,7 @@ if ("development" !== 'production') {
  * @private
  */
 function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     for (var typeSpecName in typeSpecs) {
       if (has(typeSpecs, typeSpecName)) {
         var error;
@@ -42689,7 +42692,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
  * @private
  */
 checkPropTypes.resetWarningCache = function() {
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     loggedTypeFailures = {};
   }
 }
@@ -42781,7 +42784,7 @@ var checkPropTypes = require('./checkPropTypes');
 var has = Function.call.bind(Object.prototype.hasOwnProperty);
 var printWarning = function() {};
 
-if ("development" !== 'production') {
+if ("production" !== 'production') {
   printWarning = function(text) {
     var message = 'Warning: ' + text;
     if (typeof console !== 'undefined') {
@@ -42932,7 +42935,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   PropTypeError.prototype = Error.prototype;
 
   function createChainableTypeChecker(validate) {
-    if ("development" !== 'production') {
+    if ("production" !== 'production') {
       var manualPropTypeCallCache = {};
       var manualPropTypeWarningCount = 0;
     }
@@ -42950,7 +42953,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
           );
           err.name = 'Invariant Violation';
           throw err;
-        } else if ("development" !== 'production' && typeof console !== 'undefined') {
+        } else if ("production" !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
           if (
@@ -43069,7 +43072,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createEnumTypeChecker(expectedValues) {
     if (!Array.isArray(expectedValues)) {
-      if ("development" !== 'production') {
+      if ("production" !== 'production') {
         if (arguments.length > 1) {
           printWarning(
             'Invalid arguments supplied to oneOf, expected an array, got ' + arguments.length + ' arguments. ' +
@@ -43127,7 +43130,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
   function createUnionTypeChecker(arrayOfTypeCheckers) {
     if (!Array.isArray(arrayOfTypeCheckers)) {
-      "development" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      "production" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
       return emptyFunctionThatReturnsNull;
     }
 
@@ -43363,7 +43366,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
  * LICENSE file in the root directory of this source tree.
  */
 
-if ("development" !== 'production') {
+if ("production" !== 'production') {
   var ReactIs = require('react-is');
 
   // By explicitly using `prop-types` you are opting into new development behavior.
@@ -43784,7 +43787,7 @@ module.exports = exports.default;
 
 'use strict';
 
-if ("development" !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -48181,7 +48184,7 @@ exports.version="17.0.1";
 
 'use strict';
 
-if ("development" !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -74743,7 +74746,7 @@ function checkDCE() {
   ) {
     return;
   }
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     // This branch is unreachable because this function is only called
     // in production, but the condition is true only in development.
     // Therefore if the branch is still here, dead code elimination wasn't
@@ -74763,7 +74766,7 @@ function checkDCE() {
   }
 }
 
-if ("development" === 'production') {
+if ("production" === 'production') {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
@@ -74775,7 +74778,7 @@ if ("development" === 'production') {
 },{"./cjs/react-dom.development.js":263,"./cjs/react-dom.production.min.js":264}],266:[function(require,module,exports){
 'use strict';
 
-if ("development" === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/react-dom-server.browser.production.min.js');
 } else {
   module.exports = require('./cjs/react-dom-server.browser.development.js');
@@ -76740,7 +76743,7 @@ var ReactReduxContext = /*#__PURE__*/_react["default"].createContext(null);
 
 exports.ReactReduxContext = ReactReduxContext;
 
-if ("development" !== 'production') {
+if ("production" !== 'production') {
   ReactReduxContext.displayName = 'ReactRedux';
 }
 
@@ -76798,7 +76801,7 @@ function Provider(_ref) {
   }, children);
 }
 
-if ("development" !== 'production') {
+if ("production" !== 'production') {
   Provider.propTypes = {
     store: _propTypes["default"].shape({
       subscribe: _propTypes["default"].func.isRequired,
@@ -76997,7 +77000,7 @@ _ref) {
       context = _ref2$context === void 0 ? _Context.ReactReduxContext : _ref2$context,
       connectOptions = (0, _objectWithoutPropertiesLoose2["default"])(_ref2, ["getDisplayName", "methodName", "renderCountProp", "shouldHandleStateChanges", "storeKey", "withRef", "forwardRef", "context"]);
 
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     if (renderCountProp !== undefined) {
       throw new Error("renderCountProp is removed. render counting is built into the latest React Dev Tools profiling extension");
     }
@@ -77015,7 +77018,7 @@ _ref) {
 
   var Context = context;
   return function wrapWithConnect(WrappedComponent) {
-    if ("development" !== 'production' && !(0, _reactIs.isValidElementType)(WrappedComponent)) {
+    if ("production" !== 'production' && !(0, _reactIs.isValidElementType)(WrappedComponent)) {
       throw new Error("You must pass a component to the function returned by " + (methodName + ". Instead received " + stringifyComponent(WrappedComponent)));
     }
 
@@ -77070,7 +77073,7 @@ _ref) {
       var didStoreComeFromProps = Boolean(props.store) && Boolean(props.store.getState) && Boolean(props.store.dispatch);
       var didStoreComeFromContext = Boolean(contextValue) && Boolean(contextValue.store);
 
-      if ("development" !== 'production' && !didStoreComeFromProps && !didStoreComeFromContext) {
+      if ("production" !== 'production' && !didStoreComeFromProps && !didStoreComeFromContext) {
         throw new Error("Could not find \"store\" in the context of " + ("\"" + displayName + "\". Either wrap the root component in a <Provider>, ") + "or pass a custom React context provider to <Provider> and the corresponding " + ("React context consumer to " + displayName + " in connect options."));
       } // Based on the previous check, one of these must be true
 
@@ -77403,7 +77406,7 @@ function wrapMergePropsFunc(mergeProps) {
       } else {
         hasRunOnce = true;
         mergedProps = nextMergedProps;
-        if ("development" !== 'production') (0, _verifyPlainObject["default"])(mergedProps, displayName, 'mergeProps');
+        if ("production" !== 'production') (0, _verifyPlainObject["default"])(mergedProps, displayName, 'mergeProps');
       }
 
       return mergedProps;
@@ -77516,7 +77519,7 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
   var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
   var mergeProps = initMergeProps(dispatch, options);
 
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     (0, _verifySubselectors["default"])(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName);
   }
 
@@ -77618,7 +77621,7 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
         props = proxy(stateOrDispatch, ownProps);
       }
 
-      if ("development" !== 'production') (0, _verifyPlainObject["default"])(props, displayName, methodName);
+      if ("production" !== 'production') (0, _verifyPlainObject["default"])(props, displayName, methodName);
       return props;
     };
 
@@ -77707,7 +77710,7 @@ var _Context = require("../components/Context");
 function useReduxContext() {
   var contextValue = (0, _react.useContext)(_Context.ReactReduxContext);
 
-  if ("development" !== 'production' && !contextValue) {
+  if ("production" !== 'production' && !contextValue) {
     throw new Error('could not find react-redux context value; please ensure the component is wrapped in a <Provider>');
   }
 
@@ -77823,7 +77826,7 @@ function createSelectorHook(context) {
       equalityFn = refEquality;
     }
 
-    if ("development" !== 'production' && !selector) {
+    if ("production" !== 'production' && !selector) {
       throw new Error("You must pass a selector to useSelector");
     }
 
@@ -80205,7 +80208,7 @@ exports.default = Scrollbar;
 
 'use strict';
 
-if ("development" !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -82556,7 +82559,7 @@ exports.useLayoutEffect=function(a,b){return S().useLayoutEffect(a,b)};exports.u
 },{"object-assign":242}],304:[function(require,module,exports){
 'use strict';
 
-if ("development" === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/react.production.min.js');
 } else {
   module.exports = require('./cjs/react.development.js');
@@ -83645,7 +83648,7 @@ function combineReducers(reducers) {
   for (var i = 0; i < reducerKeys.length; i++) {
     var key = reducerKeys[i];
 
-    if ("development" !== 'production') {
+    if ("production" !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning("No reducer provided for key \"" + key + "\"");
       }
@@ -83661,7 +83664,7 @@ function combineReducers(reducers) {
 
   var unexpectedKeyCache;
 
-  if ("development" !== 'production') {
+  if ("production" !== 'production') {
     unexpectedKeyCache = {};
   }
 
@@ -83682,7 +83685,7 @@ function combineReducers(reducers) {
       throw shapeAssertionError;
     }
 
-    if ("development" !== 'production') {
+    if ("production" !== 'production') {
       var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
 
       if (warningMessage) {
@@ -83897,7 +83900,7 @@ function applyMiddleware() {
 
 function isCrushed() {}
 
-if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+if ("production" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
   warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
 }
 
@@ -89451,7 +89454,7 @@ Warning.default = Warning
 
 'use strict';
 
-if ("development" !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -89811,7 +89814,7 @@ exports.unstable_wrap = unstable_wrap;
 
 'use strict';
 
-if ("development" !== "production") {
+if ("production" !== "production") {
   (function() {
 'use strict';
 
@@ -90670,7 +90673,7 @@ exports.unstable_wrapCallback=function(a){var b=P;return function(){var c=P;P=b;
 },{}],350:[function(require,module,exports){
 'use strict';
 
-if ("development" === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/scheduler.production.min.js');
 } else {
   module.exports = require('./cjs/scheduler.development.js');
@@ -90679,7 +90682,7 @@ if ("development" === 'production') {
 },{"./cjs/scheduler.development.js":348,"./cjs/scheduler.production.min.js":349}],351:[function(require,module,exports){
 'use strict';
 
-if ("development" === 'production') {
+if ("production" === 'production') {
   module.exports = require('./cjs/scheduler-tracing.production.min.js');
 } else {
   module.exports = require('./cjs/scheduler-tracing.development.js');

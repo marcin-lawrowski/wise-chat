@@ -16,11 +16,14 @@ class Decorator extends React.Component {
 	}
 
 	onShortcodeRender(name, params, index, full) {
+		const url = params.src ? params.src : '';
+		const finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+
 		switch (name) {
 			case 'link':
-				return <a key={ index } href={ params.src } target={ params.target } className={ params.className } title={ params.title } rel="noopener noreferrer nofollow" data-org={ Base64.encode(full) }>{ params.name ? params.name : params.src }</a>;
+				return <a key={ index } href={ finalUrl } target={ params.target } className={ params.className } title={ params.title } rel="noopener noreferrer nofollow" data-org={ Base64.encode(full) }>{ params.name ? params.name : params.src }</a>;
 			case 'img':
-				return <img key={ index } src={ params.src } className={ params.className } alt={ params.alt } />
+				return <img key={ index } src={ finalUrl } className={ params.className } alt={ params.alt } />
 			case 'span':
 				return <span key={ index } className={ params.className }>{ params.content }</span>
 		}

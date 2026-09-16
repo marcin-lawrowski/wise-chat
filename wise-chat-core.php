@@ -1,7 +1,7 @@
 <?php
 /*
 	Plugin Name: Wise Chat with AI
-	Version: 3.4
+	Version: 3.4.1
 	Plugin URI: https://kainex.pl/projects/wp-plugins/wise-chat
 	Description: AI-powered, fully-featured chat plugin for WordPress. Supports AI integration, multiple channels, private messages, multisite installation, bad words filtering, themes, appearance settings, avatars, filters, bans and more.
 	Author: Kainex
@@ -33,7 +33,7 @@ if (!defined('ABSPATH')) {
 	exit;
 } // Exit if accessed directly
 
-define('WISE_CHAT_VERSION', '3.4');
+define('WISE_CHAT_VERSION', '3.4.1');
 define('WISE_CHAT_VERSION_AI', 1);
 define('WISE_CHAT_ROOT', plugin_dir_path(__FILE__));
 define('WISE_CHAT_NAME', 'Wise Chat');
