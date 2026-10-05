@@ -17,7 +17,7 @@ class Decorator extends React.Component {
 
 	onShortcodeRender(name, params, index, full) {
 		const url = params.src ? params.src : '';
-		const finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+		const finalUrl = (!url.match(/^(https|http|ftp|mailto):/) ? "https://" : '') + url;
 
 		switch (name) {
 			case 'link':

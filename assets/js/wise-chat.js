@@ -7882,7 +7882,7 @@ var Decorator = /*#__PURE__*/function (_React$Component) {
     key: "onShortcodeRender",
     value: function onShortcodeRender(name, params, index, full) {
       var url = params.src ? params.src : '';
-      var finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+      var finalUrl = (!url.match(/^(https|http|ftp|mailto):/) ? "https://" : '') + url;
 
       switch (name) {
         case 'link':
@@ -12835,7 +12835,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
           var url = match[1];
 
           if (_this.configuration["interface"].message.links) {
-            var finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+            var finalUrl = (!url.match(/^(https|http|ftp|mailto):/) ? "https://" : '') + url;
 
             if (match[2]) {
               url = match[3];
@@ -12930,7 +12930,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               }, linkBody);
             }
           } else if (_this.configuration["interface"].message.links) {
-            var finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
+            var finalUrl = (!attachmentSrc.match(/^(https|http|ftp):/) ? "http://" : '') + attachmentSrc;
             return /*#__PURE__*/_react["default"].createElement("a", {
               key: _this.currentKey++,
               href: finalUrl,
@@ -12972,7 +12972,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               imageOrgSrc = imageSrc;
             }
 
-            var finalUrl = (!imageOrgSrc.match(/^https|http|ftp:/) ? "http://" : '') + imageOrgSrc;
+            var finalUrl = (!imageOrgSrc.match(/^(https|http|ftp):/) ? "http://" : '') + imageOrgSrc;
             return /*#__PURE__*/_react["default"].createElement("a", {
               key: _this.currentKey++,
               href: finalUrl,
@@ -13031,7 +13031,7 @@ var HtmlRenderer = /*#__PURE__*/function () {
               "data-org": _jsBase.Base64.encode(match[0])
             });
           } else if (_this.configuration["interface"].message.links && srcOrg.length > 0) {
-            var finalUrl = (!srcOrg.match(/^https|http|ftp:/) ? "http://" : '') + srcOrg;
+            var finalUrl = (!srcOrg.match(/^(https|http|ftp):/) ? "http://" : '') + srcOrg;
             return /*#__PURE__*/_react["default"].createElement("a", {
               key: _this.currentKey++,
               href: finalUrl,

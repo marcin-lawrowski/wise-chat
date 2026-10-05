@@ -17,7 +17,7 @@ export default class HtmlRenderer {
 					let url = match[1];
 
 					if (this.configuration.interface.message.links) {
-						let finalUrl = (!url.match(/^https|http|ftp|mailto:/) ? "https://" : '') + url;
+						let finalUrl = (!url.match(/^(https|http|ftp|mailto):/) ? "https://" : '') + url;
 						if (match[2]) {
 							url = match[3];
 						}
@@ -76,7 +76,7 @@ export default class HtmlRenderer {
 							          data-org={Base64.encode(match[0])}>{linkBody}</a>;
 						}
 					} else if (this.configuration.interface.message.links) {
-						let finalUrl = (!attachmentSrc.match(/^https|http|ftp:/) ? "http://" : '') + attachmentSrc;
+						let finalUrl = (!attachmentSrc.match(/^(https|http|ftp):/) ? "http://" : '') + attachmentSrc;
 
 						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ linkBody }</a>;
 					} else {
@@ -109,7 +109,7 @@ export default class HtmlRenderer {
 						if (imageOrgSrc === '_') {
 							imageOrgSrc = imageSrc;
 						}
-						let finalUrl = (!imageOrgSrc.match(/^https|http|ftp:/) ? "http://" : '') + imageOrgSrc;
+						let finalUrl = (!imageOrgSrc.match(/^(https|http|ftp):/) ? "http://" : '') + imageOrgSrc;
 
 						return <a key={this.currentKey++} href={finalUrl} target="_blank"
 						          rel="noopener noreferrer nofollow" data-org={Base64.encode(match[0])}>{imageOrgSrc}</a>;
@@ -154,7 +154,7 @@ export default class HtmlRenderer {
 									data-org={ Base64.encode(match[0]) }
 								/>;
 					} else if (this.configuration.interface.message.links && srcOrg.length > 0) {
-						let finalUrl = (!srcOrg.match(/^https|http|ftp:/) ? "http://" : '') + srcOrg;
+						let finalUrl = (!srcOrg.match(/^(https|http|ftp):/) ? "http://" : '') + srcOrg;
 
 						return <a key={ this.currentKey++ } href={ finalUrl } target="_blank" rel="noopener noreferrer nofollow" data-org={ Base64.encode(match[0]) }>{ srcOrg }</a>;
 					} else if (srcOrg.length > 0) {

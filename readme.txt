@@ -407,6 +407,9 @@ After you type a message use the key combination: Shift + ENTER
 
 == Changelog ==
 
+= 3.4.2 =
+* Fixed: XSS
+
 = 3.4.1 =
 * Fixed: XSS
 
