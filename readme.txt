@@ -4,8 +4,8 @@ Donate link: https://kainex.pl/projects/wp-plugins/wise-chat/wise-chat-donate?ut
 Tags: chat, social, gpt chat, ai chat, webchat
 Requires at least: 6.2
 Requires PHP: 7.4
-Tested up to: 6.9
-Stable tag: 3.4.1
+Tested up to: 7.2
+Stable tag: 3.4.3
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -406,6 +406,9 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.4.3 =
+* Fixed: Security issue with data unserialization
 
 = 3.4.2 =
 * Fixed: XSS

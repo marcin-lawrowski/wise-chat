@@ -8,21 +8,22 @@ namespace Kainex\WiseChat;
  * @author Kainex <contact@kaine.pl>
  */
 class Crypt {
-	const PUBLIC_KEY = 'Ci0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tCk1Gd3dEUVlKS29aSWh2Y05BUUVCQlFBRFN3QXdTQUpCQU4rc1p5VkVMOURDWkRQNks3Nml3dnBJb2J5NWQrUDkKUmtZRzRDQkJaQ3Q5dnh3N1dqLzhlbjk3RU9ENW53bDJqVFAzalRPNmFhRHdGRFc0dDU5U3Baa0NBd0VBQVE9PQotLS0tLUVORCBQVUJMSUMgS0VZLS0tLS0K';
+
+	const METHOD = 'aes-256-cbc';
 
 	/**
 	 * @param string $string
 	 * @return string
 	 */
 	public static function encryptToString($string) {
-		$secretKey = self::PUBLIC_KEY;
-		$secretIv = self::getSalt();
+		$firstKey = get_option('wise_chat_key_1');
+		$secondKey = get_option('wise_chat_key_2');
+		$iv = base64_decode(get_option('wise_chat_iv'));
 
-		$encryptMethod = "AES-256-CBC";
-		$key = hash('sha256', $secretKey);
-		$iv = substr(hash('sha256', $secretIv), 0, 16);
+		$firstEncrypted = openssl_encrypt($string, self::METHOD, $firstKey, OPENSSL_RAW_DATA, $iv);
+		$secondEncrypted = hash_hmac('sha3-512', $firstEncrypted, $secondKey, TRUE);
 
-		return base64_encode(openssl_encrypt($string, $encryptMethod, $key, 0, $iv));
+		return base64_encode($secondEncrypted.$firstEncrypted);
 	}
 
 	/**
@@ -30,24 +31,22 @@ class Crypt {
 	 * @return string|null
 	 */
 	public static function decryptFromString($string) {
-		$secretKey = self::PUBLIC_KEY;
-		$secretIv = self::getSalt();
+		$firstKey = get_option('wise_chat_key_1');
+		$secondKey = get_option('wise_chat_key_2');
+		$iv = base64_decode(get_option('wise_chat_iv'));
+		$mix = base64_decode($string);
 
-		$encryptMethod = "AES-256-CBC";
-		$key = hash('sha256', $secretKey);
-		$iv = substr(hash('sha256', $secretIv), 0, 16);
+		$secondEncrypted = substr($mix, 0, 64);
+		$firstEncrypted = substr($mix, 64);
 
-		$output = openssl_decrypt(base64_decode($string), $encryptMethod, $key, 0, $iv);
+		$data = openssl_decrypt($firstEncrypted, self::METHOD, $firstKey, OPENSSL_RAW_DATA, $iv);
+		$secondEncryptedNew = hash_hmac('sha3-512', $firstEncrypted, $secondKey, TRUE);
 
-		return is_string($output) ? $output : null;
+		if (hash_equals($secondEncrypted, $secondEncryptedNew)) {
+			return $data;
+		}
+
+		return null;
 	}
-	
-	/**
-	* Returns unique salt for WordPress installation.
-	*
-	* @return string
-	*/
-	private static function getSalt() {
-		return wp_hash('MVBTY09CMHY0a0Z0a2NkcjlsZnZLcDZiSkZpYUhUL3VoWVh0OQotLS0tL');
-	}
+
 }

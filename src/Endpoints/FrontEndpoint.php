@@ -27,7 +27,7 @@ abstract class FrontEndpoint {
 		$checksum = $this->getParam('checksum');
 
 		if ($checksum !== null) {
-			$decoded = unserialize(Crypt::decryptFromString(base64_decode($checksum)));
+			$decoded = json_decode(Crypt::decryptFromString($checksum), true);
 			if (is_array($decoded)) {
 				$timestamp = array_key_exists('ts', $decoded) ? $decoded['ts'] : time();
 				$validityTime = $this->utils->getOptions()->getIntegerOption('ajax_validity_time', 1440) * 60;
@@ -44,11 +44,11 @@ abstract class FrontEndpoint {
 	protected function generateCheckSum(): ?string {
 		$checksum = $this->getParam('checksum');
 		if ($checksum !== null) {
-			$decoded = unserialize(Crypt::decryptFromString(base64_decode($checksum)));
+			$decoded = json_decode(Crypt::decryptFromString($checksum), true);
 			if (is_array($decoded)) {
 				$decoded['ts'] = time();
 
-				return base64_encode(Crypt::encryptToString(serialize($decoded)));
+				return Crypt::encryptToString(json_encode($decoded));
 			}
 		}
 		return null;

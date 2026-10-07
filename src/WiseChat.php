@@ -374,7 +374,7 @@ class WiseChat {
     private function getCheckSum() {
 		$checkSumData = is_array($this->shortCodeOptions) ? $this->shortCodeOptions : array();
 
-        return base64_encode(Crypt::encryptToString(serialize($checkSumData)));
+        return Crypt::encryptToString(json_encode($checkSumData));
     }
 
     /**

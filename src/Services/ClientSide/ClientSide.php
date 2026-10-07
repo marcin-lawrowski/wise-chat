@@ -242,7 +242,7 @@ class ClientSide {
 	 * @return string
 	 */
 	public function getInstanceId() {
-		return sha1(serialize($this->options->getOption('channel')));
+		return sha1(json_encode($this->options->getOption('channel')));
 	}
 
 	/**

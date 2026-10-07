@@ -40,6 +40,22 @@ class Options {
 		add_action('update_option_'.Options::OPTIONS_NAME, array($this, 'onOptionsUpdated'), 10, 3);
 	}
 
+	public static function setup() {
+		$optionName = 'wise_chat_key_1';
+		if (get_option($optionName) === false) {
+			update_option($optionName, base64_encode(openssl_random_pseudo_bytes(32)));
+		}
+		$optionName = 'wise_chat_key_2';
+		if (get_option($optionName) === false) {
+			update_option($optionName, base64_encode(openssl_random_pseudo_bytes(64)));
+		}
+		$optionName = 'wise_chat_iv';
+		if (get_option($optionName) === false) {
+			$ivLength = openssl_cipher_iv_length(Crypt::METHOD);
+			update_option($optionName, base64_encode(openssl_random_pseudo_bytes($ivLength)));
+		}
+	}
+
 	/**
 	 * Stores engines configuration file.
 	 */
