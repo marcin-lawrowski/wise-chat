@@ -125,12 +125,15 @@ class FeaturesTab extends AbstractTab {
 	}
 
 	public function clearAllReactionsAction() {
+		if (!current_user_can(Settings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'clearAllReactions')) {
+			return;
+		}
 		$this->messageReactionsService->deleteAll();
 		$this->addMessage('All reactions have been deleted');
 	}
 
 	public function reactionsActionsCallback() {
-		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=clearAllReactions");
+		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=clearAllReactions".'&nonce='.wp_create_nonce('clearAllReactions'));
 
 		printf(
 			'<a class="button-secondary" href="%s" title="Deletes reactions sent to all messages" onclick="return confirm(\'Are you sure? All reactions will be lost.\')">Clear All Reactions</a>',

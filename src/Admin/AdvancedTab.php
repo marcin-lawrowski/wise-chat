@@ -113,20 +113,20 @@ class AdvancedTab extends AbstractTab {
 	}
 
 	public function adminActionsCallback() {
-		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=resetAnonymousCounter");
+		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=resetAnonymousCounter".'&nonce='.wp_create_nonce('resetAnonymousCounter'));
 
 		printf(
 			'<a class="button-secondary" href="%s" title="Resets username prefix" onclick="return confirm(\'Are you sure you want to reset the prefix?\')">Reset Username Prefix</a><p class="description">Resets prefix number used to generate username for anonymous users.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=resetSettings");
+		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=resetSettings".'&nonce='.wp_create_nonce('resetSettings'));
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Resets Wise Chat Pro settings" onclick="return confirm(\'WARNING: All settings will be permanently deleted. \\n\\nAre you sure you want to reset the settings?\')">Reset All Settings</a><p class="description">Resets all settings to default values.</p>',
 			wp_nonce_url($url)
 		);
 
-		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages");
+		$url = admin_url("options-general.php?page=".Settings::MENU_SLUG."&wc_action=deleteAllUsersAndMessages".'&nonce='.wp_create_nonce('deleteAllUsersAndMessages'));
 		printf(
 			'<br /><a class="button-secondary" href="%s" title="Deletes all messages and users" onclick="return confirm(\'WARNING: All messages and users will be permanently deleted. \\n\\nAre you sure you want to proceed?\')">Delete All Messages and Users</a><p class="description">Deletes all messages and users.</p>',
 			wp_nonce_url($url)
@@ -134,11 +134,17 @@ class AdvancedTab extends AbstractTab {
 	}
 
 	public function resetAnonymousCounterAction() {
+		if (!current_user_can(Settings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'resetAnonymousCounter')) {
+			return;
+		}
 		$this->options->resetUserNameSuffix();
 		$this->addMessage('The prefix has been reset.');
 	}
 
 	public function resetSettingsAction() {
+		if (!current_user_can(Settings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'resetSettings')) {
+			return;
+		}
 		$this->options->dropAllOptions();
 
 		// set the default options:
@@ -149,11 +155,14 @@ class AdvancedTab extends AbstractTab {
 	}
 
 	public function deleteAllUsersAndMessagesAction() {
+		if (!current_user_can(Settings::CAPABILITY) || !wp_verify_nonce($_GET['nonce'], 'deleteAllUsersAndMessages')) {
+			return;
+		}
 		$this->messagesService->deleteAll();
 		$this->usersService->deleteAllData();
 		$this->channelsService->deleteUserRelatedData();
 
-		$this->actions->publishAction('deleteAllMessages', array());
+		//$this->actions->publishAction('deleteAllMessages', array());
 		$this->addMessage('All messages and users have been deleted.');
 	}
 

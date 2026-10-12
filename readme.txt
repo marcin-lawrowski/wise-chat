@@ -5,7 +5,7 @@ Tags: chat, social, gpt chat, ai chat, webchat
 Requires at least: 6.2
 Requires PHP: 7.4
 Tested up to: 7.2
-Stable tag: 3.4.3
+Stable tag: 3.4.4
 License: LGPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -406,6 +406,9 @@ After you type a message use the key combination: Shift + ENTER
 09. Adding the chat to the post
 
 == Changelog ==
+
+= 3.4.4 =
+* Fixed: Unsecured server-side operations
 
 = 3.4.3 =
 * Fixed: Security issue with data unserialization
